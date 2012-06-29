@@ -1,0 +1,11 @@
+<Hunt>
+	<Painting zoom = "1" magnifyRadius = "100">
+		<title>The Night Before the Battle</title>
+		<artist>James Henry Beard</artist>
+		<filename>../assets/NightBeforeTheBattle_HDR.jpg</filename>
+	</Painting>
+	<End_Goal>
+	</End_Goal>
+	<Object_Of_Interest>
+	</Object_Of_Interest>
+</Hunt>
