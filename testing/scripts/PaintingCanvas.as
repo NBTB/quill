@@ -10,10 +10,10 @@
 	import flash.display.MovieClip;
 	import flash.display.Shape;
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	import MagnifyingGlass;
+	import ObjectOfInterest;
 	
 	public class PaintingCanvas extends MovieClip
 	{
@@ -21,6 +21,7 @@
 		var canvasHeight:Number;
 		private var painting:Bitmap = null;
 		private var fullsizePainting:Bitmap = null;
+		private var objectsOfInterest:Array = null;
 		private var zoomed:Boolean = false;
 		private var magnifyingGlass:MagnifyingGlass;
 		private var paintingMask:Shape;
@@ -35,6 +36,9 @@
 			
 			//create magnifying glass
 			magnifyingGlass = new MagnifyingGlass(magnifyingGlassZoom, magnifyingGlassRadius);
+			
+			//create empty array of objects of interest
+			objectsOfInterest = new Array();
 			
 			//prepare to be added to stage
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
@@ -70,6 +74,11 @@
 			
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingMask;
+		}
+		
+		public function addObjectOfInterest(newObject:ObjectOfInterest)
+		{
+			objectsOfInterset.push(newObject);
 		}
 		
 		public function checkKeysUp(e:KeyboardEvent) : void

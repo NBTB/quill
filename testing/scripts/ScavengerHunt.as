@@ -42,7 +42,7 @@
 			var paintings:XMLList = xmlData.Painting;
 			var paintingFilename:String = paintings[0].filename;
 			
-			//parse attributes
+			//parse painting attributes
 			var pmgZoom:Number = 1;
 			var pmgRadius:Number = 100;
 			var paintingAttribs:XMLList = paintings[0].attributes();
@@ -62,6 +62,16 @@
 			var bitmapLoader:Loader = new Loader();
 			bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, createCanvas);
 			bitmapLoader.load(new URLRequest(paintingFilename));
+			
+			//create objects of interest
+			var objectsOfInterest:XMLList = xmlData.Object_Of_Interest;
+			for each(var obj in objectsOfInterest)
+			{
+				if(obj.hasOwnProperty("name") && obj.hasOwnProperty("hitmap_filename") && obj.hasOwnProperty("outline_filename"))
+				{
+					
+				}
+			}
 		}
 		
 		public function createCanvas(e:Event)
