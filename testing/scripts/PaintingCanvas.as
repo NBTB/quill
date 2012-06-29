@@ -123,12 +123,20 @@
 			magnifyingGlass.x = centerX;
 			magnifyingGlass.y = centerY;
 			
-			//calculate the texture coordinates of the magnified center
-			var s:Number = (centerX - painting.x - x) / painting.width;
-			var t:Number = (centerY - painting.y - y) / painting.height;
+			//create arrays to pass to magnifying glass
+			var bitmaps:Array = new Array();
+			var texXs:Array = new Array();
+			var texYs:Array = new Array();
+			
+			//add fullsize painting to bitmap array
+			bitmaps.push(fullsizePainting);
+			
+			//calculate the texture coordinates on the painting of the magnified center
+			texXs.push((centerX - painting.x - x) / painting.width);
+			texYs.push((centerY - painting.y - y) / painting.height);
 			
 			//magnify
-			magnifyingGlass.magnifyBitmap(fullsizePainting, s, t);
+			magnifyingGlass.magnifyBitmap(bitmaps, texXs, texYs);
 		}
 	}
 }

@@ -33,7 +33,7 @@
 			mouseChildren = false;
 		}
 		
-		public function magnifyBitmap(bitmap:Bitmap, s:Number, t:Number, zoom:Number = -1, radius:Number = -1)
+		public function magnifyBitmap(bitmaps:Array, texXs:Array, texYs:Array, zoom:Number = -1, radius:Number = -1)
 		{
 			//if the given zoom is negative or zero, use the default zoom
 			if(zoom <= 0)
@@ -43,35 +43,44 @@
 			if(radius < 0)
 				radius = defaultRadius;
 			
-			//clamp texture coordinates [0, 1]
-			if(s < 0)
-				s = 0;
-			else if(s > 1)
-				s = 1;
-			if(t < 0)
-				t = 0;
-			else if(t > 1)
-				t = 1;
-			
-			//clear old graphics information
-			graphics.clear();
-			
-			//create matrix to be used in bitmap sampling
-			var samplingMatrix:Matrix = new Matrix();
-			samplingMatrix.translate(-bitmap.bitmapData.width * s, -bitmap.bitmapData.height * t);
-			samplingMatrix.scale(zoom, zoom);
-			
-			//fill lens with bitmap sample
-			graphics.beginBitmapFill(bitmap.bitmapData, samplingMatrix);
-			graphics.drawCircle(0, 0, radius * 0.9);
-			graphics.endFill();
-			
-			//fill border with gradient
-			var gradientMatrix:Matrix = new Matrix();
-			gradientMatrix.createGradientBox(2 * radius, 2 * radius, 0, -radius, -radius);
-			graphics.beginGradientFill(GradientType.RADIAL, borderColors, borderAlphas, borderRatios, gradientMatrix);
-			graphics.drawCircle(0, 0, radius);
-			graphics.endFill();
+			//magnify all given bitmaps
+			for(var i:Number = 0; i < bitmaps.length; i++)
+			{
+				//adress current bitmap and coordinates
+				var bitmap:Bitmap = Bitmap(bitmaps[i]);
+				var s:Number = Number(texXs[i]);
+				var t:Number = Number(texYs[i]);
+				
+				//clamp texture coordinates [0, 1]
+				if(s < 0)
+					s = 0;
+				else if(s > 1)
+					s = 1;
+				if(t < 0)
+					t = 0;
+				else if(t > 1)
+					t = 1;
+				
+				//clear old graphics information
+				graphics.clear();
+				
+				//create matrix to be used in bitmap sampling
+				var samplingMatrix:Matrix = new Matrix();
+				samplingMatrix.translate(-bitmap.bitmapData.width * s, -bitmap.bitmapData.height * t);
+				samplingMatrix.scale(zoom, zoom);
+				
+				//fill lens with bitmap sample
+				graphics.beginBitmapFill(bitmap.bitmapData, samplingMatrix);
+				graphics.drawCircle(0, 0, radius * 0.9);
+				graphics.endFill();
+				
+				//fill border with gradient
+				var gradientMatrix:Matrix = new Matrix();
+				gradientMatrix.createGradientBox(2 * radius, 2 * radius, 0, -radius, -radius);
+				graphics.beginGradientFill(GradientType.RADIAL, borderColors, borderAlphas, borderRatios, gradientMatrix);
+				graphics.drawCircle(0, 0, radius);
+				graphics.endFill();
+			}
 		}
 	}
 }
