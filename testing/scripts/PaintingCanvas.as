@@ -3,16 +3,13 @@
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
 	import flash.xml.*;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Shape;
 	import flash.display.Bitmap;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.ui.Keyboard;
-	import MagnifyingGlass;
 	import ObjectOfInterest;
 	
 	public class PaintingCanvas extends MovieClip
@@ -21,34 +18,22 @@
 		var canvasHeight:Number;
 		private var painting:Bitmap = null;
 		private var fullsizePainting:Bitmap = null;
+		private var paintingScale:Number = 1;
 		private var objectsOfInterest:Array = null;
-		private var zoomed:Boolean = false;
-		private var magnifyingGlass:MagnifyingGlass;
+		private var ooiMousedOver:ObjectOfInterest = null;
+		private var ooiFound:Array = null;		
 		private var paintingMask:Shape;
 		
-		public function PaintingCanvas(x:Number, y:Number, canvasWidth:Number, canvasHeight:Number, magnifyingGlassZoom:Number = 1, magnifyingGlassRadius:Number = 100) : void
+		public function PaintingCanvas(x:Number, y:Number, canvasWidth:Number, canvasHeight:Number):void
 		{			
 			//store location and size (do not actually scale canvas)
 			this.x = x;
 			this.y = y;
 			this.canvasWidth = canvasWidth;
 			this.canvasHeight = canvasHeight;
-			
-			//create magnifying glass
-			magnifyingGlass = new MagnifyingGlass(magnifyingGlassZoom, magnifyingGlassRadius);
-			
+						
 			//create empty array of objects of interest
 			objectsOfInterest = new Array();
-			
-			//prepare to be added to stage
-			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-		}
-		
-		public function addedToStage(e:Event)
-		{
-			//listen for input
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, checkKeysUp);
-			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
 		}
 		
 		public function displayPainting(painting:Bitmap)
@@ -58,9 +43,9 @@
 			fullsizePainting = new Bitmap(painting.bitmapData);
 			
 			//adjust painting to fit the width of the container
-			var scale:Number = canvasWidth / painting.width;
-			painting.width *= scale;
-			painting.height *= scale;
+			paintingScale = canvasWidth / painting.width;
+			painting.width *= paintingScale;
+			painting.height *= paintingScale;
 			
 			//add bitmap to container
 			addChild(painting);
@@ -70,82 +55,70 @@
 			paintingMask.graphics.beginFill(0xffffff, 1);
 			paintingMask.graphics.drawRect(painting.x, painting.y, painting.width, painting.height);
 			paintingMask.graphics.endFill();
-			addChild(paintingMask)
-			
-			//mask the magnifying glass so that it is not drawn beyond the painting
-			magnifyingGlass.mask = paintingMask;
+			addChildAt(paintingMask, getChildIndex(painting));
 		}
 		
 		public function addObjectOfInterest(newObject:ObjectOfInterest)
 		{
-			objectsOfInterset.push(newObject);
-		}
-		
-		public function checkKeysUp(e:KeyboardEvent) : void
-		{
-			if(e.keyCode == Keyboard.SPACE)
-				toggleZoom();
-		}
-		
-		public function checkMouseMove(e:MouseEvent) : void
-		{
-			if(zoomed)
-				placeMagnifyingGlass(mouseX, mouseY);
-		}
-		
-		public function toggleZoom() : void
-		{
-			//toggle zoom
-			zoomed = !zoomed;
+			//add new object to list
+			objectsOfInterest.push(newObject);
 			
-			//if zoom started, draw magnifying glass
-			if(zoomed)
+			//get child index of painting
+			var paintingIndex:int = getChildIndex(painting);
+			
+			//place hitmap below painting
+			addChildAt(newObject.getHitmap(), paintingIndex);
+			paintingIndex++;
+			
+			//place outine above painting
+			addChildAt(newObject.getOutline(), paintingIndex + 1);
+			newObject.hideOutline();
+			
+			//scale new object in the same way that the painting was scaled
+			newObject.scaleBitmaps(paintingScale);			
+		}
+		
+		public function outlineObjectsAtPoint(point:Point)
+		{			
+			//outline any objects that make contact with the given point
+			for(var i:int; i < objectsOfInterest.length; i++)
 			{
-				placeMagnifyingGlass(mouseX, mouseY);
-				addChild(magnifyingGlass);
+				//address object of interest
+				var ooi:ObjectOfInterest = objectsOfInterest[i];
+				
+				//if the object is under the cursor, show its outline
+				if(ooi.hitTest(point))
+					ooi.showOutline();
+				//otherwise, hide its outline
+				else
+					ooi.hideOutline();
 			}
-			//if zoom ended, remove magnifying glass
+		}
+		
+		public function addPaintingToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
+		{				
+			//if flagged to use fullsize painting, add it to the bitmap list
+			if(useFullsize)
+				bitmapList.push(fullsizePainting);
+			//otherwise, add the scaled outline
 			else
-			{
-				removeChild(magnifyingGlass);
-			}
-			
-		}
-		
-		public function placeMagnifyingGlass(centerX:Number, centerY:Number) : void
-		{
-			//clmap the magnifying glass to the boundaries of the painting
-			var minX:Number = x + painting.x;
-			var maxX:Number = x + painting.x + painting.width;
-			var minY:Number = y + painting.y;
-			var maxY:Number = y + painting.y + painting.height;
-			if(centerX < minX)
-				centerX = minX;
-			else if(centerX > maxX)
-				centerX = maxX;
-			if(centerY < minY)
-				centerY = minY;
-			else if(centerY > maxY)
-				centerY = maxY;
-			
-			//position magnfying glass
-			magnifyingGlass.x = centerX;
-			magnifyingGlass.y = centerY;
-			
-			//create arrays to pass to magnifying glass
-			var bitmaps:Array = new Array();
-			var texXs:Array = new Array();
-			var texYs:Array = new Array();
-			
-			//add fullsize painting to bitmap array
-			bitmaps.push(fullsizePainting);
+				bitmapList.push(painting);
 			
 			//calculate the texture coordinates on the painting of the magnified center
-			texXs.push((centerX - painting.x - x) / painting.width);
-			texYs.push((centerY - painting.y - y) / painting.height);
+			var paintingTexturePoint:Point = new Point();
+			paintingTexturePoint.x = (samplePoint.x - painting.x) / painting.width;
+			paintingTexturePoint.y = (samplePoint.y - painting.y) / painting.height;
+			texturePointList.push(paintingTexturePoint);
 			
-			//magnify
-			magnifyingGlass.magnifyBitmap(bitmaps, texXs, texYs);
 		}
+		
+		public function addObjectOutlinesToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
+		{
+			for(var i:int = 0; i < objectsOfInterest.length; i++)
+				if(objectsOfInterest[i].isOutlined())
+					objectsOfInterest[i].addOutlineToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
+		}
+		
+		public function getPaintingMask():Shape	{	return paintingMask;	}
 	}
 }

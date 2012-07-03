@@ -4,6 +4,8 @@
 	import flash.display.GradientType;
 	import flash.display.Bitmap;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	public class MagnifyingGlass extends MovieClip
 	{
@@ -33,7 +35,31 @@
 			mouseChildren = false;
 		}
 		
-		public function magnifyBitmap(bitmaps:Array, texXs:Array, texYs:Array, zoom:Number = -1, radius:Number = -1)
+		public function place(center:Point, boundary:Rectangle = null)
+		{
+			//place magnifying glass at the given center point
+			x = center.x;
+			y = center.y;
+			
+			//if a boundary was given, ensure that the magnifying glass's center does not exceed it
+			if(boundary)
+			{
+				var minX:Number = boundary.x;
+				var maxX:Number = boundary.x + boundary.width;
+				var minY:Number = boundary.y;
+				var maxY:Number = boundary.y + boundary.height;
+				if(x < minX)
+					x = minX;
+				else if(x > maxX)
+					x = maxX;
+				if(y < minY)
+					y = minY;
+				else if(y > maxY)
+					y = maxY;
+			}
+		}
+		
+		public function magnifyBitmaps(bitmaps:Array, texturePoints:Array, zoom:Number = -1, radius:Number = -1)
 		{
 			//if the given zoom is negative or zero, use the default zoom
 			if(zoom <= 0)
@@ -43,26 +69,16 @@
 			if(radius < 0)
 				radius = defaultRadius;
 			
+			//clear old graphics information
+			graphics.clear();
+			
 			//magnify all given bitmaps
 			for(var i:Number = 0; i < bitmaps.length; i++)
 			{
 				//adress current bitmap and coordinates
 				var bitmap:Bitmap = Bitmap(bitmaps[i]);
-				var s:Number = Number(texXs[i]);
-				var t:Number = Number(texYs[i]);
-				
-				//clamp texture coordinates [0, 1]
-				if(s < 0)
-					s = 0;
-				else if(s > 1)
-					s = 1;
-				if(t < 0)
-					t = 0;
-				else if(t > 1)
-					t = 1;
-				
-				//clear old graphics information
-				graphics.clear();
+				var s:Number = Number(texturePoints[i].x);
+				var t:Number = Number(texturePoints[i].y);
 				
 				//create matrix to be used in bitmap sampling
 				var samplingMatrix:Matrix = new Matrix();
@@ -70,17 +86,24 @@
 				samplingMatrix.scale(zoom, zoom);
 				
 				//fill lens with bitmap sample
-				graphics.beginBitmapFill(bitmap.bitmapData, samplingMatrix);
+				graphics.beginBitmapFill(bitmap.bitmapData, samplingMatrix, false);
 				graphics.drawCircle(0, 0, radius * 0.9);
 				graphics.endFill();
-				
-				//fill border with gradient
-				var gradientMatrix:Matrix = new Matrix();
-				gradientMatrix.createGradientBox(2 * radius, 2 * radius, 0, -radius, -radius);
-				graphics.beginGradientFill(GradientType.RADIAL, borderColors, borderAlphas, borderRatios, gradientMatrix);
-				graphics.drawCircle(0, 0, radius);
-				graphics.endFill();
 			}
+			
+			//fill border with gradient
+			var gradientMatrix:Matrix = new Matrix();
+			gradientMatrix.createGradientBox(2 * radius, 2 * radius, 0, -radius, -radius);
+			graphics.beginGradientFill(GradientType.RADIAL, borderColors, borderAlphas, borderRatios, gradientMatrix);
+			graphics.drawCircle(0, 0, radius);
+			graphics.endFill();
+			
 		}
+		
+		public function getDefaultZoom():Number		{	return defaultZoom;		}
+		public function getDefaultRadius():Number	{	return defaultRadius;	}
+		
+		public function setDefaultZoom(defaultZoom:Number):void		{	this.defaultZoom = defaultZoom;		}
+		public function setDefaultRadius(defaultRadius:Number):void	{	this.defaultRadius = defaultRadius;	}
 	}
 }

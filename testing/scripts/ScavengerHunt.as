@@ -1,83 +1,99 @@
 ﻿package
 {
 	import flash.display.MovieClip;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
 	import flash.events.Event;
-	import flash.xml.*;
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
+	import flash.events.MouseEvent;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import HuntImporter;
 	import PaintingCanvas;
-	
+	import MagnifyingGlass;
+		
 	public class ScavengerHunt extends MovieClip
 	{
 		var paintingCanvas:PaintingCanvas = null;
+		private var zoomed:Boolean = false;
+		private var magnifyingGlass:MagnifyingGlass;
 		
-		public function ScavengerHunt() : void
-		{			
-			//import hunt parameters
-			importXML("scavenger hunt params.xml");
-		}
-		
-		public function importXML(file:String):void
-		{
-			//load XML file
-			var xmlLoader:URLLoader = new URLLoader();
-			xmlLoader.addEventListener(Event.COMPLETE, parseXML);
-			xmlLoader.load(new URLRequest(file));
-		}
-		
-		public function parseXML(e:Event):void
-		{			
-			//retrieve XML data
-			var xmlData:XML = new XML(e.target.data);
-			
-			//if the file is missing necessary information, return
-			if(!xmlData.hasOwnProperty("Painting") || !xmlData.hasOwnProperty("End_Goal") || !xmlData.hasOwnProperty("Object_Of_Interest"))
-				return;
-			
-			//find the first painting specified, return if not found
-			var paintings:XMLList = xmlData.Painting;
-			var paintingFilename:String = paintings[0].filename;
-			
-			//parse painting attributes
-			var pmgZoom:Number = 1;
-			var pmgRadius:Number = 100;
-			var paintingAttribs:XMLList = paintings[0].attributes();
-			for each(var attrib in paintingAttribs)
-			{
-				if(attrib.name() == "zoom")
-					pmgZoom = Number(attrib);
-				if(attrib.name() == "magnifyRadius")
-					pmgRadius = Number(attrib);
-			}
+		public function ScavengerHunt():void
+		{	
+			//prepare to be added to stage
+			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			
 			//create canvas to fill stage
-			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight, pmgZoom, pmgRadius);
+			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			addChild(paintingCanvas);
 			
-			//load painting
-			var bitmapLoader:Loader = new Loader();
-			bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, createCanvas);
-			bitmapLoader.load(new URLRequest(paintingFilename));
+			//create magnifying glass
+			magnifyingGlass = new MagnifyingGlass();
 			
-			//create objects of interest
-			var objectsOfInterest:XMLList = xmlData.Object_Of_Interest;
-			for each(var obj in objectsOfInterest)
-			{
-				if(obj.hasOwnProperty("name") && obj.hasOwnProperty("hitmap_filename") && obj.hasOwnProperty("outline_filename"))
-				{
-					
-				}
-			}
+			//import hunt parameters
+			var importer:HuntImporter = new HuntImporter();
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass);
 		}
 		
-		public function createCanvas(e:Event)
-		{			
-			//display painting in canvas
-			paintingCanvas.displayPainting(Bitmap(LoaderInfo(e.target).content));
+		public function addedToStage(e:Event)
+		{
+			//listen for input
+			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
+			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
+		}
+	
+		public function checkMouseMove(e:MouseEvent):void
+		{
+			//outline any objects of interest that are moused over
+			paintingCanvas.outlineObjectsAtPoint(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+			
+			//if the magnifying glass is being used, draw through its lens
+			if(zoomed)
+				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+		}
+		
+		public function checkKeysUp(e:KeyboardEvent):void
+		{
+			//toggle magnifying glass
+			if(e.keyCode == Keyboard.SPACE)
+				toggleZoom();
+		}
+		
+		public function toggleZoom():void
+		{
+			//toggle zoom
+			zoomed = !zoomed;
+			
+			//if zoom started, draw magnifying glass
+			if(zoomed)
+			{
+				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+				addChild(magnifyingGlass);
+			}
+			//otherwise, remove magnifying glass
+			else
+			{
+				removeChild(magnifyingGlass);
+			}
+		}	
+		
+		public function placeMagnifyingGlass(center:Point):void
+		{
+			//place the magnifying glass so that its center is within the canvas bounds
+			var canvasBounds:Rectangle = new Rectangle(x + paintingCanvas.x, y + paintingCanvas.y, paintingCanvas.width, paintingCanvas.height);
+			magnifyingGlass.place(center, canvasBounds);
+			
+			//create arrays to pass to magnifying glass
+			var bitmaps:Array = new Array();
+			var texturePoints:Array = new Array();
+			
+			//add magnified canvas
+			paintingCanvas.addPaintingToList(bitmaps, texturePoints, center, true);
+			
+			//add magnified object outlines
+			paintingCanvas.addObjectOutlinesToList(bitmaps, texturePoints, center, true);
+			
+			//magnify
+			magnifyingGlass.magnifyBitmaps(bitmaps, texturePoints);
 		}
 	}
 }
