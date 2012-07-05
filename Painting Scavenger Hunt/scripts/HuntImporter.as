@@ -58,17 +58,18 @@
 		{
 			//load painting
 			var bitmapLoader:Loader = new Loader();
-			bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void
-																							 {					
-																								//display painting on canvas
-																								paintingCanvas.displayPainting(Bitmap(LoaderInfo(e.target).content));
-																								
-																								//mask the magnifying glass so that it is not drawn beyond the painting
-																								magnifyingGlass.mask = paintingCanvas.getPaintingMask();
-																								
-																								//create objects of interest
-																								parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);																								
-																							 });
+			bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, 
+				function(e:Event):void
+								 {					
+									//display painting on canvas
+									paintingCanvas.displayPainting(Bitmap(LoaderInfo(e.target).content));
+									
+									//mask the magnifying glass so that it is not drawn beyond the painting
+									magnifyingGlass.mask = paintingCanvas.getPaintingMask();
+									
+									//create objects of interest
+									parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);																								
+								 });
 			bitmapLoader.load(new URLRequest(painting.filename));
 		}
 				

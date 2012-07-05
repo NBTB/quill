@@ -16,7 +16,7 @@
 		private static var borderAlphas:Array = new Array(0, 0, 0.5, 0);
 		private static var borderRatios:Array = new Array(0, 255 * 0.85, 255 * 0.95, 255);
 		
-		public function MagnifyingGlass(defaultZoom:Number = 1,defaultRadius:Number = 100)
+		public function MagnifyingGlass(defaultZoom:Number = 1, defaultRadius:Number = 100)
 		{
 			//ensure that zoom is greater than zero
 			if(defaultZoom <= 0)
