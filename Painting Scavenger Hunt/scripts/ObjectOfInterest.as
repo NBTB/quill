@@ -2,9 +2,11 @@
 {
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.geom.Point;
+	import flash.geom.Matrix;
 	import flash.events.Event;
 	import flash.net.URLRequest;
 	
@@ -71,14 +73,30 @@
 			outline.height *= scaleFactor;
 		}
 		
-		public function hitTest(testPoint:Point, alphaThreshold:Number = 255):Boolean
+		public function hitTest(testPoint:Point, alphaThreshold:Number = 1):Boolean
 		{
-			//if the object's hitmap makes contact with the test point, return a success
-			/*TODO get bitmapData.hitTest to work*/
+			//if the test point is within in the hitmap's bounding box, prepare to test against pixels
 			if(hitmap.hitTestPoint(testPoint.x, testPoint.y))
-				if(true)//(hitmap.bitmapData.hitTest(new Point(hitmap.x, hitmap.y), alphaThreshold, testPoint))
+			{
+				//create a temporary hitmap to be used in contact detection, fill it will transparent pixels for now
+				var testHitMap:Bitmap = new Bitmap(new BitmapData(hitmap.width, hitmap.height, true, 0x00000000));
+				
+				//draw the original hitmap into the duplicate, scaling the actual pixel data to fit the duplicate
+				//this is done because the dimensions of the hitmap and its internal pixel data may not be identical, the duplicate's dimensions will be identical
+				testHitMap.bitmapData.draw(hitmap, new Matrix(hitmap.width/hitmap.bitmapData.width, 0, 0, hitmap.height/hitmap.bitmapData.height));
+				
+				//align the duplicate with the original
+				testHitMap.x = hitmap.x;
+				testHitMap.y = hitmap.y;
+				
+				//if the test point hits any pixel whose opacity meets or exceeds the given threshod, return a success
+				if(testHitMap.bitmapData.hitTest(new Point(testHitMap.x, testHitMap.y), alphaThreshold, testPoint))
 					return true;
-					
+				
+				//dispose of the data used by the temporary hitmap
+				testHitMap.bitmapData.dispose();
+			}
+			
 			//by default return a failure
 			return false;
 		}
