@@ -13,7 +13,7 @@
 		
 	public class ScavengerHunt extends MovieClip
 	{
-		var paintingCanvas:PaintingCanvas = null;
+		private var paintingCanvas:PaintingCanvas = null;
 		private var zoomed:Boolean = false;
 		private var magnifyingGlass:MagnifyingGlass;
 		

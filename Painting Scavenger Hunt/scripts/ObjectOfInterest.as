@@ -67,10 +67,16 @@
 		
 		public function scaleBitmaps(scaleFactor:Number)
 		{
-			hitmap.width *= scaleFactor;
-			hitmap.height *= scaleFactor;
-			outline.width *= scaleFactor;
-			outline.height *= scaleFactor;
+			if(hitmap)
+			{
+				hitmap.width *= scaleFactor;
+				hitmap.height *= scaleFactor;
+			}
+			if(outline)
+			{
+				outline.width *= scaleFactor;
+				outline.height *= scaleFactor;
+			}
 		}
 		
 		public function hitTest(testPoint:Point, alphaThreshold:Number = 1):Boolean
@@ -78,6 +84,10 @@
 			//if the test point is within in the hitmap's bounding box, prepare to test against pixels
 			if(hitmap.hitTestPoint(testPoint.x, testPoint.y))
 			{
+				//if no hitmap exists, return failure
+				if(!hitmap)
+					return false;
+				
 				//create a temporary hitmap to be used in contact detection, fill it will transparent pixels for now
 				var testHitMap:Bitmap = new Bitmap(new BitmapData(hitmap.width, hitmap.height, true, 0x00000000));
 				
