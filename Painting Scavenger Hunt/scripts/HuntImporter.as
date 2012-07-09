@@ -58,18 +58,17 @@
 		{
 			//load painting
 			var bitmapLoader:Loader = new Loader();
-			bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, 
-				function(e:Event):void
-								 {					
-									//display painting on canvas
-									paintingCanvas.displayPainting(Bitmap(LoaderInfo(e.target).content));
-									
-									//mask the magnifying glass so that it is not drawn beyond the painting
-									magnifyingGlass.mask = paintingCanvas.getPaintingMask();
-									
-									//create objects of interest
-									parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);																								
-								 });
+			bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void
+																							 {					
+																								//display painting on canvas
+																								paintingCanvas.displayPainting(Bitmap(LoaderInfo(e.target).content));
+																								
+																								//mask the magnifying glass so that it is not drawn beyond the painting
+																								magnifyingGlass.mask = paintingCanvas.getPaintingMask();
+																								
+																								//create objects of interest
+																								parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);																								
+																							 });
 			bitmapLoader.load(new URLRequest(painting.filename));
 		}
 				
@@ -77,9 +76,9 @@
 		{
 			for each(var ooi in objectsOfInterest)
 			{
-				if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("outline_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"))
+				if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("outline_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"), ooi.hasOwnProperty("clue"))
 				{
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y));
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), ooi.clue);
 					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	{	paintingCanvas.addObjectOfInterest(ObjectOfInterest(e.target));	});
 					newObject.loadComponents();
 				}

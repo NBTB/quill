@@ -12,6 +12,7 @@
 		<outline_filename>../assets/quill outline.png</outline_filename>
 		<x>455</x>
 		<y>275</y>
+		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Moon</name>
@@ -19,5 +20,6 @@
 		<outline_filename>../assets/moon outline.png</outline_filename>
 		<x>80</x>
 		<y>15</y>
+		<clue>My appearance is always different, but I always have the same face...</clue>
 	</Object_Of_Interest>
 </Hunt>

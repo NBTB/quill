@@ -1,11 +1,10 @@
 ﻿package
 {
-	import flash.display.MovieClip;
-	import flash.display.Bitmap;
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.ui.*;	
 	import flash.geom.Point;
-	import flash.events.Event;
+	
 	import flash.net.URLRequest;
 	
 	public class ObjectOfInterest extends MovieClip
@@ -17,14 +16,21 @@
 		private var outline:Bitmap = null;
 		private var fullsizeHitmap:Bitmap = null;
 		private var fullsizeOutline:Bitmap = null;
+		public var clue:String = null;
 		
-		public function ObjectOfInterest(objectName:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number)
+		public function ObjectOfInterest(objectName:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number, clue:String)
 		{
 			this.objectName = objectName;
 			this.hitmapFilename = hitmapFilename;
 			this.outlineFilename = outlineFilename;
 			this.x = x;
 			this.y = y;
+			this.clue = clue;
+			addEventListener(MouseEvent.CLICK, testClick);
+		}
+		
+		public function testClick(event:MouseEvent):void {
+			trace("test");
 		}
 		
 		public function loadComponents():void
@@ -32,6 +38,8 @@
 			loadHitmap();
 			loadOutline();
 		}
+		
+		
 		
 		private function loadHitmap():void
 		{

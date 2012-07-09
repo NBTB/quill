@@ -13,18 +13,46 @@
 		
 	public class ScavengerHunt extends MovieClip
 	{
+		var startGameListener:MenuListener;
 		var paintingCanvas:PaintingCanvas = null;
+		var startUpScreen:SplashScreen;
+		var useTutorial:Boolean;
 		private var zoomed:Boolean = false;
 		private var magnifyingGlass:MagnifyingGlass;
 		
 		public function ScavengerHunt():void
 		{	
-			//prepare to be added to stage
-			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			
+			startMenu();	
+			
+			
+		}
+		
+		public function startMenu():void
+		{
+			
+			startGameListener = new MenuListener();
+			startUpScreen = new SplashScreen(startGameListener);
+			
+			addChild(startUpScreen);
+			startGameListener.addEventListener(MenuListener.GAME_START, gameStart);
+			useTutorial = startUpScreen.useTut;
+			
+			
+		}
+		
+		public function gameStart(e:Event):void
+		{
+			removeChild(startUpScreen);	
+			
+						
 			
 			//create canvas to fill stage
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			addChild(paintingCanvas);
+			
+			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
+			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
 			
 			//create magnifying glass
 			magnifyingGlass = new MagnifyingGlass();
@@ -32,14 +60,10 @@
 			//import hunt parameters
 			var importer:HuntImporter = new HuntImporter();
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass);
+			
 		}
 		
-		public function addedToStage(e:Event)
-		{
-			//listen for input
-			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
-			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
-		}
+		
 	
 		public function checkMouseMove(e:MouseEvent):void
 		{
@@ -53,6 +77,7 @@
 		
 		public function checkKeysUp(e:KeyboardEvent):void
 		{
+			
 			//toggle magnifying glass
 			if(e.keyCode == Keyboard.SPACE)
 				toggleZoom();
