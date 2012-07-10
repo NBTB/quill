@@ -18,7 +18,6 @@
 		private var outlineFilename = null;
 		private var hitmap:Bitmap = null;
 		private var outline:Bitmap = null;
-		private var fullsizeHitmap:Bitmap = null;
 		private var fullsizeOutline:Bitmap = null;
 		private var scaleFactor:Number = 1;
 		private var mousedOver:Boolean = false;
@@ -44,7 +43,6 @@
 			//prevent object from capturing mouse input initially
 			mouseEnabled = false;
 			mouseChildren = false;
-			//addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent){	trace("hi");});
 			
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
@@ -89,7 +87,6 @@
 																								hitmap = new Bitmap(new BitmapData(tempHitmap.bitmapData.width * scaleFactor, tempHitmap.bitmapData.height * scaleFactor, true, 0x00000000));
 																								hitmap.bitmapData.draw(tempHitmap, new Matrix(scaleFactor, 0, 0, scaleFactor));
 																								tempHitmap.bitmapData.dispose();
-																								fullsizeHitmap = new Bitmap(hitmap.bitmapData);
 																								if(hitmap && outline)
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							 });
