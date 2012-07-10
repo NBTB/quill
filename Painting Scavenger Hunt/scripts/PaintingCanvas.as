@@ -20,7 +20,6 @@
 		private var fullsizePainting:Bitmap = null;
 		private var paintingScale:Number = 1;
 		private var objectsOfInterest:Array = null;
-		private var ooiMousedOver:ObjectOfInterest = null;
 		private var ooiFound:Array = null;		
 		private var paintingMask:Shape;
 		
