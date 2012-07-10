@@ -8,6 +8,7 @@
 	import flash.geom.Point;
 	import flash.geom.Matrix;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.net.URLRequest;
 	
 	public class ObjectOfInterest extends MovieClip
@@ -19,14 +20,58 @@
 		private var outline:Bitmap = null;
 		private var fullsizeHitmap:Bitmap = null;
 		private var fullsizeOutline:Bitmap = null;
+		private var scaleFactor:Number = 1;
+		private var mousedOver:Boolean = false;
 		
-		public function ObjectOfInterest(objectName:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number)
+		public function ObjectOfInterest(objectName:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number, scaleFactor:Number = 1)
 		{
+			//set object name
 			this.objectName = objectName;
+			
+			//store locations of hitmap and outline image files
 			this.hitmapFilename = hitmapFilename;
 			this.outlineFilename = outlineFilename;
+			
+			//set coordinates
 			this.x = x;
 			this.y = y;
+			
+			//store scale to be used when loading bitmaps
+			if(scaleFactor  <= 0)
+				scaleFactor = 1;
+			this.scaleFactor = scaleFactor;
+			
+			//prevent object from capturing mouse input initially
+			mouseEnabled = false;
+			mouseChildren = false;
+			//addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent){	trace("hi");});
+			
+			//track the start of a new frame
+			addEventListener(Event.ENTER_FRAME, enterFrame);
+		}
+		
+		public function enterFrame(e:Event)
+		{
+			if(parent)
+			{
+				if(hitTest(new Point(parent.mouseX, parent.mouseY)))
+				{
+					if(!mousedOver)
+					{
+						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+						mousedOver = true;
+					}
+				}
+				else
+				{
+					if(mousedOver)
+					{
+						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+						mousedOver = false;
+					}
+				}
+			}
+																  
 		}
 		
 		public function loadComponents():void
@@ -40,9 +85,10 @@
 			var hitmapLoader:Loader = new Loader();
 			hitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void   
 																							 {	
-																							 	hitmap = Bitmap(LoaderInfo(e.target).content);	
-																								hitmap.x = x;
-																								hitmap.y = y;
+																							 	var tempHitmap:Bitmap = Bitmap(LoaderInfo(e.target).content);	
+																								hitmap = new Bitmap(new BitmapData(tempHitmap.bitmapData.width * scaleFactor, tempHitmap.bitmapData.height * scaleFactor, true, 0x00000000));
+																								hitmap.bitmapData.draw(tempHitmap, new Matrix(scaleFactor, 0, 0, scaleFactor));
+																								tempHitmap.bitmapData.dispose();
 																								fullsizeHitmap = new Bitmap(hitmap.bitmapData);
 																								if(hitmap && outline)
 																									dispatchEvent(new Event(Event.COMPLETE)); 
@@ -55,56 +101,29 @@
 			var outlineLoader:Loader = new Loader();
 			outlineLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void	
 																							  {	
-																							  	outline = Bitmap(LoaderInfo(e.target).content);	
-																								outline.x = x;
-																								outline.y = y;
+																							  	outline = Bitmap(LoaderInfo(e.target).content);
+																								outline.width *= scaleFactor;
+																								outline.height *= scaleFactor;
 																								fullsizeOutline = new Bitmap(outline.bitmapData);
+																								addChild(outline);
 																								if(hitmap && outline)
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							  });
 			outlineLoader.load(new URLRequest(outlineFilename));
 		}
-		
-		public function scaleBitmaps(scaleFactor:Number)
-		{
-			if(hitmap)
-			{
-				hitmap.width *= scaleFactor;
-				hitmap.height *= scaleFactor;
-			}
-			if(outline)
-			{
-				outline.width *= scaleFactor;
-				outline.height *= scaleFactor;
-			}
-		}
-		
+				
 		public function hitTest(testPoint:Point, alphaThreshold:Number = 1):Boolean
 		{
 			//if the test point is within in the hitmap's bounding box, prepare to test against pixels
-			if(hitmap.hitTestPoint(testPoint.x, testPoint.y))
+			if(hitTestPoint(testPoint.x, testPoint.y))
 			{
 				//if no hitmap exists, return failure
 				if(!hitmap)
 					return false;
 				
-				//create a temporary hitmap to be used in contact detection, fill it will transparent pixels for now
-				var testHitMap:Bitmap = new Bitmap(new BitmapData(hitmap.width, hitmap.height, true, 0x00000000));
-				
-				//draw the original hitmap into the duplicate, scaling the actual pixel data to fit the duplicate
-				//this is done because the dimensions of the hitmap and its internal pixel data may not be identical, the duplicate's dimensions will be identical
-				testHitMap.bitmapData.draw(hitmap, new Matrix(hitmap.width/hitmap.bitmapData.width, 0, 0, hitmap.height/hitmap.bitmapData.height));
-				
-				//align the duplicate with the original
-				testHitMap.x = hitmap.x;
-				testHitMap.y = hitmap.y;
-				
-				//if the test point hits any pixel whose opacity meets or exceeds the given threshod, return a success
-				if(testHitMap.bitmapData.hitTest(new Point(testHitMap.x, testHitMap.y), alphaThreshold, testPoint))
+				//if the given point makes contact with the hitmap, return a success
+				if(hitmap.bitmapData.hitTest(new Point(x, y), alphaThreshold, testPoint))
 					return true;
-				
-				//dispose of the data used by the temporary hitmap
-				testHitMap.bitmapData.dispose();
 			}
 			
 			//by default return a failure

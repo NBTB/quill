@@ -3,6 +3,7 @@
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.xml.*;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
@@ -62,36 +63,22 @@
 			//add new object to list
 			objectsOfInterest.push(newObject);
 			
-			//get child index of painting
-			var paintingIndex:int = getChildIndex(painting);
-			
-			//place hitmap below painting
-			addChildAt(newObject.getHitmap(), paintingIndex);
-			paintingIndex++;
-			
-			//place outine above painting
-			addChildAt(newObject.getOutline(), paintingIndex + 1);
+			//add new object as a display list child
+			addChild(newObject);
 			newObject.hideOutline();
 			
-			//scale new object in the same way that the painting was scaled
-			newObject.scaleBitmaps(paintingScale);			
-		}
-		
-		public function outlineObjectsAtPoint(point:Point)
-		{			
-			//outline any objects that make contact with the given point
-			for(var i:int; i < objectsOfInterest.length; i++)
-			{
-				//address object of interest
-				var ooi:ObjectOfInterest = objectsOfInterest[i];
-				
-				//if the object is under the cursor, show its outline
-				if(ooi.hitTest(point))
-					ooi.showOutline();
-				//otherwise, hide its outline
-				else
-					ooi.hideOutline();
-			}
+			
+			//listen for when the cursor begins to hover over the new object
+			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
+																					{	
+																						ObjectOfInterest(e.target).showOutline();	
+																					});
+			
+			//listen for when the cursor stops hovering over the new object
+			newObject.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
+																					{	
+																						ObjectOfInterest(e.target).hideOutline();	
+																					});
 		}
 		
 		public function addPaintingToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
@@ -118,6 +105,7 @@
 					objectsOfInterest[i].addOutlineToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}
 		
-		public function getPaintingMask():Shape	{	return paintingMask;	}
+		public function getPaintingMask():Shape		{	return paintingMask;	}
+		public function getPaintingScale():Number	{	return paintingScale;	}
 	}
 }
