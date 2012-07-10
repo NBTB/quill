@@ -66,10 +66,7 @@
 		
 	
 		public function checkMouseMove(e:MouseEvent):void
-		{
-			//outline any objects of interest that are moused over
-			paintingCanvas.outlineObjectsAtPoint(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
-			
+		{			
 			//if the magnifying glass is being used, draw through its lens
 			if(zoomed)
 				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));

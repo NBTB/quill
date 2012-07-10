@@ -78,7 +78,7 @@
 			{
 				if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("outline_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"), ooi.hasOwnProperty("clue"))
 				{
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), ooi.clue);
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), paintingCanvas.getPaintingScale());
 					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	{	paintingCanvas.addObjectOfInterest(ObjectOfInterest(e.target));	});
 					newObject.loadComponents();
 				}
