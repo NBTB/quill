@@ -23,8 +23,9 @@
 		private var fullsizePainting:Bitmap = null;
 		private var paintingScale:Number = 1;
 		public var objectsOfInterest:Array = null;
-		private var ooiMousedOver:ObjectOfInterest = null;
+		private var ooiUnused:Array = null;
 		private var ooiFound:Array = null;		
+		private var currentOOI:ObjectOfInterest = null;
 		private var paintingMask:Shape;
 		var showCaption:Boolean;//if true, hoverCaption is visible
 		public static var clueCounter:Number=0; //the current clue you are working on
@@ -52,16 +53,17 @@
 		var objects:Array=new Array();//stores all of the buttons 
 		
 		public function PaintingCanvas(x:Number, y:Number, canvasWidth:Number, canvasHeight:Number):void
-		{			
-		
-			addEventListener(Event.ENTER_FRAME, captionFN);
+		{						
 			//store location and size (do not actually scale canvas)
 			this.x = x;
 			this.y = y;
 			this.canvasWidth = canvasWidth;
 			this.canvasHeight = canvasHeight;
 			
-			moon=new Moon("Moon",79,5);
+			//create empty array of objects of interest
+			objectsOfInterest = new Array();
+			
+			/*moon=new Moon("Moon",79,5);
 			flag=new Flag("Flag",308, 301);
 			skull=new Skull("Skull",275,130);
 			rifle=new Rifle("Rifle",359,260);
@@ -94,19 +96,12 @@
 			objects.push(cards);
 			objects.push(quill);
 			
-			showCaption=false;
+			showCaption=false;			
 			
-			
-						
-			//create empty array of objects of interest
-			objectsOfInterest = new Array();
-			
-			for (var i:Number = 0; i < objects.length; i++) {
-
-				objects[i].addEventListener(MouseEvent.ROLL_OVER, manageMouseOver);
-				objects[i].addEventListener(MouseEvent.ROLL_OUT, manageMouseOut);
+			for (var i:Number = 0; i < objects.length; i++) 
+			{
 				objects[i].addEventListener(MouseEvent.CLICK, clueHandler);
-			}
+			}*/
 			
 			
 		}
@@ -144,72 +139,23 @@
 			addChild(clueText);			
 			addChild(captionField);
 
-			//set clue textfield location and settings
-			
+			//set clue textfield location and settings		
+			//clueText.autoSize = TextFieldAutoSize.CENTER;
 			clueText.wordWrap=true;
 			clueText.x=66;
 			clueText.y=68;
 			clueText.width=474;
 			captionField.width = 474;
-			
-			clueText.text=quill.clue;
 		}
-		
-		//handles the mouse moving over an object
-
-		public function manageMouseOver(event:MouseEvent):void {
-			
-			showCaption=true;
-			
-			//when the button is hovered over, the boolean is triggered, and changes the text
-			//of the caption
-
-			if (objects[0].isOver) {
-				captionText=objects[0].captionText;
-			}
-			if (objects[1].isOver) {
-				captionText=objects[1].captionText;
-			}
-			if (objects[2].isOver) {
-				captionText=objects[2].captionText;
-			}
-			if (objects[3].isOver) {
-				captionText=objects[3].captionText;
-			}
-			if (objects[4].isOver) {
-				captionText=objects[4].captionText;
-			}
-			if (objects[5].isOver) {
-				captionText=objects[5].captionText;
-			}
-			if (objects[6].isOver) {
-				captionText=objects[6].captionText;
-			}
-			if (objects[7].isOver) {
-				captionText=objects[7].captionText;
-			}
-			if (objects[8].isOver) {
-				captionText=objects[8].captionText;
-			}
-			if (objects[9].isOver) {
-				captionText=objects[9].captionText;
-			}
-		}
-
-		//when the mouse moves off an object, remove the caption
-
-		public function manageMouseOut(event:MouseEvent):void {
-			
-			showCaption=false;
-			captionText="";
-
-		}
-		
+										
 		//handles the cycle of clues
-
-		public function clueHandler(event:MouseEvent):void {
+		public function clueHandler(event:MouseEvent):void 
+		{
+			//currentOOI = pickNextOOI();
+			//trace(currentOOI.getClue());
+			
 			//reset the timer for the clue so you can see the text again
-			textTimer=0;
+			/*textTimer=0;
 			clueText.visible=true;
 			
 			//clueCounter is the current clue you are on, if you get the clue right, the next clue appears
@@ -296,47 +242,8 @@
 				}
 			}
 
-
-		}
-		
-		//handles the text in the caption rectangle
-
-		public function captionFN(e: Event ):void {
-
-
-			if (showCaption==true) {
-				//set hover box size, location, and text
-				captionField.text=captionText;
-				captionField.width=13*captionField.text.length;
-				captionField.alpha=75;
-				if (captionField.text.length>8) {
-					captionField.x=root.mouseX+x-90;
-					captionField.y=root.mouseY+y-5;
-				} else {
-					captionField.x=root.mouseX+x+20;
-					captionField.y=root.mouseY+y-5;
-				}
-				//puts a delay on the hover captioning
-				counter++;
-				
-				if (counter>=15) {
-					captionField.visible=true;
-				}
-
-
-			} else {
-				//reset hover cap rectangle 
-				counter=0;
-				captionField.visible=false;
-				//makes the clue text disappear after a few seconds so its not in the way
-				textTimer++;
-				if (textTimer>=70) {
-					clueText.visible=false;
-				}
-			}
-
-		}
-	
+			*/
+		}	
 		
 		public function addObjectOfInterest(newObject:ObjectOfInterest)
 		{
@@ -344,21 +251,85 @@
 			objectsOfInterest.push(newObject);
 			
 			//add new object as a display list child
-			addChild(newObject);
-			newObject.hideOutline();
-			
+			addChild(newObject);			
 			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
 																					{	
-																						ObjectOfInterest(e.target).showOutline();	
+																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
+																						targetObject.showOutline();	
+																						targetObject.prepareCaption();																						
 																					});
 
 			//listen for when the cursor stops hovering over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
 																					{	
-																						ObjectOfInterest(e.target).hideOutline();	
+																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
+																						targetObject.hideOutline();	
+																						targetObject.unprepareCaption();
 																					});
+			
+			
+			
+			
+			newObject.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void
+																					{	
+																						if(currentOOI)
+																						{
+																							if(ObjectOfInterest(e.target).getID() == currentOOI.getID())
+																							{
+																								pickNextOOI();
+																								displayClue();
+																							}
+																							else
+																								displayIncorrect();
+																						}
+																					});
+			
+		}
+		
+		public function resetUnusedOOIList():void
+		{
+			ooiUnused = new Array();
+			for(var i:int = 0; i < objectsOfInterest.length; i++)
+				ooiUnused.push(objectsOfInterest[i]);
+		}
+		
+		public function pickNextOOI():void
+		{
+			//generate a number [0, 1)
+			var randNum:Number = Math.random();
+			if(randNum >= 1)
+				randNum = 0;
+			
+			//determine index of next object of interest
+			var index:int = int(randNum * ooiUnused.length);
+			
+			//address chosen object
+			currentOOI = ooiUnused[index];
+			
+			//remove object from list of unused
+			ooiUnused.splice(index, 1);
+		}
+		
+		public function displayClue():void
+		{
+			if(currentOOI)
+			{
+				clueText.visible = true;
+				clueText.text = currentOOI.getClue();
+			}
+			else
+			{
+				clueText.visible = true;
+				clueText.text = "All done";
+			}
+		}
+		
+		public function displayIncorrect():void
+		{
+			clueText.visible = true;
+			clueText.text = wrongAnswer;
 		}
 		
 		public function addPaintingToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)

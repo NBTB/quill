@@ -51,6 +51,8 @@
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			addChild(paintingCanvas);
 			
+			//listen for input events
+			stage.focus = stage;
 			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
 			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
 			
@@ -60,10 +62,7 @@
 			//import hunt parameters
 			var importer:HuntImporter = new HuntImporter();
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass);
-			
-		}
-		
-		
+		}		
 	
 		public function checkMouseMove(e:MouseEvent):void
 		{			
@@ -74,7 +73,6 @@
 		
 		public function checkKeysUp(e:KeyboardEvent):void
 		{
-			
 			//toggle magnifying glass
 			if(e.keyCode == Keyboard.SPACE)
 				toggleZoom();

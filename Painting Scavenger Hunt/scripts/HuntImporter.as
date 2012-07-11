@@ -2,7 +2,7 @@
 {
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.events.Event;
+	import flash.events.*;
 	import flash.xml.*;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
@@ -67,22 +67,60 @@
 																								magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 																								
 																								//create objects of interest
-																								parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);																								
+																								parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);		
 																							 });
 			bitmapLoader.load(new URLRequest(painting.filename));
 		}
 				
 		private function parseObjectsOfInterest(objectsOfInterest:XMLList, paintingCanvas:PaintingCanvas)
 		{
+			var objectsParsed:Number = 0;
+			var objectsLoaded:Number = 0;
+			var objectsFailed:Number = 0;
+			var allObjectsParsed:Boolean = false;
+			
 			for each(var ooi in objectsOfInterest)
 			{
 				if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("outline_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"), ooi.hasOwnProperty("clue"))
 				{
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), paintingCanvas.getPaintingScale());
-					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	{	paintingCanvas.addObjectOfInterest(ObjectOfInterest(e.target));	});
+					objectsParsed++;
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), paintingCanvas.getPaintingScale());
+					
+					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	
+																				{	
+																					objectsLoaded++;
+																					paintingCanvas.addObjectOfInterest(ObjectOfInterest(e.target));	
+																					if(allObjectsParsed)
+																						initClueList(paintingCanvas)
+																				});
+					
+					newObject.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																							  {	
+																							  	objectsFailed++;	
+																								if(allObjectsParsed)
+																									initClueList(paintingCanvas)
+																							  });
+					
 					newObject.loadComponents();
 				}
 			}
+			
+			allObjectsParsed = true;
+			
+			if(objectsLoaded + objectsFailed >= objectsParsed)
+				initClueList(paintingCanvas);
+		}
+		
+		/*TODO this should be handled differently, consider creating events for when the painting, object list, or end goal are fully loaded*/
+		private function initClueList(paintingCanvas:PaintingCanvas)
+		{
+			//prepare new list of unused objects of interest and pick the first object
+			paintingCanvas.resetUnusedOOIList();
+			paintingCanvas.pickNextOOI();
+			
+			/*TODO this might go somewhere else*/
+			//display first clue
+			paintingCanvas.displayClue();
 		}
 	}
 }
