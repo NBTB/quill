@@ -61,49 +61,7 @@
 			this.canvasHeight = canvasHeight;
 			
 			//create empty array of objects of interest
-			objectsOfInterest = new Array();
-			
-			/*moon=new Moon("Moon",79,5);
-			flag=new Flag("Flag",308, 301);
-			skull=new Skull("Skull",275,130);
-			rifle=new Rifle("Rifle",359,260);
-			silhouette=new Silhouette("Silhouette",512,37);
-			fire=new Fire("Fire",102,318);
-			cannonball=new Cannonball("Cannonball",502,383);
-			sword=new Sword("Sword",509,310);
-			cards=new Cards("Cards",221,360);
-			quill=new Quill("Quill",454,281);
-			addChild(moon);
-			addChild(flag);
-			addChild(skull);
-			addChild(rifle);
-			addChild(silhouette);
-			addChild(fire);
-			addChild(cannonball);
-			addChild(sword);
-			addChild(cards);
-			addChild(quill);
-			//add them to the objects array
-
-			objects.push(moon);
-			objects.push(flag);
-			objects.push(skull);
-			objects.push(rifle);
-			objects.push(silhouette);
-			objects.push(fire);
-			objects.push(cannonball);
-			objects.push(sword);
-			objects.push(cards);
-			objects.push(quill);
-			
-			showCaption=false;			
-			
-			for (var i:Number = 0; i < objects.length; i++) 
-			{
-				objects[i].addEventListener(MouseEvent.CLICK, clueHandler);
-			}*/
-			
-			
+			objectsOfInterest = new Array();			
 		}
 		
 		public function displayPainting(painting:Bitmap)
@@ -148,103 +106,6 @@
 			captionField.width = 474;
 		}
 										
-		//handles the cycle of clues
-		public function clueHandler(event:MouseEvent):void 
-		{
-			//currentOOI = pickNextOOI();
-			//trace(currentOOI.getClue());
-			
-			//reset the timer for the clue so you can see the text again
-			/*textTimer=0;
-			clueText.visible=true;
-			
-			//clueCounter is the current clue you are on, if you get the clue right, the next clue appears
-			if (clueCounter==0) {
-				//if you are going through the cycle correctly, the previous clue should be numerically before it
-				if (prevCounter==9) {
-					clueText.text=quill.clue;
-				//otherwise you solved the clue incorrectly and the current clue counter goes back to the previous one
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==1) {
-				if (prevCounter==0) {
-					clueText.text=moon.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==2) {
-				if (prevCounter==1) {
-					clueText.text=cards.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==3) {
-				if (prevCounter==2) {
-					clueText.text=rifle.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==4) {
-				if (prevCounter==3) {
-					clueText.text=flag.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==5) {
-				if (prevCounter==4) {
-					clueText.text=fire.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==6) {
-				if (prevCounter==5) {
-					clueText.text=sword.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==7) {
-				if (prevCounter==6) {
-					clueText.text=cannonball.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==8) {
-				if (prevCounter==7) {
-					clueText.text=silhouette.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-			if (clueCounter==9) {
-				if (prevCounter==8) {
-					clueText.text=skull.clue;
-				} else {
-					clueText.text=wrongAnswer;
-					clueCounter=prevCounter;
-				}
-			}
-
-			*/
-		}	
-		
 		public function addObjectOfInterest(newObject:ObjectOfInterest)
 		{
 			//add new object to list
@@ -271,7 +132,7 @@
 			
 			
 			
-			
+			//listen for when the object of interest is clicked
 			newObject.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void
 																					{	
 																						if(currentOOI)
