@@ -74,6 +74,14 @@
 			//if the magnifying glass is being used, draw through its lens
 			if(zoomed)
 				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+				
+				
+			/*TODO this should not go here (or even work like this), super temporary*/
+			if(paintingCanvas.clueText.text != "" && paintingCanvas.clueText.text != paintingCanvas.wrongAnswer)
+			{
+				mainMenu.cluesMenu.clueText.text = paintingCanvas.clueText.text;
+				mainMenu.cluesMenu.clueText.wordWrap = true;
+			}
 		}
 		
 		public function checkKeysUp(e:KeyboardEvent):void
