@@ -16,6 +16,7 @@
 		var startGameListener:MenuListener;
 		var paintingCanvas:PaintingCanvas = null;
 		var startUpScreen:SplashScreen;
+		var mainMenu:MainMenu;
 		var useTutorial:Boolean;
 		private var zoomed:Boolean = false;
 		private var magnifyingGlass:MagnifyingGlass;
@@ -58,6 +59,10 @@
 			
 			//create magnifying glass
 			magnifyingGlass = new MagnifyingGlass();
+			
+			//Does the user want the tutorial when the game starts up?
+			mainMenu = new MainMenu(startUpScreen.useTut);
+			addChild(mainMenu);
 			
 			//import hunt parameters
 			var importer:HuntImporter = new HuntImporter();
