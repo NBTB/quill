@@ -16,43 +16,42 @@
 		var startGameListener:MenuListener;
 		var paintingCanvas:PaintingCanvas = null;
 		var startUpScreen:SplashScreen;
-		var useTutorial:Boolean;
+		var mainMenu:MainMenu;
 		private var zoomed:Boolean = false;
 		private var magnifyingGlass:MagnifyingGlass;
 		
 		public function ScavengerHunt():void
 		{	
+			//Add the event listeners for the mouse and keyboard, to be used during the main painting.
+			//addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			
-			startMenu();	
-			
-			
+			//Program starts
+			startMenu();
 		}
 		
 		public function startMenu():void
 		{
-			
+			//Listener that updates when the game is started
 			startGameListener = new MenuListener();
+			
+			//Start up screen 
 			startUpScreen = new SplashScreen(startGameListener);
-			
 			addChild(startUpScreen);
-			startGameListener.addEventListener(MenuListener.GAME_START, gameStart);
-			useTutorial = startUpScreen.useTut;
 			
-			
+			//If the game has started, go to the main game function
+			startGameListener.addEventListener(MenuListener.GAME_START, gameStart);			
 		}
 		
 		public function gameStart(e:Event):void
 		{
-			removeChild(startUpScreen);	
-			
 						
+			//listen for input
+			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
+			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
 			
 			//create canvas to fill stage
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
-			addChild(paintingCanvas);
-			
-			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
-			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
+			addChild(paintingCanvas);			
 			
 			//create magnifying glass
 			magnifyingGlass = new MagnifyingGlass();
@@ -61,12 +60,29 @@
 			var importer:HuntImporter = new HuntImporter();
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass);
 			
+			//Does the user want the tutorial when the game starts up?
+			mainMenu = new MainMenu(startUpScreen.useTut);
+			addChild(mainMenu);
+			
+			//Remove the splash screen, since the user has started the game.
+			removeChild(startUpScreen);
+
 		}
 		
-		
+		//has 
+		/*public function addedToStage(e:Event)
+		{
+			//listen for input
+			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
+			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);						
+		}*/
 	
 		public function checkMouseMove(e:MouseEvent):void
-		{			
+		{
+			
+			//outline any objects of interest that are moused over
+			paintingCanvas.outlineObjectsAtPoint(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+			
 			//if the magnifying glass is being used, draw through its lens
 			if(zoomed)
 				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
@@ -74,7 +90,6 @@
 		
 		public function checkKeysUp(e:KeyboardEvent):void
 		{
-			
 			//toggle magnifying glass
 			if(e.keyCode == Keyboard.SPACE)
 				toggleZoom();
