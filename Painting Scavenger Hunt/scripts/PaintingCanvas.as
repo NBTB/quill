@@ -40,19 +40,6 @@
 		var format2:TextFormat = new TextFormat(); //formats the textfield with color, fonts
 		var wrongAnswer:String = "That is not the answer to the riddle"; //appears in clueText when you guess the wrong clue
 		
-		var moon:Moon;
-		var flag:Flag;
-		var skull:Skull;
-		var rifle:Rifle;
-		var fire:Fire;
-		var sword:Sword;
-		var silhouette:Silhouette;
-		var cards:Cards;
-		var cannonball:Cannonball;
-		var quill:Quill;
-		
-		var objects:Array=new Array();//stores all of the buttons 
-		
 		public function PaintingCanvas(x:Number, y:Number, canvasWidth:Number, canvasHeight:Number):void
 		{						
 			//store location and size (do not actually scale canvas)
@@ -196,7 +183,7 @@
 				clueText.text = "All done";
 			}
 			
-			clueTimer.reset():
+			clueTimer.reset();
 			clueTimer.start();
 		}
 		

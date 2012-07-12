@@ -75,7 +75,7 @@
 		<clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
 		<hitmap_filename>../assets/sword hitmap.png</hitmap_filename>
 		<outline_filename>../assets/sword outline.png</outline_filename>
-		<x>490</x>
+		<x>491</x>
 		<y>303</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
