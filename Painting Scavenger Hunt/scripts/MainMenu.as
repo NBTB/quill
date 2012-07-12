@@ -5,6 +5,7 @@
 	import flash.display.Shape;
 	import flash.text.TextFormat;
 	import flash.events.MouseEvent;
+	import flash.geom.ColorTransform;
 
 	class MainMenu extends MovieClip
 	{
@@ -17,31 +18,43 @@
 		
 		var helpMenu:HelpMenu;
 		var cluesMenu:CluesMenu;
+		var letterMenu:LetterMenu;
 		
 		var menuButtonFormat:TextFormat = new TextFormat();
 		
-		var buttonY:int = 380;
+		var buttonY:int = 390;
 
 		public function MainMenu(startWTutorial:Boolean):void
 		{
 			helpMenu = new HelpMenu(0);
-			cluesMenu = new CluesMenu(200);
+			cluesMenu = new CluesMenu(150);
+			letterMenu = new LetterMenu(300);
 			
 			helpMenu.getBaseMenu(this);
 			cluesMenu.getBaseMenu(this);
+			letterMenu.getBaseMenu(this);
 			
 			this.addChild(menuBackground);
 			this.addChild(menuButtonHelp);
 			this.addChild(menuButtonClues);
+			this.addChild(menuButtonLetter);
 			
 			createBackground();
 			formatText();
 			
 			menuButtonHelp.setTextFormat(menuButtonFormat);
 			menuButtonClues.setTextFormat(menuButtonFormat);
+			menuButtonLetter.setTextFormat(menuButtonFormat);
 			
 			menuButtonHelp.addEventListener(MouseEvent.MOUSE_DOWN, clickHelpMenu);
 			menuButtonClues.addEventListener(MouseEvent.MOUSE_DOWN, clickCluesMenu);
+			menuButtonLetter.addEventListener(MouseEvent.MOUSE_DOWN, clickLetterMenu);
+			menuButtonHelp.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			menuButtonHelp.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			menuButtonClues.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			menuButtonClues.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			menuButtonLetter.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			menuButtonLetter.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			
 		}
 		
@@ -53,16 +66,22 @@
 			menuButtonFormat.size = 30;
 			
 			menuButtonHelp.y = buttonY;
-			menuButtonHelp.x = 20;
+			menuButtonHelp.x = 0;
 			menuButtonHelp.height = 50;
 			menuButtonHelp.width = 175;
 			menuButtonHelp.text = "Help";
 			
 			menuButtonClues.y = buttonY;
-			menuButtonClues.x = 200;
+			menuButtonClues.x = 150;
 			menuButtonClues.height = 50;
 			menuButtonClues.width = 175;
 			menuButtonClues.text = "Clues";
+			
+			menuButtonLetter.y = buttonY;
+			menuButtonLetter.x = 300;
+			menuButtonLetter.height = 50;
+			menuButtonLetter.width = 175;
+			menuButtonLetter.text = "Letter";
 		}
 	
 		//restarts the whole application
@@ -88,6 +107,19 @@
 		function clickCluesMenu(event:MouseEvent):void
 		{
 			openCluesMenu();
+		}
+		
+		function openLetterMenu():void
+		{
+			closeMenus();
+			this.addChild(letterMenu);
+			letterMenu.isOpen = true;
+		}
+		
+		//Tells the cluesMenu when to activate
+		function clickLetterMenu(event:MouseEvent):void
+		{
+			openLetterMenu();
 		}
 		
 		function openHelpMenu():void
@@ -116,6 +148,32 @@
 				cluesMenu.isOpen = false;
 				removeChild(cluesMenu);
 			}
+			if(letterMenu.isOpen == true)
+			{
+				letterMenu.isOpen = false;
+				removeChild(letterMenu);
+			}
+		}
+		
+		//changes the text color of the menu buttons to identify which one you're moused over
+
+		public function colorChange(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xFFC000;
+			sender.transform.colorTransform=myColor;
+
+		}
+		
+		//reverts the buttons back to their original colors
+		
+		public function revertColor(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xFFFFFF;
+			sender.transform.colorTransform=myColor;
+
 		}
 		
 		function createBackground():void

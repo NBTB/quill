@@ -22,4 +22,8 @@
 		<y>15</y>
 		<clue>My appearance is always different, but I always have the same face...</clue>
 	</Object_Of_Interest>
+	<Letter_Piece>
+		<name>Unfinished</name>
+		<filename>../assets/unfinishedLetter.png</filename>		
+	</Letter_Piece>
 </Hunt>

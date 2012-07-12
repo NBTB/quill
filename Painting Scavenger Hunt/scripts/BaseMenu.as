@@ -30,7 +30,7 @@
 			theMainMenu = theMenu;
 		}
 		
-		function createBackground(xPos:int):void
+		public function createBackground(xPos:int):void
 		{
 			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);

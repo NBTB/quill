@@ -4,24 +4,24 @@
 	import flash.text.TextField;
 	import flash.display.Shape;
 
-	class HelpMenu extends BaseMenu
+	class LetterMenu extends BaseMenu
 	{
 
-		public function HelpMenu():void
+		public function LetterMenu(xPos:int):void
 		{
-			this.addChild(menuBackground);
-			createBackground();
+			//this.addChild(menuBackground);
+			super(xPos);
 		}
 
 	
 		
-		function createBackground():void
-		{
+		//override public function createBackground(xPos:int):void
+		//{
 			//Set the background graphics
-			menuBackground.graphics.lineStyle(1, 0x836A35);
+			/*menuBackground.graphics.lineStyle(1, 0x836A35);
 			menuBackground.graphics.beginFill(0x2F2720);
 			menuBackground.graphics.drawRect(0, 392.5, 579.5, 41.5);
-			menuBackground.graphics.endFill();
-		}
+			menuBackground.graphics.endFill();*/
+		//}
 	}
 }
