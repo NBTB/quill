@@ -8,18 +8,18 @@
 	</End_Goal>
 	<Object_Of_Interest>
 		<name>Quill</name>
+		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 		<hitmap_filename>../assets/quill hitmap.png</hitmap_filename>
 		<outline_filename>../assets/quill outline.png</outline_filename>
 		<x>455</x>
-		<y>275</y>
-		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
+		<y>275</y>		
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Moon</name>
+		<clue>My appearance is always different, but I always have the same face...</clue>
 		<hitmap_filename>../assets/moon hitmap.png</hitmap_filename>
 		<outline_filename>../assets/moon outline.png</outline_filename>
 		<x>80</x>
 		<y>15</y>
-		<clue>My appearance is always different, but I always have the same face...</clue>
 	</Object_Of_Interest>
 </Hunt>
