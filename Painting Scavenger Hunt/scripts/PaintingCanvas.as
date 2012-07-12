@@ -2,8 +2,7 @@
 {
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
+	import flash.events.*;
 	import flash.xml.*;
 	import flash.display.DisplayObjectContainer;
 	import flash.geom.ColorTransform;
@@ -13,6 +12,7 @@
 	import flash.display.Bitmap;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Timer;
 	import ObjectOfInterest;
 	
 	public class PaintingCanvas extends MovieClip
@@ -31,6 +31,7 @@
 		public static var clueCounter:Number=0; //the current clue you are working on
 		public static var prevCounter:Number=9; //the previous clue you solved
 		var textTimer:Number=0; //times how long the clue text is available
+		var clueTimer:Timer = null;
 		var captionText:String="";//the caption text
 		var counter:Number=0;//puts a delay on when the hover caption appears
 		var captionField:TextField = new TextField();
@@ -62,6 +63,15 @@
 			
 			//create empty array of objects of interest
 			objectsOfInterest = new Array();			
+			
+			//create clue timer
+			clueTimer = new Timer(3 * 1000, 1);
+			clueTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
+																		  {
+																			clueTimer.reset();
+																			clueText.text = ""
+																			clueText.visible = false;
+																		  });
 		}
 		
 		public function displayPainting(painting:Bitmap)
@@ -185,12 +195,18 @@
 				clueText.visible = true;
 				clueText.text = "All done";
 			}
+			
+			clueTimer.reset():
+			clueTimer.start();
 		}
 		
 		public function displayIncorrect():void
 		{
 			clueText.visible = true;
 			clueText.text = wrongAnswer;
+			
+			clueTimer.reset();
+			clueTimer.start();
 		}
 		
 		public function addPaintingToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
