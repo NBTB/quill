@@ -21,32 +21,28 @@
 		private var zoomed:Boolean = false;
 		private var magnifyingGlass:MagnifyingGlass;
 		
+		//construct scavanger hunt
 		public function ScavengerHunt():void
 		{	
-			
-			startMenu();	
-			
-			
+			//show start menu
+			startMenu();			
 		}
+		
 		
 		public function startMenu():void
 		{
-			
 			startGameListener = new MenuListener();
 			startUpScreen = new SplashScreen(startGameListener);
 			
 			addChild(startUpScreen);
 			startGameListener.addEventListener(MenuListener.GAME_START, gameStart);
 			useTutorial = startUpScreen.useTut;
-			
-			
 		}
 		
 		public function gameStart(e:Event):void
 		{
-			removeChild(startUpScreen);	
-			
-						
+			/*TODO screens should be switched only after everything is loaded*/
+			removeChild(startUpScreen);							
 			
 			//create canvas to fill stage
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
@@ -68,7 +64,8 @@
 			var importer:HuntImporter = new HuntImporter();
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass);
 		}		
-	
+		
+		//handle movement of mouse
 		public function checkMouseMove(e:MouseEvent):void
 		{			
 			//if the magnifying glass is being used, draw through its lens
@@ -77,13 +74,14 @@
 				
 				
 			/*TODO this should not go here (or even work like this), super temporary*/
-			if(paintingCanvas.clueText.text != "" && paintingCanvas.clueText.text != paintingCanvas.wrongAnswer)
+			if(paintingCanvas.clueText.text != "" && paintingCanvas.clueText.text != PaintingCanvas.wrongAnswer)
 			{
 				mainMenu.cluesMenu.clueText.text = paintingCanvas.clueText.text;
 				mainMenu.cluesMenu.clueText.wordWrap = true;
 			}
 		}
 		
+		//handles the release of keys
 		public function checkKeysUp(e:KeyboardEvent):void
 		{
 			//toggle magnifying glass
@@ -91,6 +89,7 @@
 				toggleZoom();
 		}
 		
+		//toggle use of magnifying glass
 		public function toggleZoom():void
 		{
 			//toggle zoom
@@ -109,6 +108,7 @@
 			}
 		}	
 		
+		//place the magnifying glass over the scene and magnify affected bitmaps
 		public function placeMagnifyingGlass(center:Point):void
 		{
 			//place the magnifying glass so that its center is within the canvas bounds

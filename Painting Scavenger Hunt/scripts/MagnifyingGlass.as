@@ -9,13 +9,14 @@
 	
 	public class MagnifyingGlass extends MovieClip
 	{
-		private var defaultRadius:Number;
-		private var defaultZoom:Number;
+		private var defaultRadius:Number;		//default radius of magnifying glass
+		private var defaultZoom:Number;			//default zoom factor applied to given bitmaps
 		
-		private static var borderColors:Array = new Array(0xffffff, 0xffffff, 0xffffff, 0xffffff);
-		private static var borderAlphas:Array = new Array(0, 0, 0.5, 0);
-		private static var borderRatios:Array = new Array(0, 255 * 0.85, 255 * 0.95, 255);
+		private static var borderColors:Array = new Array(0xffffff, 0xffffff, 0xffffff, 0xffffff);	//border gradient colors
+		private static var borderAlphas:Array = new Array(0, 0, 0.5, 0);							//border gradient alphas
+		private static var borderRatios:Array = new Array(0, 255 * 0.85, 255 * 0.95, 255);			//border gradient ratios
 		
+		//construct a magnifying glass with a default zoom and default radius
 		public function MagnifyingGlass(defaultZoom:Number = 1,defaultRadius:Number = 100)
 		{
 			//ensure that zoom is greater than zero
@@ -35,6 +36,7 @@
 			mouseChildren = false;
 		}
 		
+		//place the magnifying glass and clamp the center of it within a given rectangular boundary (unbounded if no rectangle is given)
 		public function place(center:Point, boundary:Rectangle = null)
 		{
 			//place magnifying glass at the given center point
@@ -59,6 +61,7 @@
 			}
 		}
 		
+		//magnify an array of bitmaps centered on texture coordinates, allowing for special zoom or radius
 		public function magnifyBitmaps(bitmaps:Array, texturePoints:Array, zoom:Number = -1, radius:Number = -1)
 		{
 			//if the given zoom is negative or zero, use the default zoom

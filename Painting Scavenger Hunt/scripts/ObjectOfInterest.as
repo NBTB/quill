@@ -11,23 +11,23 @@
 	
 	public class ObjectOfInterest extends MovieClip
 	{
-		private var objectName:String = null;
-		private var id:Number = 0;
-		private var clue:String = null;
-		private var hitmapFilename = null;
-		private var outlineFilename = null;
-		private var hitmap:Bitmap = null;
-		private var outline:Bitmap = null;
-		private var fullsizeOutline:Bitmap = null;
-		private var scaleFactor:Number = 1;
-		private var mousedOver:Boolean = false;
-		private var unused:Boolean = true;
-		private var captionTimer:Timer = null;
-		private var caption:TextField = null;
+		private var objectName:String = null;			//name of object
+		private var id:Number = 0;						//identification number of object
+		private var clue:String = null;					//clue associated with object
+		private var hitmapFilename = null;				//filename of hitmap
+		private var outlineFilename = null;				//filename of outline
+		private var hitmap:Bitmap = null;				//bitmap used for checking collisions and contact
+		private var outline:Bitmap = null;				//bitmap used to highlight object
+		private var fullsizeOutline:Bitmap = null;		//unscaled outline bitmap
+		private var scaleFactor:Number = 1;				//scale factor applied to hitmap and outline to fit a given scene
+		private var mousedOver:Boolean = false;			//flag if the object is currently under the cursor
+		private var captionTimer:Timer = null;			//time used to trigger caption display
+		private var caption:TextField = null;			//caption that displays name of object
 		
-		private static var staticID:Number = 0;
-		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);
+		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
+		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
+		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and outline
 		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number, scaleFactor:Number = 1)
 		{
 			//set name, and clue
@@ -60,7 +60,8 @@
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 		}
 		
-		public function enterFrame(e:Event)
+		//handle new frames
+		private function enterFrame(e:Event)
 		{
 			//ensure that the object has a display list parent before depending on it
 			if(parent)
@@ -91,60 +92,89 @@
 			}
 		}
 		
+		//load object's components
 		public function loadComponents():void
 		{
 			loadHitmap();
 			loadOutline();
 		}
-		
-		
-		
+				
+		//load the object's hitmap image
 		private function loadHitmap():void
 		{
+			//create new loader
 			var hitmapLoader:Loader = new Loader();
+			
+			//listen for the completion of the image loading
 			hitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void   
 																							 {	
+																							 	//store the final image data temporarily
 																							 	var tempHitmap:Bitmap = Bitmap(LoaderInfo(e.target).content);	
+																								
+																								//create a new, scaled hitmap and draw the loaded hitmap into it 
 																								hitmap = new Bitmap(new BitmapData(tempHitmap.bitmapData.width * scaleFactor, tempHitmap.bitmapData.height * scaleFactor, true, 0x00000000));
 																								hitmap.bitmapData.draw(tempHitmap, new Matrix(scaleFactor, 0, 0, scaleFactor));
+																								
+																								//dispose of the temporary image data
 																								tempHitmap.bitmapData.dispose();
+																								
+																								//if both the hitmap and outline are now loaded, dispatch a completion event
 																								if(hitmap && outline)
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							 });
 			
+			//listen for a IO error
 			hitmapLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 																										   {	
+																										   	//dispatch and IO error message
 																										   	dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
+																											
+																											//display error in debug trace
 																											trace("Failed to load hitmap of " + objectName);
 																										   });
 			
+			//begin loading iamge
 			hitmapLoader.load(new URLRequest(hitmapFilename));
 		}
 		
+		//load the object's outline image
 		private function loadOutline():void
 		{
+			//create new loader
 			var outlineLoader:Loader = new Loader();
+			
+			//listen for the completion of the image loading
 			outlineLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void	
 																							  {	
+																							  	//store image data as outline
 																							  	outline = Bitmap(LoaderInfo(e.target).content);
+																								
+																								//scale the outline image (internal data is not affected)
 																								outline.width *= scaleFactor;
 																								outline.height *= scaleFactor;
+																								
+																								//store a fullsize outline for convenience
 																								fullsizeOutline = new Bitmap(outline.bitmapData);
 																								addChild(outline);
 																								hideOutline();
+																								
+																								//if both the hitmap and outline are now loaded, dispatch a completion event
 																								if(hitmap && outline)
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							  });
 			
+			//listen for a IO error
 			outlineLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 																											{	
 																												dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
 																												trace("Failed to load outline of " + objectName);
 																											});
 			
+			//begin loading image
 			outlineLoader.load(new URLRequest(outlineFilename));
 		}
 				
+		//test hitmap against a given point, determine hit using a minimum alpha value		
 		public function hitTest(testPoint:Point, alphaThreshold:Number = 1):Boolean
 		{
 			//if the test point is within in the hitmap's bounding box, prepare to test against pixels
@@ -163,6 +193,7 @@
 			return false;
 		}
 		
+		//add the object's outline to a list of bitmaps along with corresponding texture points based on a given sample point relative to the object's upper-left corner
 		public function addOutlineToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
 		{
 			//if flagged to use fullsize outline, add it to the bitmap list
@@ -179,9 +210,14 @@
 			texturePointList.push(objectTexturePoint);
 		}
 		
+		
+		//prepare to display caption after a delay
 		public function prepareCaption(displayDelay:Number = 1000)
 		{
+			//create new timer
 			captionTimer = new Timer(displayDelay, 1);
+			
+			//listen for the completion of the time
 			captionTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
 																				  {
 																					//if the time exists, stop and discard, and add the caption to the display list
@@ -198,9 +234,12 @@
 																							parent.addChild(caption);
 																					}
 																				  });
+			
+			//start the timer
 			captionTimer.start();
 		}
 		
+		//stop preparing to display caption
 		public function unprepareCaption()
 		{
 			//stop caption time and discard it
@@ -215,19 +254,19 @@
 				caption.parent.removeChild(caption);
 		}
 		
+		//place the caption at the mouse position in the display parent's space
 		private function captionAtMouse()
 		{
 			caption.x = parent.mouseX + 10;
 			caption.y = parent.mouseY;
 		}
 		
+		//toggle outline visibilty
 		public function showOutline():void				{	outline.visible = true;		}
 		public function hideOutline():void				{	outline.visible = false;	}
-		public function isOutlined():Boolean			{	return outline.visible;		}
 		
-		public function useClue():void					{	unused = false;		}
-		public function unuseClue():void				{	unused = true;		}
-		public function isClueUnused():Boolean			{	return unused;		}
+		//retrieve outline visibility
+		public function isOutlined():Boolean			{	return outline.visible;		}
 		
 		public function getObjectName():String			{	return objectName;		}
 		public function getID():Number					{	return id;				}

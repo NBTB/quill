@@ -15,6 +15,7 @@
 	
 	public class HuntImporter
 	{				
+		//load XML scavenger hunt specification and call parser when done
 		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass):void
 		{
 			//load XML file
@@ -26,6 +27,7 @@
 			xmlLoader.load(new URLRequest(filename));
 		}
 		
+		//parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
 		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass):void
 		{				
 			//parse hunt attributes
@@ -54,6 +56,7 @@
 			
 		}
 		
+		//parse XML specification of painting to be applied to canvas
 		private function parsePainting(hunt:XML, painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)
 		{
 			//load painting
@@ -72,41 +75,61 @@
 			bitmapLoader.load(new URLRequest(painting.filename));
 		}
 				
+		//parse XML specification of obejcts of interest
 		private function parseObjectsOfInterest(objectsOfInterest:XMLList, paintingCanvas:PaintingCanvas)
 		{
+			//object of interest loading counters
 			var objectsParsed:Number = 0;
 			var objectsLoaded:Number = 0;
 			var objectsFailed:Number = 0;
+			
+			//flag noting if all objects have been parsed
 			var allObjectsParsed:Boolean = false;
 			
 			for each(var ooi in objectsOfInterest)
 			{
 				if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("outline_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"), ooi.hasOwnProperty("clue"))
 				{
+					//increment the number of objects parsed
 					objectsParsed++;
+					
+					//create new object of interest
 					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), paintingCanvas.getPaintingScale());
 					
+					//listen for the completion of the new object
 					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	
 																				{	
+																					//increment the number of successfully loaded obejcts
 																					objectsLoaded++;
-																					paintingCanvas.addObjectOfInterest(ObjectOfInterest(e.target));	
-																					if(allObjectsParsed)
+																					
+																					//add the object to the painting canvas
+																					paintingCanvas.addObjectOfInterest(ObjectOfInterest(e.target));
+																					
+																					//if this was the last object of interest to load, initialize the clue list
+																					if(allObjectsParsed && objectsLoaded + objectsFailed >= objectsParsed)
 																						initClueList(paintingCanvas)
 																				});
 					
+					//listen of an IO error cause by the new object (signifies a failure to load file)
 					newObject.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 																							  {	
+																							  	//increment the number of failed objects
 																							  	objectsFailed++;	
-																								if(allObjectsParsed)
+																								
+																								//if this was the last object of interest to load, initialize the clue list
+																								if(allObjectsParsed && objectsLoaded + objectsFailed >= objectsParsed)
 																									initClueList(paintingCanvas)
 																							  });
 					
+					//begin loading the components of the new object of interest
 					newObject.loadComponents();
 				}
 			}
 			
+			//flag that all objects have been parsed (not necessarily fully loaded)
 			allObjectsParsed = true;
 			
+			//if no objects are left to load, initalize the clue list
 			if(objectsLoaded + objectsFailed >= objectsParsed)
 				initClueList(paintingCanvas);
 		}
