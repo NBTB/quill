@@ -45,7 +45,7 @@
             theMainMenu.closeMenus();
         }
          
-        function createCloseButton(xPos):void
+        public function createCloseButton(xPos):void
         {
             closeMenuButton.graphics.lineStyle(1, 0x000000);
             closeMenuButton.graphics.beginFill(0xFF0000);

@@ -20,6 +20,7 @@
         var useTutorial:Boolean;
         private var zoomed:Boolean = false;
         private var magnifyingGlass:MagnifyingGlass;
+		public static var rewardCounter:Number = 0;
          
         //construct scavanger hunt
         public function ScavengerHunt():void
@@ -62,7 +63,9 @@
              
             //import hunt parameters
             var importer:HuntImporter = new HuntImporter();
-            importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass);
+            importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass, mainMenu.letterMenu);
+			
+			
         }      
          
         //handle movement of mouse

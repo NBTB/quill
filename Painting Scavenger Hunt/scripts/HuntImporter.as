@@ -17,19 +17,19 @@
     public class HuntImporter
     {              
         //load XML scavenger hunt specification and call parser when done
-        public function importHunt(filename:String, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass):void
+        public function importHunt(filename:String, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
         {
             //load XML file
             var xmlLoader:URLLoader = new URLLoader();
             xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                         {
-                                                                            parseHunt(new XML(e.target.data), paintingCanvas, magnifyingGlass);
+                                                                            parseHunt(new XML(e.target.data), paintingCanvas, magnifyingGlass, letterMenu);
                                                                         });
             xmlLoader.load(new URLRequest(filename));
         }
          
         //parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-        private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass):void
+        private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
         {              
             //parse hunt attributes
             var mgZoom:Number = 1;
@@ -54,6 +54,7 @@
             //find the first painting specified and parse it
             var painting:XML = hunt.Painting[0];   
             parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);
+			parseLetterPieces(hunt.Letter_Piece, letterMenu);
              
         }
          
@@ -73,7 +74,7 @@
                                                                                                 //create objects of interest
                                                                                                 parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);  
 																								
-																								parseLetterPieces(hunt.Letter_Piece);
+																								
                                                                                              });
             bitmapLoader.load(new URLRequest(painting.filename));
         }
@@ -149,21 +150,59 @@
             paintingCanvas.displayClue();
         }
 		
-		private function parseLetterPieces(pieces:XMLList)
-		{
-			for each(var piece in pieces)
-			{
-				if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename"), piece.hasOwnProperty("x"))
-				{
-					var newPiece:LetterPieces = new LetterPieces(piece.name, piece.filename, Number(piece.x))
-					newPiece.addEventListener(Event.COMPLETE, function(e:Event):void	{	LetterMenu.pieces.push(newPiece);});
-					newPiece.loadPiece();
+		//parse XML specification of obejcts of interest
+        private function parseLetterPieces(pieces:XMLList, letterMenu:LetterMenu)
+        {
+            //object of interest loading counters
+            var objectsParsed:Number = 0;
+            var objectsLoaded:Number = 0;
+            var objectsFailed:Number = 0;
+             
+            //flag noting if all objects have been parsed
+            var allObjectsParsed:Boolean = false;
+             
+            for each(var piece in pieces)
+            {
+                if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename") ,piece.hasOwnProperty("y"))
+                {
+                    //increment the number of objects parsed
+                    objectsParsed++;
+                     
+                    //create new object of interest
+                    var newPiece:LetterPieces = new LetterPieces(piece.name, piece.filename, Number(piece.y));
+                     
+                    //listen for the completion of the new object
+                    newPiece.addEventListener(Event.COMPLETE, function(e:Event):void  
+                                                                                {  
+                                                                                    //increment the number of successfully loaded obejcts
+                                                                                    objectsLoaded++;
+                                                                                     
+                                                                                    //add the object to the painting canvas
+                                                                                    letterMenu.addPiece(LetterPieces(e.target));
+                                                                                     
+                                                                                    
+                                                                                });
+                     
+                    //listen of an IO error cause by the new object (signifies a failure to load file)
+                    newPiece.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+                                                                                              {
+                                                                                                //increment the number of failed objects
+                                                                                                objectsFailed++;   
+                                                                                                 
+                                                                                                
+                                                                                              });
+                     
+                    //begin loading the components of the new object of interest
+                    newPiece.loadPiece();					
+					newPiece.visible = false;
 					
-					
-				}
-				
-			}
-			
-		}
+                }
+            }
+             
+            //flag that all objects have been parsed (not necessarily fully loaded)
+            allObjectsParsed = true;
+             
+            
+        }
     }
 }

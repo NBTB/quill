@@ -18,7 +18,7 @@
 		
 		var helpMenu:HelpMenu;
 		var cluesMenu:CluesMenu;
-		var letterMenu:LetterMenu;
+		public var letterMenu:LetterMenu;
 		
 		var menuButtonFormat:TextFormat = new TextFormat();
 		
@@ -114,6 +114,8 @@
 			closeMenus();
 			this.addChild(letterMenu);
 			letterMenu.isOpen = true;
+			letterMenu.pieces[0].visible = true;
+			letterMenu.rewardPiece();
 		}
 		
 		//Tells the cluesMenu when to activate

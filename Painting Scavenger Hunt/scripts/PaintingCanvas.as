@@ -139,6 +139,7 @@
         //reset the unused object of interest list so that objects can be re-hunted
         public function resetUnusedOOIList():void
         {
+			ScavengerHunt.rewardCounter = 0;
             ooiUnused = new Array();
             for(var i:int = 0; i < objectsOfInterest.length; i++)
                 ooiUnused.push(objectsOfInterest[i]);
@@ -170,6 +171,8 @@
             {
                 clueText.visible = true;
                 clueText.text = currentOOI.getClue();
+				ScavengerHunt.rewardCounter++;
+				trace(ScavengerHunt.rewardCounter);
             }
             //otherwise, notify the user that the hunt has been completed
             else

@@ -89,11 +89,36 @@
 	<Letter_Piece>
 		<name>Unfinished</name>
 		<filename>../assets/unfinishedLetter.png</filename>
-		<x>0</x>		
+		<y>0</y>		
 	</Letter_Piece>
 	<Letter_Piece>
 		<name>Piece2</name>
 		<filename>../assets/letterPiece2.png</filename>	
-		<x>20</x>	
+		<y>-90</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece3</name>
+		<filename>../assets/letterPiece3.png</filename>	
+		<y>-67</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece4</name>
+		<filename>../assets/letterPiece4.png</filename>	
+		<y>-33</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece5</name>
+		<filename>../assets/letterPiece5.png</filename>	
+		<y>0</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece6</name>
+		<filename>../assets/letterPiece6.png</filename>	
+		<y>29</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece7</name>
+		<filename>../assets/letterPiece7.png</filename>	
+		<y>95</y>	
 	</Letter_Piece>
 </Hunt>
