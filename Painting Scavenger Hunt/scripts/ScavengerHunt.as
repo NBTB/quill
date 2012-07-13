@@ -1,25 +1,21 @@
 ﻿package
 {
 	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.events.KeyboardEvent;
+	import flash.events.*;
 	import flash.ui.Keyboard;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import HuntImporter;
-	import PaintingCanvas;
-	import MagnifyingGlass;
 		
 	public class ScavengerHunt extends MovieClip
 	{
 		var startGameListener:MenuListener;
 		var paintingCanvas:PaintingCanvas = null;
+		var ooiManager = null;
 		var startUpScreen:SplashScreen;
 		var mainMenu:MainMenu;
 		var useTutorial:Boolean;
 		private var zoomed:Boolean = false;
-		private var magnifyingGlass:MagnifyingGlass;
+		private var magnifyingGlass:MagnifyingGlass;		
 		
 		//construct scavanger hunt
 		public function ScavengerHunt():void
@@ -48,6 +44,10 @@
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			addChild(paintingCanvas);
 			
+			//create object of interest manager
+			ooiManager = new OOIManager();
+			addChild(ooiManager);
+			
 			//listen for input events
 			stage.focus = stage;
 			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
@@ -62,7 +62,7 @@
 			
 			//import hunt parameters
 			var importer:HuntImporter = new HuntImporter();
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, magnifyingGlass);
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass);
 		}		
 		
 		//handle movement of mouse
@@ -74,9 +74,9 @@
 				
 				
 			/*TODO this should not go here (or even work like this), super temporary*/
-			if(paintingCanvas.clueText.text != "" && paintingCanvas.clueText.text != PaintingCanvas.wrongAnswer)
+			if(ooiManager.clueText.text != "" && ooiManager.clueText.text != OOIManager.wrongAnswer)
 			{
-				mainMenu.cluesMenu.clueText.text = paintingCanvas.clueText.text;
+				mainMenu.cluesMenu.clueText.text = ooiManager.clueText.text;
 				mainMenu.cluesMenu.clueText.wordWrap = true;
 			}
 		}
@@ -123,7 +123,7 @@
 			paintingCanvas.addPaintingToList(bitmaps, texturePoints, center, true);
 			
 			//add magnified object outlines
-			paintingCanvas.addObjectOutlinesToList(bitmaps, texturePoints, center, true);
+			ooiManager.addObjectOutlinesToList(bitmaps, texturePoints, center, true);
 			
 			//magnify
 			magnifyingGlass.magnifyBitmaps(bitmaps, texturePoints);

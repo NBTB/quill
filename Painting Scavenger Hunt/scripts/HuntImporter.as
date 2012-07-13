@@ -16,19 +16,19 @@
 	public class HuntImporter
 	{				
 		//load XML scavenger hunt specification and call parser when done
-		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass):void
+		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
 		{
 			//load XML file
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																		{
-																			parseHunt(new XML(e.target.data), paintingCanvas, magnifyingGlass);
+																			parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass);
 																		});
 			xmlLoader.load(new URLRequest(filename));
 		}
 		
 		//parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass):void
+		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
 		{				
 			//parse hunt attributes
 			var mgZoom:Number = 1;
@@ -54,6 +54,9 @@
 			var painting:XML = hunt.Painting[0];	
 			parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);
 			
+			//parse objects of interest to be used in hunt
+			parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager);		
+			
 		}
 		
 		//parse XML specification of painting to be applied to canvas
@@ -68,15 +71,13 @@
 																								
 																								//mask the magnifying glass so that it is not drawn beyond the painting
 																								magnifyingGlass.mask = paintingCanvas.getPaintingMask();
-																								
-																								//create objects of interest
-																								parseObjectsOfInterest(hunt.Object_Of_Interest, paintingCanvas);		
+																								/*TODO this should not happen in this function, wait for event of painting being completed*/
 																							 });
 			bitmapLoader.load(new URLRequest(painting.filename));
 		}
 				
 		//parse XML specification of obejcts of interest
-		private function parseObjectsOfInterest(objectsOfInterest:XMLList, paintingCanvas:PaintingCanvas)
+		private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager)
 		{
 			//object of interest loading counters
 			var objectsParsed:Number = 0;
@@ -94,7 +95,7 @@
 					objectsParsed++;
 					
 					//create new object of interest
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), paintingCanvas.getPaintingScale());
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), 1);
 					
 					//listen for the completion of the new object
 					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	
@@ -103,11 +104,11 @@
 																					objectsLoaded++;
 																					
 																					//add the object to the painting canvas
-																					paintingCanvas.addObjectOfInterest(ObjectOfInterest(e.target));
+																					ooiManager.addObjectOfInterest(ObjectOfInterest(e.target));
 																					
 																					//if this was the last object of interest to load, initialize the clue list
 																					if(allObjectsParsed && objectsLoaded + objectsFailed >= objectsParsed)
-																						initClueList(paintingCanvas)
+																						initClueList(ooiManager)
 																				});
 					
 					//listen of an IO error cause by the new object (signifies a failure to load file)
@@ -118,7 +119,7 @@
 																								
 																								//if this was the last object of interest to load, initialize the clue list
 																								if(allObjectsParsed && objectsLoaded + objectsFailed >= objectsParsed)
-																									initClueList(paintingCanvas)
+																									initClueList(ooiManager)
 																							  });
 					
 					//begin loading the components of the new object of interest
@@ -131,19 +132,19 @@
 			
 			//if no objects are left to load, initalize the clue list
 			if(objectsLoaded + objectsFailed >= objectsParsed)
-				initClueList(paintingCanvas);
+				initClueList(ooiManager);
 		}
 		
 		/*TODO this should be handled differently, consider creating events for when the painting, object list, or end goal are fully loaded*/
-		private function initClueList(paintingCanvas:PaintingCanvas)
+		private function initClueList(ooiManager:OOIManager)
 		{
 			//prepare new list of unused objects of interest and pick the first object
-			paintingCanvas.resetUnusedOOIList();
-			paintingCanvas.pickNextOOI();
+			ooiManager.resetUnusedOOIList();
+			ooiManager.pickNextOOI();
 			
 			/*TODO this might go somewhere else*/
 			//display first clue
-			paintingCanvas.displayClue();
+			ooiManager.displayClue();
 		}
 	}
 }
