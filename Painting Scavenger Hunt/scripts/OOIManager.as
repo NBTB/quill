@@ -12,12 +12,14 @@
 	{
 		public var objectsOfInterest:Array = null;				//array of objects of interest
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
-		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted
+		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted		
 		
 		private static var clueTextFormat:TextFormat = new TextFormat("Edwardian Script ITC", 30, 0x40E0D0, 
 																	  null, null, null, null, null, TextFormatAlign.CENTER);	//text format of the clue textfield
 		
-		
+		//event types
+		public static const CORRECT:String = "The correct answer was given";
+		public static const INCORRECT:String = "An incorrect answer was given";
 		
 		/*TODO should go into scavenger hunt and be private*/
 		private var clueTimer:Timer = null;						//timer used to trigger the hiding of the clue textfield

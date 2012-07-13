@@ -4,7 +4,6 @@
 	import flash.net.URLRequest;
 	import flash.events.*;
 	import flash.xml.*;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
@@ -13,8 +12,14 @@
 	import PaintingCanvas;
 	import MagnifyingGlass;
 	
-	public class HuntImporter
+	public class HuntImporter extends EventDispatcher
 	{				
+		//event types
+		public static const PAINTING_LOADED:String = "Painting loaded";
+		public static const OBJECTS_LOADED:String = "Objects loaded";
+		public static const END_GOAL_LOADED:String = "End goal loaded";
+	
+	
 		//load XML scavenger hunt specification and call parser when done
 		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
 		{
@@ -50,13 +55,30 @@
 			if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest"))
 				return;
 			
+			//listen for the painting to be fully loaded
+			addEventListener(PAINTING_LOADED, function(e:Event):void
+															   {
+																	//flags of completion
+																	var objectsLoaded:Boolean = false;
+																	var endGoalLoaded:Boolean = true;
+																	
+																	//listen for all of the objects to be fully loaded
+																	addEventListener(OBJECTS_LOADED, function(e:Event):void
+																													  {
+																														objectsLoaded = true;
+																														if(objectsLoaded && endGoalLoaded)
+																															dispatchEvent(new Event(Event.COMPLETE));
+																													  });
+																	
+																	//parse objects of interest to be used in hunt
+																	parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager, paintingCanvas.getPaintingScale());	
+																   
+																	/*TODO parse end goal and set to false initially*/
+															   });
+			
 			//find the first painting specified and parse it
 			var painting:XML = hunt.Painting[0];	
-			parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);
-			
-			//parse objects of interest to be used in hunt
-			parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager);		
-			
+			parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);			
 		}
 		
 		//parse XML specification of painting to be applied to canvas
@@ -69,15 +91,14 @@
 																								//display painting on canvas
 																								paintingCanvas.displayPainting(Bitmap(LoaderInfo(e.target).content));
 																								
-																								//mask the magnifying glass so that it is not drawn beyond the painting
-																								magnifyingGlass.mask = paintingCanvas.getPaintingMask();
-																								/*TODO this should not happen in this function, wait for event of painting being completed*/
+																								//dispatch event for painting importation completion
+																								dispatchEvent(new Event(PAINTING_LOADED));
 																							 });
 			bitmapLoader.load(new URLRequest(painting.filename));
 		}
 				
 		//parse XML specification of obejcts of interest
-		private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager)
+		private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number)
 		{
 			//object of interest loading counters
 			var objectsParsed:Number = 0;
@@ -95,7 +116,7 @@
 					objectsParsed++;
 					
 					//create new object of interest
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), 1);
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), ooiScaleFactor);
 					
 					//listen for the completion of the new object
 					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	
@@ -108,7 +129,7 @@
 																					
 																					//if this was the last object of interest to load, initialize the clue list
 																					if(allObjectsParsed && objectsLoaded + objectsFailed >= objectsParsed)
-																						initClueList(ooiManager)
+																						dispatchEvent(new Event(OBJECTS_LOADED));
 																				});
 					
 					//listen of an IO error cause by the new object (signifies a failure to load file)
@@ -119,7 +140,7 @@
 																								
 																								//if this was the last object of interest to load, initialize the clue list
 																								if(allObjectsParsed && objectsLoaded + objectsFailed >= objectsParsed)
-																									initClueList(ooiManager)
+																									dispatchEvent(new Event(OBJECTS_LOADED));
 																							  });
 					
 					//begin loading the components of the new object of interest
@@ -132,19 +153,7 @@
 			
 			//if no objects are left to load, initalize the clue list
 			if(objectsLoaded + objectsFailed >= objectsParsed)
-				initClueList(ooiManager);
-		}
-		
-		/*TODO this should be handled differently, consider creating events for when the painting, object list, or end goal are fully loaded*/
-		private function initClueList(ooiManager:OOIManager)
-		{
-			//prepare new list of unused objects of interest and pick the first object
-			ooiManager.resetUnusedOOIList();
-			ooiManager.pickNextOOI();
-			
-			/*TODO this might go somewhere else*/
-			//display first clue
-			ooiManager.displayClue();
+				dispatchEvent(new Event(OBJECTS_LOADED));
 		}
 	}
 }

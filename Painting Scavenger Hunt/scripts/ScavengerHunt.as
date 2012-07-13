@@ -31,38 +31,50 @@
 			startUpScreen = new SplashScreen(startGameListener);
 			
 			addChild(startUpScreen);
-			startGameListener.addEventListener(MenuListener.GAME_START, gameStart);
+			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
 			useTutorial = startUpScreen.useTut;
 		}
 		
-		public function gameStart(e:Event):void
+		public function initGame():void
+		{			
+			//create in-game children that will handle specific interaction
+			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
+			ooiManager = new OOIManager();
+			magnifyingGlass = new MagnifyingGlass();
+			mainMenu = new MainMenu(startUpScreen.useTut);
+			
+			//load hunt information and listen for completion
+			var importer:HuntImporter = new HuntImporter();
+			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass);
+		}
+		
+		public function startGame():void
 		{
-			/*TODO screens should be switched only after everything is loaded*/
+			//remove start up menu from display list
 			removeChild(startUpScreen);							
 			
-			//create canvas to fill stage
-			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
+			//add in-game children to display list
 			addChild(paintingCanvas);
-			
-			//create object of interest manager
-			ooiManager = new OOIManager();
 			addChild(ooiManager);
+			addChild(magnifyingGlass);
+			addChild(mainMenu);
+			
+			//mask the magnifying glass so that it is not drawn beyond the painting
+			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
+			
+			//prepare new list of unused objects of interest and pick the first object
+			ooiManager.resetUnusedOOIList();
+			ooiManager.pickNextOOI();
+			
+			/*TODO this might go somewhere else*/
+			//display first clue
+			ooiManager.displayClue();
 			
 			//listen for input events
 			stage.focus = stage;
 			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
 			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
-			
-			//create magnifying glass
-			magnifyingGlass = new MagnifyingGlass();
-			
-			//Does the user want the tutorial when the game starts up?
-			mainMenu = new MainMenu(startUpScreen.useTut);
-			addChild(mainMenu);
-			
-			//import hunt parameters
-			var importer:HuntImporter = new HuntImporter();
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass);
 		}		
 		
 		//handle movement of mouse
@@ -99,12 +111,12 @@
 			if(zoomed)
 			{
 				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
-				addChild(magnifyingGlass);
+				magnifyingGlass.visible = true;
 			}
 			//otherwise, remove magnifying glass
 			else
 			{
-				removeChild(magnifyingGlass);
+				magnifyingGlass.visible = false;
 			}
 		}	
 		
