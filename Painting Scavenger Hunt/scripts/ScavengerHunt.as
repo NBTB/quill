@@ -4,7 +4,9 @@
 	import flash.events.*;
 	import flash.ui.Keyboard;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
+	import flash.geom.Rectangle;	
+	import flash.text.*;
+	import flash.utils.Timer;
 		
 	public class ScavengerHunt extends MovieClip
 	{
@@ -12,10 +14,18 @@
 		var paintingCanvas:PaintingCanvas = null;
 		var ooiManager = null;
 		var startUpScreen:SplashScreen;
-		var mainMenu:MainMenu;
-		var useTutorial:Boolean;
-		private var zoomed:Boolean = false;
-		private var magnifyingGlass:MagnifyingGlass;		
+		var mainMenu:MainMenu;									
+		var useTutorial:Boolean;								
+		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
+		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
+		private var clueTimer:Timer = null;						//timer used to trigger the hiding of the clue textfield
+		private var clueText:TextField = new TextField(); 		//textfield to hold a newly unlocked clue
+		private var needNewClue:Boolean = false;				//flag that tracks whether or not a new clue is needed
+		
+		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
+		
+		
+		
 		
 		//construct scavanger hunt
 		public function ScavengerHunt():void
@@ -23,8 +33,7 @@
 			//show start menu
 			startMenu();			
 		}
-		
-		
+				
 		public function startMenu():void
 		{
 			startGameListener = new MenuListener();
@@ -42,6 +51,19 @@
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(startUpScreen.useTut);
+			clueText = new TextField();
+			
+			//setup clue text format
+			clueTextFormat = new TextFormat("Edwardian Script ITC", 25, 0x40E0D0);
+			clueTextFormat.align = TextFormatAlign.CENTER;
+			
+			//set clue textfield location and settings
+			clueText.defaultTextFormat = clueTextFormat;
+			clueText.wordWrap=true;
+			clueText.x=66;
+			clueText.y=60;
+			clueText.width=474;
+			clueText.visible = false;
 			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
@@ -59,17 +81,36 @@
 			addChild(ooiManager);
 			addChild(magnifyingGlass);
 			addChild(mainMenu);
+			addChild(clueText);	
 			
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
+			//create clue timer
+			clueTimer = new Timer(3 * 1000, 1);
+			
+			//listen for the completion of the clue timer
+			clueTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
+																		  {
+																			//reset clue time and hide the clue text box
+																			clueTimer.reset();
+																			clueText.text = ""
+																			clueText.visible = false;
+																		  });
+			
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
-			ooiManager.pickNextOOI();
+			var firstClue:String = ooiManager.pickNextOOI();
 			
-			/*TODO this might go somewhere else*/
-			//display first clue
-			ooiManager.displayClue();
+			//need a new clue
+			needNewClue = true;
+			postToClueText("Press 'c' to view the first clue");
+			
+			//listen for correct answers to clues
+			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
+			
+			//listen for incorrect answers to clues
+			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for input events
 			stage.focus = stage;
@@ -83,14 +124,6 @@
 			//if the magnifying glass is being used, draw through its lens
 			if(zoomed)
 				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
-				
-				
-			/*TODO this should not go here (or even work like this), super temporary*/
-			if(ooiManager.clueText.text != "" && ooiManager.clueText.text != OOIManager.wrongAnswer)
-			{
-				mainMenu.cluesMenu.clueText.text = ooiManager.clueText.text;
-				mainMenu.cluesMenu.clueText.wordWrap = true;
-			}
 		}
 		
 		//handles the release of keys
@@ -99,6 +132,30 @@
 			//toggle magnifying glass
 			if(e.keyCode == Keyboard.SPACE)
 				toggleZoom();
+				
+			//get next clue
+			if(e.charCode == 67 || e.charCode == 99) //c key 
+			{
+				if(needNewClue)
+				{
+					
+					//attempt to pick the next object to hunt and retrieve its clue
+					var nextClue:String = ooiManager.pickNextOOI();
+					
+					//if a new clue was picked, display it and pass it to the clues menu
+					if(nextClue)
+					{
+						postToClueText(nextClue);
+						mainMenu.cluesMenu.addClue(nextClue);
+					}
+					//otherwise, notify the user that the hunt has been completed
+					else
+						postToClueText(OOIManager.NO_CLUES_NOTIFY);
+						
+					//a new clue is no longer needed 
+					needNewClue = false;
+				}
+			}
 		}
 		
 		//toggle use of magnifying glass
@@ -139,6 +196,37 @@
 			
 			//magnify
 			magnifyingGlass.magnifyBitmaps(bitmaps, texturePoints);
+		}
+		
+		//handle a correct answer to a clue
+		private function handleCorrectAnswer(e:Event)
+		{
+			//notify the user that the correct obejct was chosen
+			postToClueText("Correct. Press 'c' to view the next clue");
+			
+			//a new clue is needed
+			needNewClue = true;
+			
+			//make the current clue old
+			mainMenu.cluesMenu.outdateCurrentClue();
+		}
+		
+		//handle an incorrect answer to a clue
+		private function handleIncorrectAnswer(e:Event)
+		{
+			//notify the user that the answer was incorrect
+			postToClueText(OOIManager.WRONG_ANSWER_NOTIFY);
+		}
+		
+		private function postToClueText(textToPost:String)
+		{
+			//display notification
+			clueText.visible = true;
+			clueText.text = textToPost;
+			
+			//restart the clue hiding timer
+			clueTimer.reset();
+			clueTimer.start();
 		}
 	}
 }

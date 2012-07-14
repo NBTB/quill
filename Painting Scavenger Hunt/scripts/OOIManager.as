@@ -4,62 +4,25 @@
 	import flash.events.*;
 	import flash.geom.Point;
 	
-	
-	import flash.text.*;
-	import flash.utils.Timer;
-	
 	public class OOIManager extends MovieClip
 	{
 		public var objectsOfInterest:Array = null;				//array of objects of interest
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
 		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted		
 		
-		private static var clueTextFormat:TextFormat = new TextFormat("Edwardian Script ITC", 30, 0x40E0D0, 
-																	  null, null, null, null, null, TextFormatAlign.CENTER);	//text format of the clue textfield
+				
+		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
+		public static const NO_CLUES_NOTIFY:String = "No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
 		
 		//event types
-		public static const CORRECT:String = "The correct answer was given";
-		public static const INCORRECT:String = "An incorrect answer was given";
-		
-		/*TODO should go into scavenger hunt and be private*/
-		private var clueTimer:Timer = null;						//timer used to trigger the hiding of the clue textfield
-		var clueText:TextField = new TextField(); 		//textfield to hold a newly unlocked clue
-		
-		public static var wrongAnswer:String = "That is not the answer to the riddle"; 										//message that appears in the clue textfield when the wrong clue is guessed
+		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
+		public static const INCORRECT:String = "An incorrect answer was given";				//dispatched when an incorrect answer is given
 		
 		//construct Object of Interest Manager
 		public function OOIManager()
 		{
 			//create empty array of objects of interest
-			objectsOfInterest = new Array();			
-			
-			//create clue timer
-			clueTimer = new Timer(3 * 1000, 1);
-			
-			//listen for the completion of the clue timer
-			clueTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
-																		  {
-																			//reset clue time and hide the clue text box
-																			clueTimer.reset();
-																			clueText.text = ""
-																			clueText.visible = false;
-																		  });
-			
-			//listen for being added to the display list
-			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-		}
-		
-		private function addedToStage(e:Event):void
-		{			
-			//set clue textfield location and settings		
-			clueText.defaultTextFormat = clueTextFormat;
-			clueText.wordWrap=true;
-			clueText.x=66;
-			clueText.y=68;
-			clueText.width=474;
-			
-			//add clue textfield to display list
-			addChild(clueText);	
+			objectsOfInterest = new Array();				
 		}
 		
 						
@@ -96,12 +59,9 @@
 																						if(currentOOI)
 																						{
 																							if(ObjectOfInterest(e.target).getID() == currentOOI.getID())
-																							{
-																								pickNextOOI();
-																								displayClue();
-																							}
+																								dispatchEvent(new Event(CORRECT));
 																							else
-																								displayIncorrect();
+																								dispatchEvent(new Event(INCORRECT));
 																						}
 																					});
 			
@@ -115,9 +75,13 @@
 				ooiUnused.push(objectsOfInterest[i]);
 		}
 		
-		//pick the next object of interest to hunt at random
-		public function pickNextOOI():void
+		//pick the next object of interest to hunt at random and return its clue
+		public function pickNextOOI():String
 		{
+			//if no objects remain, return a failure
+			if(ooiUnused.length < 1)
+				return null;
+			
 			//generate a number [0, 1)
 			var randNum:Number = Math.random();
 			if(randNum >= 1)
@@ -131,41 +95,10 @@
 			
 			//remove object from list of unused
 			ooiUnused.splice(index, 1);
-		}
-		
-		//display the clue of the current object of interest in the clue textfield
-		public function displayClue():void
-		{
-			//if an object is being hunted, display its clue
-			if(currentOOI)
-			{
-				clueText.visible = true;
-				clueText.text = currentOOI.getClue();
-			}
-			//otherwise, notify the user that the hunt has been completed
-			else
-			{
-				clueText.visible = true;
-				clueText.text = "All done";
-			}
 			
-			//restart the clue hiding timer
-			clueTimer.reset();
-			clueTimer.start();
+			return currentOOI.getClue();
 		}
-		
-		//notify the user that the last attempt at solving the clue was incorrect
-		public function displayIncorrect():void
-		{
-			//display notification
-			clueText.visible = true;
-			clueText.text = wrongAnswer;
-			
-			//restart the clue hiding timer
-			clueTimer.reset();
-			clueTimer.start();
-		}
-		
+				
 		//add all objects whose outlines are visible to a list of bitmaps
 		public function addObjectOutlinesToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
 		{
