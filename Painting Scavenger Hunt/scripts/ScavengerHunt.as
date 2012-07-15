@@ -103,8 +103,11 @@
 			var firstClue:String = ooiManager.pickNextOOI();
 			
 			//need a new clue
-			needNewClue = true;
-			postToClueText("Press 'c' to view the first clue");
+			//needNewClue = true;
+			//postToClueText("Press 'c' to view the first clue");
+			
+			//post first clue
+			postToClueText(firstClue);
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
@@ -134,7 +137,7 @@
 				toggleZoom();
 				
 			//get next clue
-			if(e.charCode == 67 || e.charCode == 99) //c key 
+			/*if(e.charCode == 67 || e.charCode == 99) //c key 
 			{
 				if(needNewClue)
 				{
@@ -155,7 +158,7 @@
 					//a new clue is no longer needed 
 					needNewClue = false;
 				}
-			}
+			}*/
 		}
 		
 		//toggle use of magnifying glass
@@ -205,7 +208,20 @@
 			postToClueText("Correct. Press 'c' to view the next clue");
 			
 			//a new clue is needed
-			needNewClue = true;
+			//needNewClue = true;
+			
+			//attempt to pick the next object to hunt and retrieve its clue
+			var nextClue:String = ooiManager.pickNextOOI();
+			
+			//if a new clue was picked, display it and pass it to the clues menu
+			if(nextClue)
+			{
+				postToClueText(nextClue);
+				mainMenu.cluesMenu.addClue(nextClue);
+			}
+			//otherwise, notify the user that the hunt has been completed
+			else
+				postToClueText(OOIManager.NO_CLUES_NOTIFY);
 			
 			//make the current clue old
 			mainMenu.cluesMenu.outdateCurrentClue();
