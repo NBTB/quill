@@ -11,18 +11,19 @@
 	
 	public class ObjectOfInterest extends MovieClip
 	{
-		private var objectName:String = null;			//name of object
-		private var id:Number = 0;						//identification number of object
-		private var clue:String = null;					//clue associated with object
-		private var hitmapFilename = null;				//filename of hitmap
-		private var outlineFilename = null;				//filename of outline
-		private var hitmap:Bitmap = null;				//bitmap used for checking collisions and contact
-		private var outline:Bitmap = null;				//bitmap used to highlight object
-		private var fullsizeOutline:Bitmap = null;		//unscaled outline bitmap
-		private var scaleFactor:Number = 1;				//scale factor applied to hitmap and outline to fit a given scene
-		private var mousedOver:Boolean = false;			//flag if the object is currently under the cursor
-		private var captionTimer:Timer = null;			//time used to trigger caption display
-		private var caption:TextField = null;			//caption that displays name of object
+		private var objectName:String = null;					//name of object
+		private var id:Number = 0;								//identification number of object
+		private var clue:String = null;							//clue associated with object
+		private var hitmapFilename = null;						//filename of hitmap
+		private var outlineFilename = null;						//filename of outline
+		private var hitmap:Bitmap = null;						//bitmap used for checking collisions and contact
+		private var outline:Bitmap = null;						//bitmap used to highlight object
+		private var fullsizeOutline:Bitmap = null;				//unscaled outline bitmap
+		private var scaleFactor:Number = 1;						//scale factor applied to hitmap and outline to fit a given scene
+		private var mousedOver:Boolean = false;					//flag if the object is currently under the cursor
+		private var captionTimer:Timer = null;					//time used to trigger caption display
+		private var caption:TextField = null;					//caption that displays name of object
+		private var descriptionPane:OOIDescriptionPane = null;	//pane used to display object's description
 		
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
@@ -55,6 +56,10 @@
 			caption = new TextField();
 			caption.defaultTextFormat = captionFormat;
 			caption.text = objectName;
+			
+						
+			//create description pane
+			descriptionPane = new OOIDescriptionPane(1, 1, 250, 380);
 			
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
@@ -261,6 +266,22 @@
 			caption.y = parent.mouseY;
 		}
 		
+		//display description pane
+		public function displayDescription()
+		{
+			if(parent)
+			{	
+				parent.addChild(descriptionPane);
+				descriptionPane.addEventListener(OOIDescriptionPane.CLOSE_PANE, undisplayDescription);
+			}
+		}
+		
+		private function undisplayDescription(e:Event)
+		{
+			descriptionPane.removeEventListener(OOIDescriptionPane.CLOSE_PANE, undisplayDescription);
+			descriptionPane.parent.removeChild(DisplayObject(e.target));	
+		}
+		
 		//toggle outline visibilty
 		public function showOutline():void				{	outline.visible = true;		}
 		public function hideOutline():void				{	outline.visible = false;	}
@@ -268,11 +289,12 @@
 		//retrieve outline visibility
 		public function isOutlined():Boolean			{	return outline.visible;		}
 		
-		public function getObjectName():String			{	return objectName;		}
-		public function getID():Number					{	return id;				}
-		public function getClue():String				{	return clue;			}
-		public function getHitmap():Bitmap				{	return hitmap;			}
-		public function getOutline():Bitmap				{	return outline;			}
-		public function getFullsizeOutline():Bitmap		{	return fullsizeOutline;	}
+		public function getObjectName():String						{	return objectName;		}
+		public function getID():Number								{	return id;				}
+		public function getClue():String							{	return clue;			}
+		public function getHitmap():Bitmap							{	return hitmap;			}
+		public function getOutline():Bitmap							{	return outline;			}
+		public function getFullsizeOutline():Bitmap					{	return fullsizeOutline;	}
+		public function getDescriptionPane():OOIDescriptionPane		{	return descriptionPane;	}
 	}
 }

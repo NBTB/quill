@@ -106,5 +106,7 @@
 				if(objectsOfInterest[i].isOutlined())
 					objectsOfInterest[i].addOutlineToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}
+		
+		public function getCurrentOOI():ObjectOfInterest	{	return currentOOI;		}
 	}
 }

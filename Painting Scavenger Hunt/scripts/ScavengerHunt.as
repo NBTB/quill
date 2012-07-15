@@ -1,6 +1,6 @@
 ﻿package
 {
-	import flash.display.MovieClip;
+	import flash.display.*;
 	import flash.events.*;
 	import flash.ui.Keyboard;
 	import flash.geom.Point;
@@ -205,13 +205,23 @@
 		private function handleCorrectAnswer(e:Event)
 		{
 			//notify the user that the correct obejct was chosen
-			postToClueText("Correct. Press 'c' to view the next clue");
+			//postToClueText("Correct. Press 'c' to view the next clue");
 			
 			//a new clue is needed
 			//needNewClue = true;
 			
+			//display object pane
+			ooiManager.getCurrentOOI().displayDescription();
+			//ooiManager.getCurrentOOI().getDescriptionPane().addEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
+		}
+		
+		private function ooiDescriptionClosed(e:Event)
+		{
+			//stop listening
+			OOIDescriptionPane(e.target).removeEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
+			
 			//attempt to pick the next object to hunt and retrieve its clue
-			var nextClue:String = ooiManager.pickNextOOI();
+			var nextClue:String = ooiManager.pickNextOOI();			
 			
 			//if a new clue was picked, display it and pass it to the clues menu
 			if(nextClue)
@@ -222,7 +232,7 @@
 			//otherwise, notify the user that the hunt has been completed
 			else
 				postToClueText(OOIManager.NO_CLUES_NOTIFY);
-			
+				
 			//make the current clue old
 			mainMenu.cluesMenu.outdateCurrentClue();
 		}
