@@ -115,7 +115,6 @@
 			this.addChild(letterMenu);
 			letterMenu.isOpen = true;
 			letterMenu.pieces[0].visible = true;
-			letterMenu.rewardPiece();
 		}
 		
 		//Tells the cluesMenu when to activate

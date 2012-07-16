@@ -148,6 +148,13 @@
         //pick the next object of interest to hunt at random
         public function pickNextOOI():void
         {
+			//temporary, stop making clue after 7/10
+			if(ooiUnused.length < 4)
+			{
+				currentOOI = null;
+				return;
+			}
+			
             //generate a number [0, 1)
             var randNum:Number = Math.random();
             if(randNum >= 1)
@@ -172,7 +179,7 @@
                 clueText.visible = true;
                 clueText.text = currentOOI.getClue();
 				ScavengerHunt.rewardCounter++;
-				trace(ScavengerHunt.rewardCounter);
+				//trace(ScavengerHunt.rewardCounter);
             }
             //otherwise, notify the user that the hunt has been completed
             else
