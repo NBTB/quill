@@ -8,8 +8,7 @@
 	{
 		public var objectsOfInterest:Array = null;				//array of objects of interest
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
-		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted		
-		
+		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted				
 				
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
 		public static const NO_CLUES_NOTIFY:String = "No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
@@ -107,6 +106,7 @@
 					objectsOfInterest[i].addOutlineToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}
 		
-		public function getCurrentOOI():ObjectOfInterest	{	return currentOOI;		}
+		public function getCurrentOOI():ObjectOfInterest	{	return currentOOI;					}
+		public function getCurrentClue():String				{	return currentOOI.getClue();		}
 	}
 }

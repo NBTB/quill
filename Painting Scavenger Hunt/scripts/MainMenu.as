@@ -1,10 +1,10 @@
 ﻿package
 {
 	import flash.display.MovieClip;
+	import flash.events.*;
 	import flash.text.TextField;
 	import flash.display.Shape;
 	import flash.text.TextFormat;
-	import flash.events.MouseEvent;
 	import flash.geom.ColorTransform;
 
 	class MainMenu extends MovieClip
@@ -86,6 +86,7 @@
 			closeMenus();
 			this.addChild(cluesMenu);
 			cluesMenu.isOpen = true;
+			cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
 		}
 		
 		//Tells the cluesMenu when to activate
@@ -99,6 +100,7 @@
 			closeMenus();
 			this.addChild(helpMenu);
 			helpMenu.isOpen = true;
+			helpMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
 		}
 		
 		//Tells the helpMenu when to activate
@@ -114,11 +116,13 @@
 			{
 				helpMenu.isOpen = false;
 				removeChild(helpMenu);
+				helpMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
 			}
 			if(cluesMenu.isOpen == true)
 			{
 				cluesMenu.isOpen = false;
 				removeChild(cluesMenu);
+				cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
 			}
 		}
 		

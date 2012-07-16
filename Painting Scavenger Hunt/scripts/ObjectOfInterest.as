@@ -63,8 +63,10 @@
 			
 			//add title to object description pane
 			var titleText:TextField = new TextField();
-			titleText.text = objectName;
-			
+			titleText.defaultTextFormat = OOIDescriptionPane.getTitleFormat();
+			titleText.text = objectName;	
+			titleText.x = 5;
+			titleText.y = 5;
 			descriptionPane.addListChild(titleText);
 			
 			//track the start of a new frame

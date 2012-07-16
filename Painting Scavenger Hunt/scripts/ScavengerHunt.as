@@ -7,6 +7,7 @@
 	import flash.geom.Rectangle;	
 	import flash.text.*;
 	import flash.utils.Timer;
+	import flash.ui.Mouse;
 		
 	public class ScavengerHunt extends MovieClip
 	{
@@ -21,11 +22,11 @@
 		private var clueTimer:Timer = null;						//timer used to trigger the hiding of the clue textfield
 		private var clueText:TextField = new TextField(); 		//textfield to hold a newly unlocked clue
 		private var needNewClue:Boolean = false;				//flag that tracks whether or not a new clue is needed
+		//private var nextClueButtonImage:Sprite = null;
+		//private var nextClueButton:SimpleButton = null;
+		private var nextClueButton:Sprite = null;
 		
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
-		
-		
-		
 		
 		//construct scavanger hunt
 		public function ScavengerHunt():void
@@ -52,6 +53,9 @@
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(startUpScreen.useTut);
 			clueText = new TextField();
+			//nextClueButtonImage = new Sprite();
+			//nextClueButton = new SimpleButton(nextClueButtonImage);
+			
 			
 			//setup clue text format
 			clueTextFormat = new TextFormat("Edwardian Script ITC", 25, 0x40E0D0);
@@ -64,6 +68,28 @@
 			clueText.y=60;
 			clueText.width=474;
 			clueText.visible = false;
+			clueText.mouseEnabled = false;
+			
+			//setup next clue button states
+			/*nextClueButtonImage.graphics.lineStyle(1, 0x836A35);
+			nextClueButtonImage.graphics.beginFill(0xffff00);
+			nextClueButtonImage.graphics.drawRect(0, 0, 20, 20);
+			nextClueButtonImage.graphics.endFill();	
+			
+			//position and next clue button
+			nextClueButton.x = 280;
+			nextClueButton.y = 360;
+			nextClueButton.visible = false;*/
+			
+			/*TODO this should be made to work with a SimpleButton containing this sprite*/
+			nextClueButton = new Sprite();
+			nextClueButton.graphics.lineStyle(1, 0x836A35);
+			nextClueButton.graphics.beginFill(0xffff00);
+			nextClueButton.graphics.drawRect(0, 0, 20, 20);
+			nextClueButton.graphics.endFill();	
+			nextClueButton.x = 280;
+			nextClueButton.y = 360;
+			nextClueButton.visible = true;
 			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
@@ -80,8 +106,9 @@
 			addChild(paintingCanvas);
 			addChild(ooiManager);
 			addChild(magnifyingGlass);
-			addChild(mainMenu);
 			addChild(clueText);	
+			addChild(nextClueButton);
+			addChild(mainMenu);
 			
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
@@ -101,19 +128,25 @@
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
 			var firstClue:String = ooiManager.pickNextOOI();
-			
-			//need a new clue
-			//needNewClue = true;
-			//postToClueText("Press 'c' to view the first clue");
-			
-			//post first clue
-			postToClueText(firstClue);
+			mainMenu.cluesMenu.addClue(firstClue);
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
 			
 			//listen for incorrect answers to clues
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
+			
+			//listen for the next clue button being clicked
+			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	showNextClue();	});
+			
+			//listen for the clues menu being opened
+			mainMenu.cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	
+																					   {
+																						   //if the next clue button is visible, hide it 
+																						   //the clue will appear in the clues menu
+																						   if(nextClueButton.visible)
+																						   	nextClueButton.visible = false;
+																					   });
 			
 			//listen for input events
 			stage.focus = stage;
@@ -203,30 +236,20 @@
 		
 		//handle a correct answer to a clue
 		private function handleCorrectAnswer(e:Event)
-		{
-			//notify the user that the correct obejct was chosen
-			//postToClueText("Correct. Press 'c' to view the next clue");
-			
-			//a new clue is needed
-			//needNewClue = true;
-			
-			//display object pane
-			ooiManager.getCurrentOOI().displayDescription();
-			ooiManager.getCurrentOOI().addEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
-		}
+		{	
+			//close menus
+			mainMenu.closeMenus();
 		
-		private function ooiDescriptionClosed(e:Event)
-		{
-			//stop listening
-			ObjectOfInterest(e.target).removeEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
-			
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			
 			
 			//if a new clue was picked, display it and pass it to the clues menu
 			if(nextClue)
 			{
-				postToClueText(nextClue);
+				//show next clue button
+				nextClueButton.visible = true;
+				
+				//add new clue to clue menu
 				mainMenu.cluesMenu.addClue(nextClue);
 			}
 			//otherwise, notify the user that the hunt has been completed
@@ -235,6 +258,15 @@
 				
 			//make the current clue old
 			mainMenu.cluesMenu.outdateCurrentClue();
+		}
+		
+		private function showNextClue():void
+		{
+			//post the new clue to the clue textfield
+			postToClueText(ooiManager.getCurrentClue());			
+			
+			//hide the next clue button
+			nextClueButton.visible = false;
 		}
 		
 		//handle an incorrect answer to a clue

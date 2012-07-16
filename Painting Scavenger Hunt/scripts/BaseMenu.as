@@ -13,6 +13,10 @@
 		var theMainMenu:MainMenu;
 		
 		var isOpen:Boolean;
+		
+		//event types
+		public static const MENU_OPENED = "Menu Opened";
+		public static const MENU_CLOSED = "Menu Closed";
 
 		public function BaseMenu(xPos:int):void
 		{

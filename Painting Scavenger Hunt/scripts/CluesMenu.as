@@ -1,9 +1,8 @@
 ﻿package
 {
-	import flash.display.MovieClip;
+	import flash.display.*;
 	import flash.text.*;
 	import flash.events.*;
-	import flash.display.Shape;
 	
 	class CluesMenu extends BaseMenu
 	{
@@ -37,7 +36,6 @@
 			currentClueText.defaultTextFormat = clueTextFormat;
 			oldClueText.defaultTextFormat = clueTextFormat;
 			oldClueText.textColor = 0xFFFFFF99;
-			
 			
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			

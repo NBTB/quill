@@ -10,9 +10,9 @@
 		private var listChildren:Array = null;		//list of display objects that populate the pane
 		private var closeMenuButton:Sprite = null;
 		
-		private var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xFFFFFFFF);
-		private var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xFFFFFFFF);
-		private var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xFFFFFFFF, null, true);
+		private static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
+		private static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
+		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		
 		//event types
 		public static const CLOSE_PANE = "Close Pane";
@@ -84,10 +84,10 @@
 			}
 			addChild(child);
 		}
+		
+				
+		public static function getTitleFormat():TextFormat		{	return titleFormat;		}
+		public static function getBodyFormat():TextFormat		{	return bodyFormat;		}
+		public static function getCaptionFormat():TextFormat	{	return captionFormat;	}
 	}
-	
-	
-	/*public function getTitleFormat():TextFormat		{	return titleFormat;		}
-	public function getBodyFormat():TextFormat		{	return bodyFormat;		}
-	public function getCaptionFormat():TextFormat	{	return captionFormat;	}*/
 }
