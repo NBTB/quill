@@ -2,12 +2,19 @@
 {
 	import flash.display.*;
 	import flash.events.*;
+	import flash.text.*;
+	import flash.geom.Point;
 	
 	public class OOIDescriptionPane extends MovieClip
 	{
-		private var innerObjects:Array = null;		//list of display objects that populate the pane
+		private var listChildren:Array = null;		//list of display objects that populate the pane
 		private var closeMenuButton:Sprite = null;
 		
+		private var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xFFFFFFFF);
+		private var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xFFFFFFFF);
+		private var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xFFFFFFFF, null, true);
+		
+		//event types
 		public static const CLOSE_PANE = "Close Pane";
 		
 		public function OOIDescriptionPane(x:Number, y:Number, width:Number, height:Number)
@@ -15,6 +22,9 @@
 			//position pane
 			this.x = x;
 			this.y = y;
+			
+			//create list of child objects
+			listChildren = new Array();
 			
 			//draw background
 			graphics.lineStyle(1, 0x836A35);
@@ -28,7 +38,17 @@
 			createCloseButton();
 			
 			//listen for close button click
-			closeMenuButton.addEventListener(MouseEvent.MOUSE_DOWN, closeMenu);
+			closeMenuButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void
+																						 {
+																							  closeMenu();
+																						 });
+																							
+			
+			//listen for being added to the stage
+			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
+																	{
+																		stage.addEventListener(KeyboardEvent.KEY_UP, handleKeysUp);
+																	});
 		}
 		
 		private function createCloseButton():void
@@ -39,10 +59,35 @@
 			closeMenuButton.graphics.endFill();
 		}
 		
-		private function closeMenu(event:MouseEvent):void
+		
+		private function handleKeysUp(e:KeyboardEvent)
+		{
+			if(e.charCode == 88 || e.charCode == 120) //'x'
+				closeMenu()
+		}
+		
+		private function closeMenu():void
 		{
 			dispatchEvent(new Event(CLOSE_PANE));
 		}
+		
+		public function addListChild(child:DisplayObject, position:Point = null)
+		{
+			//add child to list objects 
+			listChildren.push(child);			
+			
+			//position child and add it to the display list
+			if(position)
+			{
+				child.x = position.x;
+				child.y = position.y;
+			}
+			addChild(child);
+		}
 	}
 	
+	
+	/*public function getTitleFormat():TextFormat		{	return titleFormat;		}
+	public function getBodyFormat():TextFormat		{	return bodyFormat;		}
+	public function getCaptionFormat():TextFormat	{	return captionFormat;	}*/
 }

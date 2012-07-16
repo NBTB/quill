@@ -59,7 +59,13 @@
 			
 						
 			//create description pane
-			descriptionPane = new OOIDescriptionPane(1, 1, 250, 380);
+			descriptionPane = new OOIDescriptionPane(5, 5, 250, 380);
+			
+			//add title to object description pane
+			var titleText:TextField = new TextField();
+			titleText.text = objectName;
+			
+			descriptionPane.addListChild(titleText);
 			
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
