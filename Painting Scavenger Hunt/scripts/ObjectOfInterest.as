@@ -279,7 +279,8 @@
 		private function undisplayDescription(e:Event)
 		{
 			descriptionPane.removeEventListener(OOIDescriptionPane.CLOSE_PANE, undisplayDescription);
-			descriptionPane.parent.removeChild(DisplayObject(e.target));	
+			descriptionPane.parent.removeChild(DisplayObject(e.target));
+			dispatchEvent(new Event(OOIDescriptionPane.CLOSE_PANE));
 		}
 		
 		//toggle outline visibilty

@@ -212,13 +212,13 @@
 			
 			//display object pane
 			ooiManager.getCurrentOOI().displayDescription();
-			//ooiManager.getCurrentOOI().getDescriptionPane().addEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
+			ooiManager.getCurrentOOI().addEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
 		}
 		
 		private function ooiDescriptionClosed(e:Event)
 		{
 			//stop listening
-			OOIDescriptionPane(e.target).removeEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
+			ObjectOfInterest(e.target).removeEventListener(OOIDescriptionPane.CLOSE_PANE, ooiDescriptionClosed);
 			
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			
