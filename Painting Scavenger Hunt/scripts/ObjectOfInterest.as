@@ -277,7 +277,7 @@
 		//display description pane
 		public function displayDescription()
 		{
-			if(parent)
+			if(parent && !descriptionPane.parent)
 			{	
 				parent.addChild(descriptionPane);
 				descriptionPane.addEventListener(OOIDescriptionPane.CLOSE_PANE, undisplayDescription);

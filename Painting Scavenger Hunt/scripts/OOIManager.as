@@ -64,6 +64,13 @@
 																						}
 																					});
 			
+			//listen for when the object of interest is double-clicked
+			newObject.doubleClickEnabled = true;
+			newObject.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:MouseEvent):void
+																					{	
+																						ObjectOfInterest(e.target).displayDescription();
+																					});
+			
 		}
 		
 		//reset the unused object of interest list so that objects can be re-hunted

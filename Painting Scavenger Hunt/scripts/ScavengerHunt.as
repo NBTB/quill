@@ -273,7 +273,7 @@
 		private function handleIncorrectAnswer(e:Event)
 		{
 			//notify the user that the answer was incorrect
-			postToClueText(OOIManager.WRONG_ANSWER_NOTIFY);
+			//postToClueText(OOIManager.WRONG_ANSWER_NOTIFY);
 		}
 		
 		private function postToClueText(textToPost:String)
