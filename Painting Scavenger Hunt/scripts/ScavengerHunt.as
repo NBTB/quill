@@ -26,7 +26,8 @@
         public function ScavengerHunt():void
         {  
             //show start menu
-            startMenu();           
+            startMenu();   
+			
         }
          
          

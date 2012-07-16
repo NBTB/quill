@@ -57,6 +57,8 @@
                                                                             clueText.text = ""
                                                                             clueText.visible = false;
                                                                           });
+			
+			
         }
          
         //display painting and setup clue display
@@ -89,7 +91,8 @@
             clueText.width=474;
              
             //add clue textfield to display list
-            addChild(clueText);                    
+            addChild(clueText); 
+			
         }
                                      
         //add an object of interest to the list
@@ -154,7 +157,6 @@
 				currentOOI = null;
 				return;
 			}
-			
             //generate a number [0, 1)
             var randNum:Number = Math.random();
             if(randNum >= 1)
@@ -178,8 +180,17 @@
             {
                 clueText.visible = true;
                 clueText.text = currentOOI.getClue();
-				ScavengerHunt.rewardCounter++;
-				//trace(ScavengerHunt.rewardCounter);
+				
+				if(ScavengerHunt.rewardCounter > 7)
+				{
+					ScavengerHunt.rewardCounter = 7;
+				}
+				else
+				{
+					ScavengerHunt.rewardCounter++;
+					MainMenu.letterRec.visible = true;
+				}
+				trace(ScavengerHunt.rewardCounter);
             }
             //otherwise, notify the user that the hunt has been completed
             else

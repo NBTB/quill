@@ -257,8 +257,8 @@
         //place the caption at the mouse position in the display parent's space
         private function captionAtMouse()
         {
-            caption.x = parent.mouseX + 10;
-            caption.y = parent.mouseY;
+			caption.x = parent.mouseX + 10;
+			caption.y = parent.mouseY;
         }
          
         //toggle outline visibilty

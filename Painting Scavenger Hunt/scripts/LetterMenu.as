@@ -4,6 +4,7 @@
 	import flash.text.TextField;
 	import flash.display.Shape;
 	
+	
 
 	public class LetterMenu extends BaseMenu
 	{
@@ -45,10 +46,7 @@
 			
 		}
 		
-		public function rewardPiece()
-		{
-			pieces[ScavengerHunt.rewardCounter-1].visible = true;			
-		}
+		
 		
 		public override function createCloseButton(xPos):void
         {
