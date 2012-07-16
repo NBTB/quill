@@ -6,6 +6,7 @@
 	import flash.text.TextFormat;
 	import flash.events.MouseEvent;
 	import flash.geom.ColorTransform;
+	import flash.geom.Rectangle;
 
 	class MainMenu extends MovieClip
 	{
@@ -15,10 +16,12 @@
 		var menuButtonRestart:TextField = new TextField();
 		var menuButtonLetter:TextField = new TextField();
 		var menuButtonObjects:TextField = new TextField();
+		var recTransform:ColorTransform;
 		
 		var helpMenu:HelpMenu;
 		var cluesMenu:CluesMenu;
 		public var letterMenu:LetterMenu;
+		public static var letterRec:Shape;
 		
 		var menuButtonFormat:TextFormat = new TextFormat();
 		
@@ -26,6 +29,14 @@
 
 		public function MainMenu(startWTutorial:Boolean):void
 		{
+			//letterRec.graphics.beginFill(0x000000);
+			//letterRec.graphics.drawRect(300, buttonY, 175, 50); 	
+			//recTransform = letterRec.transform.colorTransform;
+			//recTransform.color = 0x00CCFF;
+			//letterRec.transform.colorTransform = recTransform; 
+			
+			
+			
 			helpMenu = new HelpMenu(0);
 			cluesMenu = new CluesMenu(150);
 			letterMenu = new LetterMenu(300);
@@ -37,7 +48,16 @@
 			this.addChild(menuBackground);
 			this.addChild(menuButtonHelp);
 			this.addChild(menuButtonClues);
+			
+			letterRec = new Shape();
+			letterRec.graphics.beginFill(0x00CCFF); 
+			letterRec.graphics.drawRect(325, buttonY, 125, 50); 
+			letterRec.graphics.endFill();
+			letterRec.visible = false;
+			addChild(letterRec); 
+			
 			this.addChild(menuButtonLetter);
+			
 			
 			createBackground();
 			formatText();
@@ -83,6 +103,11 @@
 			menuButtonLetter.width = 175;
 			menuButtonLetter.text = "Letter";
 		}
+		
+		function letterNotifyer():void
+		{
+			
+		}
 	
 		//restarts the whole application
 		function restart(event:MouseEvent):void
@@ -114,8 +139,16 @@
 			closeMenus();
 			this.addChild(letterMenu);
 			letterMenu.isOpen = true;
+			//the first piece of letter is always available
 			letterMenu.pieces[0].visible = true;
-			letterMenu.rewardPiece();
+		
+			//when a new letter piece is rewarded, make it visible in the lette menu
+			for(var i:Number = 0; i < ScavengerHunt.rewardCounter; i++)
+			{
+				trace(letterMenu.pieces[i].pieceName);
+				letterMenu.pieces[i].visible = true;							
+			}
+			
 		}
 		
 		//Tells the cluesMenu when to activate
@@ -153,6 +186,7 @@
 			if(letterMenu.isOpen == true)
 			{
 				letterMenu.isOpen = false;
+				letterRec.visible = false;
 				removeChild(letterMenu);
 			}
 		}
@@ -161,7 +195,6 @@
 
 		public function colorChange(event:MouseEvent):void {
 			var sender:TextField=event.target as TextField;
-
 			var myColor:ColorTransform=sender.transform.colorTransform;
 			myColor.color=0xFFC000;
 			sender.transform.colorTransform=myColor;
@@ -172,8 +205,8 @@
 		
 		public function revertColor(event:MouseEvent):void {
 			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;
-			myColor.color=0xFFFFFF;
+			var myColor:ColorTransform=sender.transform.colorTransform;	
+			myColor.color=0xFFFFFF;		
 			sender.transform.colorTransform=myColor;
 
 		}

@@ -138,17 +138,17 @@
 			splashButtonTitle.text = "Main Page";
 			
 			//Details of the view tutorial button
-			splashButtonTutorial.x = buttonX;
+			splashButtonTutorial.x = buttonX-50;
 			splashButtonTutorial.y = buttonY1;
 			splashButtonTutorial.height = 50;
-			splashButtonTutorial.width = 175;
+			splashButtonTutorial.width = 275;
 			splashButtonTutorial.text = "View Tutorial";
 			
 			//Details of the skip tutorial button
-			splashButtonSkip.x = buttonX;
+			splashButtonSkip.x = buttonX-50;
 			splashButtonSkip.y = buttonY2;
 			splashButtonSkip.height = 50;
-			splashButtonSkip.width = 175;
+			splashButtonSkip.width = 275;
 			splashButtonSkip.text = "Skip Tutorial";
 		}
 		
