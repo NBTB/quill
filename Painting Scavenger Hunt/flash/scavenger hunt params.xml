@@ -39,7 +39,7 @@
 		<y>0.3287687</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
-		<name>Rifle</name>
+		<name>Musket</name>
 		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
 		<hitmap_filename>../assets/rifle hitmap.png</hitmap_filename>
 		<outline_filename>../assets/rifle outline.png</outline_filename>
