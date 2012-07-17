@@ -84,9 +84,16 @@
 		//pick the next object of interest to hunt at random and return its clue
 		public function pickNextOOI():String
 		{
-			//if no objects remain, return a failure
-			if(ooiUnused.length < 1)
+			//temporary, stop making clue after 7/10
+			if(ooiUnused.length < 4)
+			{
+				currentOOI = null;
 				return null;
+			}
+			
+			//if no objects remain, return a failure
+			//if(ooiUnused.length < 1)
+			//	return null;
 			
 			//generate a number [0, 1)
 			var randNum:Number = Math.random();

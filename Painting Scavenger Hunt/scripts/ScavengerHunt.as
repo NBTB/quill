@@ -24,8 +24,7 @@
 		private var needNewClue:Boolean = false;				//flag that tracks whether or not a new clue is needed
 		//private var nextClueButtonImage:Sprite = null;
 		//private var nextClueButton:SimpleButton = null;
-		private var nextClueButton:Sprite = null;
-		
+		private var nextClueButton:Sprite = null;			
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		
 		//construct scavanger hunt
@@ -94,7 +93,7 @@
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass);
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, mainMenu.letterMenu);
 		}
 		
 		public function startGame():void
@@ -239,6 +238,18 @@
 		{	
 			//close menus
 			mainMenu.closeMenus();
+		
+			//add the piece of the end goal
+			/*TODO make not hard coded and perhaps not linear*/
+			if(mainMenu.rewardCounter > 7)
+			{
+				mainMenu.rewardCounter = 7;
+			}
+			else
+			{
+				mainMenu.rewardCounter++;
+				mainMenu.letterRec.visible = true;
+			}
 		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			

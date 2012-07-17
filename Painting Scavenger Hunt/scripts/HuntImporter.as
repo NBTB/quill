@@ -21,19 +21,19 @@
 	
 	
 		//load XML scavenger hunt specification and call parser when done
-		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
+		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
 		{
 			//load XML file
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																		{
-																			parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass);
+																			parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu);
 																		});
 			xmlLoader.load(new URLRequest(filename));
 		}
 		
 		//parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
+		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
 		{				
 			//parse hunt attributes
 			var mgZoom:Number = 1;
@@ -52,7 +52,7 @@
 			magnifyingGlass.setDefaultRadius(mgRadius);
 			
 			//if the hunt is missing necessary information, return
-			if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest"))
+			if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest") || !hunt.hasOwnProperty("Letter_Piece"))
 				return;
 			
 			//listen for the painting to be fully loaded
@@ -60,7 +60,7 @@
 															   {
 																	//flags of completion
 																	var objectsLoaded:Boolean = false;
-																	var endGoalLoaded:Boolean = true;
+																	var endGoalLoaded:Boolean = false;
 																	
 																	//listen for all of the objects to be fully loaded
 																	addEventListener(OBJECTS_LOADED, function(e:Event):void
@@ -73,7 +73,16 @@
 																	//parse objects of interest to be used in hunt
 																	parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager, paintingCanvas.getPaintingScale());	
 																   
-																	/*TODO parse end goal and set to false initially*/
+																	//listen for all of the end goal pieces to be fully loaded
+																	addEventListener(OBJECTS_LOADED, function(e:Event):void
+																													  {
+																														endGoalLoaded = true;
+																														if(objectsLoaded && endGoalLoaded)
+																															dispatchEvent(new Event(Event.COMPLETE));
+																													  });
+																	
+																	//parse objects of interest to be used in hunt
+																	parseLetterPieces(hunt.Letter_Piece, letterMenu);	
 															   });
 			
 			//find the first painting specified and parse it
@@ -155,5 +164,54 @@
 			if(objectsLoaded + objectsFailed >= objectsParsed)
 				dispatchEvent(new Event(OBJECTS_LOADED));
 		}
-	}
+		
+		//parse XML specification of pieces of the end goal
+        private function parseLetterPieces(pieces:XMLList, letterMenu:LetterMenu)
+        {
+            //object of interest loading counters
+            var piecesParsed:Number = 0;
+            var piecesLoaded:Number = 0;
+            var piecesFailed:Number = 0;
+             
+            //flag noting if all objects have been parsed
+            var allPiecesParsed:Boolean = false;
+             
+            for each(var piece in pieces)
+            {
+                if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename") ,piece.hasOwnProperty("y"))
+                {
+                    //increment the number of objects parsed
+                    piecesParsed++;
+                     
+                    //create new object of interest
+                    var newPiece:LetterPieces = new LetterPieces(piece.name, piece.filename, Number(piece.y));
+                     
+                    //listen for the completion of the new object
+                    newPiece.addEventListener(Event.COMPLETE, function(e:Event):void  
+                                                                                {  
+                                                                                    //increment the number of successfully loaded obejcts
+                                                                                    piecesLoaded++;
+                                                                                     
+                                                                                    //add the object to the painting canvas
+                                                                                    letterMenu.addPiece(LetterPieces(e.target));    
+                                                                                });
+                     
+                    //listen of an IO error cause by the new object (signifies a failure to load file)
+                    newPiece.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+                                                                                              {
+                                                                                                //increment the number of failed objects
+                                                                                                piecesFailed++;   
+                                                                                              });
+                     
+                    //begin loading the components of the new object of interest
+                    newPiece.loadPiece();					
+					newPiece.visible = false;
+					
+                }
+            }
+             
+            //flag that all objects have been parsed (not necessarily fully loaded)
+            allPiecesParsed = true; 
+        }
+    }
 }
