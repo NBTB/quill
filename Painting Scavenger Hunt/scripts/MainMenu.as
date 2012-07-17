@@ -154,7 +154,7 @@
 			if(rewardCounter == 8 && letterMenu.pieces[7].visible == true)
 			{
 			
-			
+				letterMenu.nextButton.visible = true;
                 letterMenu.pieces[0].visible = false; 
 				letterMenu.pieces[1].visible = false; 
 				letterMenu.pieces[2].visible = false; 
