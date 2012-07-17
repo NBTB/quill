@@ -22,4 +22,103 @@
 		<x>80</x>
 		<y>15</y>
 	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Flag</name>
+		<clue>I have no arms or hands, but I am always willing to give a friendly wave...</clue>
+		<hitmap_filename>../assets/flag hitmap.png</hitmap_filename>
+		<outline_filename>../assets/flag outline.png</outline_filename>
+		<x>313</x>
+		<y>269</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Skull</name>
+		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
+		<hitmap_filename>../assets/skull hitmap.png</hitmap_filename>
+		<outline_filename>../assets/skull outline.png</outline_filename>
+		<x>281</x>
+		<y>129</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Rifle</name>
+		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
+		<hitmap_filename>../assets/rifle hitmap.png</hitmap_filename>
+		<outline_filename>../assets/rifle outline.png</outline_filename>
+		<x>369</x>
+		<y>250</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Silhouette</name>
+		<clue>You have stripped me of my color, but I still look like you...</clue>
+		<hitmap_filename>../assets/silhouette hitmap.png</hitmap_filename>
+		<outline_filename>../assets/silhouette outline.png</outline_filename>
+		<x>507</x>
+		<y>55</y>
+		</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Fire</name>
+		<clue>fire clue needed</clue>
+		<hitmap_filename>../assets/fire hitmap.png</hitmap_filename>
+		<outline_filename>../assets/fire outline.png</outline_filename>
+		<x>108</x>
+		<y>300</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Cannonball</name>
+		<clue>cannonball clue needed</clue>
+		<hitmap_filename>../assets/cannonball hitmap.png</hitmap_filename>
+		<outline_filename>../assets/cannonball outline.png</outline_filename>
+		<x>505</x>
+		<y>360</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sword</name>
+		<clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
+		<hitmap_filename>../assets/sword hitmap.png</hitmap_filename>
+		<outline_filename>../assets/sword outline.png</outline_filename>
+		<x>491</x>
+		<y>303</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Cards</name>
+		<clue>We are always dressed our best in many different suits...</clue>
+		<hitmap_filename>../assets/cards hitmap.png</hitmap_filename>
+		<outline_filename>../assets/cards outline.png</outline_filename>
+		<x>227</x>
+		<y>358</y>
+	</Object_Of_Interest>
+	<Letter_Piece>
+		<name>Unfinished</name>
+		<filename>../assets/unfinishedLetter.png</filename>
+		<y>0</y>		
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece4</name>
+		<filename>../assets/letterPiece4.png</filename>	
+		<y>-33</y>	
+	</Letter_Piece>	
+	<Letter_Piece>
+		<name>Piece6</name>
+		<filename>../assets/letterPiece6.png</filename>	
+		<y>29</y>	
+	</Letter_Piece>	
+	<Letter_Piece>
+		<name>Piece2</name>
+		<filename>../assets/letterPiece2.png</filename>	
+		<y>-90</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece5</name>
+		<filename>../assets/letterPiece5.png</filename>	
+		<y>0</y>	
+	</Letter_Piece>	
+	<Letter_Piece>
+		<name>Piece7</name>
+		<filename>../assets/letterPiece7.png</filename>	
+		<y>95</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece3</name>
+		<filename>../assets/letterPiece3.png</filename>	
+		<y>-67</y>	
+	</Letter_Piece>	
 </Hunt>
