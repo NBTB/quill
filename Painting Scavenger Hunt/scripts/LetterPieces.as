@@ -10,10 +10,13 @@
 	public class LetterPieces extends MovieClip
 	{
 		var pieceName:String;
+		private var id:Number = 0;								//identification number of piece
 		var fileName:String;
 		var yPos:Number;
 		private var letter:Bitmap = null;
 		private var scaleFactor:Number = 1; 
+	
+		private static var staticID:Number = 0;					//counter of pieces used to determine each objects ID
 		
 		function LetterPieces(pieceName:String, fileName:String, yPos:Number)
 		{
@@ -22,6 +25,9 @@
 			this.yPos = yPos;
 			y = yPos;
 			
+			//set ID and increment static counter
+			this.id = staticID;
+			staticID++;
 			
 			//store scale to be used when loading bitmaps
             if(scaleFactor  <= 0)
@@ -79,7 +85,7 @@
             //begin loading image
             loader.load(new URLRequest(fileName));
         }
-	}
-	
-	
+		
+		public function getID():Number	{	return id;				}
+	}	
 }

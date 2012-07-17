@@ -7,118 +7,118 @@
 	<End_Goal>
 	</End_Goal>
 	<Object_Of_Interest>
-        <name>Quill</name>
-        <clue>Once I helped in achieving flight, now I assist you when you write...</clue>
-        <hitmap_filename>../assets/quill hitmap.png</hitmap_filename>
-        <outline_filename>../assets/quill outline.png</outline_filename>
-        <x>455</x>
-        <y>275</y>     
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Moon</name>
-        <clue>My appearance is always different, but I always have the same face...</clue>
-        <hitmap_filename>../assets/moon hitmap.png</hitmap_filename>
-        <outline_filename>../assets/moon outline.png</outline_filename>
-        <x>80</x>
-        <y>15</y>
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Flag</name>
-        <clue>I have no arms or hands, but I am always willing to give a friendly wave...</clue>
-        <hitmap_filename>../assets/flag hitmap.png</hitmap_filename>
-        <outline_filename>../assets/flag outline.png</outline_filename>
-        <x>313</x>
-        <y>269</y>
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Skull</name>
-        <clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
-        <hitmap_filename>../assets/skull hitmap.png</hitmap_filename>
-        <outline_filename>../assets/skull outline.png</outline_filename>
-        <x>281</x>
-        <y>129</y>
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Rifle</name>
-        <clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
-        <hitmap_filename>../assets/rifle hitmap.png</hitmap_filename>
-        <outline_filename>../assets/rifle outline.png</outline_filename>
-        <x>369</x>
-        <y>250</y>
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Silhouette</name>
-        <clue>You have stripped me of my color, but I still look like you...</clue>
-        <hitmap_filename>../assets/silhouette hitmap.png</hitmap_filename>
-        <outline_filename>../assets/silhouette outline.png</outline_filename>
-        <x>507</x>
-        <y>55</y>
-        </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Fire</name>
-        <clue>fire clue needed</clue>
-        <hitmap_filename>../assets/fire hitmap.png</hitmap_filename>
-        <outline_filename>../assets/fire outline.png</outline_filename>
-        <x>108</x>
-        <y>300</y>
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Cannonball</name>
-        <clue>cannonball clue needed</clue>
-        <hitmap_filename>../assets/cannonball hitmap.png</hitmap_filename>
-        <outline_filename>../assets/cannonball outline.png</outline_filename>
-        <x>505</x>
-        <y>360</y>
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Sword</name>
-        <clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
-        <hitmap_filename>../assets/sword hitmap.png</hitmap_filename>
-        <outline_filename>../assets/sword outline.png</outline_filename>
-        <x>491</x>
-        <y>303</y>
-    </Object_Of_Interest>
-    <Object_Of_Interest>
-        <name>Cards</name>
-        <clue>We are always dressed our best in many different suits...</clue>
-        <hitmap_filename>../assets/cards hitmap.png</hitmap_filename>
-        <outline_filename>../assets/cards outline.png</outline_filename>
-        <x>227</x>
-        <y>358</y>
-    </Object_Of_Interest>
+		<name>Quill</name>
+		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
+		<hitmap_filename>../assets/quill hitmap.png</hitmap_filename>
+		<outline_filename>../assets/quill outline.png</outline_filename>
+		<x>0.7844827</x>
+		<y>0.7008636</y>		
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Moon</name>
+		<clue>My appearance is always different, but I always have the same face...</clue>
+		<hitmap_filename>../assets/moon hitmap.png</hitmap_filename>
+		<outline_filename>../assets/moon outline.png</outline_filename>
+		<x>0.1379310</x>
+		<y>0.0382288</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Flag</name>
+		<clue>I have no arms or hands, but I am always willing to give a friendly wave...</clue>
+		<hitmap_filename>../assets/flag hitmap.png</hitmap_filename>
+		<outline_filename>../assets/flag outline.png</outline_filename>
+		<x>0.5396551</x>
+		<y>0.6855720</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Skull</name>
+		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
+		<hitmap_filename>../assets/skull hitmap.png</hitmap_filename>
+		<outline_filename>../assets/skull outline.png</outline_filename>
+		<x>0.4844827</x>
+		<y>0.3287687</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Rifle</name>
+		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
+		<hitmap_filename>../assets/rifle hitmap.png</hitmap_filename>
+		<outline_filename>../assets/rifle outline.png</outline_filename>
+		<x>0.6362068</x>
+		<y>0.6371487</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Silhouette</name>
+		<clue>You have stripped me of my color, but I still look like you...</clue>
+		<hitmap_filename>../assets/silhouette hitmap.png</hitmap_filename>
+		<outline_filename>../assets/silhouette outline.png</outline_filename>
+		<x>0.8741379</x>
+		<y>0.1401726</y>
+		</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Fire</name>
+		<clue>fire clue needed</clue>
+		<hitmap_filename>../assets/fire hitmap.png</hitmap_filename>
+		<outline_filename>../assets/fire outline.png</outline_filename>
+		<x>0.1862068</x>
+		<y>0.7645784</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Cannonball</name>
+		<clue>cannonball clue needed</clue>
+		<hitmap_filename>../assets/cannonball hitmap.png</hitmap_filename>
+		<outline_filename>../assets/cannonball outline.png</outline_filename>
+		<x>0.8706896</x>
+		<y>0.9174942</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sword</name>
+		<clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
+		<hitmap_filename>../assets/sword hitmap.png</hitmap_filename>
+		<outline_filename>../assets/sword outline.png</outline_filename>
+		<x>0.8465517</x>
+		<y>0.7722242</y>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Cards</name>
+		<clue>We are always dressed our best in many different suits...</clue>
+		<hitmap_filename>../assets/cards hitmap.png</hitmap_filename>
+		<outline_filename>../assets/cards outline.png</outline_filename>
+		<x>0.3913793</x>
+		<y>0.9123970</y>
+	</Object_Of_Interest>
 	<Letter_Piece>
 		<name>Unfinished</name>
 		<filename>../assets/unfinishedLetter.png</filename>
 		<y>0</y>		
 	</Letter_Piece>
+		<Letter_Piece>
+		<name>Piece2</name>
+		<filename>../assets/letterPiece2.png</filename>	
+		<y>-127.8947368421052631578947368421</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>Piece3</name>
+		<filename>../assets/letterPiece3.png</filename>	
+		<y>-95.210526315789473684210526315786</y>	
+	</Letter_Piece>	
 	<Letter_Piece>
 		<name>Piece4</name>
 		<filename>../assets/letterPiece4.png</filename>	
-		<y>-33</y>	
+		<y>-46.894736842105263157894736842104</y>	
 	</Letter_Piece>	
-	<Letter_Piece>
-		<name>Piece6</name>
-		<filename>../assets/letterPiece6.png</filename>	
-		<y>29</y>	
-	</Letter_Piece>	
-	<Letter_Piece>
-		<name>Piece2</name>
-		<filename>../assets/letterPiece2.png</filename>	
-		<y>-90</y>	
-	</Letter_Piece>
 	<Letter_Piece>
 		<name>Piece5</name>
 		<filename>../assets/letterPiece5.png</filename>	
 		<y>0</y>	
 	</Letter_Piece>	
+		<Letter_Piece>
+		<name>Piece6</name>
+		<filename>../assets/letterPiece6.png</filename>	
+		<y>41.210526315789473684210526315788</y>	
+	</Letter_Piece>	
 	<Letter_Piece>
 		<name>Piece7</name>
 		<filename>../assets/letterPiece7.png</filename>	
-		<y>95</y>	
+		<y>135</y>	
 	</Letter_Piece>
-	<Letter_Piece>
-		<name>Piece3</name>
-		<filename>../assets/letterPiece3.png</filename>	
-		<y>-67</y>	
-	</Letter_Piece>	
 </Hunt>
