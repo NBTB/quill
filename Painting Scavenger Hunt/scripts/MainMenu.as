@@ -144,8 +144,8 @@
 			letterMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
 			
 			//the first piece of letter is always available
-			if(letterMenu.pieces.length > 0)
-				letterMenu.pieces[0].visible = true;
+			//if(letterMenu.pieces.length > 0)
+			//	letterMenu.pieces[0].visible = true;
 		
 			//when a new letter piece is rewarded, make it visible in the lette menu
 			for(var i:Number = 0; i < rewardCounter; i++)

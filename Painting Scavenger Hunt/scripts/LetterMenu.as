@@ -33,18 +33,22 @@
 			var newID:int = newPiece.getID();
 			var indexFound:Boolean = false;
 			
-			/*if(pieces.length > 0)
+			if(pieces.length > 0)
 			{
 				for(var i:int = 0; i < pieces.length && !indexFound; i++)
 				{
 					if(pieces[i].getID() > newID)
+					{
 						pieces.splice(i, 0, newPiece);
-						
-					indexFound = true;
+						indexFound = true;
+					}
 				}
+				if(!indexFound)
+					pieces.push(newPiece);
 			}
-			else*/
+			else
 				pieces.push(newPiece);
+				
 			//add new object to list
 			newPiece.width = 400;
 			newPiece.height = 380;
