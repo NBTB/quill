@@ -86,8 +86,8 @@
 			nextClueButton.graphics.beginFill(0xffff00);
 			nextClueButton.graphics.drawRect(0, 0, 20, 20);
 			nextClueButton.graphics.endFill();	
-			nextClueButton.x = 280;
-			nextClueButton.y = 360;
+			nextClueButton.x = 230;
+			nextClueButton.y = 375;
 			nextClueButton.visible = true;
 			
 			//load hunt information and listen for completion

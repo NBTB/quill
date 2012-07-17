@@ -141,13 +141,16 @@
 			closeMenus();
 			this.addChild(letterMenu);
 			letterMenu.isOpen = true;
+			letterMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+			
 			//the first piece of letter is always available
-			letterMenu.pieces[0].visible = true;
+			if(letterMenu.pieces.length > 0)
+				letterMenu.pieces[0].visible = true;
 		
 			//when a new letter piece is rewarded, make it visible in the lette menu
 			for(var i:Number = 0; i < rewardCounter; i++)
 			{
-				trace(letterMenu.pieces[i].pieceName);
+				//trace(letterMenu.pieces[i].pieceName);
 				letterMenu.pieces[i].visible = true;							
 			}
 		}
@@ -192,6 +195,7 @@
 				letterMenu.isOpen = false;
 				letterRec.visible = false;
 				removeChild(letterMenu);
+				letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
 			}
 		}
 		

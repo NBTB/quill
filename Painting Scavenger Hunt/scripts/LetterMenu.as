@@ -26,14 +26,26 @@
 			menuBackground.graphics.drawRect(0, 0, 440, 380);
 			menuBackground.graphics.endFill();
 			createCloseButton(240);
-			
-			//trace(pieces[0].pieceName);
 		}
 		
 		public function addPiece(newPiece:LetterPieces)
 		{
+			var newID:int = newPiece.getID();
+			var indexFound:Boolean = false;
+			
+			/*if(pieces.length > 0)
+			{
+				for(var i:int = 0; i < pieces.length && !indexFound; i++)
+				{
+					if(pieces[i].getID() > newID)
+						pieces.splice(i, 0, newPiece);
+						
+					indexFound = true;
+				}
+			}
+			else*/
+				pieces.push(newPiece);
 			//add new object to list
-            pieces.push(newPiece);
 			newPiece.width = 400;
 			newPiece.height = 380;
             

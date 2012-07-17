@@ -24,11 +24,11 @@
 						
 			//temporary
 			currentClueText.wordWrap = true;
-			currentClueText.x = 210;
+			currentClueText.x = 155;
 			currentClueText.y = 300;
 			currentClueText.width = 150;			
 			oldClueText.wordWrap = true;
-			oldClueText.x = 210;
+			oldClueText.x = 155;
 			oldClueText.y = 300;
 			oldClueText.width = 150;	
 			
