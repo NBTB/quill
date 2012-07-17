@@ -30,12 +30,7 @@
   
         public function MainMenu(startWTutorial:Boolean):void
         {
-            //letterRec.graphics.beginFill(0x000000);
-            //letterRec.graphics.drawRect(300, buttonY, 175, 50);  
-            //recTransform = letterRec.transform.colorTransform;
-            //recTransform.color = 0x00CCFF;
-            //letterRec.transform.colorTransform = recTransform;
-             
+            
              
              
             helpMenu = new HelpMenu(0);
@@ -52,7 +47,7 @@
              
             letterRec = new Shape();
             letterRec.graphics.beginFill(0x00CCFF);
-            letterRec.graphics.drawRect(422, buttonY, 162, 65);
+            letterRec.graphics.drawRect(422, buttonY, 122, 65);
             letterRec.graphics.endFill();
             letterRec.visible = false;
             addChild(letterRec);
@@ -151,8 +146,27 @@
             for(var i:Number = 0; i < rewardCounter; i++)
             {
                 //trace(letterMenu.pieces[i].pieceName);
-                letterMenu.pieces[i].visible = true;                           
+                letterMenu.pieces[i].visible = true; 
+				
             }
+			//if the search is over, you find the hidden letter!
+			//the other pieces become invisible 
+			if(rewardCounter == 8 && letterMenu.pieces[7].visible == true)
+			{
+			
+			
+                letterMenu.pieces[0].visible = false; 
+				letterMenu.pieces[1].visible = false; 
+				letterMenu.pieces[2].visible = false; 
+				letterMenu.pieces[3].visible = false; 
+				letterMenu.pieces[4].visible = false; 
+				letterMenu.pieces[5].visible = false; 
+				letterMenu.pieces[6].visible = false; 			 
+				
+            
+			}
+			
+			
         }
          
         //Tells the cluesMenu when to activate

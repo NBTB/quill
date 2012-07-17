@@ -23,9 +23,9 @@
 			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);
 			menuBackground.graphics.beginFill(0x2F2720);
-			menuBackground.graphics.drawRect(0, 0, 600, 515);
+			menuBackground.graphics.drawRect(0, 0, 450, 515);
 			menuBackground.graphics.endFill();
-			createCloseButton(240);
+			createCloseButton(90);
 		}
 		
 		public function addPiece(newPiece:LetterPieces)
@@ -50,8 +50,8 @@
 				pieces.push(newPiece);
 				
 			//add new object to list
-			newPiece.width = 568;
-			newPiece.height = 540;
+			newPiece.width = 399;
+			newPiece.height = 544;
             
             //add new object as a display list child
             addChild(newPiece); 

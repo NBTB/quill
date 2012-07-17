@@ -121,4 +121,9 @@
 		<filename>../assets/letterPiece7.png</filename>	
 		<y>135</y>	
 	</Letter_Piece>
+	<Letter_Piece>
+		<name>HiddenLetter</name>
+		<filename>../assets/hiddenLetter.png</filename>	
+		<y>0</y>	
+	</Letter_Piece>
 </Hunt>
