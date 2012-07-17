@@ -26,7 +26,7 @@
 		
 		var menuButtonFormat:TextFormat = new TextFormat();
 		
-		var buttonY:int = 390;
+		var buttonY:int = 517;
 
 		public function MainMenu(startWTutorial:Boolean):void
 		{
@@ -39,8 +39,8 @@
 			
 			
 			helpMenu = new HelpMenu(0);
-			cluesMenu = new CluesMenu(150);
-			letterMenu = new LetterMenu(300);
+			cluesMenu = new CluesMenu(195);
+			letterMenu = new LetterMenu(390);
 			
 			helpMenu.getBaseMenu(this);
 			cluesMenu.getBaseMenu(this);
@@ -52,7 +52,7 @@
 			
 			letterRec = new Shape();
 			letterRec.graphics.beginFill(0x00CCFF); 
-			letterRec.graphics.drawRect(325, buttonY, 125, 50); 
+			letterRec.graphics.drawRect(422, buttonY, 162, 65); 
 			letterRec.graphics.endFill();
 			letterRec.visible = false;
 			addChild(letterRec); 
@@ -93,13 +93,13 @@
 			menuButtonHelp.text = "Help";
 			
 			menuButtonClues.y = buttonY;
-			menuButtonClues.x = 150;
+			menuButtonClues.x = 195;
 			menuButtonClues.height = 50;
 			menuButtonClues.width = 175;
 			menuButtonClues.text = "Clues";
 			
 			menuButtonLetter.y = buttonY;
-			menuButtonLetter.x = 300;
+			menuButtonLetter.x = 390;
 			menuButtonLetter.height = 50;
 			menuButtonLetter.width = 175;
 			menuButtonLetter.text = "Letter";
@@ -148,7 +148,7 @@
 			//	letterMenu.pieces[0].visible = true;
 		
 			//when a new letter piece is rewarded, make it visible in the lette menu
-			for(var i:Number = 0; i < rewardCounter; i++)
+			for(var i:Number = 0; i < 7; i++)
 			{
 				//trace(letterMenu.pieces[i].pieceName);
 				letterMenu.pieces[i].visible = true;							
@@ -222,7 +222,7 @@
 			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);
 			menuBackground.graphics.beginFill(0x2F2720);
-			menuBackground.graphics.drawRect(0, 392.5, 579.5, 41.5);
+			menuBackground.graphics.drawRect(0, buttonY, 764, 55);
 			menuBackground.graphics.endFill();
 		}
 	}

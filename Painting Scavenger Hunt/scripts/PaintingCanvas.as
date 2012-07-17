@@ -37,7 +37,7 @@
 		
 		//display painting and setup clue display
 		public function displayPainting(painting:Bitmap)
-		{
+		{			
 			//create bitmap from file and make a copy that will not be scaled
 			this.painting = painting;
 			fullsizePainting = new Bitmap(painting.bitmapData);
@@ -77,6 +77,10 @@
 			
 		}
 		
+		public function getCanvasWidth():Number		{	return canvasWidth;		}
+		public function getCanvasHeight():Number	{	return canvasHeight;	}		
+		public function getPaintingWidth():Number	{	return painting.width;	}
+		public function getPaintingHeight():Number	{	return painting.height;	}		
 		public function getPaintingMask():Shape		{	return paintingMask;	}
 		public function getPaintingScale():Number	{	return paintingScale;	}
 	}

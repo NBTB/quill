@@ -71,7 +71,7 @@
 																													  });
 																	
 																	//parse objects of interest to be used in hunt
-																	parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager, paintingCanvas.getPaintingScale());	
+																	parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager, paintingCanvas.getPaintingScale(), paintingCanvas.getPaintingWidth(), paintingCanvas.getPaintingHeight());	
 																   
 																	//listen for all of the end goal pieces to be fully loaded
 																	addEventListener(OBJECTS_LOADED, function(e:Event):void
@@ -107,7 +107,7 @@
 		}
 				
 		//parse XML specification of obejcts of interest
-		private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number)
+		private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number, paintingWidth:Number, paintingHeight:Number)
 		{
 			//object of interest loading counters
 			var objectsParsed:Number = 0;
@@ -125,7 +125,7 @@
 					objectsParsed++;
 					
 					//create new object of interest
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x), Number(ooi.y), ooiScaleFactor);
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor);
 					
 					//listen for the completion of the new object
 					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	

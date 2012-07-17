@@ -32,9 +32,9 @@
 		var splashTitleFormat:TextFormat = new TextFormat();
 		var splashButtonFormat:TextFormat = new TextFormat();
 		
-		var buttonX:int = 185;
+		var buttonX:int = 285;
 		var buttonSeparation = 75;
-		var buttonY1:int = 165;
+		var buttonY1:int = 265;
 		var buttonY2:int = buttonY1+buttonSeparation;
 		var buttonY3:int = buttonY2+buttonSeparation;
 		
@@ -98,8 +98,8 @@
 			//More details regarding the title
 			splashTitle.wordWrap = true;
 			splashTitle.selectable = false;
-			splashTitle.x = 60;
-			splashTitle.y = 10;
+			splashTitle.x = 160;
+			splashTitle.y = 110;
 			splashTitle.height = 168;
 			splashTitle.width = 425;
 			
@@ -225,7 +225,7 @@
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
 			theBackground.graphics.beginFill(0x2F2720);
-			theBackground.graphics.drawRect(0, 0, 579.5, 434.5);
+			theBackground.graphics.drawRect(0, 0, 764, 572);
 			theBackground.graphics.endFill();
 		}
 	}

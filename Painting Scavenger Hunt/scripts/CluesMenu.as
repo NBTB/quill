@@ -24,12 +24,12 @@
 						
 			//temporary
 			currentClueText.wordWrap = true;
-			currentClueText.x = 155;
-			currentClueText.y = 300;
+			currentClueText.x = 205;
+			currentClueText.y = 430;
 			currentClueText.width = 150;			
 			oldClueText.wordWrap = true;
-			oldClueText.x = 155;
-			oldClueText.y = 300;
+			oldClueText.x = 205;
+			oldClueText.y = 430;
 			oldClueText.width = 150;	
 			
 			var clueTextFormat:TextFormat = new TextFormat("Arial", 14, 0xFFFFFFFF);

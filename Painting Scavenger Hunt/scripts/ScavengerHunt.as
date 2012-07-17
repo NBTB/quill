@@ -63,8 +63,8 @@
 			//set clue textfield location and settings
 			clueText.defaultTextFormat = clueTextFormat;
 			clueText.wordWrap=true;
-			clueText.x=66;
-			clueText.y=60;
+			clueText.x=150;
+			clueText.y=90;
 			clueText.width=474;
 			clueText.visible = false;
 			clueText.mouseEnabled = false;
@@ -86,8 +86,8 @@
 			nextClueButton.graphics.beginFill(0xffff00);
 			nextClueButton.graphics.drawRect(0, 0, 20, 20);
 			nextClueButton.graphics.endFill();	
-			nextClueButton.x = 230;
-			nextClueButton.y = 375;
+			nextClueButton.x = 280;
+			nextClueButton.y = 500;
 			nextClueButton.visible = true;
 			
 			//load hunt information and listen for completion
@@ -136,7 +136,11 @@
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for the next clue button being clicked
-			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	showNextClue();	});
+			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																					{	
+																						mainMenu.closeMenus();
+																						showNextClue();	
+																					});
 			
 			//listen for the clues menu being opened
 			mainMenu.cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	

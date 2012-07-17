@@ -23,7 +23,7 @@
 			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);
 			menuBackground.graphics.beginFill(0x2F2720);
-			menuBackground.graphics.drawRect(0, 0, 440, 380);
+			menuBackground.graphics.drawRect(0, 0, 600, 515);
 			menuBackground.graphics.endFill();
 			createCloseButton(240);
 		}
@@ -50,8 +50,8 @@
 				pieces.push(newPiece);
 				
 			//add new object to list
-			newPiece.width = 400;
-			newPiece.height = 380;
+			newPiece.width = 568;
+			newPiece.height = 540;
             
             //add new object as a display list child
             addChild(newPiece); 
@@ -65,7 +65,7 @@
         {
             closeMenuButton.graphics.lineStyle(1, 0x000000);
             closeMenuButton.graphics.beginFill(0xFF0000);
-            closeMenuButton.graphics.drawRect(xPos+180, 340, 10, 10);
+            closeMenuButton.graphics.drawRect(xPos+340, 10, 10, 10);
             closeMenuButton.graphics.endFill();
         }
 	}
