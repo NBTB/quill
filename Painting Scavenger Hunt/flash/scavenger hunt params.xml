@@ -56,7 +56,7 @@
 		</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
-		<clue>fire clue needed</clue>
+		<clue>You can look, but don't touch. I'm just too hot to handle.</clue>
 		<hitmap_filename>../assets/fire hitmap.png</hitmap_filename>
 		<outline_filename>../assets/fire outline.png</outline_filename>
 		<x>0.1862068</x>
@@ -64,7 +64,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cannonball</name>
-		<clue>cannonball clue needed</clue>
+		<clue>I've been known to be quite the gate crasher...</clue>
 		<hitmap_filename>../assets/cannonball hitmap.png</hitmap_filename>
 		<outline_filename>../assets/cannonball outline.png</outline_filename>
 		<x>0.8706896</x>
