@@ -37,7 +37,7 @@
 		}
 		
 		//place the magnifying glass and clamp the center of it within a given rectangular boundary (unbounded if no rectangle is given)
-		public function place(center:Point, boundary:Rectangle = null)
+		public function place(center:Point, boundary:Rectangle = null):Point
 		{
 			//place magnifying glass at the given center point
 			x = center.x;
@@ -59,6 +59,9 @@
 				else if(y > maxY)
 					y = maxY;
 			}
+			
+			//return the clamped point
+			return new Point(x, y);
 		}
 		
 		//magnify an array of bitmaps centered on texture coordinates, allowing for special zoom or radius

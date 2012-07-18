@@ -19,13 +19,12 @@
 		var useTutorial:Boolean;								
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
+		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
 		private var clueTimer:Timer = null;						//timer used to trigger the hiding of the clue textfield
 		private var clueText:TextField = new TextField(); 		//textfield to hold a newly unlocked clue
 		private var needNewClue:Boolean = false;				//flag that tracks whether or not a new clue is needed
-		//private var nextClueButtonImage:Sprite = null;
-		//private var nextClueButton:SimpleButton = null;
-		private var nextClueButton:Sprite = null;
-		
+		private var nextClueButton:SimpleButton = null;			//notification button that appears when the next clue becomes available
+		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		
 		//construct scavanger hunt
@@ -53,8 +52,9 @@
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(startUpScreen.useTut);
 			clueText = new TextField();
-			//nextClueButtonImage = new Sprite();
-			//nextClueButton = new SimpleButton(nextClueButtonImage);
+			magnifyButton = new SimpleButton();
+			nextClueButton = new SimpleButton();
+			newRewardButton = new SimpleButton();
 			
 			
 			//setup clue text format
@@ -64,37 +64,60 @@
 			//set clue textfield location and settings
 			clueText.defaultTextFormat = clueTextFormat;
 			clueText.wordWrap=true;
-			clueText.x=66;
-			clueText.y=60;
+			clueText.x=150;
+			clueText.y=90;
 			clueText.width=474;
 			clueText.visible = false;
 			clueText.mouseEnabled = false;
 			
-			//setup next clue button states
-			/*nextClueButtonImage.graphics.lineStyle(1, 0x836A35);
-			nextClueButtonImage.graphics.beginFill(0xffff00);
-			nextClueButtonImage.graphics.drawRect(0, 0, 20, 20);
-			nextClueButtonImage.graphics.endFill();	
+			var notificationButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
+			notificationButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																					   {
+																						   //setup next clue button
+																							nextClueButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage().bitmapData), 
+																																new Bitmap(notificationButtonLoader.getOverImage().bitmapData), 
+																																new Bitmap(notificationButtonLoader.getDownImage().bitmapData), 
+																																new Bitmap(notificationButtonLoader.getHittestImage().bitmapData));
+																							nextClueButton.x = 280;
+																							nextClueButton.y = 500;
+																							nextClueButton.width /= 5;
+																							nextClueButton.height /= 5;
+																							nextClueButton.visible = true;
+																							
+																							//setup new reward button
+																							newRewardButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage().bitmapData), 
+																																new Bitmap(notificationButtonLoader.getOverImage().bitmapData), 
+																																new Bitmap(notificationButtonLoader.getDownImage().bitmapData), 
+																																new Bitmap(notificationButtonLoader.getHittestImage().bitmapData));
+																							newRewardButton.x = 470;
+																							newRewardButton.y = 500;
+																							newRewardButton.width /= 5;
+																							newRewardButton.height /= 5;
+																							newRewardButton.visible = true;
+																					   });
+			notificationButtonLoader.loadBitmaps("../assets/notification button up.png", "../assets/notification button over.png", "../assets/notification button down.png", "../assets/notification button hittest.png");
 			
-			//position and next clue button
-			nextClueButton.x = 280;
-			nextClueButton.y = 360;
-			nextClueButton.visible = false;*/
+			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
+			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																					   {
+																						   //setup next clue button
+																							magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage().bitmapData), 
+																																new Bitmap(magnifyButtonLoader.getOverImage().bitmapData), 
+																																new Bitmap(magnifyButtonLoader.getDownImage().bitmapData), 
+																																new Bitmap(magnifyButtonLoader.getHittestImage().bitmapData));
+																							magnifyButton.x = 720;
+																							magnifyButton.y = 520;
+																							magnifyButton.width /= 5;
+																							magnifyButton.height /= 5;
+																							magnifyButton.visible = true;
+																					   });
+			magnifyButtonLoader.loadBitmaps("../assets/magnify button up.png", "../assets/magnify button over.png", "../assets/magnify button down.png", "../assets/magnify button hittest.png");
 			
-			/*TODO this should be made to work with a SimpleButton containing this sprite*/
-			nextClueButton = new Sprite();
-			nextClueButton.graphics.lineStyle(1, 0x836A35);
-			nextClueButton.graphics.beginFill(0xffff00);
-			nextClueButton.graphics.drawRect(0, 0, 20, 20);
-			nextClueButton.graphics.endFill();	
-			nextClueButton.x = 280;
-			nextClueButton.y = 360;
-			nextClueButton.visible = true;
 			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass);
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, mainMenu.letterMenu);
 		}
 		
 		public function startGame():void
@@ -107,8 +130,10 @@
 			addChild(ooiManager);
 			addChild(magnifyingGlass);
 			addChild(clueText);	
-			addChild(nextClueButton);
 			addChild(mainMenu);
+			addChild(magnifyButton);
+			addChild(nextClueButton);
+			addChild(newRewardButton);
 			
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
@@ -137,16 +162,41 @@
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for the next clue button being clicked
-			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	showNextClue();	});
+			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																					{	
+																						mainMenu.closeMenus();
+																						showNextClue();	
+																					});
 			
 			//listen for the clues menu being opened
 			mainMenu.cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	
 																					   {
-																						   //if the next clue button is visible, hide it 
-																						   //the clue will appear in the clues menu
-																						   if(nextClueButton.visible)
-																						   	nextClueButton.visible = false;
+																							//if the next clue button is visible, hide it 
+																							//the clue will appear in the clues menu
+																							if(nextClueButton.visible)
+																						   		nextClueButton.visible = false;
 																					   });
+			
+			//listen for the new reward button being clicked
+			newRewardButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																					{	
+																						mainMenu.openLetterMenu();
+																					});
+			
+			//listen for the reward menu being opened
+			mainMenu.letterMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
+																						{
+																						   //if the new reward button is visible, hide it 
+																						   //the new reward is being viewed
+																						   if(newRewardButton.visible)
+																								newRewardButton.visible = false;
+																					   	});
+			
+			//listen for the magnify button being clicked
+			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																					{	
+																						toggleZoom();
+																					});
 			
 			//listen for input events
 			stage.focus = stage;
@@ -218,7 +268,7 @@
 		{
 			//place the magnifying glass so that its center is within the canvas bounds
 			var canvasBounds:Rectangle = new Rectangle(x + paintingCanvas.x, y + paintingCanvas.y, paintingCanvas.width, paintingCanvas.height);
-			magnifyingGlass.place(center, canvasBounds);
+			center = magnifyingGlass.place(center, canvasBounds);
 			
 			//create arrays to pass to magnifying glass
 			var bitmaps:Array = new Array();
@@ -239,6 +289,19 @@
 		{	
 			//close menus
 			mainMenu.closeMenus();
+		
+			//add the piece of the end goal
+			/*TODO make not hard coded and perhaps not linear*/
+			if(mainMenu.rewardCounter > 7)
+			{
+				mainMenu.rewardCounter = 7;
+			}
+			else
+			{
+				mainMenu.rewardCounter++;
+				newRewardButton.visible = true;
+				//mainMenu.letterRec.visible = true;
+			}
 		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			

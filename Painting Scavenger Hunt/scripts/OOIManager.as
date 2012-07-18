@@ -1,6 +1,6 @@
 ﻿package
 {
-	import flash.display.MovieClip;
+	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
 	
@@ -22,6 +22,9 @@
 		{
 			//create empty array of objects of interest
 			objectsOfInterest = new Array();				
+			
+			//listen for being added to the display list
+			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 		}
 		
 						
@@ -34,20 +37,39 @@
 			//add new object as a display list child
 			addChild(newObject);			
 			
+			//if the manager is part of the display list, direct the new object's placement of caption and description
+			if(parent)
+			{
+				newObject.setCaptionContainer(stage);
+				newObject.setDescriptionContainer(stage);
+			}
+			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
 																					{	
 																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
 																						targetObject.showOutline();	
-																						targetObject.prepareCaption();																						
+																						targetObject.prepareDescription();																						
 																					});
 
 			//listen for when the cursor stops hovering over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
 																					{	
-																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
-																						targetObject.hideOutline();	
-																						targetObject.unprepareCaption();
+																						if(!testMouseOverOOI(newObject))
+																						{
+																							newObject.hideOutline();	
+																							newObject.unprepareDescription();
+																						}
+																					});
+			
+			//listen for when the cursor stops hovering over the new object's description pane
+			newObject.getDescriptionPane().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
+																					{	
+																						if(!testMouseOverOOI(newObject))
+																						{
+																							newObject.hideOutline();	
+																							newObject.unprepareDescription();
+																						}
 																					});
 			
 			
@@ -73,6 +95,35 @@
 			
 		}
 		
+		private function addedToStage(e:Event)
+		{
+			for(var i:int; i < objectsOfInterest.length; i++)
+			{
+				objectsOfInterest[i].setCaptionContainer(stage);
+				objectsOfInterest[i].setDescriptionContainer(stage);
+			}
+		}
+		
+		//determine whether or not the mouse is hovering over either the object of interest or its description
+		private function testMouseOverOOI(targetOOI:ObjectOfInterest):Boolean
+		{
+			var ooiParent:DisplayObjectContainer = targetOOI.parent;			
+			var descriptionPane:OOIDescriptionPane = targetOOI.getDescriptionPane();
+			var descriptionPaneParent:DisplayObjectContainer = descriptionPane.parent;																						
+			
+			var mouseOverOOI:Boolean = false;
+			var mouseOverDescription:Boolean = false;
+			
+			if(ooiParent)
+				mouseOverOOI = targetOOI.hitTest(new Point(ooiParent.mouseX, ooiParent.mouseY));
+			
+			if(descriptionPaneParent)
+				mouseOverDescription = descriptionPane.hitTestPoint(descriptionPaneParent.mouseX, descriptionPaneParent.mouseY);
+				
+			var mouseOverEither = mouseOverOOI || mouseOverDescription;
+			return mouseOverEither;
+		}
+		
 		//reset the unused object of interest list so that objects can be re-hunted
 		public function resetUnusedOOIList():void
 		{
@@ -84,9 +135,16 @@
 		//pick the next object of interest to hunt at random and return its clue
 		public function pickNextOOI():String
 		{
-			//if no objects remain, return a failure
-			if(ooiUnused.length < 1)
+			//temporary, stop making clue after 7/10
+			if(ooiUnused.length < 4)
+			{
+				currentOOI = null;
 				return null;
+			}
+			
+			//if no objects remain, return a failure
+			//if(ooiUnused.length < 1)
+			//	return null;
 			
 			//generate a number [0, 1)
 			var randNum:Number = Math.random();

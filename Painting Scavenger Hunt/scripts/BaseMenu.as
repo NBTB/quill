@@ -34,26 +34,26 @@
 			theMainMenu = theMenu;
 		}
 		
-		function createBackground(xPos:int):void
+		public function createBackground(xPos:int):void
 		{
 			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);
 			menuBackground.graphics.beginFill(0x2F2720);
-			menuBackground.graphics.drawRect(xPos, 300, 200, 92.5);
+			menuBackground.graphics.drawRect(xPos, 425, 200, 92.5);
 			menuBackground.graphics.endFill();
 			createCloseButton(xPos);
 		}
 		
-		function closeMenu(event:MouseEvent):void
+		public function closeMenu(event:MouseEvent):void
 		{
 			theMainMenu.closeMenus();
 		}
 		
-		function createCloseButton(xPos):void
+		public function createCloseButton(xPos):void
 		{
 			closeMenuButton.graphics.lineStyle(1, 0x000000);
 			closeMenuButton.graphics.beginFill(0xFF0000);
-			closeMenuButton.graphics.drawRect(xPos+180, 310, 10, 10);
+			closeMenuButton.graphics.drawRect(xPos+180, 435, 10, 10);
 			closeMenuButton.graphics.endFill();
 		}
 	}
