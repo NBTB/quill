@@ -20,6 +20,8 @@
 		private var outline:Bitmap = null;								//bitmap used to highlight object
 		private var fullsizeOutline:Bitmap = null;						//unscaled outline bitmap
 		private var scaleFactor:Number = 1;								//scale factor applied to hitmap and outline to fit a given scene
+		private var lowerBounds:Point = null;							//low-end coordinates of boundary for dynamic components (null indicates no boundary)
+		private var upperBounds:Point = null;							//upper-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var mousedOver:Boolean = false;							//flag if the object is currently under the cursor
 		private var caption:TextField = null;							//caption that displays name of object
 		private var captionContainer:DisplayObjectContainer = null;		//display container of caption
@@ -31,7 +33,7 @@
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and outline
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number, scaleFactor:Number = 1, captionContainer:DisplayObjectContainer = null, descriptionContainer:DisplayObjectContainer = null)
+		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null, captionContainer:DisplayObjectContainer = null, descriptionContainer:DisplayObjectContainer = null)
 		{
 			//set name, and clue
 			this.objectName = objectName;
@@ -54,6 +56,10 @@
 				scaleFactor = 1;
 			this.scaleFactor = scaleFactor;
 			
+			//store bounds
+			this.lowerBounds = lowerBounds;
+			this.upperBounds = upperBounds;
+			
 			//store display containers (default to this object's parent)
 			if(captionContainer)
 				this.captionContainer = captionContainer;
@@ -67,6 +73,8 @@
 			//create caption textfield to display name
 			caption = new TextField();
 			caption.defaultTextFormat = captionFormat;
+			caption.autoSize = TextFieldAutoSize.LEFT;
+			caption.mouseEnabled = false;
 			caption.text = objectName;
 			
 						
@@ -242,7 +250,7 @@
 		
 		
 		//display caption and prepare to display description after a delay
-		public function prepareDescription(displayDelay:Number = 1000)
+		public function prepareDescription(displayDelay:Number = -1)
 		{
 			//move caption to mouse position										
 			captionAtMouse();
@@ -250,6 +258,10 @@
 			//if a parent in the display list exists, add the caption as its child
 			if(captionContainer)
 				captionContainer.addChild(caption);
+			
+			//if a negative time was given, assume that discription is not desired and do not start timer
+			if(displayDelay < 0)
+				return;
 			
 			//create new timer
 			descriptionTimer = new Timer(displayDelay, 1);
@@ -295,8 +307,21 @@
 		{
 			if(caption.parent)
 			{
+				//place caption near mouse
 				caption.x = caption.parent.mouseX + 10;
 				caption.y = caption.parent.mouseY;
+				
+				//if the caption exceeds bounds, clamp it
+				var captionFarX = caption.x + caption.width;
+				var captionFarY = caption.y + caption.height;
+				if(caption.x < lowerBounds.x)
+					caption.x = lowerBounds.x;
+				if(caption.y < lowerBounds.y)
+					caption.y = lowerBounds.y;
+				if(captionFarX > upperBounds.x)
+					caption.x -= captionFarX - upperBounds.x;
+				if(captionFarY > upperBounds.y)
+					caption.y -= captionFarY - upperBounds.y;
 			}
 		}
 		
@@ -305,8 +330,21 @@
 		{
 			if(descriptionPane.parent)
 			{
+				//place description near mouse
 				descriptionPane.x = parent.mouseX - descriptionPane.width/2;
-				descriptionPane.y = parent.mouseY;
+				descriptionPane.y = parent.mouseY+1;
+				
+				//if the cadescription pane exceeds bounds, clamp it
+				var descriptionPaneFarX = descriptionPane.x + descriptionPane.width;
+				var descriptionPaneFarY = descriptionPane.y + descriptionPane.height;
+				if(descriptionPane.x < lowerBounds.x)
+					descriptionPane.x = lowerBounds.x;
+				if(descriptionPane.y < lowerBounds.y)
+					descriptionPane.y = lowerBounds.y;
+				if(descriptionPaneFarX > upperBounds.x)
+					descriptionPane.x -= descriptionPaneFarX - upperBounds.x;
+				if(descriptionPaneFarY > upperBounds.y)
+					descriptionPane.y -= descriptionPaneFarY - upperBounds.y;
 			}
 		}
 		

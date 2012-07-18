@@ -41,8 +41,8 @@
 	<Object_Of_Interest>
 		<name>Musket</name>
 		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
-		<hitmap_filename>../assets/rifle hitmap.png</hitmap_filename>
-		<outline_filename>../assets/rifle outline.png</outline_filename>
+		<hitmap_filename>../assets/musket hitmap.png</hitmap_filename>
+		<outline_filename>../assets/musket outline.png</outline_filename>
 		<x>0.6362068</x>
 		<y>0.6371487</y>
 	</Object_Of_Interest>
@@ -56,7 +56,7 @@
 		</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
-		<clue>fire clue needed</clue>
+		<clue>You can look, but don't touch. I'm just too hot to handle...</clue>
 		<hitmap_filename>../assets/fire hitmap.png</hitmap_filename>
 		<outline_filename>../assets/fire outline.png</outline_filename>
 		<x>0.1862068</x>
@@ -64,7 +64,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cannonball</name>
-		<clue>cannonball clue needed</clue>
+		<clue>I've been known to be quite the gate crasher...</clue>
 		<hitmap_filename>../assets/cannonball hitmap.png</hitmap_filename>
 		<outline_filename>../assets/cannonball outline.png</outline_filename>
 		<x>0.8706896</x>
@@ -86,6 +86,16 @@
 		<x>0.3913793</x>
 		<y>0.9123970</y>
 	</Object_Of_Interest>
+	<!-- 
+		<Object_Of_Interest>
+		<name>Parrott Rifle</name>
+		<clue>Better run for cover because when I sneeze it'll bring the whole building down...</clue>
+		<hitmap_filename>../assets/parrot rifle hitmap.png</hitmap_filename>
+		<outline_filename>../assets/parrot rifle outline.png</outline_filename>
+		<x>0.3913793</x>
+		<y>0.9123970</y>
+	</Object_Of_Interest>
+	-->
 	<Letter_Piece>
 		<name>Unfinished</name>
 		<filename>../assets/unfinishedLetter.png</filename>

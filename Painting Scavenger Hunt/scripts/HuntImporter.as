@@ -4,13 +4,8 @@
 	import flash.net.URLRequest;
 	import flash.events.*;
 	import flash.xml.*;
-	import flash.display.Stage;
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import PaintingCanvas;
-	import MagnifyingGlass;
+	import flash.display.*
+	import flash.geom.Point;
 	
 	public class HuntImporter extends EventDispatcher
 	{				
@@ -125,7 +120,7 @@
 					objectsParsed++;
 					
 					//create new object of interest
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor);
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.outline_filename, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
 					
 					//listen for the completion of the new object
 					newObject.addEventListener(Event.COMPLETE, function(e:Event):void	
