@@ -22,6 +22,9 @@
 		{
 			//create empty array of objects of interest
 			objectsOfInterest = new Array();				
+			
+			//listen for being added to the display list
+			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 		}
 		
 						
@@ -34,12 +37,19 @@
 			//add new object as a display list child
 			addChild(newObject);			
 			
+			//if the manager is part of the display list, direct the new object's placement of caption and description
+			if(parent)
+			{
+				newObject.setCaptionContainer(stage);
+				newObject.setDescriptionContainer(stage);
+			}
+			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
 																					{	
 																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
 																						targetObject.showOutline();	
-																						targetObject.prepareCaption();																						
+																						targetObject.prepareDescription();																						
 																					});
 
 			//listen for when the cursor stops hovering over the new object
@@ -48,7 +58,7 @@
 																						if(!testMouseOverOOI(newObject))
 																						{
 																							newObject.hideOutline();	
-																							newObject.unprepareCaption();
+																							newObject.unprepareDescription();
 																						}
 																					});
 			
@@ -58,7 +68,7 @@
 																						if(!testMouseOverOOI(newObject))
 																						{
 																							newObject.hideOutline();	
-																							newObject.unprepareCaption();
+																							newObject.unprepareDescription();
 																						}
 																					});
 			
@@ -83,6 +93,15 @@
 																						ObjectOfInterest(e.target).displayDescription();
 																					});
 			
+		}
+		
+		private function addedToStage(e:Event)
+		{
+			for(var i:int; i < objectsOfInterest.length; i++)
+			{
+				objectsOfInterest[i].setCaptionContainer(stage);
+				objectsOfInterest[i].setDescriptionContainer(stage);
+			}
 		}
 		
 		//determine whether or not the mouse is hovering over either the object of interest or its description
