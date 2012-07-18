@@ -19,6 +19,7 @@
 		var useTutorial:Boolean;								
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
+		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
 		private var clueTimer:Timer = null;						//timer used to trigger the hiding of the clue textfield
 		private var clueText:TextField = new TextField(); 		//textfield to hold a newly unlocked clue
 		private var needNewClue:Boolean = false;				//flag that tracks whether or not a new clue is needed
@@ -51,6 +52,7 @@
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(startUpScreen.useTut);
 			clueText = new TextField();
+			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
 			newRewardButton = new SimpleButton();
 			
@@ -95,6 +97,22 @@
 																					   });
 			notificationButtonLoader.loadBitmaps("../assets/notification button up.png", "../assets/notification button over.png", "../assets/notification button down.png", "../assets/notification button hittest.png");
 			
+			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
+			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																					   {
+																						   //setup next clue button
+																							magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage().bitmapData), 
+																																new Bitmap(magnifyButtonLoader.getOverImage().bitmapData), 
+																																new Bitmap(magnifyButtonLoader.getDownImage().bitmapData), 
+																																new Bitmap(magnifyButtonLoader.getHittestImage().bitmapData));
+																							magnifyButton.x = 720;
+																							magnifyButton.y = 520;
+																							magnifyButton.width /= 5;
+																							magnifyButton.height /= 5;
+																							magnifyButton.visible = true;
+																					   });
+			magnifyButtonLoader.loadBitmaps("../assets/magnify button up.png", "../assets/magnify button over.png", "../assets/magnify button down.png", "../assets/magnify button hittest.png");
+			
 			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
@@ -113,6 +131,7 @@
 			addChild(magnifyingGlass);
 			addChild(clueText);	
 			addChild(mainMenu);
+			addChild(magnifyButton);
 			addChild(nextClueButton);
 			addChild(newRewardButton);
 			
@@ -173,6 +192,12 @@
 																								newRewardButton.visible = false;
 																					   	});
 			
+			//listen for the magnify button being clicked
+			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																					{	
+																						toggleZoom();
+																					});
+			
 			//listen for input events
 			stage.focus = stage;
 			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
@@ -185,9 +210,6 @@
 			//if the magnifying glass is being used, draw through its lens
 			if(zoomed)
 				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
-				
-			//if(nextClueButton.hitTestPoint(mouseX, mouseY, true))
-			//	nextClueButton.upState = nextClueButton.downState;
 		}
 		
 		//handles the release of keys
@@ -246,7 +268,7 @@
 		{
 			//place the magnifying glass so that its center is within the canvas bounds
 			var canvasBounds:Rectangle = new Rectangle(x + paintingCanvas.x, y + paintingCanvas.y, paintingCanvas.width, paintingCanvas.height);
-			magnifyingGlass.place(center, canvasBounds);
+			center = magnifyingGlass.place(center, canvasBounds);
 			
 			//create arrays to pass to magnifying glass
 			var bitmaps:Array = new Array();
@@ -277,7 +299,7 @@
 			else
 			{
 				mainMenu.rewardCounter++;
-				newRewardButton.visible
+				newRewardButton.visible = true;
 				//mainMenu.letterRec.visible = true;
 			}
 		

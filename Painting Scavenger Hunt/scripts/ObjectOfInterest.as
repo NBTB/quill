@@ -21,7 +21,7 @@
 		private var fullsizeOutline:Bitmap = null;				//unscaled outline bitmap
 		private var scaleFactor:Number = 1;						//scale factor applied to hitmap and outline to fit a given scene
 		private var mousedOver:Boolean = false;					//flag if the object is currently under the cursor
-		private var captionTimer:Timer = null;					//time used to trigger caption display
+		private var descriptionTimer:Timer = null;				//time used to trigger description display
 		private var caption:TextField = null;					//caption that displays name of object
 		private var descriptionPane:OOIDescriptionPane = null;	//pane used to display object's description
 		
@@ -65,9 +65,14 @@
 			var titleText:TextField = new TextField();
 			titleText.defaultTextFormat = OOIDescriptionPane.getTitleFormat();
 			titleText.text = objectName;	
+			titleText.width = 200;
 			titleText.x = 5;
 			titleText.y = 5;
+			titleText.wordWrap = true;
 			descriptionPane.addListChild(titleText);
+			
+			//listen for when description pane closes
+			descriptionPane.addEventListener(OOIDescriptionPane.CLOSE_PANE, function(e:Event):void	{	undisplayDescription();	});
 			
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
@@ -225,46 +230,52 @@
 		
 		
 		//prepare to display caption after a delay
-		public function prepareCaption(displayDelay:Number = 1000)
+		public function prepareCaption(displayDelay:Number = 500)
 		{
+			//move caption to mouse position										
+			captionAtMouse();
+			
+			//if a parent in the display list exists, add the caption as its child
+			if(parent)
+				parent.addChild(caption);
+			
 			//create new timer
-			captionTimer = new Timer(displayDelay, 1);
+			descriptionTimer = new Timer(displayDelay, 1);
 			
 			//listen for the completion of the time
-			captionTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
+			descriptionTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
 																				  {
 																					//if the time exists, stop and discard, and add the caption to the display list
-																					if(captionTimer)
+																					if(descriptionTimer)
 																					{
-																						captionTimer.stop();
-																						captionTimer = null;
-																					
-																						//move caption to mouse position
-																						captionAtMouse();
+																						descriptionTimer.stop();
+																						descriptionTimer = null;
 																						
-																						//if a parent in the display list exists, add the caption as its child
-																						if(parent)
-																							parent.addChild(caption);
+																						//display description pane
+																						displayDescription();
 																					}
 																				  });
 			
 			//start the timer
-			captionTimer.start();
+			descriptionTimer.start();
 		}
 		
 		//stop preparing to display caption
 		public function unprepareCaption()
 		{
 			//stop caption time and discard it
-			if(captionTimer)
+			if(descriptionTimer)
 			{
-				captionTimer.stop();
-				captionTimer = null;
+				descriptionTimer.stop();
+				descriptionTimer = null;
 			}
 			
 			//if the caption has been added to the display list, remove it
 			if(caption.parent)
 				caption.parent.removeChild(caption);
+				
+			//hide the discription pane
+			undisplayDescription();
 		}
 		
 		//place the caption at the mouse position in the display parent's space
@@ -280,15 +291,16 @@
 			if(parent && !descriptionPane.parent)
 			{	
 				parent.addChild(descriptionPane);
-				descriptionPane.addEventListener(OOIDescriptionPane.CLOSE_PANE, undisplayDescription);
 			}
 		}
 		
-		private function undisplayDescription(e:Event)
+		private function undisplayDescription()
 		{
-			descriptionPane.removeEventListener(OOIDescriptionPane.CLOSE_PANE, undisplayDescription);
-			descriptionPane.parent.removeChild(DisplayObject(e.target));
-			dispatchEvent(new Event(OOIDescriptionPane.CLOSE_PANE));
+			if(descriptionPane.parent)
+			{
+				descriptionPane.parent.removeChild(descriptionPane);
+				dispatchEvent(new Event(OOIDescriptionPane.CLOSE_PANE));
+			}
 		}
 		
 		//toggle outline visibilty

@@ -6,10 +6,10 @@
 	
 	public class ButtonBitmapLoader extends SimpleButton
 	{
-		private static var upImage:Bitmap = null;
-		private static var overImage:Bitmap = null;
-		private static var downImage:Bitmap = null;
-		private static var hittestImage:Bitmap = null;
+		private var upImage:Bitmap = null;
+		private var overImage:Bitmap = null;
+		private var downImage:Bitmap = null;
+		private var hittestImage:Bitmap = null;
 		
 		public static const IMAGE_LOAD_ERROR = "An image failed to load";
 	

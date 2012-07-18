@@ -1,6 +1,6 @@
 ﻿package
 {
-	import flash.display.MovieClip;
+	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
 	
@@ -45,9 +45,21 @@
 			//listen for when the cursor stops hovering over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
 																					{	
-																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
-																						targetObject.hideOutline();	
-																						targetObject.unprepareCaption();
+																						if(!testMouseOverOOI(newObject))
+																						{
+																							newObject.hideOutline();	
+																							newObject.unprepareCaption();
+																						}
+																					});
+			
+			//listen for when the cursor stops hovering over the new object's description pane
+			newObject.getDescriptionPane().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
+																					{	
+																						if(!testMouseOverOOI(newObject))
+																						{
+																							newObject.hideOutline();	
+																							newObject.unprepareCaption();
+																						}
 																					});
 			
 			
@@ -71,6 +83,26 @@
 																						ObjectOfInterest(e.target).displayDescription();
 																					});
 			
+		}
+		
+		//determine whether or not the mouse is hovering over either the object of interest or its description
+		private function testMouseOverOOI(targetOOI:ObjectOfInterest):Boolean
+		{
+			var ooiParent:DisplayObjectContainer = targetOOI.parent;			
+			var descriptionPane:OOIDescriptionPane = targetOOI.getDescriptionPane();
+			var descriptionPaneParent:DisplayObjectContainer = descriptionPane.parent;																						
+			
+			var mouseOverOOI:Boolean = false;
+			var mouseOverDescription:Boolean = false;
+			
+			if(ooiParent)
+				mouseOverOOI = targetOOI.hitTest(new Point(ooiParent.mouseX, ooiParent.mouseY));
+			
+			if(descriptionPaneParent)
+				mouseOverDescription = descriptionPane.hitTestPoint(descriptionPaneParent.mouseX, descriptionPaneParent.mouseY);
+				
+			var mouseOverEither = mouseOverOOI || mouseOverDescription;
+			return mouseOverEither;
 		}
 		
 		//reset the unused object of interest list so that objects can be re-hunted
