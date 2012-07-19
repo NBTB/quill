@@ -29,6 +29,7 @@
 		private var descriptionContainer:DisplayObjectContainer = null;	//display container of description pane
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
 		
+		private static var anyMousedOver = false;												//flag if any object is moused over
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
@@ -108,10 +109,11 @@
 				if(hitTest(new Point(parent.mouseX, parent.mouseY)))
 				{					
 					//only dispatch the event if the object was not previously hovered over
-					if(!mousedOver)
+					if(!mousedOver && !anyMousedOver)
 					{
 						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
 						mousedOver = true;
+						anyMousedOver = true;
 					}
 					//otherwise, move caption to mouse position
 					else
@@ -125,6 +127,7 @@
 					{
 						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
 						mousedOver = false;
+						anyMousedOver = false;
 					}
 				}
 			}

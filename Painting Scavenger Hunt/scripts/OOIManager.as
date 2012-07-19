@@ -49,7 +49,7 @@
 																					{	
 																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
 																						targetObject.showOutline();	
-																						targetObject.prepareDescription();																						
+																						targetObject.prepareDescription();								
 																					});
 
 			//listen for when the cursor stops hovering over the new object
