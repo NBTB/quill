@@ -136,7 +136,7 @@
 		public function pickNextOOI():String
 		{
 			//temporary, stop making clue after 7/10
-			if(ooiUnused.length < 4)
+			if(ooiUnused.length < objectsOfInterest.length - 7 + 1)
 			{
 				currentOOI = null;
 				return null;

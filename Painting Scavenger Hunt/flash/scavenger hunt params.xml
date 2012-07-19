@@ -10,7 +10,7 @@
 		<name>Quill</name>
 		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 		<hitmap_filename>../assets/quill hitmap.png</hitmap_filename>
-		<outline_filename>../assets/quill outline.png</outline_filename>
+		<outline_filename>../assets/quill highlight.png</outline_filename>
 		<x>0.7844827</x>
 		<y>0.7008636</y>		
 	</Object_Of_Interest>
@@ -18,7 +18,7 @@
 		<name>Moon</name>
 		<clue>My appearance is always different, but I always have the same face...</clue>
 		<hitmap_filename>../assets/moon hitmap.png</hitmap_filename>
-		<outline_filename>../assets/moon outline.png</outline_filename>
+		<outline_filename>../assets/moon highlight.png</outline_filename>
 		<x>0.1379310</x>
 		<y>0.0382288</y>
 	</Object_Of_Interest>
@@ -34,7 +34,7 @@
 		<name>Skull</name>
 		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
 		<hitmap_filename>../assets/skull hitmap.png</hitmap_filename>
-		<outline_filename>../assets/skull outline.png</outline_filename>
+		<outline_filename>../assets/skull highlight.png</outline_filename>
 		<x>0.4844827</x>
 		<y>0.3287687</y>
 	</Object_Of_Interest>
@@ -50,7 +50,7 @@
 		<name>Silhouette</name>
 		<clue>You have stripped me of my color, but I still look like you...</clue>
 		<hitmap_filename>../assets/silhouette hitmap.png</hitmap_filename>
-		<outline_filename>../assets/silhouette outline.png</outline_filename>
+		<outline_filename>../assets/silhouette highlight.png</outline_filename>
 		<x>0.8741379</x>
 		<y>0.1401726</y>
 		</Object_Of_Interest>
@@ -86,16 +86,14 @@
 		<x>0.3913793</x>
 		<y>0.9123970</y>
 	</Object_Of_Interest>
-	<!-- 
-		<Object_Of_Interest>
+	<Object_Of_Interest>
 		<name>Parrott Rifle</name>
 		<clue>Better run for cover because when I sneeze it'll bring the whole building down...</clue>
-		<hitmap_filename>../assets/parrot rifle hitmap.png</hitmap_filename>
-		<outline_filename>../assets/parrot rifle outline.png</outline_filename>
-		<x>0.3913793</x>
-		<y>0.9123970</y>
+		<hitmap_filename>../assets/parrott rifle hitmap.png</hitmap_filename>
+		<outline_filename>../assets/parrott rifle outline.png</outline_filename>
+		<x>0.2551307</x>
+		<y>0.3390287</y>
 	</Object_Of_Interest>
-	-->
 	<Letter_Piece>
 		<name>Unfinished</name>
 		<filename>../assets/unfinishedLetter.png</filename>
