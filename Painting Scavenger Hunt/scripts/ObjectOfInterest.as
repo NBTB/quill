@@ -15,11 +15,11 @@
 		private var id:Number = 0;										//identification number of object
 		private var clue:String = null;									//clue associated with object
 		private var hitmapFilename = null;								//filename of hitmap
-		private var outlineFilename = null;								//filename of outline
+		private var highlightFilename = null;								//filename of highlight
 		private var hitmap:Bitmap = null;								//bitmap used for checking collisions and contact
-		private var outline:Bitmap = null;								//bitmap used to highlight object
-		private var fullsizeOutline:Bitmap = null;						//unscaled outline bitmap
-		private var scaleFactor:Number = 1;								//scale factor applied to hitmap and outline to fit a given scene
+		private var highlight:Bitmap = null;								//bitmap used to highlight object
+		private var fullsizeHighlight:Bitmap = null;						//unscaled highlight bitmap
+		private var scaleFactor:Number = 1;								//scale factor applied to hitmap and highlight to fit a given scene
 		private var lowerBounds:Point = null;							//low-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var upperBounds:Point = null;							//upper-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var mousedOver:Boolean = false;							//flag if the object is currently under the cursor
@@ -29,11 +29,12 @@
 		private var descriptionContainer:DisplayObjectContainer = null;	//display container of description pane
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
 		
+		private static var anyMousedOver = false;												//flag if any object is moused over
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
-		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and outline
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, outlineFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null, captionContainer:DisplayObjectContainer = null, descriptionContainer:DisplayObjectContainer = null)
+		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
+		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null, captionContainer:DisplayObjectContainer = null, descriptionContainer:DisplayObjectContainer = null)
 		{
 			//set name, and clue
 			this.objectName = objectName;
@@ -43,9 +44,9 @@
 			this.id = staticID;
 			staticID++;
 			
-			//store locations of hitmap and outline image files
+			//store locations of hitmap and highlight image files
 			this.hitmapFilename = hitmapFilename;
-			this.outlineFilename = outlineFilename;
+			this.highlightFilename = highlightFilename;
 			
 			//set coordinates
 			this.x = x;
@@ -108,10 +109,11 @@
 				if(hitTest(new Point(parent.mouseX, parent.mouseY)))
 				{					
 					//only dispatch the event if the object was not previously hovered over
-					if(!mousedOver)
+					if(!mousedOver && !anyMousedOver)
 					{
 						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
 						mousedOver = true;
+						anyMousedOver = true;
 					}
 					//otherwise, move caption to mouse position
 					else
@@ -125,6 +127,7 @@
 					{
 						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
 						mousedOver = false;
+						anyMousedOver = false;
 					}
 				}
 			}
@@ -134,7 +137,7 @@
 		public function loadComponents():void
 		{
 			loadHitmap();
-			loadOutline();
+			loadHighlight();
 		}
 				
 		//load the object's hitmap image
@@ -156,8 +159,8 @@
 																								//dispose of the temporary image data
 																								tempHitmap.bitmapData.dispose();
 																								
-																								//if both the hitmap and outline are now loaded, dispatch a completion event
-																								if(hitmap && outline)
+																								//if both the hitmap and highlight are now loaded, dispatch a completion event
+																								if(hitmap && highlight)
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							 });
 			
@@ -175,41 +178,41 @@
 			hitmapLoader.load(new URLRequest(hitmapFilename));
 		}
 		
-		//load the object's outline image
-		private function loadOutline():void
+		//load the object's highlight image
+		private function loadHighlight():void
 		{
 			//create new loader
-			var outlineLoader:Loader = new Loader();
+			var highlightLoader:Loader = new Loader();
 			
 			//listen for the completion of the image loading
-			outlineLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void	
+			highlightLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void	
 																							  {	
-																							  	//store image data as outline
-																							  	outline = Bitmap(LoaderInfo(e.target).content);
+																							  	//store image data as highlight
+																							  	highlight = Bitmap(LoaderInfo(e.target).content);
 																								
-																								//scale the outline image (internal data is not affected)
-																								outline.width *= scaleFactor;
-																								outline.height *= scaleFactor;
+																								//scale the highlight image (internal data is not affected)
+																								highlight.width *= scaleFactor;
+																								highlight.height *= scaleFactor;
 																								
-																								//store a fullsize outline for convenience
-																								fullsizeOutline = new Bitmap(outline.bitmapData);
-																								addChild(outline);
-																								hideOutline();
+																								//store a fullsize highlight for convenience
+																								fullsizeHighlight = new Bitmap(highlight.bitmapData);
+																								addChild(highlight);
+																								hideHighlight();
 																								
-																								//if both the hitmap and outline are now loaded, dispatch a completion event
-																								if(hitmap && outline)
+																								//if both the hitmap and highlight are now loaded, dispatch a completion event
+																								if(hitmap && highlight)
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							  });
 			
 			//listen for a IO error
-			outlineLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+			highlightLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 																											{	
 																												dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
-																												trace("Failed to load outline of " + objectName);
+																												trace("Failed to load highlight of " + objectName);
 																											});
 			
 			//begin loading image
-			outlineLoader.load(new URLRequest(outlineFilename));
+			highlightLoader.load(new URLRequest(highlightFilename));
 		}
 				
 		//test hitmap against a given point, determine hit using a minimum alpha value		
@@ -231,20 +234,20 @@
 			return false;
 		}
 		
-		//add the object's outline to a list of bitmaps along with corresponding texture points based on a given sample point relative to the object's upper-left corner
-		public function addOutlineToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
+		//add the object's highlight to a list of bitmaps along with corresponding texture points based on a given sample point relative to the object's upper-left corner
+		public function addHighlightToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
 		{
-			//if flagged to use fullsize outline, add it to the bitmap list
+			//if flagged to use fullsize highlight, add it to the bitmap list
 			if(useFullsize)
-				bitmapList.push(fullsizeOutline);
-			//otherwise, add the scaled outline
+				bitmapList.push(fullsizeHighlight);
+			//otherwise, add the scaled highlight
 			else
-				bitmapList.push(outline);
+				bitmapList.push(highlight);
 			
 			//add texture coordinates to the texture coordinate list
 			var objectTexturePoint:Point = new Point();
-			objectTexturePoint.x = (samplePoint.x - x) / outline.width;
-			objectTexturePoint.y = (samplePoint.y - y) / outline.height;
+			objectTexturePoint.x = (samplePoint.x - x) / highlight.width;
+			objectTexturePoint.y = (samplePoint.y - y) / highlight.height;
 			texturePointList.push(objectTexturePoint);
 		}
 		
@@ -367,19 +370,19 @@
 			}
 		}
 		
-		//toggle outline visibilty
-		public function showOutline():void				{	outline.visible = true;		}
-		public function hideOutline():void				{	outline.visible = false;	}
+		//toggle highlight visibilty
+		public function showHighlight():void				{	highlight.visible = true;		}
+		public function hideHighlight():void				{	highlight.visible = false;	}
 		
-		//retrieve outline visibility
-		public function isOutlined():Boolean			{	return outline.visible;		}
+		//retrieve highlight visibility
+		public function isHighlightd():Boolean			{	return highlight.visible;		}
 		
 		public function getObjectName():String							{	return objectName;				}
 		public function getID():Number									{	return id;						}
 		public function getClue():String								{	return clue;					}
 		public function getHitmap():Bitmap								{	return hitmap;					}
-		public function getOutline():Bitmap								{	return outline;					}
-		public function getFullsizeOutline():Bitmap						{	return fullsizeOutline;			}
+		public function getHighlight():Bitmap								{	return highlight;					}
+		public function getFullsizeHighlight():Bitmap						{	return fullsizeHighlight;			}
 		public function getDescriptionPane():OOIDescriptionPane			{	return descriptionPane;			}
 		public function getCaptionContainer():DisplayObjectContainer	{	return captionContainer;		}
 		public function getDescriptionContainer():DisplayObjectContainer{	return descriptionContainer;	}

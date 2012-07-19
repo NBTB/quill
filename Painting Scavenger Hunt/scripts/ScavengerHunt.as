@@ -277,8 +277,8 @@
 			//add magnified canvas
 			paintingCanvas.addPaintingToList(bitmaps, texturePoints, center, true);
 			
-			//add magnified object outlines
-			ooiManager.addObjectOutlinesToList(bitmaps, texturePoints, center, true);
+			//add magnified object highlights
+			ooiManager.addObjectHighlightsToList(bitmaps, texturePoints, center, true);
 			
 			//magnify
 			magnifyingGlass.magnifyBitmaps(bitmaps, texturePoints);

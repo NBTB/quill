@@ -48,8 +48,8 @@
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
 																					{	
 																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
-																						targetObject.showOutline();	
-																						targetObject.prepareDescription();																						
+																						targetObject.showHighlight();	
+																						targetObject.prepareDescription();								
 																					});
 
 			//listen for when the cursor stops hovering over the new object
@@ -57,7 +57,7 @@
 																					{	
 																						if(!testMouseOverOOI(newObject))
 																						{
-																							newObject.hideOutline();	
+																							newObject.hideHighlight();	
 																							newObject.unprepareDescription();
 																						}
 																					});
@@ -67,7 +67,7 @@
 																					{	
 																						if(!testMouseOverOOI(newObject))
 																						{
-																							newObject.hideOutline();	
+																							newObject.hideHighlight();	
 																							newObject.unprepareDescription();
 																						}
 																					});
@@ -163,12 +163,12 @@
 			return currentOOI.getClue();
 		}
 				
-		//add all objects whose outlines are visible to a list of bitmaps
-		public function addObjectOutlinesToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
+		//add all objects whose highlights are visible to a list of bitmaps
+		public function addObjectHighlightsToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
 		{
 			for(var i:int = 0; i < objectsOfInterest.length; i++)
-				if(objectsOfInterest[i].isOutlined())
-					objectsOfInterest[i].addOutlineToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
+				if(objectsOfInterest[i].isHighlightd())
+					objectsOfInterest[i].addHighlightToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}
 		
 		public function getCurrentOOI():ObjectOfInterest	{	return currentOOI;					}
