@@ -135,6 +135,10 @@
 			addChild(nextClueButton);
 			addChild(newRewardButton);
 			
+			//add listeners for when in-game children are clicked
+			for(var i = 0; i < this.numChildren; i++)
+				addDismissibleOverlayCloser(this.getChildAt(i));
+			
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
@@ -212,7 +216,7 @@
 			//if the magnifying glass is being used, draw through its lens
 			if(zoomed)
 				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
-		}
+		}		
 		
 		//handles the release of keys
 		public function checkKeysUp(e:KeyboardEvent):void
@@ -220,30 +224,6 @@
 			//toggle magnifying glass
 			if(e.keyCode == Keyboard.SPACE)
 				toggleZoom();
-				
-			//get next clue
-			/*if(e.charCode == 67 || e.charCode == 99) //c key 
-			{
-				if(needNewClue)
-				{
-					
-					//attempt to pick the next object to hunt and retrieve its clue
-					var nextClue:String = ooiManager.pickNextOOI();
-					
-					//if a new clue was picked, display it and pass it to the clues menu
-					if(nextClue)
-					{
-						postToClueText(nextClue);
-						mainMenu.cluesMenu.addClue(nextClue);
-					}
-					//otherwise, notify the user that the hunt has been completed
-					else
-						postToClueText(OOIManager.NO_CLUES_NOTIFY);
-						
-					//a new clue is no longer needed 
-					needNewClue = false;
-				}
-			}*/
 		}
 		
 		//toggle use of magnifying glass
@@ -325,6 +305,7 @@
 			mainMenu.cluesMenu.outdateCurrentClue();
 		}
 		
+		//display the next clue
 		private function showNextClue():void
 		{
 			//post the new clue to the clue textfield
@@ -341,6 +322,7 @@
 			//postToClueText(OOIManager.WRONG_ANSWER_NOTIFY);
 		}
 		
+		//display clue text in textfield on screen
 		private function postToClueText(textToPost:String)
 		{
 			//display notification
@@ -350,6 +332,19 @@
 			//restart the clue hiding timer
 			clueTimer.reset();
 			clueTimer.start();
+		}
+		
+		//add evebt listener to list that will trigger the closing of dismissible overlays
+		private function addDismissibleOverlayCloser(closer:DisplayObject, eventType:String = MouseEvent.CLICK):void
+		{
+			closer.addEventListener(eventType, closeDismissibleOverlays);
+		}
+		
+		//close overlays that are to be dismissed by a click anywhere else on screen
+		private function closeDismissibleOverlays(e:MouseEvent):void
+		{
+			//close captions and descriptions of all objects of interest
+			ooiManager.hideAllOOIInfoPanes();
 		}
 	}
 }

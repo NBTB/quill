@@ -48,8 +48,9 @@
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
 																					{	
 																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
-																						targetObject.showHighlight();	
-																						targetObject.prepareDescription();								
+																						targetObject.showHighlight();
+																						targetObject.showCaption();
+																						targetObject.prepareInfoPane();								
 																					});
 
 			//listen for when the cursor stops hovering over the new object
@@ -58,18 +59,25 @@
 																						if(!testMouseOverOOI(newObject))
 																						{
 																							newObject.hideHighlight();	
-																							newObject.unprepareDescription();
+																							newObject.hideCaption();
+																							newObject.unprepareInfoPane();
 																						}
 																					});
 			
-			//listen for when the cursor stops hovering over the new object's description pane
-			newObject.getDescriptionPane().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
+			//listen for when the cursor stops hovering over the new object's info Pane
+			newObject.getInfoPane().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
 																					{	
 																						if(!testMouseOverOOI(newObject))
 																						{
 																							newObject.hideHighlight();	
-																							newObject.unprepareDescription();
+																							newObject.hideCaption();
 																						}
+																					});
+			
+			//llisten for when an object's info pane is being opened
+			newObject.addEventListener(OOIInfoPane.OPEN_PANE, function(e:Event):void
+																					{	
+																						hideAllOOIInfoPanes(new Array(ObjectOfInterest(e.target)));
 																					});
 			
 			
@@ -90,7 +98,7 @@
 			newObject.doubleClickEnabled = true;
 			newObject.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:MouseEvent):void
 																					{	
-																						ObjectOfInterest(e.target).displayDescription();
+																						ObjectOfInterest(e.target).showInfoPane();
 																					});
 			
 		}
@@ -108,8 +116,8 @@
 		private function testMouseOverOOI(targetOOI:ObjectOfInterest):Boolean
 		{
 			var ooiParent:DisplayObjectContainer = targetOOI.parent;			
-			var descriptionPane:OOIDescriptionPane = targetOOI.getDescriptionPane();
-			var descriptionPaneParent:DisplayObjectContainer = descriptionPane.parent;																						
+			var infoPane:OOIInfoPane = targetOOI.getInfoPane();
+			var infoPaneParent:DisplayObjectContainer = infoPane.parent;																						
 			
 			var mouseOverOOI:Boolean = false;
 			var mouseOverDescription:Boolean = false;
@@ -117,8 +125,8 @@
 			if(ooiParent)
 				mouseOverOOI = targetOOI.hitTest(new Point(ooiParent.mouseX, ooiParent.mouseY));
 			
-			if(descriptionPaneParent)
-				mouseOverDescription = descriptionPane.hitTestPoint(descriptionPaneParent.mouseX, descriptionPaneParent.mouseY);
+			if(infoPaneParent)
+				mouseOverDescription = infoPane.hitTestPoint(infoPaneParent.mouseX, infoPaneParent.mouseY);
 				
 			var mouseOverEither = mouseOverOOI || mouseOverDescription;
 			return mouseOverEither;
@@ -161,6 +169,32 @@
 			ooiUnused.splice(index, 1);
 			
 			return currentOOI.getClue();
+		}
+		
+		//hide all captions and info panes of non-ignored objects
+		public function hideAllOOIInfoPanes(ignoreOOIs:Array = null)
+		{
+			//hide each object of interest's info pane
+			for(var i = 0; i < objectsOfInterest.length; i++)
+			{
+				//address the current object of interest
+				var ooi:ObjectOfInterest = objectsOfInterest[i];
+				
+				//if the object's info pane is in the display list, hide it
+				if(ooi.getInfoPane().parent)
+				{
+					//determine if the current object of interest should actually be ignored and skipped
+					var ignoreOOI:Boolean = false;
+					if(ignoreOOIs != null)
+						for(var j = 0; j < ignoreOOIs.length && !ignoreOOI; j++)
+							if(ooi.getID() == ignoreOOIs[j].getID())
+								ignoreOOI = true;
+					
+					//if the object of interest is not to be ignored, hide its info pane
+					if(!ignoreOOI)
+						ooi.hideInfoPane();
+				}
+			}
 		}
 				
 		//add all objects whose highlights are visible to a list of bitmaps

@@ -15,18 +15,19 @@
 		private var id:Number = 0;										//identification number of object
 		private var clue:String = null;									//clue associated with object
 		private var hitmapFilename = null;								//filename of hitmap
-		private var highlightFilename = null;								//filename of highlight
+		private var highlightFilename = null;							//filename of highlight
 		private var hitmap:Bitmap = null;								//bitmap used for checking collisions and contact
-		private var highlight:Bitmap = null;								//bitmap used to highlight object
-		private var fullsizeHighlight:Bitmap = null;						//unscaled highlight bitmap
+		private var highlight:Bitmap = null;							//bitmap used to highlight object
+		private var fullsizeHighlight:Bitmap = null;					//unscaled highlight bitmap
 		private var scaleFactor:Number = 1;								//scale factor applied to hitmap and highlight to fit a given scene
 		private var lowerBounds:Point = null;							//low-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var upperBounds:Point = null;							//upper-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var mousedOver:Boolean = false;							//flag if the object is currently under the cursor
 		private var caption:TextField = null;							//caption that displays name of object
 		private var captionContainer:DisplayObjectContainer = null;		//display container of caption
-		private var descriptionPane:OOIDescriptionPane = null;			//pane used to display object's description
-		private var descriptionContainer:DisplayObjectContainer = null;	//display container of description pane
+		private var infoPane:OOIInfoPane = null;						//pane used to display object's description
+		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info Pane
+		private var infoPanePosition:Point = null;						//coordinates of info Pane
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
 		
 		private static var anyMousedOver = false;												//flag if any object is moused over
@@ -34,7 +35,7 @@
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null, captionContainer:DisplayObjectContainer = null, descriptionContainer:DisplayObjectContainer = null)
+		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{
 			//set name, and clue
 			this.objectName = objectName;
@@ -52,6 +53,9 @@
 			this.x = x;
 			this.y = y;
 			
+			//by default position the info pane at the origin
+			infoPanePosition = new Point(0, 0);
+			
 			//store scale to be used when loading bitmaps
 			if(scaleFactor  <= 0)
 				scaleFactor = 1;
@@ -66,10 +70,10 @@
 				this.captionContainer = captionContainer;
 			else
 				this.captionContainer = this.parent;
-			if(descriptionContainer)
-				this.descriptionContainer = captionContainer;
+			if(infoPaneContainer)
+				this.infoPaneContainer = captionContainer;
 			else
-				this.descriptionContainer = this.parent;
+				this.infoPaneContainer = this.parent;
 			
 			//create caption textfield to display name
 			caption = new TextField();
@@ -77,23 +81,22 @@
 			caption.autoSize = TextFieldAutoSize.LEFT;
 			caption.mouseEnabled = false;
 			caption.text = objectName;
-			
 						
-			//create description pane
-			descriptionPane = new OOIDescriptionPane(5, 5, 250, 380);
+			//create info Pane
+			infoPane = new OOIInfoPane(5, 5, 250, 380);
 			
-			//add title to object description pane
+			//add title to object info Pane
 			var titleText:TextField = new TextField();
-			titleText.defaultTextFormat = OOIDescriptionPane.getTitleFormat();
+			titleText.defaultTextFormat = OOIInfoPane.getTitleFormat();
 			titleText.text = objectName;	
 			titleText.width = 200;
 			titleText.x = 5;
 			titleText.y = 5;
 			titleText.wordWrap = true;
-			descriptionPane.addListChild(titleText);
+			infoPane.addListChild(titleText);
 			
-			//listen for when description pane closes
-			descriptionPane.addEventListener(OOIDescriptionPane.CLOSE_PANE, function(e:Event):void	{	undisplayDescription();	});
+			//listen for when info Pane closes
+			infoPane.addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void	{	hideInfoPane();	});
 			
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
@@ -253,15 +256,8 @@
 		
 		
 		//display caption and prepare to display description after a delay
-		public function prepareDescription(displayDelay:Number = -1)
-		{
-			//move caption to mouse position										
-			captionAtMouse();
-			
-			//if a parent in the display list exists, add the caption as its child
-			if(captionContainer)
-				captionContainer.addChild(caption);
-			
+		public function prepareInfoPane(displayDelay:Number = 1000)
+		{			
 			//if a negative time was given, assume that discription is not desired and do not start timer
 			if(displayDelay < 0)
 				return;
@@ -278,8 +274,8 @@
 																						descriptionTimer.stop();
 																						descriptionTimer = null;
 																						
-																						//display description pane
-																						displayDescription();
+																						//display info Pane
+																						showInfoPane();
 																					}
 																				  });
 			
@@ -288,7 +284,7 @@
 		}
 		
 		//stop preparing to display description and hide caption
-		public function unprepareDescription()
+		public function unprepareInfoPane()
 		{
 			//stop caption time and discard it
 			if(descriptionTimer)
@@ -296,13 +292,6 @@
 				descriptionTimer.stop();
 				descriptionTimer = null;
 			}
-			
-			//if the caption has been added to the display list, remove it
-			if(caption.parent)
-				caption.parent.removeChild(caption);
-				
-			//hide the discription pane
-			undisplayDescription();
 		}
 		
 		//place the caption at the mouse position in the display parent's space
@@ -329,65 +318,91 @@
 		}
 		
 		//place the caption at the mouse position in the display parent's space
-		private function descriptionAtMouse()
+		private function infoPaneAtMouse()
 		{
-			if(descriptionPane.parent)
+			if(infoPane.parent)
 			{
 				//place description near mouse
-				descriptionPane.x = parent.mouseX - descriptionPane.width/2;
-				descriptionPane.y = parent.mouseY+1;
+				infoPane.x = parent.mouseX - infoPane.width/2;
+				infoPane.y = parent.mouseY+1;
 				
-				//if the cadescription pane exceeds bounds, clamp it
-				var descriptionPaneFarX = descriptionPane.x + descriptionPane.width;
-				var descriptionPaneFarY = descriptionPane.y + descriptionPane.height;
-				if(descriptionPane.x < lowerBounds.x)
-					descriptionPane.x = lowerBounds.x;
-				if(descriptionPane.y < lowerBounds.y)
-					descriptionPane.y = lowerBounds.y;
-				if(descriptionPaneFarX > upperBounds.x)
-					descriptionPane.x -= descriptionPaneFarX - upperBounds.x;
-				if(descriptionPaneFarY > upperBounds.y)
-					descriptionPane.y -= descriptionPaneFarY - upperBounds.y;
+				//if the cainfo Pane exceeds bounds, clamp it
+				var infoPaneFarX = infoPane.x + infoPane.width;
+				var infoPaneFarY = infoPane.y + infoPane.height;
+				if(infoPane.x < lowerBounds.x)
+					infoPane.x = lowerBounds.x;
+				if(infoPane.y < lowerBounds.y)
+					infoPane.y = lowerBounds.y;
+				if(infoPaneFarX > upperBounds.x)
+					infoPane.x -= infoPaneFarX - upperBounds.x;
+				if(infoPaneFarY > upperBounds.y)
+					infoPane.y -= infoPaneFarY - upperBounds.y;
 			}
 		}
 		
-		//display description pane
-		public function displayDescription()
+		//display caption
+		public function showCaption()
 		{
-			if(descriptionContainer)
+			if(captionContainer)
 			{	
-				descriptionContainer.addChild(descriptionPane);
-				descriptionAtMouse();
+				captionContainer.addChild(caption);
+				captionAtMouse();
 			}
 		}
 		
-		private function undisplayDescription()
+		//hide caption
+		public function hideCaption()
 		{
-			if(descriptionPane.parent)
+			if(caption.parent)
 			{
-				descriptionPane.parent.removeChild(descriptionPane);
-				dispatchEvent(new Event(OOIDescriptionPane.CLOSE_PANE));
+				caption.parent.removeChild(caption);
+			}
+		}		
+		
+		//display info Pane
+		public function showInfoPane()
+		{
+			if(infoPaneContainer)
+			{	
+				infoPaneContainer.addChild(infoPane);
+				dispatchEvent(new Event(OOIInfoPane.OPEN_PANE));
+			}
+		}
+		
+		//hide descrition pane
+		public function hideInfoPane()
+		{
+			if(infoPane.parent)
+			{
+				infoPane.parent.removeChild(infoPane);
+				dispatchEvent(new Event(OOIInfoPane.CLOSE_PANE));
 			}
 		}
 		
 		//toggle highlight visibilty
 		public function showHighlight():void				{	highlight.visible = true;		}
-		public function hideHighlight():void				{	highlight.visible = false;	}
+		public function hideHighlight():void				{	highlight.visible = false;		}
 		
 		//retrieve highlight visibility
 		public function isHighlightd():Boolean			{	return highlight.visible;		}
 		
-		public function getObjectName():String							{	return objectName;				}
-		public function getID():Number									{	return id;						}
-		public function getClue():String								{	return clue;					}
-		public function getHitmap():Bitmap								{	return hitmap;					}
-		public function getHighlight():Bitmap								{	return highlight;					}
-		public function getFullsizeHighlight():Bitmap						{	return fullsizeHighlight;			}
-		public function getDescriptionPane():OOIDescriptionPane			{	return descriptionPane;			}
-		public function getCaptionContainer():DisplayObjectContainer	{	return captionContainer;		}
-		public function getDescriptionContainer():DisplayObjectContainer{	return descriptionContainer;	}
-		
+		public function getObjectName():String							{	return objectName;					}
+		public function getID():Number									{	return id;							}
+		public function getClue():String								{	return clue;						}
+		public function getHitmap():Bitmap								{	return hitmap;						}
+		public function getHighlight():Bitmap							{	return highlight;					}
+		public function getFullsizeHighlight():Bitmap					{	return fullsizeHighlight;			}
+		public function getInfoPane():OOIInfoPane						{	return infoPane;				}
+		public function getCaptionContainer():DisplayObjectContainer	{	return captionContainer;			}
+		public function getInfoPaneContainer():DisplayObjectContainer	{	return infoPaneContainer;	}
+		public function getInfoPanePosition():Point						{	return infoPanePosition	}
+			
 		public function setCaptionContainer(container:DisplayObjectContainer):void		{	this.captionContainer = container;		}
-		public function setDescriptionContainer(container:DisplayObjectContainer):void	{	this.descriptionContainer = container;	}
+		public function setDescriptionContainer(container:DisplayObjectContainer):void	{	this.infoPaneContainer = container;		}
+		public function setInfoPanePosition(coordinates:Point):void						
+		{	
+			this.infoPane.x = coordinates.x;	
+			this.infoPane.y = coordinates.y;	
+		}
 	}
 }

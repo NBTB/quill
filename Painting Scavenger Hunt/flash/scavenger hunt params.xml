@@ -1,4 +1,4 @@
-<Hunt zoom = "1" magnifyRadius = "100">
+<Hunt zoom = "1" magnify_radius = "100">
 	<Painting>
 		<title>The Night Before the Battle</title>
 		<artist>James Henry Beard</artist>
@@ -12,7 +12,9 @@
 		<hitmap_filename>../assets/quill hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/quill highlight.png</highlight_filename>
 		<x>0.7834827</x>
-		<y>0.7008636</y>		
+		<y>0.7008636</y>
+		<info_pane_x>0.45</info_pane_x>
+		<info_pane_y>0.25</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Moon</name>
@@ -21,6 +23,8 @@
 		<highlight_filename>../assets/moon highlight.png</highlight_filename>
 		<x>0.1389310</x>
 		<y>0.0392288</y>
+		<info_pane_x>0.18</info_pane_x>
+		<info_pane_y>0.02</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Flag</name>
@@ -29,6 +33,8 @@
 		<highlight_filename>../assets/flag highlight.png</highlight_filename>
 		<x>0.5396551</x>
 		<y>0.6855720</y>
+		<info_pane_x>0.20</info_pane_x>
+		<info_pane_y>0.25</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Skull</name>
@@ -37,6 +43,8 @@
 		<highlight_filename>../assets/skull highlight.png</highlight_filename>
 		<x>0.4845827</x>
 		<y>0.3307687</y>
+		<info_pane_x>0.15</info_pane_x>
+		<info_pane_y>0.10</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Musket</name>
@@ -45,6 +53,8 @@
 		<highlight_filename>../assets/musket highlight.png</highlight_filename>
 		<x>0.6232068</x>
 		<y>0.6401487</y>
+		<info_pane_x>0.28</info_pane_x>
+		<info_pane_y>0.25</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Silhouette</name>
@@ -53,6 +63,8 @@
 		<highlight_filename>../assets/silhouette highlight.png</highlight_filename>
 		<x>0.8701379</x>
 		<y>0.1251726</y>
+		<info_pane_x>0.53</info_pane_x>
+		<info_pane_y>0.02</info_pane_y>
 		</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
@@ -61,6 +73,8 @@
 		<highlight_filename>../assets/fire highlight.png</highlight_filename>
 		<x>0.1772068</x>
 		<y>0.7695784</y>
+		<info_pane_x>0.24</info_pane_x>
+		<info_pane_y>0.25</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cannonball</name>
@@ -69,6 +83,8 @@
 		<highlight_filename>../assets/cannonball highlight.png</highlight_filename>
 		<x>0.8696896</x>
 		<y>0.9174942</y>
+		<info_pane_x>0.53</info_pane_x>
+		<info_pane_y>0.25</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Sword</name>
@@ -77,6 +93,8 @@
 		<highlight_filename>../assets/sword highlight.png</highlight_filename>
 		<x>0.8485517</x>
 		<y>0.7722242</y>
+		<info_pane_x>0.51</info_pane_x>
+		<info_pane_y>0.25</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cards</name>
@@ -85,14 +103,18 @@
 		<highlight_filename>../assets/cards highlight.png</highlight_filename>
 		<x>0.3913793</x>
 		<y>0.9123970</y>
+		<info_pane_x>0.47</info_pane_x>
+		<info_pane_y>0.25</info_pane_y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Parrott Rifle</name>
 		<clue>Better run for cover because when I sneeze it'll bring the whole building down...</clue>
 		<hitmap_filename>../assets/parrott rifle hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/parrott rifle highlight.png</highlight_filename>
-		<x>0.2580307</x>
+		<x>0.2560307</x>
 		<y>0.3380287</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.10</info_pane_y>
 	</Object_Of_Interest>
 	<Letter_Piece>
 		<name>Unfinished</name>

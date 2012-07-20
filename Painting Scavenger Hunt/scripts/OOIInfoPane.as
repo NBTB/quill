@@ -5,7 +5,7 @@
 	import flash.text.*;
 	import flash.geom.Point;
 	
-	public class OOIDescriptionPane extends MovieClip
+	public class OOIInfoPane extends MovieClip
 	{
 		private var listChildren:Array = null;		//list of display objects that populate the pane
 		private var closeMenuButton:Sprite = null;
@@ -15,9 +15,10 @@
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		
 		//event types
+		public static const OPEN_PANE = "Open Pane";
 		public static const CLOSE_PANE = "Close Pane";
 		
-		public function OOIDescriptionPane(x:Number, y:Number, width:Number, height:Number)
+		public function OOIInfoPane(x:Number, y:Number, width:Number, height:Number)
 		{
 			//position pane
 			this.x = x;
