@@ -11,7 +11,7 @@
 		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 		<hitmap_filename>../assets/quill hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/quill highlight.png</highlight_filename>
-		<x>0.7844827</x>
+		<x>0.7834827</x>
 		<y>0.7008636</y>		
 	</Object_Of_Interest>
 	<Object_Of_Interest>
@@ -19,8 +19,8 @@
 		<clue>My appearance is always different, but I always have the same face...</clue>
 		<hitmap_filename>../assets/moon hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/moon highlight.png</highlight_filename>
-		<x>0.1379310</x>
-		<y>0.0382288</y>
+		<x>0.1389310</x>
+		<y>0.0392288</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Flag</name>
@@ -35,39 +35,39 @@
 		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
 		<hitmap_filename>../assets/skull hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/skull highlight.png</highlight_filename>
-		<x>0.4844827</x>
-		<y>0.3287687</y>
+		<x>0.4845827</x>
+		<y>0.3307687</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Musket</name>
 		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
 		<hitmap_filename>../assets/musket hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/musket highlight.png</highlight_filename>
-		<x>0.6362068</x>
-		<y>0.6371487</y>
+		<x>0.6232068</x>
+		<y>0.6401487</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Silhouette</name>
 		<clue>You have stripped me of my color, but I still look like you...</clue>
 		<hitmap_filename>../assets/silhouette hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/silhouette highlight.png</highlight_filename>
-		<x>0.8741379</x>
-		<y>0.1401726</y>
+		<x>0.8701379</x>
+		<y>0.1251726</y>
 		</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
 		<clue>You can look, but don't touch. I'm just too hot to handle...</clue>
 		<hitmap_filename>../assets/fire hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/fire highlight.png</highlight_filename>
-		<x>0.1862068</x>
-		<y>0.7645784</y>
+		<x>0.1772068</x>
+		<y>0.7695784</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cannonball</name>
 		<clue>I've been known to be quite the gate crasher...</clue>
 		<hitmap_filename>../assets/cannonball hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/cannonball highlight.png</highlight_filename>
-		<x>0.8706896</x>
+		<x>0.8696896</x>
 		<y>0.9174942</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
@@ -75,7 +75,7 @@
 		<clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
 		<hitmap_filename>../assets/sword hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/sword highlight.png</highlight_filename>
-		<x>0.8465517</x>
+		<x>0.8485517</x>
 		<y>0.7722242</y>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
@@ -91,8 +91,8 @@
 		<clue>Better run for cover because when I sneeze it'll bring the whole building down...</clue>
 		<hitmap_filename>../assets/parrott rifle hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/parrott rifle highlight.png</highlight_filename>
-		<x>0.2551307</x>
-		<y>0.3390287</y>
+		<x>0.2580307</x>
+		<y>0.3380287</y>
 	</Object_Of_Interest>
 	<Letter_Piece>
 		<name>Unfinished</name>

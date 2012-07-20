@@ -198,14 +198,16 @@
 																						toggleZoom();
 																					});
 			
+			//listen for new frame
+			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
+			
 			//listen for input events
 			stage.focus = stage;
-			addEventListener(MouseEvent.MOUSE_MOVE, checkMouseMove);
 			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
 		}		
 		
-		//handle movement of mouse
-		public function checkMouseMove(e:MouseEvent):void
+		//handle new frame
+		public function checkEnterFrame(e:Event):void
 		{			
 			//if the magnifying glass is being used, draw through its lens
 			if(zoomed)
