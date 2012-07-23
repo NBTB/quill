@@ -9,6 +9,7 @@
 		public var objectsOfInterest:Array = null;				//array of objects of interest
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
 		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted				
+		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
 				
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
 		public static const NO_CLUES_NOTIFY:String = "No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
@@ -144,17 +145,27 @@
 		//pick the next object of interest to hunt at random and return its clue
 		public function pickNextOOI():String
 		{
-			//temporary, stop making clue after 7/10
-			if(ooiUnused.length < objectsOfInterest.length - 7 + 1)
+			//if the maximum number of usable objects of interet is positive or zero, ensure that it does not get exceeded
+			if(usableOOICount >= 0)
 			{
-				currentOOI = null;
-				return null;
+				//if the maxium number of usable objects of interest has been reached, return a failure
+				if(ooiUnused.length < objectsOfInterest.length - usableOOICount + 1)
+				{
+					currentOOI = null;
+					return null;
+				}
 			}
-			
-			//if no objects remain, return a failure
-			//if(ooiUnused.length < 1)
-			//	return null;
-			
+			//otherwise, ensure that an unused clue remains
+			else
+			{
+				//if the maxium number of usable objects of interest has been reached, return a failure
+				if(ooiUnused.length < 1)
+				{
+					currentOOI = null;
+					return null;
+				}
+			}
+				
 			//generate a number [0, 1)
 			var randNum:Number = Math.random();
 			if(randNum >= 1)
@@ -169,6 +180,7 @@
 			//remove object from list of unused
 			ooiUnused.splice(index, 1);
 			
+			//return turn new clue
 			return currentOOI.getClue();
 		}
 		
@@ -208,5 +220,7 @@
 		
 		public function getCurrentOOI():ObjectOfInterest	{	return currentOOI;					}
 		public function getCurrentClue():String				{	return currentOOI.getClue();		}
+		
+		public function setUsableOOICount(count:int):void	{	usableOOICount = count;				}
 	}
 }

@@ -32,6 +32,7 @@
 			//parse hunt attributes
 			var mgZoom:Number = 1;
 			var mgRadius:Number = 100;
+			var huntCount:int = -1;
 			var huntAttribs:XMLList = hunt.attributes();
 			for each(var attrib in huntAttribs)
 			{
@@ -39,11 +40,16 @@
 					mgZoom = Number(attrib);
 				if(attrib.name() == "magnify_radius")
 					mgRadius = Number(attrib);
+				if(attrib.name() == "huntCount")
+					huntCount = int(Number(attrib));
 			}
 			
 			//set magnifying glass defaults
 			magnifyingGlass.setDefaultZoom(mgZoom);
 			magnifyingGlass.setDefaultRadius(mgRadius);
+			
+			//set number of number of usable objects of interest
+			ooiManager.setUsableOOICount(huntCount);
 			
 			//if the hunt is missing necessary information, return
 			if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest") || !hunt.hasOwnProperty("Letter_Piece"))
