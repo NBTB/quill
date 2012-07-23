@@ -36,7 +36,7 @@
 			objectsOfInterest.push(newObject);
 			
 			//add new object as a display list child
-			addChild(newObject);			
+			addChild(newObject);
 			
 			//if the manager is part of the display list, direct the new object's placement of caption and description
 			if(parent)
