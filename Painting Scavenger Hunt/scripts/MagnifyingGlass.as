@@ -59,7 +59,6 @@
 				else if(y > maxY)
 					y = maxY;
 			}
-			
 			//return the clamped point
 			return new Point(x, y);
 		}

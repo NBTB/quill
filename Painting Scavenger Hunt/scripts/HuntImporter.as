@@ -177,43 +177,43 @@
             var piecesLoaded:Number = 0;
             var piecesFailed:Number = 0;
              
-            //flag noting if all objects have been parsed
+            //flag nothing if all objects have been parsed
             var allPiecesParsed:Boolean = false;
-             
+            
             for each(var piece in pieces)
             {
                 if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename") ,piece.hasOwnProperty("y"))
                 {
                     //increment the number of objects parsed
                     piecesParsed++;
-                     
+
                     //create new object of interest
                     var newPiece:LetterPieces = new LetterPieces(piece.name, piece.filename, Number(piece.y));
-                     
+                      
                     //listen for the completion of the new object
-                    newPiece.addEventListener(Event.COMPLETE, function(e:Event):void  
-                                                                                {  
+                    newPiece.addEventListener(Event.COMPLETE, function(e:Event):void 
+                                                                                { 
                                                                                     //increment the number of successfully loaded obejcts
                                                                                     piecesLoaded++;
                                                                                      
                                                                                     //add the object to the painting canvas
                                                                                     letterMenu.addPiece(LetterPieces(e.target));    
                                                                                 });
-                     
+                      
                     //listen of an IO error cause by the new object (signifies a failure to load file)
                     newPiece.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
                                                                                               {
                                                                                                 //increment the number of failed objects
                                                                                                 piecesFailed++;   
                                                                                               });
-                     
+                      
                     //begin loading the components of the new object of interest
-                    newPiece.loadPiece();					
-					newPiece.visible = false;
-					
+                    newPiece.loadPiece();                  
+                    newPiece.visible = false;
+                     
                 }
             }
-             
+              
             //flag that all objects have been parsed (not necessarily fully loaded)
             allPiecesParsed = true; 
         }

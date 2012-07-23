@@ -65,7 +65,7 @@
 		<y>0.1251726</y>
 		<info_pane_x>0.53</info_pane_x>
 		<info_pane_y>0.02</info_pane_y>
-		</Object_Of_Interest>
+	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
 		<clue>You can look, but don't touch. I'm just too hot to handle...</clue>
@@ -150,5 +150,10 @@
 		<name>Piece7</name>
 		<filename>../assets/letterPiece7.png</filename>	
 		<y>135</y>	
+	</Letter_Piece>
+	<Letter_Piece>
+		<name>HiddenLetter</name>
+		<filename>../assets/hiddenLetter.png</filename>	
+		<y>0</y>	
 	</Letter_Piece>
 </Hunt>

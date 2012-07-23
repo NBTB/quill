@@ -256,7 +256,7 @@
 		
 		
 		//display caption and prepare to display description after a delay
-		public function prepareInfoPane(displayDelay:Number = 1000)
+		public function prepareInfoPane(displayDelay:Number = 2000)
 		{			
 			//if a negative time was given, assume that discription is not desired and do not start timer
 			if(displayDelay < 0)

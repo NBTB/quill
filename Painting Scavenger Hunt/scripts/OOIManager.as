@@ -21,7 +21,7 @@
 		public function OOIManager()
 		{
 			//create empty array of objects of interest
-			objectsOfInterest = new Array();				
+			objectsOfInterest = new Array();
 			
 			//listen for being added to the display list
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
@@ -46,6 +46,11 @@
 			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
+																					{	
+																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
+																						targetObject.showHighlight();	
+																						targetObject.showCaption();
+																						targetObject.prepareInfoPane();							
 																					});
 
 			//listen for when the cursor stops hovering over the new object
@@ -55,7 +60,7 @@
 																						{
 																							newObject.hideHighlight();	
 																							newObject.hideCaption();
-																							newObject.unprepareInfoPane();
+																							//newObject.unprepareInfoPane();
 																						}
 																					});
 			
@@ -92,12 +97,13 @@
 			//listen for when the object of interest is double-clicked
 			newObject.doubleClickEnabled = true;
 			newObject.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:MouseEvent):void
-																					{	
+																					{
 																						ObjectOfInterest(e.target).showInfoPane();
 																					});
 			
 		}
 		
+
 		private function addedToStage(e:Event)
 		{
 			for(var i:int; i < objectsOfInterest.length; i++)
