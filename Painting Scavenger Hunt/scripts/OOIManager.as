@@ -46,11 +46,6 @@
 			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
-																					{	
-																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
-																						targetObject.showHighlight();
-																						targetObject.showCaption();
-																						targetObject.prepareInfoPane();								
 																					});
 
 			//listen for when the cursor stops hovering over the new object
