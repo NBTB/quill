@@ -153,6 +153,22 @@
 				//trace(letterMenu.pieces[i].pieceName);
 				letterMenu.pieces[i].visible = true;							
 			}
+			//if the search is over, you find the hidden letter!
+			//the other pieces become invisible 
+			if(rewardCounter == 8 && letterMenu.pieces[7].visible == true)
+			{
+			
+				letterMenu.nextButton.visible = true;
+                letterMenu.pieces[0].visible = false; 
+				letterMenu.pieces[1].visible = false; 
+				letterMenu.pieces[2].visible = false; 
+				letterMenu.pieces[3].visible = false; 
+				letterMenu.pieces[4].visible = false; 
+				letterMenu.pieces[5].visible = false; 
+				letterMenu.pieces[6].visible = false; 			 
+				
+            
+			}
 		}
 		
 		//Tells the cluesMenu when to activate
