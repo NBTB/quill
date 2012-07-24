@@ -149,7 +149,7 @@
 			if(usableOOICount >= 0)
 			{
 				//if the maxium number of usable objects of interest has been reached, return a failure
-				if(ooiUnused.length < objectsOfInterest.length - usableOOICount + 1)
+				if(ooiUnused.length < objectsOfInterest.length - usableOOICount)
 				{
 					currentOOI = null;
 					return null;
