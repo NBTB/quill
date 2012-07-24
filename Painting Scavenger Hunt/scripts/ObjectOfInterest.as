@@ -79,7 +79,7 @@
 			caption = new TextField();
 			caption.defaultTextFormat = captionFormat;
 			caption.autoSize = TextFieldAutoSize.LEFT;
-			caption.mouseEnabled = false;
+			caption.selectable = false;
 			caption.text = objectName;
 						
 			//create info Pane
@@ -93,6 +93,7 @@
 			titleText.x = 5;
 			titleText.y = 5;
 			titleText.wordWrap = true;
+			titleText.selectable = false;
 			infoPane.addListChild(titleText);
 			
 			//listen for when info Pane closes
