@@ -9,7 +9,7 @@
 	{
 		private var upButton:SimpleButton = null;
 		private var downButton:SimpleButton = null;
-		private var scrollButton:SimpleButton = null;			//indicates the current scroll distance and can be dragged (also call scroller)
+		private var scroller:SimpleButton = null;			//indicates the current scroll distance and can be dragged
 		private var contentHeight:Number = 0;
 		private var visibleHeight:Number = 0;
 		private var contentScrollSpeed:Number = 0;				//desired speed of content scolling
@@ -17,7 +17,7 @@
 		private var movementFactor:Number = 0;					//factor of scroller movement (often 1 or -1)
 		private var scrolledPercentage:Number = 0;				//portion of full scroll away from rest
 		private var upDownButtonSize:Point = null;
-		private var scrollButtonSize:Point = null;
+		private var scrollerSize:Point = null;
 		
 		//event types
 		public static const SCROLLED:String = "Scrolled";
@@ -49,16 +49,16 @@
 			downButton.y = fillableRect.height - downButton.height;
 			addChild(downButton);
 			
-			//determine dimensions of scroll button
-			scrollButtonSize = new Point()
-			scrollButtonSize.x = fillableRect.width;
-			scrollButtonSize.y = calculateScrollButtonHeight();
+			//determine dimensions of scroller
+			scrollerSize = new Point()
+			scrollerSize.x = fillableRect.width;
+			scrollerSize.y = calculateScrollerHeight();
 			
-			//place scroll button
-			scrollButton = new SimpleButton();
-			scrollButton.x = 0;
-			scrollButton.y = upDownButtonSize.y;
-			addChild(scrollButton);
+			//place scroller
+			scroller = new SimpleButton();
+			scroller.x = 0;
+			scroller.y = upDownButtonSize.y;
+			addChild(scroller);
 			
 			//store desired content scrolling speed and calcuate the speed of the scroller
 			this.contentScrollSpeed = contentScrollSpeed;
@@ -67,15 +67,15 @@
 			//make buttons use hand cursor when hovered over
 			upButton.useHandCursor = true;
 			downButton.useHandCursor = true;
-			//scrollButton.useHandCursor = true;
+			//scroller.useHandCursor = true;
 			
 			//attach button images
 			updateUpDownButtonStates(style);
-			updateScrollButtonStates(style);			
+			updateScrollerStates(style);			
 			
 			//listen for updates to style changes
 			style.addEventListener(ScrollBarStyle.UP_DOWN_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateUpDownButtonStates(style);	});
-			style.addEventListener(ScrollBarStyle.SCROLL_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateScrollButtonStates(style);	});
+			style.addEventListener(ScrollBarStyle.SCROLL_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateScrollerStates(style);	});
 			
 			//listen for new frames
 			addEventListener(Event.ENTER_FRAME, enterFrame);
@@ -94,7 +94,7 @@
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
 			if(totalMovement)
 			{
-				scrollButton.y += totalMovement;
+				scroller.y += totalMovement;
 				scrolledPercentage = calculateScrolledPercentage();
 				dispatchEvent(new Event(SCROLLED));
 			}
@@ -103,7 +103,7 @@
 		private function moveScroller(movement:Number)
 		{
 			movementFactor = movement;
-			scrollButton.y += movementSpeed * movementFactor * scrollerMoveableFactor();
+			scroller.y += movementSpeed * movementFactor * scrollerMoveableFactor();
 			scrolledPercentage = calculateScrolledPercentage();
 			dispatchEvent(new Event(SCROLLED));
 		}
@@ -120,10 +120,10 @@
 			
 			//if the movement is positive, check distance to down button
 			if(moveable > 0)
-				moveable = (downButton.y - (scrollButton.y + scrollButton.height)) / moveable;
+				moveable = (downButton.y - (scroller.y + scroller.height)) / moveable;
 			//otherwise if the movement is negative, check distance to up button
 			else if(moveable < 0)
-				moveable = ((upButton.y + upButton.height) - scrollButton.y) / moveable;
+				moveable = ((upButton.y + upButton.height) - scroller.y) / moveable;
 			//otherwise, fully moveable
 			else
 				moveable = 1;
@@ -162,24 +162,24 @@
 			downButton.height = upDownButtonSize.y;
 		}
 		
-		private function updateScrollButtonStates(style:ScrollBarStyle):void
+		private function updateScrollerStates(style:ScrollBarStyle):void
 		{
 			//get states
-			var upState:BitmapData = style.getScrollButtonState(ScrollBarStyle.UP);
-			var overState:BitmapData = style.getScrollButtonState(ScrollBarStyle.OVER);
-			var downState:BitmapData = style.getScrollButtonState(ScrollBarStyle.DOWN);
-			var hittestState:BitmapData = style.getScrollButtonState(ScrollBarStyle.HITTEST);
+			var upState:BitmapData = style.getScrollerState(ScrollBarStyle.UP);
+			var overState:BitmapData = style.getScrollerState(ScrollBarStyle.OVER);
+			var downState:BitmapData = style.getScrollerState(ScrollBarStyle.DOWN);
+			var hittestState:BitmapData = style.getScrollerState(ScrollBarStyle.HITTEST);
 			
-			///update scroll button
-			scrollButton.upState = new Bitmap(upState);
-			scrollButton.overState = new Bitmap(overState);
-			scrollButton.downState = new Bitmap(downState);
-			scrollButton.hitTestState = new Bitmap(hittestState);
-			scrollButton.width = scrollButtonSize.x;
-			scrollButton.height = scrollButtonSize.y;
+			///update scroller
+			scroller.upState = new Bitmap(upState);
+			scroller.overState = new Bitmap(overState);
+			scroller.downState = new Bitmap(downState);
+			scroller.hitTestState = new Bitmap(hittestState);
+			scroller.width = scrollerSize.x;
+			scroller.height = scrollerSize.y;
 		}
 		
-		private function calculateScrollButtonHeight():Number
+		private function calculateScrollerHeight():Number
 		{
 			//calculate the distance between the up and down buttons
 			var calcHeight:Number = downButton.y - (upButton.y + upDownButtonSize.y);
@@ -195,7 +195,7 @@
 		{
 			//compute the two extremes that are reachable by the top of the scroll bar
 			var startPoint:Number = upButton.y + upDownButtonSize.y;			
-			var endPoint:Number = downButton.y - scrollButtonSize.y;
+			var endPoint:Number = downButton.y - scrollerSize.y;
 			
 			//calculate the moveable space of the scroller
 			var calcHeight:Number = endPoint - startPoint;
@@ -212,14 +212,14 @@
 		{
 			//compute the two extremes that are reachable by the top of the scroll bar
 			var startPoint:Number = upButton.y + upDownButtonSize.y;			
-			var endPoint:Number = downButton.y - scrollButtonSize.y;
+			var endPoint:Number = downButton.y - scrollerSize.y;
 			
 			//if the end point is at or behind the start point, return invalid
 			if(endPoint <= startPoint)
 				return -1;
 			
 			//compute percentage of scroll
-			var percentage = (scrollButton.y - startPoint) / (endPoint - startPoint)
+			var percentage = (scroller.y - startPoint) / (endPoint - startPoint)
 			return percentage;
 		}
 		
@@ -233,9 +233,9 @@
 			//store new content height
 			this.contentHeight = contentHeight;	
 			
-			//resize scroll button reflect change in height
-			scrollButtonSize.y = calculateScrollButtonHeight();
-			scrollButton.height = scrollButtonSize.y;
+			//resize scroller reflect change in height
+			scrollerSize.y = calculateScrollerHeight();
+			scroller.height = scrollerSize.y;
 			
 			//calculate scroller movement speed
 			movementSpeed = calculateScrollSpeed();
@@ -245,9 +245,9 @@
 			//store new visible height
 			this.visibleHeight = visibleHeight;	
 			
-			//resize scroll button reflect change in height
-			scrollButtonSize.y = calculateScrollButtonHeight();
-			scrollButton.height = scrollButtonSize.y;
+			//resize scroller reflect change in height
+			scrollerSize.y = calculateScrollerHeight();
+			scroller.height = scrollerSize.y;
 		}		
 		public function setContentScrollSpeed(contentScrollSpeed:Number):void	
 		{
