@@ -12,7 +12,7 @@
 		private var closeMenuButton:Sprite = null;	//button to close window
 		private var scrollBar = null;				//scroll bar used to scroll through pane content
 		private var maxPoint:Point = null;			//bottom-right most point of the pane's content
-		private var scrollPoint = null;				//translation of pane content due to scrolling
+		private var scrollPoint:Point = null;		//translation of pane content due to scrolling
 		
 		private static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		private static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
@@ -82,7 +82,7 @@
 			createCloseButton();
 			
 			//create scroll bar
-			scrollBar = new ScrollBar(new Rectangle(0, 100, 10, 200), scrollBarStyle);
+			scrollBar = new ScrollBar(new Rectangle(0, 100, 10, 200), scrollBarStyle, 1000, 100, 40);
 			addChild(scrollBar);
 			
 			//currently no scrolling is available
@@ -96,12 +96,17 @@
 																							  closeMenu();
 																						 });
 																							
-			
-			//listen for being added to the stage
-			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
-																	{
-																		stage.addEventListener(KeyboardEvent.KEY_UP, handleKeysUp);
-																	});
+			//listen for the scrolling of the scroll bar
+			scrollBar.addEventListener(ScrollBar.SCROLLED, function(e:Event):void
+																			{
+																				//compute how much content must be scrolled 
+																				var scrollFactor = scrollBar.getScrolledPercentage();
+																				scrollFactor *= 1000;//maxPoint.y;
+																				scrollFactor -= scrollPoint.y;
+																				
+																				//scroll content
+																				scrollContent(new Point(0, scrollFactor));
+																			});
 		}
 		
 		private function createCloseButton():void
@@ -111,14 +116,7 @@
 			closeMenuButton.graphics.drawRect(width - 20, 10, 10, 10);
 			closeMenuButton.graphics.endFill();
 		}
-		
-		
-		private function handleKeysUp(e:KeyboardEvent)
-		{
-			if(e.charCode == 88 || e.charCode == 120) //'x'
-				closeMenu()
-		}
-		
+				
 		private function closeMenu():void
 		{
 			dispatchEvent(new Event(CLOSE_PANE));
@@ -154,14 +152,15 @@
 		private function scrollContent(distance:Point):void
 		{
 			//move content
-			for(var i = 0; i < listChildren.size; i++)
+			for(var i = 0; i < listChildren.length; i++)
 			{
-				listChildren.x += distance.x;
-				listChildren.y += distance.y;
+				listChildren[i].x -= distance.x;
+				listChildren[i].y -= distance.y;
 			}
 			
 			//update total scroll distance
-			scrollPoint += distance;						
+			scrollPoint.x += distance.x;
+			scrollPoint.y += distance.y;			
 		}
 		
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}

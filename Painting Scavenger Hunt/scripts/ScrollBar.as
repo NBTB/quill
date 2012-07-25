@@ -12,19 +12,25 @@
 		private var scrollButton:SimpleButton = null;			//indicates the current scroll distance and can be dragged (also call scroller)
 		private var contentHeight:Number = 0;
 		private var visibleHeight:Number = 0;
-		private var movementSpeed:Number = 0;
-		private var movementFactor:Number = 0;
+		private var contentScrollSpeed:Number = 0;				//desired speed of content scolling
+		private var movementSpeed:Number = 0;					//speed of scroller 
+		private var movementFactor:Number = 0;					//factor of scroller movement (often 1 or -1)
+		private var scrolledPercentage:Number = 0;				//portion of full scroll away from rest
 		private var upDownButtonSize:Point = null;
 		private var scrollButtonSize:Point = null;
 		
 		//event types
 		public static const SCROLLED:String = "Scrolled";
 		
-		public function ScrollBar(fillableRect:Rectangle, style:ScrollBarStyle, contentHeight:Number = 0, visibleHeight = 0)
+		public function ScrollBar(fillableRect:Rectangle, style:ScrollBarStyle, contentHeight:Number = 0, visibleHeight = 0, contentScrollSpeed = 0)
 		{
 			//set location
 			this.x = fillableRect.x;
 			this.y = fillableRect.y;
+			
+			//store total content height and displayable height
+			this.contentHeight = contentHeight;
+			this.visibleHeight = visibleHeight;
 			
 			//determine dimensions of up and down buttons
 			upDownButtonSize = new Point()
@@ -54,14 +60,18 @@
 			scrollButton.y = upDownButtonSize.y;
 			addChild(scrollButton);
 			
+			//store desired content scrolling speed and calcuate the speed of the scroller
+			this.contentScrollSpeed = contentScrollSpeed;
+			movementSpeed = calculateScrollSpeed();
+			
+			//make buttons use hand cursor when hovered over
 			upButton.useHandCursor = true;
+			downButton.useHandCursor = true;
+			//scrollButton.useHandCursor = true;
 			
-			//create buttons
+			//attach button images
 			updateUpDownButtonStates(style);
-			updateScrollButtonStates(style);
-			
-			//store content height
-			this.contentHeight = contentHeight;
+			updateScrollButtonStates(style);			
 			
 			//listen for updates to style changes
 			style.addEventListener(ScrollBarStyle.UP_DOWN_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateUpDownButtonStates(style);	});
@@ -77,21 +87,25 @@
 			//listen for up and down buttons being pressed
 			upButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void	{	stopScroller();	});
-			
-			
-			
-			movementSpeed = 5;
 		}
 		
 		private function enterFrame(e:Event)
 		{
-			scrollButton.y += movementSpeed * movementFactor * scrollerMoveableFactor();
+			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
+			if(totalMovement)
+			{
+				scrollButton.y += totalMovement;
+				scrolledPercentage = calculateScrolledPercentage();
+				dispatchEvent(new Event(SCROLLED));
+			}
 		}
 		
 		private function moveScroller(movement:Number)
 		{
 			movementFactor = movement;
 			scrollButton.y += movementSpeed * movementFactor * scrollerMoveableFactor();
+			scrolledPercentage = calculateScrolledPercentage();
+			dispatchEvent(new Event(SCROLLED));
 		}
 		
 		private function stopScroller()
@@ -169,18 +183,50 @@
 		{
 			//calculate the distance between the up and down buttons
 			var calcHeight:Number = downButton.y - (upButton.y + upDownButtonSize.y);
-			
-			//if the content height is greater than zero, divide the calculated height by it
-			if(contentHeight > 0)
-				calcHeight /= contentHeight;
-			
-			//temporary
-			calcHeight /= 2;
-			
+						
+			//if both the total content height and displayable height are positive, use the ratio to determine scroller height
+			if(contentHeight > 0 && visibleHeight > 0)
+				calcHeight *= visibleHeight/contentHeight;
+				
 			return calcHeight;
 		}
 		
-		public function getContentHeight():Number	{	return contentHeight;	}
+		private function calculateScrollSpeed():Number
+		{
+			//compute the two extremes that are reachable by the top of the scroll bar
+			var startPoint:Number = upButton.y + upDownButtonSize.y;			
+			var endPoint:Number = downButton.y - scrollButtonSize.y;
+			
+			//calculate the moveable space of the scroller
+			var calcHeight:Number = endPoint - startPoint;
+			
+			//if both the total content height and content scroll speed are positive, use the ratio to determine scroller movement speed
+			var speed:Number = 0;
+			if(contentHeight > 0 && contentScrollSpeed > 0)
+				speed = calcHeight * contentScrollSpeed/contentHeight;
+				
+			return speed;
+		}
+		
+		private function calculateScrolledPercentage():Number
+		{
+			//compute the two extremes that are reachable by the top of the scroll bar
+			var startPoint:Number = upButton.y + upDownButtonSize.y;			
+			var endPoint:Number = downButton.y - scrollButtonSize.y;
+			
+			//if the end point is at or behind the start point, return invalid
+			if(endPoint <= startPoint)
+				return -1;
+			
+			//compute percentage of scroll
+			var percentage = (scrollButton.y - startPoint) / (endPoint - startPoint)
+			return percentage;
+		}
+		
+		public function getContentHeight():Number		{	return contentHeight;		}
+		public function getVisibleHeight():Number		{	return visibleHeight;		}
+		public function getContentScrollSpeed():Number	{	return contentScrollSpeed;	}
+		public function getScrolledPercentage():Number	{	return scrolledPercentage;	}
 		
 		public function setContentHeight(contentHeight:Number):void	
 		{	
@@ -190,6 +236,26 @@
 			//resize scroll button reflect change in height
 			scrollButtonSize.y = calculateScrollButtonHeight();
 			scrollButton.height = scrollButtonSize.y;
+			
+			//calculate scroller movement speed
+			movementSpeed = calculateScrollSpeed();
+		}
+		public function setVisibleHeight(visibleHeight:Number):void	
+		{
+			//store new visible height
+			this.visibleHeight = visibleHeight;	
+			
+			//resize scroll button reflect change in height
+			scrollButtonSize.y = calculateScrollButtonHeight();
+			scrollButton.height = scrollButtonSize.y;
+		}		
+		public function setContentScrollSpeed(contentScrollSpeed:Number):void	
+		{
+			//store new visible height
+			this.contentScrollSpeed = contentScrollSpeed;	
+			
+			//calculate scroller movement speed
+			movementSpeed = calculateScrollSpeed();
 		}
 	}
 }
