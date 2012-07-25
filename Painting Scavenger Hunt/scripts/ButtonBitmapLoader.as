@@ -147,9 +147,9 @@
 				dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
-		public function getUpImage():BitmapData				{	return upImage;			}
-		public function getOverImage():BitmapData			{	return overImage;		}
-		public function getDownImage():BitmapData			{	return downImage;		}
-		public function getHittestImage():BitmapData		{	return hittestImage;	}
+		public function getUpImage():BitmapData				{	return upImage;										}
+		public function getOverImage():BitmapData			{	return (overImage) ? overImage : upImage;			}
+		public function getDownImage():BitmapData			{	return (downImage) ? downImage : upImage;			}
+		public function getHittestImage():BitmapData		{	return (hittestImage) ? hittestImage : upImage;		}
 	}
 }
