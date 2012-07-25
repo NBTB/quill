@@ -24,6 +24,7 @@
 			this.fileName = fileName;
 			this.yPos = yPos;
 			y = yPos;
+			x = 78;
 			
 			//set ID and increment static counter
 			this.id = staticID;

@@ -16,7 +16,8 @@
 		var ooiManager = null;
 		var startUpScreen:SplashScreen;
 		var mainMenu:MainMenu;									
-		var useTutorial:Boolean;								
+		var useTutorial:Boolean;				
+		var initiator:GameInitiator;
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
@@ -28,8 +29,9 @@
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		
 		//construct scavanger hunt
-		public function ScavengerHunt():void
-		{			
+		public function ScavengerHunt(theInitiator:GameInitiator):void
+		{	
+			initiator = theInitiator;
 			//show start menu
 			startMenu();			
 		}
@@ -41,7 +43,6 @@
 			
 			addChild(startUpScreen);
 			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
-			useTutorial = startUpScreen.useTut;
 		}
 		
 		public function initGame():void
@@ -50,7 +51,7 @@
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(startUpScreen.useTut);
+			mainMenu = new MainMenu(startUpScreen.useTut, initiator);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
@@ -78,7 +79,7 @@
 																																new Bitmap(notificationButtonLoader.getOverImage()), 
 																																new Bitmap(notificationButtonLoader.getDownImage()), 
 																																new Bitmap(notificationButtonLoader.getHittestImage()));
-																							nextClueButton.x = 280;
+																							nextClueButton.x = 185;
 																							nextClueButton.y = 500;
 																							nextClueButton.width /= 5;
 																							nextClueButton.height /= 5;
@@ -89,7 +90,7 @@
 																																new Bitmap(notificationButtonLoader.getOverImage()), 
 																																new Bitmap(notificationButtonLoader.getDownImage()), 
 																																new Bitmap(notificationButtonLoader.getHittestImage()));
-																							newRewardButton.x = 470;
+																							newRewardButton.x = 315;																							
 																							newRewardButton.y = 500;
 																							newRewardButton.width /= 5;
 																							newRewardButton.height /= 5;
@@ -105,7 +106,7 @@
 																																new Bitmap(magnifyButtonLoader.getOverImage()), 
 																																new Bitmap(magnifyButtonLoader.getDownImage()), 
 																																new Bitmap(magnifyButtonLoader.getHittestImage()));
-																							magnifyButton.x = 720;
+																							magnifyButton.x = 685;
 																							magnifyButton.y = 520;
 																							magnifyButton.width /= 5;
 																							magnifyButton.height /= 5;
@@ -122,6 +123,8 @@
 		
 		public function startGame():void
 		{
+			useTutorial = startUpScreen.useTut;
+			
 			//remove start up menu from display list
 			removeChild(startUpScreen);							
 			

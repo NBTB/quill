@@ -11,11 +11,9 @@
 		private var currentClue:String = null;
 		private var oldClues:Array = null;
 		
-		public function CluesMenu(xPos):void
+		public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
 		{
-			super(xPos);
-			//this.addChild(menuBackground);
-			//createBackground();
+			super(xPos, yPos, widthVal, heightVal, theMenu);
 			
 			oldClues = new Array();
 			
@@ -24,13 +22,15 @@
 						
 			//temporary
 			currentClueText.wordWrap = true;
-			currentClueText.x = 205;
-			currentClueText.y = 430;
+			currentClueText.x = xPos+20;
+			currentClueText.y = yPos+20;
 			currentClueText.width = 150;			
+			currentClueText.selectable = false;
 			oldClueText.wordWrap = true;
-			oldClueText.x = 205;
-			oldClueText.y = 430;
+			oldClueText.x = xPos+40;
+			oldClueText.y = yPos+40;
 			oldClueText.width = 150;	
+			oldClueText.selectable = false;
 			
 			var clueTextFormat:TextFormat = new TextFormat("Arial", 14, 0xFFFFFFFF);
 			currentClueText.defaultTextFormat = clueTextFormat;
