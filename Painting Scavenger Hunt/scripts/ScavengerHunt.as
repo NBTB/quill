@@ -31,9 +31,7 @@
 		//construct scavanger hunt
 		public function ScavengerHunt(theInitiator:GameInitiator):void
 		{	
-			initiator = theInitiator;
-			//show start menu
-			startMenu();			
+			initiator = theInitiator;		
 		}
 				
 		public function startMenu():void
@@ -69,16 +67,16 @@
 			clueText.y=90;
 			clueText.width=474;
 			clueText.visible = false;
-			clueText.mouseEnabled = false;
+			clueText.selectable = false;
 			
 			var notificationButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			notificationButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																					   {
 																						   //setup next clue button
-																							nextClueButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getOverImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getDownImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getHittestImage().bitmapData));
+																							nextClueButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage()), 
+																																new Bitmap(notificationButtonLoader.getOverImage()), 
+																																new Bitmap(notificationButtonLoader.getDownImage()), 
+																																new Bitmap(notificationButtonLoader.getHittestImage()));
 																							nextClueButton.x = 185;
 																							nextClueButton.y = 500;
 																							nextClueButton.width /= 5;
@@ -86,10 +84,10 @@
 																							nextClueButton.visible = true;
 																							
 																							//setup new reward button
-																							newRewardButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getOverImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getDownImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getHittestImage().bitmapData));
+																							newRewardButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage()), 
+																																new Bitmap(notificationButtonLoader.getOverImage()), 
+																																new Bitmap(notificationButtonLoader.getDownImage()), 
+																																new Bitmap(notificationButtonLoader.getHittestImage()));
 																							newRewardButton.x = 315;
 																							newRewardButton.y = 500;
 																							newRewardButton.width /= 5;
@@ -102,10 +100,10 @@
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																					   {
 																						   //setup next clue button
-																							magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage().bitmapData), 
-																																new Bitmap(magnifyButtonLoader.getOverImage().bitmapData), 
-																																new Bitmap(magnifyButtonLoader.getDownImage().bitmapData), 
-																																new Bitmap(magnifyButtonLoader.getHittestImage().bitmapData));
+																							magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage()), 
+																																new Bitmap(magnifyButtonLoader.getOverImage()), 
+																																new Bitmap(magnifyButtonLoader.getDownImage()), 
+																																new Bitmap(magnifyButtonLoader.getHittestImage()));
 																							magnifyButton.x = 685;
 																							magnifyButton.y = 520;
 																							magnifyButton.width /= 5;

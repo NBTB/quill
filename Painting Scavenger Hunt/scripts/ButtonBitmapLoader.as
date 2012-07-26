@@ -6,10 +6,10 @@
 	
 	public class ButtonBitmapLoader extends SimpleButton
 	{
-		private var upImage:Bitmap = null;
-		private var overImage:Bitmap = null;
-		private var downImage:Bitmap = null;
-		private var hittestImage:Bitmap = null;
+		private var upImage:BitmapData = null;
+		private var overImage:BitmapData = null;
+		private var downImage:BitmapData = null;
+		private var hittestImage:BitmapData = null;
 		
 		public static const IMAGE_LOAD_ERROR = "An image failed to load";
 	
@@ -100,16 +100,16 @@
 			switch(stateIndex)
 			{
 				case 0:
-					upImage = image;
+					upImage = image.bitmapData;
 					break;
 				case 1:
-					overImage = image;
+					overImage = image.bitmapData;
 					break;
 				case 2:
-					downImage = image;
+					downImage = image.bitmapData;
 					break;
 				case 3:
-					hittestImage = image;
+					hittestImage = image.bitmapData;
 					break;
 			}
 			
@@ -147,9 +147,9 @@
 				dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
-		public function getUpImage():Bitmap				{	return upImage;			}
-		public function getOverImage():Bitmap			{	return overImage;		}
-		public function getDownImage():Bitmap			{	return downImage;		}
-		public function getHittestImage():Bitmap		{	return hittestImage;	}
+		public function getUpImage():BitmapData				{	return upImage;										}
+		public function getOverImage():BitmapData			{	return (overImage) ? overImage : upImage;			}
+		public function getDownImage():BitmapData			{	return (downImage) ? downImage : upImage;			}
+		public function getHittestImage():BitmapData		{	return (hittestImage) ? hittestImage : upImage;		}
 	}
 }

@@ -79,7 +79,7 @@
 			caption = new TextField();
 			caption.defaultTextFormat = captionFormat;
 			caption.autoSize = TextFieldAutoSize.LEFT;
-			caption.mouseEnabled = false;
+			caption.selectable = false;
 			caption.text = objectName;
 						
 			//create info Pane
@@ -89,11 +89,24 @@
 			var titleText:TextField = new TextField();
 			titleText.defaultTextFormat = OOIInfoPane.getTitleFormat();
 			titleText.text = objectName;	
-			titleText.width = 200;
+			titleText.width = 180;
 			titleText.x = 5;
 			titleText.y = 5;
 			titleText.wordWrap = true;
+			titleText.selectable = false;
 			infoPane.addListChild(titleText);
+			
+			//temporary
+			var bodyText:TextField = new TextField();
+			bodyText.defaultTextFormat = OOIInfoPane.getBodyFormat();
+			bodyText.text = "//store locations of hitmap and highlight image files			this.hitmapFilename = hitmapFilename;			this.highlightFilename = highlightFilename;						//set coordinates			this.x = x;			this.y = y;						//by default position the info pane at the origin			infoPanePosition = new Point(0, 0);						//store scale to be used when loading bitmaps			if(scaleFactor  <= 0)				scaleFactor = 1;			this.scaleFactor = scaleFactor;		//store bounds			this.lowerBounds = lowerBounds;			this.upperBounds = upperBounds;						//store display containers (default to this object's parent)			if(captionContainer)				this.captionContainer = captionContainer;			else				this.captionContainer = this.parent;			if(infoPaneContainer)				this.infoPaneContainer = captionContainer;			else				this.infoPaneContainer = this.parent;						//create caption textfield to display name			caption = new TextField();			caption.defaultTextFormat = captionFormat;			caption.autoSize = TextFieldAutoSize.LEFT;			caption.selectable = false;	caption.text = objectName;									//create info Pane			infoPane = new OOIInfoPane(5, 5, 250, 380);						//add title to object info Pane			var titleText:TextField = new TextField();			titleText.defaultTextFormat = OOIInfoPane.getTitleFormat();			titleText.text = objectName;				titleText.width = 200;			titleText.x = 5;			titleText.y = 5;			titleText.wordWrap = true;			titleText.selectable = false;infoPane.addListChild(titleText);"
+			bodyText.height = 1000;
+			bodyText.width = 180;
+			bodyText.x = 5;
+			bodyText.y = 50;
+			bodyText.wordWrap = true;
+			bodyText.selectable = false;
+			infoPane.addListChild(bodyText);
 			
 			//listen for when info Pane closes
 			infoPane.addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void	{	hideInfoPane();	});
