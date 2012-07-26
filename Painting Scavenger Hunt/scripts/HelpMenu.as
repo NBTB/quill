@@ -20,23 +20,30 @@
 		{
 			super(xPos, yPos, widthVal, heightVal, theMenu);
 			
+			var startX = 10;
+			var startY = 10;
+			var elementHeight = 40;
+			
 			objectiveOption.text = "Objective";
-			objectiveOption.x = xPos+20;
-			objectiveOption.y = yPos+20;
-			objectiveOption.height = 40;
+			objectiveOption.x = startX;
+			objectiveOption.y = startY;
+			objectiveOption.height = elementHeight;
 			objectiveOption.selectable = false;
+			addListChild(objectiveOption);
 			
 			controlsOption.text = "Controls";
-			controlsOption.x = xPos+20;
-			controlsOption.y = yPos+60;
-			controlsOption.height = 40;
+			controlsOption.x = startX;
+			controlsOption.y = contentEndPoint.y;
+			controlsOption.height = elementHeight;
 			controlsOption.selectable = false;
+			addListChild(controlsOption);
 			
 			tutorialOption.text = "Tutorial";
-			tutorialOption.x = xPos+20;
-			tutorialOption.y = yPos+100;
-			tutorialOption.height = 40;
+			tutorialOption.x = startX;
+			tutorialOption.y = contentEndPoint.y;
+			tutorialOption.height = elementHeight;
 			tutorialOption.selectable = false;
+			addListChild(tutorialOption);
 			
 			textFormat.color = 0xE5E5E5;
 			textFormat.font = "Gabriola";
@@ -45,9 +52,9 @@
 			tutorialOption.setTextFormat(textFormat);
 			controlsOption.setTextFormat(textFormat);
 			
-			addChild(objectiveOption);
+			/*addChild(objectiveOption);
 			addChild(tutorialOption);
-			addChild(controlsOption);
+			addChild(controlsOption);*/
 			
 			objectiveOption.addEventListener(MouseEvent.MOUSE_DOWN, showObjective);
 			tutorialOption.addEventListener(MouseEvent.MOUSE_DOWN, showTutorial);

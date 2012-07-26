@@ -15,7 +15,7 @@
 		var paintingCanvas:PaintingCanvas = null;
 		var ooiManager = null;
 		var startUpScreen:SplashScreen;
-		var mainMenu:MainMenu;									
+		static var mainMenu:MainMenu;							/*TODO this should not be static, instead main menu should be a singleton*/
 		var useTutorial:Boolean;				
 		var initiator:GameInitiator;
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
@@ -32,6 +32,7 @@
 		public function ScavengerHunt(theInitiator:GameInitiator):void
 		{	
 			initiator = theInitiator;		
+			startMenu();
 		}
 				
 		public function startMenu():void
