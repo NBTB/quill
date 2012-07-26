@@ -25,7 +25,8 @@
 		var tutText:TextFormat = new TextFormat();
 		var buttonFormat:TextFormat = new TextFormat();
 		var letterLoader:Loader = new Loader();            
-		var clueLoader:Loader = new Loader();            
+		var clueLoader:Loader = new Loader(); 
+		var mouseLoader:Loader = new Loader();
 		
 		public function TutorialMenu(xPos:int):void
 		{
@@ -52,20 +53,29 @@
 		function loadImages()
 		{
 			
-			var url:URLRequest = new URLRequest("../assets/letterTutImage.png");
+			var url:URLRequest = new URLRequest("../assets/letterTutImage.png");			
 			
 			letterLoader.load(url); 
 			letterLoader.scaleX = .8;
 			letterLoader.scaleY = .8;
 			letterLoader.x = 90;
-			letterLoader.y = 250;
+			letterLoader.y = 300;
 			
 			var url2:URLRequest = new URLRequest("../assets/clueTutImage.png");
+			
 			clueLoader.load(url2); 
 			clueLoader.scaleX = .8;
 			clueLoader.scaleY = .8;
 			clueLoader.x = 90;
 			clueLoader.y = 350;
+			
+			var url3:URLRequest = new URLRequest("../assets/mouseLeftClick.swf");
+			
+			mouseLoader.load(url3); 
+			mouseLoader.scaleX = .6;
+			mouseLoader.scaleY = .6;
+			mouseLoader.x = 50;
+			mouseLoader.y = 250;
 			
 			
 		}
@@ -113,6 +123,10 @@
 			{
 				removeChild(clueLoader);
 			}
+			if(contains(mouseLoader))
+			{
+				removeChild(mouseLoader);
+			}
 			if(curSlide == 1)
 			{
 				controls.text = "Welcome to The Night Before The Battle Interactive Scavenger Hunt.  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.";
@@ -120,6 +134,7 @@
 			if (curSlide == 2)
 			{				
 				controls.text = "In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and clicking upon it will open a description.";
+				addChild(mouseLoader);
 			}
 			if (curSlide == 3)
 			{
