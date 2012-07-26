@@ -6,7 +6,7 @@
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 
-	class BaseMenu extends MovieClip
+	public class BaseMenu extends MovieClip
 	{
 		var menuBackground:Shape = new Shape();
 		var closeMenuButton:Sprite = new Sprite();

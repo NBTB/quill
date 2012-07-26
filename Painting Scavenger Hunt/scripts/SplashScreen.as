@@ -83,7 +83,7 @@
 			removeChild(splashTitle);
 			removeChild(splashButtonTutorial);
 			removeChild(splashButtonSkip);						
-			tut = new TutorialMenu();
+			tut = new TutorialMenu(0);
 			addChild(tut);
 			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 			

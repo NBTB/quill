@@ -1,6 +1,8 @@
 ﻿package
 {
 	import flash.text.TextField;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	import flash.display.Shape;
 	import flash.display.DisplayObject;
 	import flash.text.TextFormat;
@@ -8,10 +10,11 @@
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.display.Loader;
 	
 
 
-	public class TutorialMenu extends MovieClip	{
+	public class TutorialMenu extends BaseMenu{
 		
 		public var proceedButton:TextField = new TextField();
 		var continueButton:TextField = new TextField();
@@ -21,12 +24,15 @@
 		var theBackground:Shape = new Shape();
 		var tutText:TextFormat = new TextFormat();
 		var buttonFormat:TextFormat = new TextFormat();
+		var letterLoader:Loader = new Loader();            
+		var clueLoader:Loader = new Loader();            
 		
-		public function TutorialMenu()
+		public function TutorialMenu(xPos:int):void
 		{
+			super(xPos);
 			curSlide = 1;
 			initText();
-			
+			loadImages();
 			proceedButton.setTextFormat(buttonFormat);
 			continueButton.setTextFormat(buttonFormat);
 			previousButton.setTextFormat(buttonFormat);
@@ -39,7 +45,30 @@
 			continueButton.addEventListener(MouseEvent.MOUSE_DOWN,continueReading);
 			previousButton.addEventListener(MouseEvent.MOUSE_DOWN,previousPage);
 			
+			
+			
 		}	
+		
+		function loadImages()
+		{
+			
+			var url:URLRequest = new URLRequest("../assets/letterTutImage.png");
+			
+			letterLoader.load(url); 
+			letterLoader.scaleX = .8;
+			letterLoader.scaleY = .8;
+			letterLoader.x = 90;
+			letterLoader.y = 250;
+			
+			var url2:URLRequest = new URLRequest("../assets/clueTutImage.png");
+			clueLoader.load(url2); 
+			clueLoader.scaleX = .8;
+			clueLoader.scaleY = .8;
+			clueLoader.x = 90;
+			clueLoader.y = 350;
+			
+			
+		}
 		
 		function initText()
 		{
@@ -76,21 +105,31 @@
 		//cycles through what the text in the tutorial says
 		function updateText():void
 		{
+			if(contains(letterLoader))
+			{
+				removeChild(letterLoader);
+			}
+			if(contains(clueLoader))
+			{
+				removeChild(clueLoader);
+			}
 			if(curSlide == 1)
 			{
 				controls.text = "Welcome to The Night Before The Battle Interactive Scavenger Hunt.  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.";
 			}
 			if (curSlide == 2)
-			{
+			{				
 				controls.text = "In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and clicking upon it will open a description.";
 			}
 			if (curSlide == 3)
 			{
 				controls.text = "In a few moments you will be given a clue to the first object you need to look for.  When the game begins, click on the little icon above the Clues Menu in the bottom of the game screen to obtain your first clue. By clicking on the correct object that the riddle references, the object will be added to your collection.  You will also be given a brief description of the object, as well as some background on its history and its purpose in the painting.";
+				addChild(clueLoader);
 			}
 			if (curSlide == 4)
 			{
 				controls.text = "Along with this description, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole. Click on the Letter Menu icon to review your progress";  
+				addChild(letterLoader);
 			}
 			if (curSlide == 5)
 			{
@@ -130,12 +169,12 @@
 		}
 		
 		
-		function createBackground():void
+		override public function createBackground(xPos:int):void
 		{
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
 			theBackground.graphics.beginFill(0x2F2720);
-			theBackground.graphics.drawRect(0, 0, 764, 572);
+			theBackground.graphics.drawRect(xPos, 0, 764, 572);
 			theBackground.graphics.endFill();
 		}
 	}
