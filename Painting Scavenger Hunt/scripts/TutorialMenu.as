@@ -11,6 +11,7 @@
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.display.Loader;
+	import flash.geom.ColorTransform;
 	
 
 
@@ -41,11 +42,17 @@
 			controls.selectable = false;
 			continueButton.selectable = false;
 			previousButton.selectable = false;
+			proceedButton.selectable = false;
 			addChild(controls);
 			addChild(continueButton);
 			continueButton.addEventListener(MouseEvent.MOUSE_DOWN,continueReading);
 			previousButton.addEventListener(MouseEvent.MOUSE_DOWN,previousPage);
-			
+			continueButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			continueButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			previousButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			previousButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			
 			
 		}	
@@ -133,7 +140,7 @@
 			}
 			if (curSlide == 2)
 			{				
-				controls.text = "In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and clicking upon it will open a description.";
+				controls.text = "In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and clicking upon it will open a description. A magnifying glass is available to help you see objects more clearly. Hit space to toggle this function on and off.";
 				addChild(mouseLoader);
 			}
 			if (curSlide == 3)
@@ -181,6 +188,24 @@
 			}
 			
 			updateText();
+		}
+		
+		//changes the text color of the menu buttons to identify which one you're moused over
+		public function colorChange(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xCC9933;
+			sender.transform.colorTransform=myColor;
+
+		}
+		
+		//reverts the buttons back to their original colors
+		public function revertColor(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;	
+			myColor.color=0xE5E5E5;		
+			sender.transform.colorTransform=myColor;
+
 		}
 		
 		

@@ -8,6 +8,7 @@
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.geom.ColorTransform;
 	
 //TODO: Add code to read in the About and Credit page information
 //TODO: Try to find a way to have the title keep its formatting, without having to constantly reset it
@@ -65,6 +66,14 @@
 			splashButtonTutorial.setTextFormat(splashButtonFormat);
 			splashButtonSkip.setTextFormat(splashButtonFormat);
 			
+			//make the buttons so the text cursor doesn't appear over them
+			splashTitle.selectable = false;
+			splashButtonStart.selectable = false;
+			splashButtonAbout.selectable = false;
+			splashButtonCredits.selectable = false;
+			splashButtonTitle.selectable = false;
+			splashButtonTutorial.selectable = false;
+			splashButtonSkip.selectable = false;		
 			
 			//Event listeners for the different buttons in the project.
 			splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, tutorialStart);
@@ -73,6 +82,19 @@
 			splashButtonTitle.addEventListener(MouseEvent.MOUSE_DOWN, mainSplash);
 			splashButtonTutorial.addEventListener(MouseEvent.MOUSE_DOWN, startWithTut);
 			splashButtonSkip.addEventListener(MouseEvent.MOUSE_DOWN, startNoTut);
+			
+			splashButtonStart.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			splashButtonStart.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			splashButtonAbout.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			splashButtonAbout.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			splashButtonCredits.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			splashButtonCredits.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			splashButtonTitle.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			splashButtonTitle.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			splashButtonTutorial.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			splashButtonTutorial.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			splashButtonSkip.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			splashButtonSkip.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 		
 		function startWithTut(event:MouseEvent):void
@@ -170,6 +192,24 @@
 			splashButtonSkip.text = "Skip Tutorial";
 			
 			
+
+		}
+		
+		//changes the text color of the menu buttons to identify which one you're moused over
+		public function colorChange(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xCC9933;
+			sender.transform.colorTransform=myColor;
+
+		}
+		
+		//reverts the buttons back to their original colors
+		public function revertColor(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;	
+			myColor.color=0xE5E5E5;		
+			sender.transform.colorTransform=myColor;
 
 		}
 		

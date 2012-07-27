@@ -20,8 +20,7 @@
 				
 		var helpMenu:HelpMenu;
 		var cluesMenu:CluesMenu;
-		public var letterMenu:LetterMenu;
-		public var letterRec:Shape;
+		public var letterMenu:LetterMenu;		
 		public var rewardCounter:Number = 0;	
 		
 		var menuButtonFormat:TextFormat = new TextFormat();
@@ -30,14 +29,7 @@
 
 		public function MainMenu(startWTutorial:Boolean):void
 		{
-			//letterRec.graphics.beginFill(0x000000);
-			//letterRec.graphics.drawRect(300, buttonY, 175, 50); 	
-			//recTransform = letterRec.transform.colorTransform;
-			//recTransform.color = 0x00CCFF;
-			//letterRec.transform.colorTransform = recTransform; 
-			
-			
-			
+					
 			helpMenu = new HelpMenu(0);
 			cluesMenu = new CluesMenu(195);
 			letterMenu = new LetterMenu(390);
@@ -48,15 +40,7 @@
 			
 			this.addChild(menuBackground);
 			this.addChild(menuButtonHelp);
-			this.addChild(menuButtonClues);
-			
-			letterRec = new Shape();
-			letterRec.graphics.beginFill(0x00CCFF); 
-			letterRec.graphics.drawRect(422, buttonY, 162, 65); 
-			letterRec.graphics.endFill();
-			letterRec.visible = false;
-			addChild(letterRec); 
-			
+			this.addChild(menuButtonClues);		
 			this.addChild(menuButtonLetter);
 			
 			createBackground();
@@ -66,6 +50,10 @@
 			menuButtonClues.setTextFormat(menuButtonFormat);
 			menuButtonLetter.setTextFormat(menuButtonFormat);
 			
+			menuButtonHelp.selectable = false;
+			menuButtonClues.selectable = false;
+			menuButtonLetter.selectable = false;
+			
 			menuButtonHelp.addEventListener(MouseEvent.MOUSE_DOWN, clickHelpMenu);
 			menuButtonClues.addEventListener(MouseEvent.MOUSE_DOWN, clickCluesMenu);
 			menuButtonLetter.addEventListener(MouseEvent.MOUSE_DOWN, clickLetterMenu);
@@ -74,7 +62,6 @@
 			menuButtonHelp.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			menuButtonClues.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			menuButtonClues.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-
 			menuButtonLetter.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			menuButtonLetter.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
@@ -209,7 +196,6 @@
 			if(letterMenu.isOpen == true)
 			{
 				letterMenu.isOpen = false;
-				letterRec.visible = false;
 				removeChild(letterMenu);
 				letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
 			}
@@ -219,7 +205,7 @@
 		public function colorChange(event:MouseEvent):void {
 			var sender:TextField=event.target as TextField;
 			var myColor:ColorTransform=sender.transform.colorTransform;
-			myColor.color=0xFFC000;
+			myColor.color=0xCC9933;
 			sender.transform.colorTransform=myColor;
 
 		}
@@ -228,7 +214,7 @@
 		public function revertColor(event:MouseEvent):void {
 			var sender:TextField=event.target as TextField;
 			var myColor:ColorTransform=sender.transform.colorTransform;	
-			myColor.color=0xFFFFFF;		
+			myColor.color=0xE5E5E5;		
 			sender.transform.colorTransform=myColor;
 
 		}
