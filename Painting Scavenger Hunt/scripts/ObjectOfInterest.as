@@ -36,7 +36,7 @@
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
 		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
-		{
+		{			
 			//set name, and clue
 			this.objectName = objectName;
 			this.clue = clue;

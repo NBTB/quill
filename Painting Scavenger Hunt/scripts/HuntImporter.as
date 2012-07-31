@@ -109,6 +109,11 @@
 		//parse XML specification of obejcts of interest
 		private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number, paintingWidth:Number, paintingHeight:Number)
 		{
+			//temporary
+			var objImp:OOIInfoImporter = new OOIInfoImporter();
+			objImp.importText("../assets/testText.txt");
+			
+			
 			//object of interest loading counters
 			var objectsParsed:Number = 0;
 			var objectsLoaded:Number = 0;
