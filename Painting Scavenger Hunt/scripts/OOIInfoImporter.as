@@ -2,130 +2,74 @@
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
+	import flash.xml.*;
+	import flash.text.*;
 	
 	public class OOIInfoImporter extends EventDispatcher
-	{
-		private var textFiles:Array = null;			//list of text fils that have been read in (cleared on load completion)
-		private var textImports:Array = null;		//list of imported text strings (cleared on load completion)
-		private var sectionTrackers:Array = null;	//list of numbers that track the next section to read in each text string (cleared on load completion)
-		
-		//event types
-		public static const TEXT_FILE_IMPORTED:String = "Text file imported";
-		
-		public function OOIInfoImporter()
+	{	
+		private var xmlData:XMLList = null; 	//XML specifications
+	
+		public function OOIInfoImporter(xmlData:XMLList)
 		{
-			textFiles = new Array();
-			textImports = new Array();
-			sectionTrackers = new Array();
+			this.xmlData = xmlData;
+		}
+	
+		public function loadInfoToOOI(targetOOI:ObjectOfInterest)
+		{
+			//extract list of children
+			var children:XMLList = xmlData.children();
+			
+			//child counter and total
+			var childNum:int = 0;
+			var childCount = children.length();
+			
+			//create text loader and listen for when it finishes importing a file
+			var textLoader:TextLoader = new TextLoader();
+			textLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
+																						{
+																							/*TODO take in section number*/
+																							//parse text file
+																							var newText:String = textLoader.parseText();
+																							
+																							//if text was found, add a textfield to the object's info pane
+																							if(newText)
+																							{
+																								var newTextField:TextField = new TextField();
+																								newTextField.defaultTextFormat = OOIInfoPane.getBodyFormat();
+																								newTextField.text = newText;	
+																								newTextField.width = 180;
+																								newTextField.wordWrap = true;
+																								newTextField.autoSize = TextFieldAutoSize.LEFT;
+																								newTextField.selectable = false;
+																								newTextField.mouseWheelEnabled = false;
+																								targetOOI.addInfoToPaneTail(newTextField);
+																							}
+																							
+																							//access next child
+																							childNum++;
+																							accessChild(children, childNum, childCount, textLoader);
+																						});
+			
+			//access first child of info list
+			accessChild(children, childNum, childCount, textLoader);
 		}
 		
-		public function importText(filename:String):void
+		//attempt to begin loading the next child of the info list
+		private function accessChild(children:XMLList, childNum:int, childCount:int, textLoader:TextLoader)
 		{
-			//determine if the given file has already been loaded
-			var loaded:Boolean = false;
-			for(var i:int = 0; i < textFiles.length && !loaded; i++)
-				loaded = (filename == textFiles[i]);
+			//if the total number of children has been reached, return before attempting to load any more
+			if(childNum >= childCount)
+				return;
 			
-			//if the file given has not been read before, import it
-			if(!loaded)
-			{				
-				//load new text file
-				var textLoader:URLLoader = new URLLoader();
-				textLoader.addEventListener(Event.COMPLETE, function(e:Event):void
-																			 {
-																				//add new entry to lists
-																				textFiles.push(filename);
-																				textImports.push(e.target.data);
-																				sectionTrackers.push(0);				
-																				
-																				//dispatch completion event
-																				dispatchEvent(new Event(TEXT_FILE_IMPORTED));
-																			 });
-				textLoader.load(new URLRequest(filename));
-			}
-			//otherwise, skip the reimport and dispatch a completion event
-			else
-				dispatchEvent(new Event(TEXT_FILE_IMPORTED));
-		}
-		
-		public function parseText(filename:String = null, section:int = -1, headerString:String = "##"):String
-		{
-			//imported file to use
-			var importNumber:int = -1;
+			//extract child
+			var child:XML = children[childNum];
 			
-			//if no file was given, use the last file imported
-			if(!filename)
-				importNumber = textFiles.length - 1;			
-			//otherwise, attempt to find the given filename in the list of already loaded files
-			else
-				for(var i:int = 0; i < textFiles.length && importNumber < 0; i++)
-					if(filename == textFiles[i])
-						importNumber = i;
-			
-			//if the file given has not been read before, return a failure
-			if(importNumber < 0)
-				return null;
-			
-			//final result string
-			var resultString:String = null;
-			
-			//address the current text string
-			var importedText:String = textImports[importNumber];
-			
-			//if an no section was given, refer the the current section tracker
-			if(section < 0)
-				section = sectionTrackers[importNumber];
-				
-			//track start of substring
-			var substringStart:int = 0;
-			
-			//if anything but the first section is being read, start the substring at the beginning of the current section
-			if(section > 0)
+			//if the child is a text file, load the text
+			if(child.name() == "text_file")
 			{
-				//find section header
-				substringStart = findSectionHeader(importedText, section, headerString);
-				
-				//if the starting index could not be found or the string ends with the header, returb a failure
-				if(substringStart < 0)
-					return null;
-				
-				//start substring after section header
-				substringStart += headerString.length;
-				
-				//while the first character of the substring would be a new line, move to the next character
-				var textLength = importedText.length;
-				while(substringStart < textLength && importedText.charAt(substringStart) == "\n")
-					substringStart++;				
+				//import text file
+				textLoader.importText(child);
 			}
-			//track the end of substring
-			var substringEnd = findSectionHeader(importedText, section + 1, headerString);
-			
-			while(substringEnd >= 0 && importedText.charAt(substringEnd) == "\n")
-				substringEnd--;	
-			
-			//if the substring end could be found, substring between start and end indices
-			if(substringEnd >= 0)
-				resultString = importedText.substr(substringStart, substringEnd - substringStart);
-			//otherwise, substring from the start index to the end of the text
-			else
-				resultString = importedText.substr(substringStart);
-				
-			//update the current section tracker
-			sectionTrackers[importNumber] = section + 1;
-			return resultString;
-		}
-		
-		private function findSectionHeader(fullText:String, sectionNumber:int, headerString:String):int
-		{
-			//start index at the beginning of text
-			var index:int = 0;
-			
-			//find the desired section header
-			for(var i:int = 0; i < sectionNumber && index >= 0; i++)
-				index = fullText.indexOf(headerString, index+1);
-			return index;
 		}
 	}
 }

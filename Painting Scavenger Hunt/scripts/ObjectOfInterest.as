@@ -26,8 +26,9 @@
 		private var caption:TextField = null;							//caption that displays name of object
 		private var captionContainer:DisplayObjectContainer = null;		//display container of caption
 		private var infoPane:OOIInfoPane = null;						//pane used to display object's description
-		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info Pane
-		private var infoPanePosition:Point = null;						//coordinates of info Pane
+		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info pane
+		private var infoPanePosition:Point = null;						//coordinates of info pane
+		private var infoLoader:OOIInfoImporter = null;					//loader of info pane content
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
 		
 		private static var anyMousedOver = false;												//flag if any object is moused over
@@ -35,7 +36,7 @@
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
+		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{			
 			//set name, and clue
 			this.objectName = objectName;
@@ -48,6 +49,9 @@
 			//store locations of hitmap and highlight image files
 			this.hitmapFilename = hitmapFilename;
 			this.highlightFilename = highlightFilename;
+			
+			//store info loader 
+			this.infoLoader = infoLoader;
 			
 			//set coordinates
 			this.x = x;
@@ -93,20 +97,10 @@
 			titleText.x = 5;
 			titleText.y = 5;
 			titleText.wordWrap = true;
+			titleText.autoSize = TextFieldAutoSize.LEFT;
 			titleText.selectable = false;
+			titleText.mouseWheelEnabled = false;
 			infoPane.addListChild(titleText);
-			
-			//temporary
-			var bodyText:TextField = new TextField();
-			bodyText.defaultTextFormat = OOIInfoPane.getBodyFormat();
-			bodyText.text = "//store locations of hitmap and highlight image files			this.hitmapFilename = hitmapFilename;			this.highlightFilename = highlightFilename;						//set coordinates			this.x = x;			this.y = y;						//by default position the info pane at the origin			infoPanePosition = new Point(0, 0);						//store scale to be used when loading bitmaps			if(scaleFactor  <= 0)				scaleFactor = 1;			this.scaleFactor = scaleFactor;		//store bounds			this.lowerBounds = lowerBounds;			this.upperBounds = upperBounds;						//store display containers (default to this object's parent)			if(captionContainer)				this.captionContainer = captionContainer;			else				this.captionContainer = this.parent;			if(infoPaneContainer)				this.infoPaneContainer = captionContainer;			else				this.infoPaneContainer = this.parent;						//create caption textfield to display name			caption = new TextField();			caption.defaultTextFormat = captionFormat;			caption.autoSize = TextFieldAutoSize.LEFT;			caption.selectable = false;	caption.text = objectName;									//create info Pane			infoPane = new OOIInfoPane(5, 5, 250, 380);						//add title to object info Pane			var titleText:TextField = new TextField();			titleText.defaultTextFormat = OOIInfoPane.getTitleFormat();			titleText.text = objectName;				titleText.width = 200;			titleText.x = 5;			titleText.y = 5;			titleText.wordWrap = true;			titleText.selectable = false;infoPane.addListChild(titleText);"
-			bodyText.height = 1000;
-			bodyText.width = 180;
-			bodyText.x = 5;
-			bodyText.y = 50;
-			bodyText.wordWrap = true;
-			bodyText.selectable = false;
-			infoPane.addListChild(bodyText);
 			
 			//listen for when info Pane closes
 			infoPane.addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void	{	hideInfoPane();	});
@@ -154,6 +148,8 @@
 		{
 			loadHitmap();
 			loadHighlight();
+			if(infoLoader)
+				infoLoader.loadInfoToOOI(this);
 		}
 				
 		//load the object's hitmap image
@@ -229,6 +225,18 @@
 			
 			//begin loading image
 			highlightLoader.load(new URLRequest(highlightFilename));
+		}
+			
+		//add display object as a child of info pane
+		public function addInfoToPane(newInfo:DisplayObject)
+		{
+			infoPane.addListChild(newInfo);
+		}
+		
+		//add display object as the tail child of info pane
+		public function addInfoToPaneTail(newInfo:DisplayObject)
+		{
+			infoPane.addListChildToTail(newInfo);
 		}
 				
 		//test hitmap against a given point, determine hit using a minimum alpha value		

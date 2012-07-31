@@ -15,6 +15,9 @@
 		<y>0.7008636</y>
 		<info_pane_x>0.45</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
+		<info>
+			<text_file>../assets/quill info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Moon</name>
@@ -25,6 +28,9 @@
 		<y>0.0392288</y>
 		<info_pane_x>0.18</info_pane_x>
 		<info_pane_y>0.02</info_pane_y>
+		<info>
+			<text_file>../assets/moon info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Flag</name>
@@ -35,6 +41,9 @@
 		<y>0.6855720</y>
 		<info_pane_x>0.20</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
+		<info>
+			<text_file>../assets/flag info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Skull</name>
@@ -45,6 +54,9 @@
 		<y>0.3307687</y>
 		<info_pane_x>0.15</info_pane_x>
 		<info_pane_y>0.10</info_pane_y>
+		<info>
+			<text_file>../assets/skull info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Musket</name>
@@ -55,6 +67,9 @@
 		<y>0.6401487</y>
 		<info_pane_x>0.28</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
+		<info>
+			<text_file>../assets/musket info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Silhouette</name>
@@ -65,6 +80,9 @@
 		<y>0.1251726</y>
 		<info_pane_x>0.53</info_pane_x>
 		<info_pane_y>0.02</info_pane_y>
+		<info>
+			<text_file>../assets/silhouette info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
@@ -75,16 +93,22 @@
 		<y>0.7695784</y>
 		<info_pane_x>0.24</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
+		<info>
+			<text_file>../assets/fire info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cannonball</name>
 		<clue>I've been known to be quite the gate crasher...</clue>
 		<hitmap_filename>../assets/cannonball hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/cannonball highlight.png</highlight_filename>
-		<x>0.8696896</x>
+		<x>0.0606896</x>
 		<y>0.9174942</y>
 		<info_pane_x>0.53</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
+		<info>
+			<text_file>../assets/cannonball info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Sword</name>
@@ -95,6 +119,9 @@
 		<y>0.7722242</y>
 		<info_pane_x>0.51</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
+		<info>
+			<text_file>../assets/sword info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cards</name>
@@ -105,6 +132,9 @@
 		<y>0.9123970</y>
 		<info_pane_x>0.47</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
+		<info>
+			<text_file>../assets/cards info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Parrott Rifle</name>
@@ -115,6 +145,48 @@
 		<y>0.3380287</y>
 		<info_pane_x>0.02</info_pane_x>
 		<info_pane_y>0.10</info_pane_y>
+		<info>
+			<text_file>../assets/parrott rifle info.txt</text_file>
+		</info>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sergeant</name>
+		<clue>I literally call of the shots...</clue>
+		<hitmap_filename>../assets/sergeant hitmap.png</hitmap_filename>
+		<highlight_filename>../assets/sergeant highlight.png</highlight_filename>
+		<x>0.4800000</x>
+		<y>0.6920000</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.10</info_pane_y>
+		<info>
+			<text_file>../assets/sergeant info.txt</text_file>
+		</info>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Gabions</name>
+		<clue>The bigger we are, the harder it is for you to fall...</clue>
+		<hitmap_filename>../assets/gabions hitmap.png</hitmap_filename>
+		<highlight_filename>../assets/gabions highlight.png</highlight_filename>
+		<x>0.0050000</x>
+		<y>0.2580287</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.10</info_pane_y>
+		<info>
+			<text_file>../assets/gabions info.txt</text_file>
+		</info>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Signiture</name>
+		<clue>I'm no mirror, but I'm a reflection you...</clue>
+		<hitmap_filename>../assets/signiture hitmap.png</hitmap_filename>
+		<highlight_filename>../assets/signiture highlight.png</highlight_filename>
+		<x>0.0060307</x>
+		<y>0.9580287</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.10</info_pane_y>
+		<info>
+			<text_file>../assets/signiture info.txt</text_file>
+		</info>
 	</Object_Of_Interest>
 	<Letter_Piece>
 		<name>Unfinished</name>

@@ -110,7 +110,7 @@
 			addChild(scrollBar);
 			
 			//currently no scrolling is available
-			//scrollBar.visible = false;
+			scrollBar.visible = false;
 			contentStartPoint = new Point(0, 0);
 			contentEndPoint = new Point(0, 0);
 			scrollPoint = new Point(0, 0);
@@ -193,6 +193,11 @@
 			//if the bottom-rightmost point exceeds the pane's own dimensions, make scrolling possible
 			if(contentContainer.height > paneDimensions.y)
 				scrollBar.visible = true;			
+		}
+		
+		public function addListChildToTail(child:DisplayObject)
+		{
+			addListChild(child, new Point(contentStartPoint.x, contentEndPoint.y));
 		}
 		
 		private function scrollContent(distance:Point):void

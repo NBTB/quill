@@ -55,8 +55,7 @@
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
 			newRewardButton = new SimpleButton();
-			
-			
+						
 			//setup clue text format
 			clueTextFormat = new TextFormat("Edwardian Script ITC", 25, 0x40E0D0);
 			clueTextFormat.align = TextFormatAlign.CENTER;
@@ -145,7 +144,7 @@
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
 			//create clue timer
-			clueTimer = new Timer(3 * 1000, 1);
+			clueTimer = new Timer(10 * 1000, 1);
 			
 			//listen for the completion of the clue timer
 			clueTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
@@ -160,6 +159,10 @@
 			ooiManager.resetUnusedOOIList();
 			var firstClue:String = ooiManager.pickNextOOI();
 			mainMenu.cluesMenu.addClue(firstClue);
+			
+			//post first clue
+			postToClueText(firstClue);
+			nextClueButton.visible = false;
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
