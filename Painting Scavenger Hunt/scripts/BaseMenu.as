@@ -195,6 +195,11 @@
 				scrollBar.visible = true;			
 		}
 		
+		public function addListChildToTail(child:DisplayObject)
+		{
+			addListChild(child, new Point(contentStartPoint.x, contentEndPoint.y));
+		}
+		
 		private function scrollContent(distance:Point):void
 		{
 			//move content
