@@ -111,6 +111,11 @@
 		{
 			//temporary
 			var objImp:OOIInfoImporter = new OOIInfoImporter();
+			objImp.addEventListener(OOIInfoImporter.TEXT_FILE_IMPORTED, function(e:Event):void
+																						 {
+																							trace(objImp.parseText("../assets/testText.txt", 1));
+																							trace(objImp.parseText());
+																						 });
 			objImp.importText("../assets/testText.txt");
 			
 			
