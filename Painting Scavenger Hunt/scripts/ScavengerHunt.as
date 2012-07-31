@@ -15,7 +15,7 @@
 		var paintingCanvas:PaintingCanvas = null;
 		var ooiManager = null;
 		var startUpScreen:SplashScreen;
-		var mainMenu:MainMenu;									
+		static var mainMenu:MainMenu;							/*TODO this should not be static, instead main menu should be a singleton*/
 		var useTutorial:Boolean;				
 		var initiator:GameInitiator;
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
@@ -30,10 +30,9 @@
 		
 		//construct scavanger hunt
 		public function ScavengerHunt(theInitiator:GameInitiator):void
-		{	
-			initiator = theInitiator;
-			//show start menu
-			startMenu();			
+		{
+			initiator = theInitiator;		
+			startMenu();
 		}
 				
 		public function startMenu():void
@@ -90,7 +89,7 @@
 																																new Bitmap(notificationButtonLoader.getOverImage()), 
 																																new Bitmap(notificationButtonLoader.getDownImage()), 
 																																new Bitmap(notificationButtonLoader.getHittestImage()));
-																							newRewardButton.x = 315;																							
+																							newRewardButton.x = 315
 																							newRewardButton.y = 500;
 																							newRewardButton.width /= 5;
 																							newRewardButton.height /= 5;

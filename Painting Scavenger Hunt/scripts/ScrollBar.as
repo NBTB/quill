@@ -67,7 +67,8 @@
 			//make buttons use hand cursor when hovered over
 			upButton.useHandCursor = true;
 			downButton.useHandCursor = true;
-			//scroller.useHandCursor = true;
+			/*TODO make scroller work and let it trigger the hand cursor*/
+			scroller.useHandCursor = false;
 			
 			//attach button images
 			updateUpDownButtonStates(style);
@@ -84,9 +85,11 @@
 			upButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	moveScroller(-1);	});
 			downButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	moveScroller(1);	});
 			
-			//listen for up and down buttons being pressed
+			//listen for up and down buttons being releases
 			upButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		{	stopScroller();	});
+			upButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void		{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void	{	stopScroller();	});
+			downButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	stopScroller();	});
 		}
 		
 		private function enterFrame(e:Event)
