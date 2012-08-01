@@ -24,10 +24,13 @@
 		var curSlide:Number;		
 		var theBackground:Shape = new Shape();
 		var tutText:TextFormat = new TextFormat();
+		var titleText:TextFormat = new TextFormat();
 		var buttonFormat:TextFormat = new TextFormat();
+		var titleField:TextField = new TextField();
 		var letterLoader:Loader = new Loader();            
 		var clueLoader:Loader = new Loader(); 
 		var mouseLoader:Loader = new Loader();
+		var mouseOverLoader:Loader = new Loader();
 		
 		public function TutorialMenu(xPos:int):void
 		{
@@ -35,6 +38,7 @@
 			curSlide = 1;
 			initText();
 			loadImages();
+			titleField.setTextFormat(titleText);
 			proceedButton.setTextFormat(buttonFormat);
 			continueButton.setTextFormat(buttonFormat);
 			previousButton.setTextFormat(buttonFormat);
@@ -43,6 +47,7 @@
 			continueButton.selectable = false;
 			previousButton.selectable = false;
 			proceedButton.selectable = false;
+			titleField.selectable = false;
 			addChild(controls);
 			addChild(continueButton);
 			continueButton.addEventListener(MouseEvent.MOUSE_DOWN,continueReading);
@@ -84,6 +89,14 @@
 			mouseLoader.x = 50;
 			mouseLoader.y = 250;
 			
+			var url4:URLRequest = new URLRequest("../assets/mouseOver.swf");
+			
+			mouseOverLoader.load(url4); 
+			mouseOverLoader.scaleX = .8;
+			mouseOverLoader.scaleY = .8;
+			mouseOverLoader.x = 300;
+			mouseOverLoader.y = 250;
+			
 			
 		}
 		
@@ -93,9 +106,18 @@
 			buttonFormat.font = "Gabriola";
 			buttonFormat.size = 36;
 			
+			titleText.color = 0xE5E5E5;
+			titleText.font = "Gabriola";
+			titleText.size = 46;
+			
 			tutText.color = 0xCC9933;
 			tutText.font = "Gabriola";
-			tutText.size = 32;			
+			tutText.size = 32;	
+			tutText.align = "center";
+			
+			titleField.x = 300;
+			titleField.width = 300;
+			titleField.text = "Controls";
 			
 			proceedButton.x = 630;
 			proceedButton.y = 500;
@@ -122,6 +144,7 @@
 		//cycles through what the text in the tutorial says
 		function updateText():void
 		{
+			//if an image is a child, and is not supposed to be seen in that page, remove it
 			if(contains(letterLoader))
 			{
 				removeChild(letterLoader);
@@ -134,6 +157,15 @@
 			{
 				removeChild(mouseLoader);
 			}
+			if(contains(mouseOverLoader))
+			{
+				removeChild(mouseOverLoader);
+			}
+			if(contains(titleField))
+			{
+				removeChild(titleField);
+			}
+			//change the text depending on what slide you are on. Add images if necessary on that slide
 			if(curSlide == 1)
 			{
 				controls.text = "Welcome to The Night Before The Battle Interactive Scavenger Hunt.  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.";
@@ -142,6 +174,7 @@
 			{				
 				controls.text = "In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and clicking upon it will open a description. A magnifying glass is available to help you see objects more clearly. Hit space to toggle this function on and off.";
 				addChild(mouseLoader);
+				addChild(mouseOverLoader);
 			}
 			if (curSlide == 3)
 			{
@@ -154,9 +187,16 @@
 				addChild(letterLoader);
 			}
 			if (curSlide == 5)
+			{				
+				controls.text = "\n\n\nLeft Click: Select\nSpace: Toggle Magnifying glass";
+				addChild(titleField);
+			}
+			if (curSlide == 6)
 			{
 				controls.text = "The next clue will be given to you when you can identify the object behind this first one. Click Proceed to begin.  Good Luck!";
 			}
+			
+			//reset the text format
 			controls.setTextFormat(tutText);
 		}
 		
@@ -164,8 +204,9 @@
 		function continueReading(event:MouseEvent):void
 		{
 			curSlide++;
-			addChild(previousButton);			
-			if(curSlide >= 5)
+			addChild(previousButton);	
+			//if on last slide, continue button is replaced by proceed button
+			if(curSlide >= 6)
 			{
 				addChild(proceedButton);
 				removeChild(continueButton);
@@ -181,6 +222,7 @@
 			{
 				removeChild(previousButton)						  
 			}
+			//if on first slide, remove the previous button
 			if(contains(proceedButton))
 			{
 				addChild(continueButton);
@@ -208,7 +250,7 @@
 
 		}
 		
-		
+		//draw the background 
 		override public function createBackground(xPos:int):void
 		{
 			//Set the background graphics

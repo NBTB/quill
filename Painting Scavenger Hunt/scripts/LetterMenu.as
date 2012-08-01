@@ -4,6 +4,7 @@
 	import flash.text.TextField;
 	import flash.display.Shape;
 	import flash.text.TextFormat;
+	import flash.geom.ColorTransform;
 	import flash.events.*;
 
 	public class LetterMenu extends BaseMenu
@@ -20,6 +21,7 @@
 			createBackground(xPos);
 			nextButton = new TextField();
 			nextButton.text = "Next Letter";
+			nextButton.selectable = false;
 			nextButton.x = 405;
 			nextButton.y = 465;
 			nextButton.width = 175;
@@ -30,6 +32,8 @@
 			addChild(nextButton);
 			nextButton.visible = false;
 			nextButton.addEventListener(MouseEvent.MOUSE_DOWN, clickNext);
+			nextButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			nextButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 
 	
@@ -72,6 +76,24 @@
             addChild(newPiece); 
 			
 			
+		}
+		
+		//changes the text color of the menu buttons to identify which one you're moused over
+		public function colorChange(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xCC9933;
+			sender.transform.colorTransform=myColor;
+
+		}
+		
+		//reverts the buttons back to their original colors
+		public function revertColor(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;	
+			myColor.color=0xE5E5E5;		
+			sender.transform.colorTransform=myColor;
+
 		}
 		
 		

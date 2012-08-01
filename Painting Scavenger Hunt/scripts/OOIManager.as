@@ -12,7 +12,7 @@
 		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
 				
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
-		public static const NO_CLUES_NOTIFY:String = "No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
+		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
 		
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
