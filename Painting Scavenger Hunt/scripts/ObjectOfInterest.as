@@ -85,6 +85,7 @@
 			caption.defaultTextFormat = captionFormat;
 			caption.autoSize = TextFieldAutoSize.LEFT;
 			caption.selectable = false;
+			caption.mouseEnabled = false;
 			caption.text = objectName;
 						
 			//create info Pane

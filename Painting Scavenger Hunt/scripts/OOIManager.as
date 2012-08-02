@@ -62,7 +62,6 @@
 																						{
 																							newObject.hideHighlight();	
 																							newObject.hideCaption();
-																							//newObject.unprepareInfoPane();
 																						}
 																					});
 			
@@ -76,7 +75,7 @@
 																						}
 																					});
 			
-			//llisten for when an object's info pane is being opened
+			//listen for when an object's info pane is being opened
 			newObject.addEventListener(OOIInfoPane.OPEN_PANE, function(e:Event):void
 																					{	
 																						hideAllOOIInfoPanes(new Array(ObjectOfInterest(e.target)));
