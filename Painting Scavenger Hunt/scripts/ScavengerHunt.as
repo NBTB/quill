@@ -127,10 +127,7 @@
 		public function startGame():void
 		{
 			useTutorial = startUpScreen.useTut;
-			mainMenu.getObjectManager(ooiManager);
-			
-			//remove start up menu from display list
-			removeChild(startUpScreen);							
+			mainMenu.getObjectManager(ooiManager);	
 			
 			//add in-game children to display list
 			addChild(paintingCanvas);

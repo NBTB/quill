@@ -78,7 +78,7 @@
 		<highlight_filename>../assets/silhouette highlight.png</highlight_filename>
 		<x>0.8701379</x>
 		<y>0.1251726</y>
-		<info_pane_x>0.53</info_pane_x>
+		<info_pane_x>0.03</info_pane_x>
 		<info_pane_y>0.02</info_pane_y>
 		<info>
 			<text_file>../assets/silhouette info.txt</text_file>
@@ -176,16 +176,16 @@
 		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
-		<name>Signiture</name>
+		<name>Signature</name>
 		<clue>I'm no mirror, but I'm a reflection you...</clue>
-		<hitmap_filename>../assets/signiture hitmap.png</hitmap_filename>
-		<highlight_filename>../assets/signiture highlight.png</highlight_filename>
+		<hitmap_filename>../assets/signature hitmap.png</hitmap_filename>
+		<highlight_filename>../assets/signature highlight.png</highlight_filename>
 		<x>0.0060307</x>
 		<y>0.9580287</y>
 		<info_pane_x>0.02</info_pane_x>
 		<info_pane_y>0.10</info_pane_y>
 		<info>
-			<text_file>../assets/signiture info.txt</text_file>
+			<text_file>../assets/signature info.txt</text_file>
 		</info>
 	</Object_Of_Interest>
 	<Letter_Piece>

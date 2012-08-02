@@ -1,6 +1,6 @@
 ﻿package
 {
-	import flash.events.Event;
+	import flash.events.*;
 	import flash.events.EventDispatcher;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -13,6 +13,8 @@
 		
 		//event types
 		public static const TEXT_FILE_IMPORTED:String = "Text file imported";
+		public static const TEXT_FILE_IMPORT_FAILED:String = "Text file import failed";
+		
 		
 		public function TextLoader()
 		{
@@ -44,6 +46,11 @@
 																				
 																				//dispatch completion event
 																				dispatchEvent(new Event(TEXT_FILE_IMPORTED));
+																			 });
+				textLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																			 {																				
+																				//dispatch errorevent
+																				dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																			 });
 				textLoader.load(new URLRequest(filename));
 			}

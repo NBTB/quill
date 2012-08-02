@@ -1,6 +1,6 @@
 ﻿package
 {
-	import flash.events.Event;
+	import flash.events.*;
 	import flash.events.EventDispatcher;
 	import flash.xml.*;
 	import flash.text.*;
@@ -23,7 +23,7 @@
 			var childNum:int = 0;
 			var childCount = children.length();
 			
-			//create text loader and listen for when it finishes importing a file
+			//create text loader and listen for when it finishes importing a file (or fails to do so)
 			var textLoader:TextLoader = new TextLoader();
 			textLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
 																						{
@@ -49,6 +49,16 @@
 																							childNum++;
 																							accessChild(children, childNum, childCount, textLoader);
 																						});
+			textLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																					   {
+																							//display error in debug trace
+																							trace("Failed to load a piece of info about " + targetOOI.getObjectName());
+																							
+																							//access next child
+																							childNum++;
+																							accessChild(children, childNum, childCount, textLoader);
+																					   });
+																						
 			
 			//access first child of info list
 			accessChild(children, childNum, childCount, textLoader);
