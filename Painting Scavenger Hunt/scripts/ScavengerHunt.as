@@ -149,10 +149,7 @@
 			//listen for the completion of the clue timer
 			clueTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
 																		  {
-																			//reset clue time and hide the clue text box
-																			clueTimer.reset();
-																			clueText.text = ""
-																			clueText.visible = false;
+																			hideClueText();
 																		  });
 			
 			//prepare new list of unused objects of interest and pick the first object
@@ -274,6 +271,9 @@
 		//handle a correct answer to a clue
 		private function handleCorrectAnswer(e:Event)
 		{	
+			//hide the current clue
+			hideClueText();
+		
 			//close menus
 			mainMenu.closeMenus();
 		
@@ -337,6 +337,15 @@
 			//restart the clue hiding timer
 			clueTimer.reset();
 			clueTimer.start();
+		}
+		
+		//reset clue time and hide the clue text box
+		private function hideClueText()
+		{
+			
+			clueTimer.reset();
+			clueText.text = ""
+			clueText.visible = false;
 		}
 		
 		//add evebt listener to list that will trigger the closing of dismissible overlays
