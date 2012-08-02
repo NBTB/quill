@@ -17,12 +17,11 @@
 	{
 		var theBackground:Shape = new Shape();						//Background of the splash screen
 		var splashTitle:TextField = new TextField();				//The title which appears on the splash screen
-		
+		var tut:TutorialMenu;
 		var startGameListener:MenuListener;							//Game listener which tells when the splash screen has finished
 		var useTut:Boolean;											//Boolean which tracks whether the user wants to view the tutorial or not
 		var gameReady:Boolean = false;								//Indicates that the game is ready to start
 		var firstStart:Boolean = true;								//Indicates whether this is the first time starting the game or not
-				
 		var splashButtonStart:TextField = new TextField();			//Button to start the game
 		var splashButtonAbout:TextField = new TextField();			//Button to About page
 		var splashButtonCredits:TextField = new TextField();		//Button to read credits page
@@ -67,10 +66,15 @@
 			splashButtonTitle.setTextFormat(splashButtonFormat);
 			splashButtonTutorial.setTextFormat(splashButtonFormat);
 			splashButtonSkip.setTextFormat(splashButtonFormat);
-			proceedButton.setTextFormat(splashButtonFormat);
-			continueButton.setTextFormat(splashButtonFormat);
-			controls.setTextFormat(tutText);
-			controls2.setTextFormat(tutText);
+			
+			//make the buttons so the text cursor doesn't appear over them
+			splashTitle.selectable = false;
+			splashButtonStart.selectable = false;
+			splashButtonAbout.selectable = false;
+			splashButtonCredits.selectable = false;
+			splashButtonTitle.selectable = false;
+			splashButtonTutorial.selectable = false;
+			splashButtonSkip.selectable = false;		
 			
 			//Event listeners for the different buttons in the project.
 			splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, tutorialStart);
@@ -110,10 +114,13 @@
 		{
 			//Function chosen if the user chooses to view the tutorial
 			useTut = true;
-			//gameReady = true;
+			gameReady = true;
 			removeChild(splashTitle);
 			removeChild(splashButtonTutorial);
-			removeChild(splashButtonSkip);				
+			removeChild(splashButtonSkip);						
+			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
+			addChild(tut);
+			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 			
 			addChild(controls);
 			addChild(continueButton);
@@ -132,11 +139,9 @@
 		
 		//Sends the event signaling for the game to start.
 		function proceedFromTut(event:MouseEvent):void
-		{
-			gameReady = true;
-			useTut = false;
+		{			
 			startGameListener.triggerListener();
-		}
+		}			
 		
 		//Sends the event signaling for the game to start.
 		function startNoTut(event:MouseEvent):void
@@ -247,7 +252,6 @@
 			controls2.wordWrap = true;
 			controls2.selectable = false;
 			controls2.text = "In a few moments you will be given a clue to the first object you need to look for.  By clicking on the correct object that the riddle references, the object will be added to your collection.  You will also be given a brief description of the object, as well as some background on its history and its purpose in the painting.   Along with this description, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole.  The next clue will be given to you when you can identify the object behind this first one. Click Proceed to begin.";
-
 		}
 		
 		//Display the main splash page; secondary function with a mouse listener, since both are used.

@@ -285,9 +285,9 @@
 		
 			//add the piece of the end goal
 			/*TODO make not hard coded and perhaps not linear*/
-			if(mainMenu.rewardCounter > 7)
+			if(mainMenu.rewardCounter > 8)
 			{
-				mainMenu.rewardCounter = 7;
+				mainMenu.rewardCounter = 8;
 			}
 			else
 			{

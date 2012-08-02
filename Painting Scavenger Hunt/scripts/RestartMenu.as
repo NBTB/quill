@@ -22,10 +22,10 @@
 		var textFormat:TextFormat = new TextFormat();			//Formatting
 		
 		//Creates the restart menu
-		public function RestartMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
+		public function RestartMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//feeds the position values for the background to the base menu
-			super(xPos, yPos, widthVal, heightVal, theMenu);
+			super(xPos, yPos, widthVal, heightVal);
 			
 			//Sets up the question
 			startOverQuestion.text = "Are you sure you want to start over? All progress will be lost.";
@@ -68,7 +68,7 @@
 			
 			//Event listeners for the yes and no buttons
 			startOverYes.addEventListener(MouseEvent.MOUSE_DOWN, startOverProgram);
-			startOverNo.addEventListener(MouseEvent.MOUSE_DOWN, closeWindow);
+			startOverNo.addEventListener(MouseEvent.MOUSE_DOWN, closeMenu);
 			
 			startOverYes.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			startOverYes.addEventListener(MouseEvent.ROLL_OUT, revertColor);
@@ -90,14 +90,8 @@
 			//initiator = theInitiator;
 		}
 		
-		//close all currently open menus
-		public function closeWindow(event:MouseEvent):void
-		{
-			theMainMenu.closeMenus();
-		}
-		
 		//changes the color of buttons
-		public function colorChange(event:MouseEvent):void 
+		/*public function colorChange(event:MouseEvent):void 
 		{
 			var sender:TextField=event.target as TextField;
 			var myColor:ColorTransform=sender.transform.colorTransform;
@@ -112,7 +106,7 @@
 			var myColor:ColorTransform=sender.transform.colorTransform;	
 			myColor.color=0xFFFFFF;		
 			sender.transform.colorTransform=myColor;
-		}
+		}*/
 		
 	}
 }

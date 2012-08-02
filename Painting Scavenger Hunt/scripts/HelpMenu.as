@@ -17,10 +17,10 @@
 		var textFormat:TextFormat = new TextFormat();			//Formatting
 		
 		//Creates the help menu
-		public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
+		public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//sends variables to create background to the base menu
-			super(xPos, yPos, widthVal, heightVal, theMenu);
+			super(xPos, yPos, widthVal, heightVal);
 			
 			//set up start position and size of link textfields
 			var startX = 10;
@@ -93,7 +93,7 @@
 		}
 		
 		//changes the color of the buttons
-		public function colorChange(event:MouseEvent):void 
+		/*public function colorChange(event:MouseEvent):void 
 		{
 			var sender:TextField=event.target as TextField;
 			var myColor:ColorTransform=sender.transform.colorTransform;
@@ -108,6 +108,6 @@
 			var myColor:ColorTransform=sender.transform.colorTransform;	
 			myColor.color=0xFFFFFF;		
 			sender.transform.colorTransform=myColor;
-		}
+		}*/
 	}
 }

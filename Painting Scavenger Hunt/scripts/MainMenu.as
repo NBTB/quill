@@ -37,19 +37,13 @@
 		
 		//Create the main menu
 		public function MainMenu(startWTutorial:Boolean/*, theInitiator:GameInitiator*/):void
-		{
-			//letterRec.graphics.beginFill(0x000000);
-			//letterRec.graphics.drawRect(300, buttonY, 175, 50); 	
-			//recTransform = letterRec.transform.colorTransform;
-			//recTransform.color = 0x00CCFF;
-			//letterRec.transform.colorTransform = recTransform; 
-			
+		{			
 			//Create the 5 sub-menus
-			helpMenu = new HelpMenu(5, 350, 120, 165, this);
-			cluesMenu = new CluesMenu(100, 400, 220, 115, this);
-			letterMenu = new LetterMenu(75, 0, 600, 515, this);
-			objectsMenu = new ObjectsMenu(370, 50, 170, 465, this);
-			restartMenu = new RestartMenu (200, 150, 375, 200, this);
+			helpMenu = new HelpMenu(5, 350, 120, 165);
+			cluesMenu = new CluesMenu(100, 400, 220, 115);
+			letterMenu = new LetterMenu(75, 0, 600, 515);
+			objectsMenu = new ObjectsMenu(370, 50, 170, 465);
+			restartMenu = new RestartMenu (200, 150, 375, 200);
 			
 			//Add the buttons and background as children
 			this.addChild(menuBackground);
@@ -71,6 +65,10 @@
 			createBackground();
 			formatText();
 			
+			menuButtonHelp.selectable = false;
+			menuButtonClues.selectable = false;
+			menuButtonLetter.selectable = false;
+			
 			//restartMenu.addInitiator(theInitiator);
 			
 			//Add event listeners to the buttons to open their respective menus
@@ -80,20 +78,28 @@
 			menuButtonObjects.addEventListener(MouseEvent.MOUSE_DOWN, clickObjectsMenu);
 			menuButtonRestart.addEventListener(MouseEvent.MOUSE_DOWN, clickRestartMenu);
 			
-			menuButtonHelp.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonHelp.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			//listen for mouse movement to highlight menus
+			menuButtonHelp.addEventListener(MouseEvent.ROLL_OVER, helpMenu.colorChange);
+			menuButtonHelp.addEventListener(MouseEvent.ROLL_OUT, helpMenu.revertColor);			
+			menuButtonClues.addEventListener(MouseEvent.ROLL_OVER, cluesMenu.colorChange);
+			menuButtonClues.addEventListener(MouseEvent.ROLL_OUT, cluesMenu.revertColor);			
+			menuButtonLetter.addEventListener(MouseEvent.ROLL_OVER, letterMenu.colorChange);
+			menuButtonLetter.addEventListener(MouseEvent.ROLL_OUT, letterMenu.revertColor);			
+			menuButtonObjects.addEventListener(MouseEvent.ROLL_OVER, objectsMenu.colorChange);
+			menuButtonObjects.addEventListener(MouseEvent.ROLL_OUT, objectsMenu.revertColor);			
+			menuButtonRestart.addEventListener(MouseEvent.ROLL_OVER, restartMenu.colorChange);
+			menuButtonRestart.addEventListener(MouseEvent.ROLL_OUT, restartMenu.revertColor);
 			
-			menuButtonClues.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonClues.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-
-			menuButtonLetter.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonLetter.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
-			menuButtonObjects.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonObjects.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
-			menuButtonRestart.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonRestart.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			//listen for when the main menu is added to the stage
+			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
+																	{
+																		//listen for request to close menus
+																		helpMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		cluesMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		letterMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		objectsMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		restartMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																	});
 		}
 		
 		//formatting for the menu buttons
@@ -197,6 +203,22 @@
 				//trace(letterMenu.pieces[i].pieceName);
 				letterMenu.pieces[i].visible = true;							
 			}
+			//if the search is over, you find the hidden letter!
+			//the other pieces become invisible 
+			if(rewardCounter == 8 && letterMenu.pieces[7].visible == true)
+			{
+			
+				letterMenu.nextButton.visible = true;
+                letterMenu.pieces[0].visible = false; 
+				letterMenu.pieces[1].visible = false; 
+				letterMenu.pieces[2].visible = false; 
+				letterMenu.pieces[3].visible = false; 
+				letterMenu.pieces[4].visible = false; 
+				letterMenu.pieces[5].visible = false; 
+				letterMenu.pieces[6].visible = false; 			 
+				
+            
+			}
 		}
 		
 		//Tells the letterMenu when to activate
@@ -275,7 +297,6 @@
 			if(letterMenu.isOpen == true)
 			{
 				letterMenu.isOpen = false;
-				letterRec.visible = false;
 				removeChild(letterMenu);
 				letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
 			}
@@ -286,24 +307,6 @@
 				removeChild(restartMenu);
 				restartMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
 			}
-		}
-		
-		//changes the text color of the menu buttons to identify which one you're moused over
-		public function colorChange(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;
-			myColor.color=0xFFC000;
-			sender.transform.colorTransform=myColor;
-		}
-		
-		//reverts the buttons back to their original colors
-		public function revertColor(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;	
-			myColor.color=0xFFFFFF;		
-			sender.transform.colorTransform=myColor;
 		}
 		
 		//Set the background graphics

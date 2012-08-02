@@ -13,7 +13,7 @@
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 				
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
-		public static const NO_CLUES_NOTIFY:String = "No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
+		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
 		
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
@@ -154,7 +154,7 @@
 			if(usableOOICount >= 0)
 			{
 				//if the maxium number of usable objects of interest has been reached, return a failure
-				if(ooiUnused.length < objectsOfInterest.length - usableOOICount + 1)
+				if(ooiUnused.length < objectsOfInterest.length - usableOOICount)
 				{
 					currentOOI = null;
 					return null;

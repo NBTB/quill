@@ -5,7 +5,7 @@
 	import flash.text.*;
 	import flash.geom.*;
 
-	class BaseMenu extends MovieClip
+	public class BaseMenu extends MovieClip
 	{
 		protected var menuBackground:Shape = null;					//background of menu
 		protected var menuMask:Shape = null;						//mask of menu to determine what is seen
@@ -22,16 +22,16 @@
 		protected static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		
 		private static var scrollBarStyle = null;
-		var theMainMenu:MainMenu;
 		
 		var isOpen:Boolean;								//
 		
 		//event types
 		public static const MENU_OPENED = "Menu Opened";
 		public static const MENU_CLOSED = "Menu Closed";
+		public static const CLOSE_MENUS_REQUEST = "Close all menus";
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//if the scroll bar style has not yet been setup, do so now
 			if(!scrollBarStyle)
@@ -99,10 +99,7 @@
 			{
 				createBackground(xPos, yPos, widthVal, heightVal);
 			}
-			
-			//store reference to main menu
-			theMainMenu = theMenu;
-			
+						
 			//create content container
 			contentContainer = new MovieClip();
 			contentContainer.mask = menuMask;
@@ -145,7 +142,7 @@
 		//Shut.  Down.  Everything.  (Well, menus, that is.)
 		protected function closeMenu():void
 		{
-			theMainMenu.closeMenus();
+			dispatchEvent(new Event(CLOSE_MENUS_REQUEST));
 		}
 		
 		//Set the background graphics
@@ -221,6 +218,24 @@
 			//update total scroll distance
 			scrollPoint.x += distance.x;
 			scrollPoint.y += distance.y;			
+		}
+		
+		//changes the text color of the menu buttons to identify which one you're moused over
+		public function colorChange(event:MouseEvent):void 
+		{
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xCC9933;
+			sender.transform.colorTransform=myColor;
+		}
+		
+		//reverts the buttons back to their original colors
+		public function revertColor(event:MouseEvent):void 
+		{
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;	
+			myColor.color=0xE5E5E5;		
+			sender.transform.colorTransform=myColor;
 		}
 		
 		public function getContentStartPoint():Point	{	return contentStartPoint;	}

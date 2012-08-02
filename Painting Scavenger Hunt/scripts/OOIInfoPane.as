@@ -29,7 +29,7 @@
 		public function OOIInfoPane(x:Number, y:Number, widthVal:Number, heightVal:Number)
 		{
 			//call super constructor
-			super(x, y, widthVal, heightVal, ScavengerHunt.mainMenu);
+			super(x, y, widthVal, heightVal);
 		}
 				
 		/*TODO this should be be overriden, instead use BaseMenu events*/
