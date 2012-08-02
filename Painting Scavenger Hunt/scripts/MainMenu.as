@@ -12,30 +12,31 @@
 
 	class MainMenu extends MovieClip
 	{
-		var menuBackground:Shape = new Shape();
+		var menuBackground:Shape = new Shape();						//The basic background image
 		
-		var menuButtonHelp:TextField = new TextField();
-		var menuButtonClues:TextField = new TextField();
-		var menuButtonRestart:TextField = new TextField();
-		var menuButtonLetter:TextField = new TextField();
-		var menuButtonObjects:TextField = new TextField();
+		var menuButtonHelp:TextField = new TextField();				//Help Button
+		var menuButtonClues:TextField = new TextField();			//Clues Button
+		var menuButtonRestart:TextField = new TextField();			//Restart Button
+		var menuButtonLetter:TextField = new TextField();			//Letter Button
+		var menuButtonObjects:TextField = new TextField();			//Objects Button
 		
-		var recTransform:ColorTransform;
+		var recTransform:ColorTransform;							//Allows for changing of text colors.
 				
-		public var helpMenu:HelpMenu;
-		public var cluesMenu:CluesMenu;
-		public var letterMenu:LetterMenu;
-		public var objectsMenu:ObjectsMenu;
-		public var restartMenu:RestartMenu;
+		public var helpMenu:HelpMenu;								//Help menu
+		public var cluesMenu:CluesMenu;								//Clues menu
+		public var letterMenu:LetterMenu;							//Letter menu
+		public var objectsMenu:ObjectsMenu;							//Objects menu
+		public var restartMenu:RestartMenu;							//Restart menu
 		
-		public var letterRec:Shape;
-		public var rewardCounter:Number = 0;	
+		public var letterRec:Shape;									//???
+		public var rewardCounter:Number = 0;						//???
 		
-		var menuButtonFormat:TextFormat = new TextFormat();
+		var menuButtonFormat:TextFormat = new TextFormat();			//Formatting for the buttons
 		
-		var buttonY:int = 517;
-
-		public function MainMenu(startWTutorial:Boolean, theInitiator:GameInitiator):void
+		var buttonY:int = 517;										//Y location of the menu
+		
+		//Create the main menu
+		public function MainMenu(startWTutorial:Boolean/*, theInitiator:GameInitiator*/):void
 		{
 			//letterRec.graphics.beginFill(0x000000);
 			//letterRec.graphics.drawRect(300, buttonY, 175, 50); 	
@@ -43,12 +44,14 @@
 			//recTransform.color = 0x00CCFF;
 			//letterRec.transform.colorTransform = recTransform; 
 			
+			//Create the 5 sub-menus
 			helpMenu = new HelpMenu(5, 350, 120, 165, this);
 			cluesMenu = new CluesMenu(100, 400, 220, 115, this);
 			letterMenu = new LetterMenu(75, 0, 600, 515, this);
-			objectsMenu = new ObjectsMenu(360, 50, 250, 465, this);
+			objectsMenu = new ObjectsMenu(370, 50, 170, 465, this);
 			restartMenu = new RestartMenu (200, 150, 375, 200, this);
 			
+			//Add the buttons and background as children
 			this.addChild(menuBackground);
 			this.addChild(menuButtonHelp);
 			this.addChild(menuButtonClues);
@@ -56,6 +59,7 @@
 			this.addChild(menuButtonObjects);
 			this.addChild(menuButtonRestart);
 			
+			//Something to do with the letter.
 			letterRec = new Shape();
 			letterRec.graphics.beginFill(0x00CCFF); 
 			letterRec.graphics.drawRect(422, buttonY, 162, 65); 
@@ -63,11 +67,13 @@
 			letterRec.visible = false;
 			addChild(letterRec); 
 			
+			//Set up the background and button formatting
 			createBackground();
 			formatText();
 			
-			restartMenu.addInitiator(theInitiator);
+			//restartMenu.addInitiator(theInitiator);
 			
+			//Add event listeners to the buttons to open their respective menus
 			menuButtonHelp.addEventListener(MouseEvent.MOUSE_DOWN, clickHelpMenu);
 			menuButtonClues.addEventListener(MouseEvent.MOUSE_DOWN, clickCluesMenu);
 			menuButtonLetter.addEventListener(MouseEvent.MOUSE_DOWN, clickLetterMenu);
@@ -90,6 +96,7 @@
 			menuButtonRestart.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 		
+		//formatting for the menu buttons
 		function formatText():void
 		{
 			menuButtonFormat.align = "center";
@@ -139,17 +146,25 @@
 			menuButtonRestart.setTextFormat(menuButtonFormat);
 		}
 		
+		//Get the object manager for the objects menu
+		public function getObjectManager(ooiManager:OOIManager)
+		{
+			objectsMenu.getObjectManager(ooiManager);
+		}
+		
+		//notifies the letter
 		function letterNotifyer():void
 		{
 			
 		}
 				
-		//Tells the cluesMenu which clue to activate
+		//Tells the cluesMenu which clue to activate, possibly redundant
 		function activateClue():void
 		{
 			
 		}
 		
+		//Open the clues menu
 		function openCluesMenu():void
 		{
 			closeMenus();
@@ -164,6 +179,7 @@
 			openCluesMenu();
 		}
 		
+		//Opens the letter menu
 		function openLetterMenu():void
 		{
 			closeMenus();
@@ -183,12 +199,13 @@
 			}
 		}
 		
-		//Tells the cluesMenu when to activate
+		//Tells the letterMenu when to activate
 		function clickLetterMenu(event:MouseEvent):void
 		{
 			openLetterMenu();
 		}
 		
+		//opens the help menu
 		function openHelpMenu():void
 		{
 			closeMenus();
@@ -203,6 +220,7 @@
 			openHelpMenu();
 		}
 		
+		//opens the objects menu
 		function openObjectsMenu():void
 		{
 			closeMenus();
@@ -211,12 +229,13 @@
 			objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
 		}
 		
-		//Tells the helpMenu when to activate
+		//Tells the objectsMenu when to activate
 		function clickObjectsMenu(event:MouseEvent):void
 		{
 			openObjectsMenu();
 		}
 		
+		//opens the restart menu
 		function openRestartMenu():void
 		{
 			closeMenus();
@@ -225,12 +244,14 @@
 			restartMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
 		}
 		
+		//tells the restartMenu when to activate
 		function clickRestartMenu(event:MouseEvent):void
 		{
 			openRestartMenu();
 		}
 		
 		//Close all open menus, so there's no overlap when a new one is opened.
+		//Always called when a new menu is opened
 		function closeMenus():void
 		{
 			if (helpMenu.isOpen == true)
@@ -285,6 +306,7 @@
 			sender.transform.colorTransform=myColor;
 		}
 		
+		//Set the background graphics
 		function createBackground():void
 		{
 			//Set the background graphics

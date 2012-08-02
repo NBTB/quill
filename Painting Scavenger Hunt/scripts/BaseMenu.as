@@ -24,12 +24,13 @@
 		private static var scrollBarStyle = null;
 		var theMainMenu:MainMenu;
 		
-		var isOpen:Boolean;
+		var isOpen:Boolean;								//
 		
 		//event types
 		public static const MENU_OPENED = "Menu Opened";
 		public static const MENU_CLOSED = "Menu Closed";
 
+		//Sets up variables used by all the menus
 		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
 		{
 			//if the scroll bar style has not yet been setup, do so now
@@ -69,6 +70,7 @@
 				scrollBitmapLoader.loadBitmaps("../assets/scrollbar scroller up.png");				
 			}
 			
+			//Add the background and close button, and make sure it's open
 			//this.addChild(menuBackground);
 			//this.addChild(closeMenuButton);
 			isOpen = false;
@@ -92,7 +94,13 @@
 			menuMask.graphics.endFill();
 			addChild(menuMask);
 			
-			createBackground(paneDimensions.x, paneDimensions.y);
+			//If the variables read in are not 0, create the background.  Otherwise, let the subclass handle it.
+			if (xPos != 0 || yPos != 0 || widthVal != 0 || heightVal != 0)
+			{
+				createBackground(xPos, yPos, widthVal, heightVal);
+			}
+			
+			//store reference to main menu
 			theMainMenu = theMenu;
 			
 			//create content container
@@ -103,7 +111,7 @@
 			//create close button
 			closeMenuButton = new Sprite();
 			addChild(closeMenuButton);
-			createCloseButton(widthVal, heightVal);
+			createCloseButton(xPos, yPos, widthVal, heightVal);
 			
 			//create scroll bar
 			scrollBar = new ScrollBar(new Rectangle(width - 20, 50, 10, height - 100), scrollBarStyle, contentContainer.height, paneDimensions.y, 20);
@@ -134,21 +142,23 @@
 																			});
 		}
 		
+		//Shut.  Down.  Everything.  (Well, menus, that is.)
 		protected function closeMenu():void
 		{
 			theMainMenu.closeMenus();
 		}
 		
-		public function createBackground(widthVal:int, heightVal:int):void
+		//Set the background graphics
+		public function createBackground(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
-			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);
 			menuBackground.graphics.beginFill(0x2F2720);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
 		}
 		
-		public function createCloseButton(widthVal:int, heightVal:int):void
+		//Create the button used to close the menu
+		public function createCloseButton(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			closeMenuButton.graphics.lineStyle(1, 0x000000);
 			closeMenuButton.graphics.beginFill(0xFF0000);
@@ -158,6 +168,7 @@
 		
 		public function addListChild(child:DisplayObject, position:Point = null)
 		{				
+			
 			//position child and add it to the display list
 			if(position)
 			{
@@ -182,6 +193,7 @@
 			
 			//add child to content container
 			contentContainer.addChild(child);
+			//this.addChild(child);
 			
 			//ensure that end point is current
 			contentEndPoint.x = contentStartPoint.x + contentContainer.width;

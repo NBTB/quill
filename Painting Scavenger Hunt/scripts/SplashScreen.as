@@ -15,34 +15,34 @@
 
 	public class SplashScreen extends MovieClip
 	{
-		var theBackground:Shape = new Shape();
-		var splashTitle:TextField = new TextField();
+		var theBackground:Shape = new Shape();						//Background of the splash screen
+		var splashTitle:TextField = new TextField();				//The title which appears on the splash screen
 		
-		var startGameListener:MenuListener;
-		var useTut:Boolean;
-		var gameReady:Boolean = false;
-		var firstStart:Boolean = true;
+		var startGameListener:MenuListener;							//Game listener which tells when the splash screen has finished
+		var useTut:Boolean;											//Boolean which tracks whether the user wants to view the tutorial or not
+		var gameReady:Boolean = false;								//Indicates that the game is ready to start
+		var firstStart:Boolean = true;								//Indicates whether this is the first time starting the game or not
 				
-		var splashButtonStart:TextField = new TextField();
-		var splashButtonAbout:TextField = new TextField();
-		var splashButtonCredits:TextField = new TextField();
-		var splashButtonTitle:TextField = new TextField();
-		var splashButtonTutorial:TextField = new TextField();
-		var splashButtonSkip:TextField = new TextField();
-		var proceedButton:TextField = new TextField();
-		var continueButton:TextField = new TextField();
-		var controls:TextField = new TextField();
-		var controls2:TextField = new TextField();
+		var splashButtonStart:TextField = new TextField();			//Button to start the game
+		var splashButtonAbout:TextField = new TextField();			//Button to About page
+		var splashButtonCredits:TextField = new TextField();		//Button to read credits page
+		var splashButtonTitle:TextField = new TextField();			//button to return to title page
+		var splashButtonTutorial:TextField = new TextField();		//button to see tutorial
+		var splashButtonSkip:TextField = new TextField();			//button to skip tutorial
+		var proceedButton:TextField = new TextField();				//button to proceed to next page of tutorial
+		var continueButton:TextField = new TextField();				//button to indicate tutorial is finished
+		var controls:TextField = new TextField();					//The info in the tutorial (to be removed?)
+		var controls2:TextField = new TextField();					//...Page 2
 		
-		var splashTitleFormat:TextFormat = new TextFormat();
-		var splashButtonFormat:TextFormat = new TextFormat();
-		var tutText:TextFormat = new TextFormat();
+		var splashTitleFormat:TextFormat = new TextFormat();		//Format for the splash screen title
+		var splashButtonFormat:TextFormat = new TextFormat();		//Format for the splash screen buttons
+		var tutText:TextFormat = new TextFormat();					//Format for the tutorial
 		
-		var buttonX:int = 285;
-		var buttonSeparation = 75;
-		var buttonY1:int = 265;
-		var buttonY2:int = buttonY1+buttonSeparation;
-		var buttonY3:int = buttonY2+buttonSeparation;
+		var buttonX:int = 285;										//The x location of the buttons
+		var buttonSeparation = 75;									//The distance the buttons are spaced apart
+		var buttonY1:int = 265;										//The first Y location
+		var buttonY2:int = buttonY1+buttonSeparation;				//...second
+		var buttonY3:int = buttonY2+buttonSeparation;				//...third
 		
 		
 		public function SplashScreen(theTrigger:MenuListener) 
@@ -105,6 +105,7 @@
 			continueButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 		
+		//Runs if the user wanted to start the game with the tutorial
 		function startWithTut(event:MouseEvent):void
 		{
 			//Function chosen if the user chooses to view the tutorial
@@ -118,9 +119,10 @@
 			addChild(continueButton);
 			continueButton.addEventListener(MouseEvent.MOUSE_DOWN, tutorialContinue);
 		}
+		
+		//Triggers the end of the tutorial if the user decided to view it.
 		function tutorialContinue(event:MouseEvent):void
 		{			
-			
 			removeChild(controls);
 			removeChild(continueButton);
 			addChild(controls2);
@@ -128,6 +130,7 @@
 			proceedButton.addEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 		}
 		
+		//Sends the event signaling for the game to start.
 		function proceedFromTut(event:MouseEvent):void
 		{
 			gameReady = true;
@@ -135,6 +138,7 @@
 			startGameListener.triggerListener();
 		}
 		
+		//Sends the event signaling for the game to start.
 		function startNoTut(event:MouseEvent):void
 		{
 			//Function chosen if the user chooses not to view the tutorial
@@ -143,6 +147,7 @@
 			startGameListener.triggerListener();
 		}
 		
+		//Sets up text formatting
 		function formatText():void
 		{
 			//Details regarding the title
@@ -245,12 +250,13 @@
 
 		}
 		
+		//Display the main splash page; secondary function with a mouse listener, since both are used.
 		function mainSplash(event:MouseEvent):void
 		{
-			//Display the main splash page; secondary function with a mouse listener, since both are used.
 			mainSplashActivate();
 		}
 		
+		//sets up the main splash page
 		function mainSplashActivate():void
 		{
 			//Set the title for the main splash page, and make sure formatting stays correct
@@ -271,6 +277,7 @@
 			firstStart = false;
 		}
 		
+		//sets up the credits splash page
 		function creditsInfo(event:MouseEvent):void
 		{
 			//Set which code buttons are visible or not on the credits part of the splash page
@@ -284,6 +291,7 @@
 			splashTitle.setTextFormat(splashTitleFormat);
 		}
 
+		//sets up the about splash page
    		function aboutInfo(event:MouseEvent):void
 		{
 			//Set which code buttons are visible or not on the about part of the splash page
@@ -312,6 +320,7 @@
 			removeChild(splashButtonStart);
 		}
 		
+		//changes button color when hovered over
 		public function colorChange(event:MouseEvent):void 
 		{
 			var sender:TextField=event.target as TextField;
@@ -329,9 +338,9 @@
 			sender.transform.colorTransform=myColor;
 		}
 		
+		//creates the background
 		function createBackground():void
 		{
-			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
 			theBackground.graphics.beginFill(0x2F2720);
 			theBackground.graphics.drawRect(0, 0, 764, 572);

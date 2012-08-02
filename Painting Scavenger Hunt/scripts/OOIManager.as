@@ -10,6 +10,7 @@
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
 		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted				
 		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
+		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 				
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
 		public static const NO_CLUES_NOTIFY:String = "No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
@@ -100,10 +101,14 @@
 			newObject.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:MouseEvent):void
 																					{
 																						ObjectOfInterest(e.target).showInfoPane();
+																						if (ObjectOfInterest(e.target).getHasBeenOpened() == false)
+																						{
+																							ObjectOfInterest(e.target).hasOpened();
+																							objectsMenu.objectClicked(ObjectOfInterest(e.target));
+																						}
 																					});
 			
 		}
-		
 
 		private function addedToStage(e:Event)
 		{
@@ -218,9 +223,12 @@
 					objectsOfInterest[i].addHighlightToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}
 		
-		public function getCurrentOOI():ObjectOfInterest	{	return currentOOI;					}
-		public function getCurrentClue():String				{	return currentOOI.getClue();		}
+		//used to allow the ooiManager to update the ObjectsMenu when an object is clicked the first time.
+		public function getObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
 		
-		public function setUsableOOICount(count:int):void	{	usableOOICount = count;				}
+		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
+		public function getCurrentClue():String					{	return currentOOI.getClue();		}
+		
+		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}
 	}
 }

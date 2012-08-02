@@ -15,19 +15,19 @@
 		public static const END_GOAL_LOADED:String = "End goal loaded";
 		
 		//load XML scavenger hunt specification and call parser when done
-		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
+		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
 		{
 			//load XML file
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																		{
-																			parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu);
+																			parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu);
 																		});
 			xmlLoader.load(new URLRequest(filename));
 		}
 		
 		//parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
+		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
 		{				
 			//parse hunt attributes
 			var mgZoom:Number = 1;
