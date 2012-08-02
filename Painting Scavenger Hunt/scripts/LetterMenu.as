@@ -9,14 +9,17 @@
 	public class LetterMenu extends BaseMenu
 	{
 
-		var pieces:Array=new Array();//stores all of the letterPieces 
-		public var nextButton:TextField;
-		var buttonFormat:TextFormat = new TextFormat();
+		var pieces:Array=new Array();						//stores all of the letterPieces 
+		public var nextButton:TextField;					//button to go to the next part of the letter, currently redundant?
+		var buttonFormat:TextFormat = new TextFormat();		//formatting
 		
+		//Creates the letter menu
 		public function LetterMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
 		{
-			//this.addChild(menuBackground);
+			//Pass in variables to the base menu to create background
 			super(xPos, yPos, widthVal, heightVal, theMenu);
+			
+			//Create the next button
 			nextButton = new TextField();
 			nextButton.text = "Next Letter";
 			nextButton.x = 405;
@@ -31,6 +34,7 @@
 			nextButton.addEventListener(MouseEvent.MOUSE_DOWN, clickNext);
 		}
 		
+		//If a piece of the letter is unlocked, display it
 		public function addPiece(newPiece:LetterPieces)
 		{
 			var newID:int = newPiece.getID();
@@ -62,6 +66,7 @@
 			
 		}
 		
+		//next piece is shown
 		function clickNext(event:MouseEvent):void
 		{
 			for(var i:Number = 0; i < pieces.length - 1; i++)

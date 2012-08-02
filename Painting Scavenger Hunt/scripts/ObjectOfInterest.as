@@ -29,8 +29,9 @@
 		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info Pane
 		private var infoPanePosition:Point = null;						//coordinates of info Pane
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
+		private var hasBeenOpened:Boolean = false;						//turned true first time objects display pane is showed
 		
-		private static var anyMousedOver = false;												//flag if any object is moused over
+		public static var anyMousedOver = false;												//flag if any object is moused over
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
@@ -276,6 +277,7 @@
 																						
 																						//display info Pane
 																						showInfoPane();
+																						
 																					}
 																				  });
 			
@@ -369,6 +371,13 @@
 			}
 		}
 		
+		//event listener version of showInfoPane
+		public function displayInfoPane(e:MouseEvent)
+		{
+			showInfoPane();
+		}
+		
+		
 		//hide descrition pane
 		public function hideInfoPane()
 		{
@@ -383,19 +392,23 @@
 		public function showHighlight():void				{	highlight.visible = true;		}
 		public function hideHighlight():void				{	highlight.visible = false;		}
 		
-		//retrieve highlight visibility
-		public function isHighlightd():Boolean			{	return highlight.visible;		}
+		//object is opened
+		public function hasOpened():void					{	hasBeenOpened = true;			}
 		
-		public function getObjectName():String							{	return objectName;					}
-		public function getID():Number									{	return id;							}
-		public function getClue():String								{	return clue;						}
-		public function getHitmap():Bitmap								{	return hitmap;						}
-		public function getHighlight():Bitmap							{	return highlight;					}
-		public function getFullsizeHighlight():Bitmap					{	return fullsizeHighlight;			}
+		//retrieve highlight visibility
+		public function isHighlightd():Boolean				{	return highlight.visible;		}
+		
+		public function getObjectName():String							{	return objectName;				}
+		public function getID():Number									{	return id;						}
+		public function getClue():String								{	return clue;					}
+		public function getHitmap():Bitmap								{	return hitmap;					}
+		public function getHighlight():Bitmap							{	return highlight;				}
+		public function getFullsizeHighlight():Bitmap					{	return fullsizeHighlight;		}
 		public function getInfoPane():OOIInfoPane						{	return infoPane;				}
-		public function getCaptionContainer():DisplayObjectContainer	{	return captionContainer;			}
-		public function getInfoPaneContainer():DisplayObjectContainer	{	return infoPaneContainer;	}
-		public function getInfoPanePosition():Point						{	return infoPanePosition	}
+		public function getCaptionContainer():DisplayObjectContainer	{	return captionContainer;		}
+		public function getInfoPaneContainer():DisplayObjectContainer	{	return infoPaneContainer;		}
+		public function getInfoPanePosition():Point						{	return infoPanePosition;		}
+		public function getHasBeenOpened():Boolean						{	return hasBeenOpened;			}
 			
 		public function setCaptionContainer(container:DisplayObjectContainer):void		{	this.captionContainer = container;		}
 		public function setDescriptionContainer(container:DisplayObjectContainer):void	{	this.infoPaneContainer = container;		}

@@ -11,13 +11,12 @@
 		
 	public class ScavengerHunt extends MovieClip
 	{
-		var startGameListener:MenuListener;
-		var paintingCanvas:PaintingCanvas = null;
-		var ooiManager = null;
-		var startUpScreen:SplashScreen;
-		var mainMenu:MainMenu;									
-		var useTutorial:Boolean;				
-		var initiator:GameInitiator;
+		private var startGameListener:MenuListener;				//Listener to determine when the main game should begin
+		private var paintingCanvas:PaintingCanvas = null;		//The class that displays the painting 
+		private var ooiManager = null;							//Object which keeps track of objects in the painting
+		private var startUpScreen:SplashScreen;					//Splash screen which displays when program is first started
+		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting
+		private var useTutorial:Boolean;						//Boolean which determines whether the user wants to use the tutorial or not when starting the game
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
@@ -29,13 +28,19 @@
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		
 		//construct scavanger hunt
-		public function ScavengerHunt(theInitiator:GameInitiator):void
+		public function ScavengerHunt():void
 		{	
-			initiator = theInitiator;
+			//if(this.parent.parent != null){
+			//var parentObj:Object = this.parent.parent as Object;
+			//(root.loaderInfo.loader.root as Object).traceMe()
+			//}
+			//initiator = theInitiator;
 			//show start menu
+			//trace("In ScavengerHunt");
 			startMenu();			
 		}
-				
+		
+		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
 		public function startMenu():void
 		{
 			startGameListener = new MenuListener();
@@ -45,13 +50,14 @@
 			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
 		}
 		
+		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
 		{			
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(startUpScreen.useTut, initiator);
+			mainMenu = new MainMenu(startUpScreen.useTut/*, initiator*/);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
@@ -118,12 +124,15 @@
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, mainMenu.letterMenu);
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, mainMenu.letterMenu, mainMenu.objectsMenu);
+			
 		}
 		
+		//Actually begin the rest of the game
 		public function startGame():void
 		{
 			useTutorial = startUpScreen.useTut;
+			mainMenu.getObjectManager(ooiManager);
 			
 			//remove start up menu from display list
 			removeChild(startUpScreen);							
@@ -131,9 +140,9 @@
 			//add in-game children to display list
 			addChild(paintingCanvas);
 			addChild(ooiManager);
+			addChild(mainMenu);
 			addChild(magnifyingGlass);
 			addChild(clueText);	
-			addChild(mainMenu);
 			addChild(magnifyButton);
 			addChild(nextClueButton);
 			addChild(newRewardButton);
