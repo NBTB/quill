@@ -9,7 +9,7 @@
 	{
 		private var upButton:SimpleButton = null;
 		private var downButton:SimpleButton = null;
-		private var scroller:SimpleButton = null;			//indicates the current scroll distance and can be dragged
+		private var scroller:Sprite = null;						//indicates the current scroll distance and can be dragged
 		private var contentHeight:Number = 0;
 		private var visibleHeight:Number = 0;
 		private var contentScrollSpeed:Number = 0;				//desired speed of content scolling
@@ -55,10 +55,13 @@
 			scrollerSize.y = calculateScrollerHeight();
 			
 			//place scroller
-			scroller = new SimpleButton();
+			scroller = new Sprite();
 			scroller.x = 0;
 			scroller.y = upDownButtonSize.y;
 			addChild(scroller);
+			
+			//create bounding rectangle between up and down buttons to be used in scroller dragging
+			var scrollerBounds:Rectangle = new Rectangle(scroller.x, upButton.y + upButton.height, scroller.x + scroller.width, downButton.y);
 			
 			//store desired content scrolling speed and calcuate the speed of the scroller
 			this.contentScrollSpeed = contentScrollSpeed;
@@ -78,6 +81,11 @@
 			style.addEventListener(ScrollBarStyle.UP_DOWN_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateUpDownButtonStates(style);	});
 			style.addEventListener(ScrollBarStyle.SCROLL_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateScrollerStates(style);	});
 			
+			
+			//listen for being added to display list
+			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			
+			
 			//listen for new frames
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 			
@@ -90,17 +98,48 @@
 			upButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void		{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void	{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	stopScroller();	});
+			
+			/*TODO SimpleButtons are not draggable, make subclass that is*/
+			//listen for scroller being pressed
+			/*scroller.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	scroller.startDrag(false, scrollerBounds);	});
+			
+			//listen for scroller being released
+			scroller.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		{	scroller.stopDrag();	});*/
+		}
+		
+		private function addedToStage(e:Event)
+		{
+			//listen for mouse wheel movement
+			stage.addEventListener(MouseEvent.MOUSE_WHEEL, function(e:MouseEvent):void
+																	   {
+																		   //only respond if visible and on the stage
+																		   if(visible && stage)
+																		   {
+																			   //if the wheel is moved down, scroll down
+																			   if(e.delta < 0)
+																					moveScroller(1); 
+																				//otherwise, if the wheel is moved up, scroll up
+																			   else if(e.delta > 0)
+																					moveScroller(-1);
+																		   }
+																	   });
 		}
 		
 		private function enterFrame(e:Event)
 		{
+			//calculate the amount of movement
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
+			
+			//if any movement is happening, update scroller and dispatch event
 			if(totalMovement)
 			{
 				scroller.y += totalMovement;
 				scrolledPercentage = calculateScrolledPercentage();
 				dispatchEvent(new Event(SCROLLED));
-			}
+				
+				//stop movement
+				stopScroller();
+			}			
 		}
 		
 		private function moveScroller(movement:Number)

@@ -72,11 +72,11 @@
 			//restartMenu.addInitiator(theInitiator);
 			
 			//Add event listeners to the buttons to open their respective menus
-			menuButtonHelp.addEventListener(MouseEvent.MOUSE_DOWN, clickHelpMenu);
-			menuButtonClues.addEventListener(MouseEvent.MOUSE_DOWN, clickCluesMenu);
-			menuButtonLetter.addEventListener(MouseEvent.MOUSE_DOWN, clickLetterMenu);
-			menuButtonObjects.addEventListener(MouseEvent.MOUSE_DOWN, clickObjectsMenu);
-			menuButtonRestart.addEventListener(MouseEvent.MOUSE_DOWN, clickRestartMenu);
+			menuButtonHelp.addEventListener(MouseEvent.CLICK, clickHelpMenu);
+			menuButtonClues.addEventListener(MouseEvent.CLICK, clickCluesMenu);
+			menuButtonLetter.addEventListener(MouseEvent.CLICK, clickLetterMenu);
+			menuButtonObjects.addEventListener(MouseEvent.CLICK, clickObjectsMenu);
+			menuButtonRestart.addEventListener(MouseEvent.CLICK, clickRestartMenu);
 			
 			//listen for mouse movement to highlight menus
 			menuButtonHelp.addEventListener(MouseEvent.ROLL_OVER, helpMenu.colorChange);

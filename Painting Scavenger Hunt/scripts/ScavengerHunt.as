@@ -359,7 +359,10 @@
 		
 		//close overlays that are to be dismissed by a click anywhere else on screen
 		private function closeDismissibleOverlays(e:MouseEvent):void
-		{
+		{			
+			//close all menus
+			//mainMenu.closeMenus();
+			
 			//close captions and descriptions of all objects of interest
 			ooiManager.hideAllOOIInfoPanes();
 		}
