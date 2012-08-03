@@ -7,7 +7,8 @@
 	
 	public class OOIInfoImporter extends EventDispatcher
 	{	
-		private var xmlData:XMLList = null; 	//XML specifications
+		private var xmlData:XMLList = null; 		//XML specifications
+		private var doneLoading:Boolean = false;	//flag if loading has been completed
 	
 		public function OOIInfoImporter(xmlData:XMLList)
 		{
@@ -67,9 +68,13 @@
 		//attempt to begin loading the next child of the info list
 		private function accessChild(children:XMLList, childNum:int, childCount:int, textLoader:TextLoader)
 		{
-			//if the total number of children has been reached, return before attempting to load any more
+			//if the total number of children has been reached, flag and return before attempting to load any more
 			if(childNum >= childCount)
+			{
+				doneLoading = true;
+				dispatchEvent(new Event(Event.COMPLETE));
 				return;
+			}
 			
 			//extract child
 			var child:XML = children[childNum];
@@ -81,5 +86,7 @@
 				textLoader.importText(child);
 			}
 		}
+		
+		public function isDone():Boolean	{	return doneLoading;	}
 	}
 }

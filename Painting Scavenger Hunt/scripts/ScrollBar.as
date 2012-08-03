@@ -9,7 +9,7 @@
 	{
 		private var upButton:SimpleButton = null;
 		private var downButton:SimpleButton = null;
-		private var scroller:Sprite = null;						//indicates the current scroll distance and can be dragged
+		private var scroller:SimpleButton = null;				//indicates the current scroll distance and can be dragged
 		private var contentHeight:Number = 0;
 		private var visibleHeight:Number = 0;
 		private var contentScrollSpeed:Number = 0;				//desired speed of content scolling
@@ -55,7 +55,7 @@
 			scrollerSize.y = calculateScrollerHeight();
 			
 			//place scroller
-			scroller = new Sprite();
+			scroller = new SimpleButton();
 			scroller.x = 0;
 			scroller.y = upDownButtonSize.y;
 			addChild(scroller);
@@ -119,8 +119,11 @@
 																			   if(e.delta < 0)
 																					moveScroller(1); 
 																				//otherwise, if the wheel is moved up, scroll up
-																			   else if(e.delta > 0)
+																			   	else if(e.delta > 0)
 																					moveScroller(-1);
+																				
+																				//stop scroller after initial movement
+																				stopScroller();																													
 																		   }
 																	   });
 		}
@@ -138,7 +141,7 @@
 				dispatchEvent(new Event(SCROLLED));
 				
 				//stop movement
-				stopScroller();
+				//stopScroller();
 			}			
 		}
 		
@@ -153,6 +156,12 @@
 		private function stopScroller()
 		{
 			movementFactor = 0;
+		}
+		
+		private function resetScroller()
+		{
+			scroller.y = upButton.y + upButton.height;
+			dispatchEvent(new Event(SCROLLED));
 		}
 		
 		private function scrollerMoveableFactor()

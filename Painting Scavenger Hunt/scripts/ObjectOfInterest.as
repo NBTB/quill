@@ -88,8 +88,11 @@
 			caption.mouseEnabled = false;
 			caption.text = objectName;
 						
-			//create info Pane
+			//create info pane
 			infoPane = new OOIInfoPane(5, 5, 250, 380);
+			
+			//add this as an opener of info pane
+			infoPane.addOpener(this);
 			
 			//add title to object info Pane
 			var titleText:TextField = new TextField();
@@ -150,8 +153,13 @@
 		{
 			loadHitmap();
 			loadHighlight();
-			if(infoLoader)
-				infoLoader.loadInfoToOOI(this);
+			loadInfo();
+		}
+		
+		//determine if all components have been loaded
+		private function componentsLoaded():Boolean
+		{
+			return hitmap && highlight && (!infoLoader || infoLoader.isDone());
 		}
 				
 		//load the object's hitmap image
@@ -174,7 +182,7 @@
 																								tempHitmap.bitmapData.dispose();
 																								
 																								//if both the hitmap and highlight are now loaded, dispatch a completion event
-																								if(hitmap && highlight)
+																								if(componentsLoaded())
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							 });
 			
@@ -214,7 +222,7 @@
 																								hideHighlight();
 																								
 																								//if both the hitmap and highlight are now loaded, dispatch a completion event
-																								if(hitmap && highlight)
+																								if(componentsLoaded())
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							  });
 			
@@ -227,6 +235,21 @@
 			
 			//begin loading image
 			highlightLoader.load(new URLRequest(highlightFilename));
+		}
+		
+		//load objects info to be displayed in the info pane
+		private function loadInfo():void
+		{
+			if(infoLoader)
+			{
+				infoLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																			{
+																				//if all components have been loaded, dispatch a completion event
+																			if(componentsLoaded())
+																				dispatchEvent(new Event(Event.COMPLETE)); 
+																			});
+				infoLoader.loadInfoToOOI(this);
+			}
 		}
 			
 		//add display object as a child of info pane

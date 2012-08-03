@@ -15,8 +15,7 @@
 		private var paintingCanvas:PaintingCanvas = null;		//The class that displays the painting 
 		private var ooiManager = null;							//Object which keeps track of objects in the painting
 		private var startUpScreen:SplashScreen;					//Splash screen which displays when program is first started
-		/*TODO mainMenu should not be static, instead main menu should be a singleton*/
-		static var mainMenu:MainMenu;							//The main menu displayed beneath the painting 
+		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting 
 		private var useTutorial:Boolean;						//Boolean which determines whether the user wants to use the tutorial or not when starting the game
 		var initiator:GameInitiator;							//controller of game start and restart
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
@@ -33,7 +32,7 @@
 		public function ScavengerHunt(theInitiator:GameInitiator):void
 		{
 			initiator = theInitiator;		
-			startMenu();
+			startMenu();			
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
@@ -351,7 +350,7 @@
 			clueText.visible = false;
 		}
 		
-		//add evebt listener to list that will trigger the closing of dismissible overlays
+		//add event listener to list that will trigger the closing of dismissible overlays
 		private function addDismissibleOverlayCloser(closer:DisplayObject, eventType:String = MouseEvent.CLICK):void
 		{
 			closer.addEventListener(eventType, closeDismissibleOverlays);
@@ -359,12 +358,13 @@
 		
 		//close overlays that are to be dismissed by a click anywhere else on screen
 		private function closeDismissibleOverlays(e:MouseEvent):void
-		{			
+		{					
 			//close all menus
-			//mainMenu.closeMenus();
+			mainMenu.closeMenus(e.target);
 			
 			//close captions and descriptions of all objects of interest
-			ooiManager.hideAllOOIInfoPanes();
+			
+			ooiManager.hideAllOOIInfoPanes(e.target);
 		}
 	}
 }

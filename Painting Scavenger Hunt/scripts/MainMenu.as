@@ -53,6 +53,13 @@
 			this.addChild(menuButtonObjects);
 			this.addChild(menuButtonRestart);
 			
+			//add buttons as menu openers
+			helpMenu.addOpener(menuButtonHelp);
+			cluesMenu.addOpener(menuButtonClues);
+			letterMenu.addOpener(menuButtonLetter);
+			objectsMenu.addOpener(menuButtonObjects);			
+			restartMenu.addOpener(menuButtonRestart);
+			
 			//Something to do with the letter.
 			letterRec = new Shape();
 			letterRec.graphics.beginFill(0x00CCFF); 
@@ -272,40 +279,55 @@
 			openRestartMenu();
 		}
 		
-		//Close all open menus, so there's no overlap when a new one is opened.
+		//Close all open menus (except those connected to the optional closeCaller), so there's no overlap when a new one is opened.
 		//Always called when a new menu is opened
-		function closeMenus():void
+		function closeMenus(closeCaller:Object = null):void
 		{
 			if (helpMenu.isOpen == true)
 			{
-				helpMenu.isOpen = false;
-				removeChild(helpMenu);
-				helpMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !helpMenu.isObjectOpener(closeCaller))
+				{
+					helpMenu.isOpen = false;
+					removeChild(helpMenu);
+					helpMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			if (objectsMenu.isOpen == true)
 			{
-				objectsMenu.isOpen = false;
-				removeChild(objectsMenu);
-				objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !objectsMenu.isObjectOpener(closeCaller))
+				{
+					objectsMenu.isOpen = false;
+					removeChild(objectsMenu);
+					objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			if(cluesMenu.isOpen == true)
 			{
-				cluesMenu.isOpen = false;
-				removeChild(cluesMenu);
-				cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !cluesMenu.isObjectOpener(closeCaller))
+				{
+					cluesMenu.isOpen = false;
+					removeChild(cluesMenu);
+					cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			if(letterMenu.isOpen == true)
 			{
-				letterMenu.isOpen = false;
-				removeChild(letterMenu);
-				letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !letterMenu.isObjectOpener(closeCaller))
+				{
+					letterMenu.isOpen = false;
+					removeChild(letterMenu);
+					letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			
 			if(restartMenu.isOpen == true)
 			{
-				restartMenu.isOpen = false;
-				removeChild(restartMenu);
-				restartMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !restartMenu.isObjectOpener(closeCaller))
+				{
+					restartMenu.isOpen = false;
+					removeChild(restartMenu);
+					restartMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 		}
 		

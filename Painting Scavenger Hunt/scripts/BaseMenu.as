@@ -16,14 +16,14 @@
 		protected var contentEndPoint:Point = null;					//bottom-rightmost point of content
 		protected var scrollPoint:Point = null;						//translation of pane content due to scrolling
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
+		protected var openers:Array = null;							//list of objects that would cause the menu to open
+		var isOpen:Boolean;								//flag if menu is open	/*TODO this should be private*/
 		
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
 		protected static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		
-		private static var scrollBarStyle = null;
-		
-		var isOpen:Boolean;								//
+		private static var scrollBarStyle = null;		
 		
 		//event types
 		public static const MENU_OPENED = "Menu Opened";
@@ -32,7 +32,7 @@
 
 		//Sets up variables used by all the menus
 		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
-		{
+		{			
 			//if the scroll bar style has not yet been setup, do so now
 			if(!scrollBarStyle)
 			{
@@ -74,6 +74,9 @@
 			//this.addChild(menuBackground);
 			//this.addChild(closeMenuButton);
 			isOpen = false;
+			
+			//start new array of openers
+			openers = new Array();
 			
 			//position menu
 			this.x = xPos;
@@ -207,6 +210,25 @@
 		public function addListChildToTail(child:DisplayObject)
 		{
 			addListChild(child, new Point(contentStartPoint.x, contentEndPoint.y));
+		}
+		
+		public function addOpener(opener:Object)
+		{
+			openers.push(opener);
+		}
+		
+		//determine if the given object is an opener of the menu
+		public function isObjectOpener(opener:Object)
+		{
+			//if no opener was given, return a false
+			if(!opener)
+				return false;
+			
+			//check caller against list of openers
+			var isOpener = false;
+			for(var i:int = 0; i < openers.length && ! isOpener; i++)
+				isOpener = (opener == openers[i])
+			return isOpener;
 		}
 		
 		private function scrollContent(distance:Point):void
