@@ -29,9 +29,9 @@
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		
 		//construct scavanger hunt
-		public function ScavengerHunt(theInitiator:GameInitiator):void
+		public function ScavengerHunt(/*theInitiator:GameInitiator*/):void
 		{
-			initiator = theInitiator;		
+			//initiator = theInitiator;		
 			startMenu();			
 		}
 		

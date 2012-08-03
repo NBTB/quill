@@ -27,9 +27,9 @@
 			
 			/*TODO loadContent causing infinite loop and not creating hunt, temporary solution here*/
 			//load the game for the first time
-			//loadContent();
-			var scavengerHunt:ScavengerHunt = new ScavengerHunt(this);
-			addChild(scavengerHunt);
+			loadContent();
+			//var scavengerHunt:ScavengerHunt = new ScavengerHunt(this);
+			//addChild(scavengerHunt);
 			
 			
 			//check for the restart event to restart the game

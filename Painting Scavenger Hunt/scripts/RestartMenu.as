@@ -68,7 +68,10 @@
 			
 			//Event listeners for the yes and no buttons
 			startOverYes.addEventListener(MouseEvent.MOUSE_DOWN, startOverProgram);
-			startOverNo.addEventListener(MouseEvent.MOUSE_DOWN, closeMenu);
+			startOverNo.addEventListener(MouseEvent.MOUSE_DOWN, function(event:MouseEvent):void
+																						 {
+																							  closeMenu();
+																						 });
 			
 			startOverYes.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			startOverYes.addEventListener(MouseEvent.ROLL_OUT, revertColor);
