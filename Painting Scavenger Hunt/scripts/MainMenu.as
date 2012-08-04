@@ -181,6 +181,7 @@
 		function openCluesMenu():void
 		{
 			closeMenus();
+			ScavengerHunt.pauseEvents = true;	
 			this.addChild(cluesMenu);
 			cluesMenu.isOpen = true;
 			cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
@@ -196,6 +197,7 @@
 		function openLetterMenu():void
 		{
 			closeMenus();
+			ScavengerHunt.pauseEvents = true;
 			this.addChild(letterMenu);
 			letterMenu.isOpen = true;
 			letterMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
@@ -238,6 +240,7 @@
 		function openHelpMenu():void
 		{
 			closeMenus();
+			ScavengerHunt.pauseEvents = true;
 			this.addChild(helpMenu);
 			helpMenu.isOpen = true;
 			helpMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
@@ -253,6 +256,7 @@
 		function openObjectsMenu():void
 		{
 			closeMenus();
+			ScavengerHunt.pauseEvents = true;
 			this.addChild(objectsMenu);
 			objectsMenu.isOpen = true;
 			objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
@@ -268,6 +272,7 @@
 		function openRestartMenu():void
 		{
 			closeMenus();
+			ScavengerHunt.pauseEvents = true;
 			this.addChild(restartMenu);
 			restartMenu.isOpen = true;
 			restartMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
@@ -283,6 +288,8 @@
 		//Always called when a new menu is opened
 		function closeMenus(closeCaller:Object = null):void
 		{
+			ScavengerHunt.pauseEvents = false;
+			
 			if (helpMenu.isOpen == true)
 			{
 				if(!closeCaller || !helpMenu.isObjectOpener(closeCaller))

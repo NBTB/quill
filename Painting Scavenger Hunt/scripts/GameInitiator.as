@@ -28,8 +28,9 @@
 			/*TODO loadContent causing infinite loop and not creating hunt, temporary solution here*/
 			//load the game for the first time
 			loadContent();
-			//var scavengerHunt:ScavengerHunt = new ScavengerHunt(this);
+			//var scavengerHunt:ScavengerHunt = new ScavengerHunt();
 			//addChild(scavengerHunt);
+			//removeChild(scavengerHunt);
 			
 			
 			//check for the restart event to restart the game
@@ -55,16 +56,21 @@
 			//addChild(gameLoader);
 			//removeChild(gameLoader.content);
 			
+			removeChild(gameLoader);
+			//gameLoader.unload();
+			
+			
+			
 			/*TODO this does not work in CS3, find alternative or upgrade*/
 			//gameLoader.unloadAndStop();  //This works, but does not remove event listeners
-			
+			/*
 			//TO BE REMOVED!!!!!
 			var toBeRemovedRestartText:TextField = new TextField();
 			toBeRemovedRestartText.text = "Currently, game does not restart correctly.  Please refresh the page.";
 			toBeRemovedRestartText.width = 500;
 			addChild(toBeRemovedRestartText);
 			//TO BE REMOVED!!!!!
-			
+			*/
 			//removeChild(gameLoader);
 			//loadContent();
 		}

@@ -7,17 +7,18 @@
 	
 	public class ScrollBar extends MovieClip
 	{
-		private var upButton:SimpleButton = null;
-		private var downButton:SimpleButton = null;
-		private var scroller:SimpleButton = null;				//indicates the current scroll distance and can be dragged
-		private var contentHeight:Number = 0;
-		private var visibleHeight:Number = 0;
+		private var upButton:SimpleButton = null;				//button used for scrolling up
+		private var downButton:SimpleButton = null;				//button used for scrolling down
+		private var scroller:FakeAButton = null;				//indicates the current scroll distance and can be dragged
+		private var contentHeight:Number = 0;					//total height of content
+		private var visibleHeight:Number = 0;					//height visible at any given moment
 		private var contentScrollSpeed:Number = 0;				//desired speed of content scolling
 		private var movementSpeed:Number = 0;					//speed of scroller 
 		private var movementFactor:Number = 0;					//factor of scroller movement (often 1 or -1)
 		private var scrolledPercentage:Number = 0;				//portion of full scroll away from rest
-		private var upDownButtonSize:Point = null;
-		private var scrollerSize:Point = null;
+		private var upDownButtonSize:Point = null;				//size of up and down buttons
+		private var scrollerSize:Point = null;					//size of scroller
+		private var scrollerDragged:Boolean = false;			//flag if scroller is being dragged
 		
 		//event types
 		public static const SCROLLED:String = "Scrolled";
@@ -55,7 +56,7 @@
 			scrollerSize.y = calculateScrollerHeight();
 			
 			//place scroller
-			scroller = new SimpleButton();
+			scroller = new FakeAButton();
 			scroller.x = 0;
 			scroller.y = upDownButtonSize.y;
 			addChild(scroller);
@@ -99,12 +100,26 @@
 			downButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void	{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	stopScroller();	});
 			
-			/*TODO SimpleButtons are not draggable, make subclass that is*/
 			//listen for scroller being pressed
-			/*scroller.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	scroller.startDrag(false, scrollerBounds);	});
+			/*scroller.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	
+																				   {	
+																				  	 scroller.startDrag(false, scrollerBounds);	
+																					 scrollerDragged = true;
+																				   });
 			
 			//listen for scroller being released
-			scroller.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		{	scroller.stopDrag();	});*/
+			scroller.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		
+																				 {	
+																				 	scroller.stopDrag();	
+																					scrollerDragged = false;
+																				 });*/
+			
+			//listen for scroller is no longer hovered over
+			/*scroller.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void		
+																				 {	
+																				 	scroller.stopDrag();	
+																					scrollerDragged = false;
+																				 });*/
 		}
 		
 		private function addedToStage(e:Event)
@@ -130,6 +145,20 @@
 		
 		private function enterFrame(e:Event)
 		{
+			//if scroller is being dragged, track it
+			if(scrollerDragged)
+			{
+				//clamp scoller between up and down buttons
+				if(scroller.y < upButton.y + upButton.height)
+					scroller.y = upButton.y + upButton.height;
+				if(scroller.y > downButton.y - scroller.height)
+					scroller.y = downButton.y - scroller.height;
+					
+				//dispatch scroll event
+				dispatchEvent(new Event(SCROLLED));
+			}
+			
+			
 			//calculate the amount of movement
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
 			
@@ -219,13 +248,11 @@
 			var upState:BitmapData = style.getScrollerState(ScrollBarStyle.UP);
 			var overState:BitmapData = style.getScrollerState(ScrollBarStyle.OVER);
 			var downState:BitmapData = style.getScrollerState(ScrollBarStyle.DOWN);
-			var hittestState:BitmapData = style.getScrollerState(ScrollBarStyle.HITTEST);
 			
 			///update scroller
-			scroller.upState = new Bitmap(upState);
-			scroller.overState = new Bitmap(overState);
-			scroller.downState = new Bitmap(downState);
-			scroller.hitTestState = new Bitmap(hittestState);
+			scroller.setUpState(new Bitmap(upState));
+			scroller.setOverState(new Bitmap(overState));
+			scroller.setDownState(new Bitmap(downState));
 			scroller.width = scrollerSize.x;
 			scroller.height = scrollerSize.y;
 		}

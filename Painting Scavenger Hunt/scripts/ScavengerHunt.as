@@ -27,6 +27,7 @@
 		private var nextClueButton:SimpleButton = null;			//notification button that appears when the next clue becomes available
 		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
+		public static var pauseEvents:Boolean = false;			//flag if certain events should be paused
 		
 		//construct scavanger hunt
 		public function ScavengerHunt(/*theInitiator:GameInitiator*/):void
@@ -234,7 +235,7 @@
 		public function toggleZoom():void
 		{
 			//toggle zoom
-			zoomed = !zoomed;
+			zoomed = !zoomed && !pauseEvents;
 			
 			//if zoom started, draw magnifying glass
 			if(zoomed)
@@ -332,9 +333,6 @@
 		//display clue text in textfield on screen
 		private function postToClueText(textToPost:String)
 		{
-			if(!textToPost)
-				trace("hi");
-			
 			//display notification
 			clueText.visible = true;
 			clueText.text = textToPost;
