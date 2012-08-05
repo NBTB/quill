@@ -18,6 +18,8 @@
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
 		public static const INCORRECT:String = "An incorrect answer was given";				//dispatched when an incorrect answer is given
+		public static const OPEN_INFO_PANE = "An ooi's info pane has opened"				//dispatched when an object of interest's info pane is opened
+		public static const CLOSE_INFO_PANE = "An ooi's info pane has closed"				//dispatched when an object of interest's info pane is closed
 		
 		//construct Object of Interest Manager
 		public function OOIManager()
@@ -79,6 +81,13 @@
 			newObject.addEventListener(OOIInfoPane.OPEN_PANE, function(e:Event):void
 																					{	
 																						hideAllOOIInfoPanes(e.target);
+																						dispatchEvent(new Event(OPEN_INFO_PANE));
+																					});
+			
+			//listen for when an object's info pane is being closed
+			newObject.addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void
+																					{	
+																						dispatchEvent(new Event(CLOSE_INFO_PANE));
 																					});
 			
 			

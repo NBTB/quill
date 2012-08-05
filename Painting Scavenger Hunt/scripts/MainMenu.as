@@ -35,6 +35,10 @@
 		
 		var buttonY:int = 517;										//Y location of the menu
 		
+		//event types 
+		public static const OPEN_MENU = "A menu has opened"
+		public static const CLOSE_MENU = "A menu has closed"
+		
 		//Create the main menu
 		public function MainMenu(startWTutorial:Boolean/*, theInitiator:GameInitiator*/):void
 		{			
@@ -181,10 +185,10 @@
 		function openCluesMenu():void
 		{
 			closeMenus();
-			ScavengerHunt.pauseEvents = true;	
 			this.addChild(cluesMenu);
 			cluesMenu.isOpen = true;
 			cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+			dispatchEvent(new Event(OPEN_MENU));
 		}
 		
 		//Tells the cluesMenu when to activate
@@ -197,10 +201,10 @@
 		function openLetterMenu():void
 		{
 			closeMenus();
-			ScavengerHunt.pauseEvents = true;
 			this.addChild(letterMenu);
 			letterMenu.isOpen = true;
 			letterMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+			dispatchEvent(new Event(OPEN_MENU));
 			
 			//the first piece of letter is always available
 			//if(letterMenu.pieces.length > 0)
@@ -240,10 +244,10 @@
 		function openHelpMenu():void
 		{
 			closeMenus();
-			ScavengerHunt.pauseEvents = true;
 			this.addChild(helpMenu);
 			helpMenu.isOpen = true;
 			helpMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+			dispatchEvent(new Event(OPEN_MENU));
 		}
 		
 		//Tells the helpMenu when to activate
@@ -256,10 +260,10 @@
 		function openObjectsMenu():void
 		{
 			closeMenus();
-			ScavengerHunt.pauseEvents = true;
 			this.addChild(objectsMenu);
 			objectsMenu.isOpen = true;
 			objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+			dispatchEvent(new Event(OPEN_MENU));
 		}
 		
 		//Tells the objectsMenu when to activate
@@ -272,10 +276,10 @@
 		function openRestartMenu():void
 		{
 			closeMenus();
-			ScavengerHunt.pauseEvents = true;
 			this.addChild(restartMenu);
 			restartMenu.isOpen = true;
 			restartMenu.dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+			dispatchEvent(new Event(OPEN_MENU));
 		}
 		
 		//tells the restartMenu when to activate
@@ -287,9 +291,7 @@
 		//Close all open menus (except those connected to the optional closeCaller), so there's no overlap when a new one is opened.
 		//Always called when a new menu is opened
 		function closeMenus(closeCaller:Object = null):void
-		{
-			ScavengerHunt.pauseEvents = false;
-			
+		{			
 			if (helpMenu.isOpen == true)
 			{
 				if(!closeCaller || !helpMenu.isObjectOpener(closeCaller))
@@ -297,6 +299,7 @@
 					helpMenu.isOpen = false;
 					removeChild(helpMenu);
 					helpMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+					dispatchEvent(new Event(CLOSE_MENU));
 				}
 			}
 			if (objectsMenu.isOpen == true)
@@ -306,6 +309,7 @@
 					objectsMenu.isOpen = false;
 					removeChild(objectsMenu);
 					objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+					dispatchEvent(new Event(CLOSE_MENU));
 				}
 			}
 			if(cluesMenu.isOpen == true)
@@ -315,6 +319,7 @@
 					cluesMenu.isOpen = false;
 					removeChild(cluesMenu);
 					cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+					dispatchEvent(new Event(CLOSE_MENU));
 				}
 			}
 			if(letterMenu.isOpen == true)
@@ -324,6 +329,7 @@
 					letterMenu.isOpen = false;
 					removeChild(letterMenu);
 					letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+					dispatchEvent(new Event(CLOSE_MENU));
 				}
 			}
 			
@@ -334,6 +340,7 @@
 					restartMenu.isOpen = false;
 					removeChild(restartMenu);
 					restartMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+					dispatchEvent(new Event(CLOSE_MENU));
 				}
 			}
 		}

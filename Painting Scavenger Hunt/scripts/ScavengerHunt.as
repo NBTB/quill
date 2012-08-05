@@ -27,7 +27,9 @@
 		private var nextClueButton:SimpleButton = null;			//notification button that appears when the next clue becomes available
 		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
-		public static var pauseEvents:Boolean = false;			//flag if certain events should be paused
+		/*TODO this should not be static or public*/
+		public static var pauseEvents:Boolean = false;	
+		//private var pauseEvents:Boolean = false;				//flag if certain events should be paused
 		
 		//construct scavanger hunt
 		public function ScavengerHunt(/*theInitiator:GameInitiator*/):void
@@ -170,6 +172,10 @@
 			//listen for incorrect answers to clues
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
+			//listen for an object of interest's info pan to open and close
+			ooiManager.addEventListener(OOIManager.OPEN_INFO_PANE, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
+			ooiManager.addEventListener(OOIManager.CLOSE_INFO_PANE, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
+			
 			//listen for the next clue button being clicked
 			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																					{	
@@ -201,11 +207,16 @@
 																								newRewardButton.visible = false;
 																					   	});
 			
+			//listen for a menu to open and close
+			mainMenu.addEventListener(MainMenu.OPEN_MENU, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
+			mainMenu.addEventListener(MainMenu.CLOSE_MENU, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
+			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																					{	
 																						toggleZoom();
 																					});
+			
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
@@ -231,11 +242,25 @@
 				toggleZoom();
 		}
 		
-		//toggle use of magnifying glass
-		public function toggleZoom():void
+		private function allowEventsOutsideMenu(allowEvents:Boolean):void
 		{
-			//toggle zoom
-			zoomed = !zoomed && !pauseEvents;
+			//flag the pause/unpause of certain events
+			pauseEvents = !allowEvents;
+						
+			//hide the magnifying glass if not allowed
+			if(!allowEvents)
+				toggleZoom(true, false);
+		}
+		
+		//toggle use of magnifying glass
+		public function toggleZoom(forceResult:Boolean = false, forceTo:Boolean = false):void
+		{
+			//if the result is to be forced, do so
+			if(forceResult)
+				zoomed = forceTo;
+			//otherwise, toggle zoom
+			else
+				zoomed = !zoomed && !pauseEvents;
 			
 			//if zoom started, draw magnifying glass
 			if(zoomed)
@@ -364,7 +389,6 @@
 			mainMenu.closeMenus(e.target);
 			
 			//close captions and descriptions of all objects of interest
-			
 			ooiManager.hideAllOOIInfoPanes(e.target);
 		}
 	}

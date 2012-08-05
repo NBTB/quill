@@ -420,7 +420,6 @@
 			if(infoPaneContainer)
 			{					
 				infoPaneContainer.addChild(infoPane);
-				ScavengerHunt.pauseEvents = true;
 				dispatchEvent(new Event(OOIInfoPane.OPEN_PANE));
 			}
 		}
@@ -438,7 +437,6 @@
 			if(infoPane.parent)
 			{
 				infoPane.parent.removeChild(infoPane);
-				ScavengerHunt.pauseEvents = false;
 				dispatchEvent(new Event(OOIInfoPane.CLOSE_PANE));
 			}
 		}
