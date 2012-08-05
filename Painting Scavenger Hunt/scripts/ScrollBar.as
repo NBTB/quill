@@ -100,6 +100,7 @@
 			downButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void	{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	stopScroller();	});
 			
+			/*TODO make scroller dragging work*/
 			//listen for scroller being pressed
 			/*scroller.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	
 																				   {	

@@ -332,7 +332,7 @@
 		
 		//display clue text in textfield on screen
 		private function postToClueText(textToPost:String)
-		{
+		{				
 			//display notification
 			clueText.visible = true;
 			clueText.text = textToPost;

@@ -114,14 +114,15 @@
 		
 		function proceedFromTut(event:MouseEvent):void
 		{			
+			tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			startGameListener.triggerListener();
 		}
 			
 			
-		
+		//Function chosen if the user chooses not to view the tutorial
 		function startNoTut(event:MouseEvent):void
 		{
-			//Function chosen if the user chooses not to view the tutorial
+			splashButtonSkip.removeEventListener(MouseEvent.MOUSE_DOWN, startNoTut);
 			useTut = false;
 			gameReady = true;
 			startGameListener.triggerListener();
