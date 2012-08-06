@@ -11,6 +11,7 @@
 		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted				
 		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
+		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
 				
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
 		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
@@ -45,9 +46,10 @@
 			addChildAt(newObject, childIndex);
 			
 			//instruct the new object to display its caption above the list of objects 
-			//and display its info pane above everything added previously
+			//and display its info pane on the stage
 			newObject.setCaptionContainer(this, childIndex+1);
-			newObject.setInfoPaneContainer(this);
+			if(stage)
+				newObject.setInfoPaneContainer(stage);
 			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
@@ -61,32 +63,19 @@
 			//listen for when the cursor stops hovering over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
 																					{	
-																						//if(!testMouseOverOOI(newObject))
-																						//{
-																							newObject.hideHighlight();	
-																							newObject.hideCaption();
-																						//}
+																						newObject.hideHighlight();	
+																						newObject.hideCaption();
 																					});
 			
-			//listen for when the cursor stops hovering over the new object's info Pane
-			/*newObject.getInfoPane().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
-																					{	
-																						if(!testMouseOverOOI(newObject))
-																						{
-																							newObject.hideHighlight();	
-																							newObject.hideCaption();
-																						}
-																					});*/
-			
 			//listen for when an object's info pane is being opened
-			newObject.addEventListener(OOIInfoPane.OPEN_PANE, function(e:Event):void
+			newObject.getInfoPane().addEventListener(OOIInfoPane.OPEN_PANE, function(e:Event):void
 																					{	
 																						hideAllOOIInfoPanes(e.target);
 																						dispatchEvent(new Event(OPEN_INFO_PANE));
 																					});
 			
 			//listen for when an object's info pane is being closed
-			newObject.addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void
+			newObject.getInfoPane().addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void
 																					{	
 																						dispatchEvent(new Event(CLOSE_INFO_PANE));
 																					});
@@ -121,31 +110,10 @@
 
 		private function addedToStage(e:Event)
 		{
-			/*for(var i:int; i < objectsOfInterest.length; i++)
+			for(var i:int; i < objectsOfInterest.length; i++)
 			{
-				objectsOfInterest[i].setCaptionContainer(this);
-				objectsOfInterest[i].setDescriptionContainer(this);
-			}*/
-		}
-		
-		//determine whether or not the mouse is hovering over either the object of interest or its description
-		private function testMouseOverOOI(targetOOI:ObjectOfInterest):Boolean
-		{
-			var ooiParent:DisplayObjectContainer = targetOOI.parent;			
-			var infoPane:OOIInfoPane = targetOOI.getInfoPane();
-			var infoPaneParent:DisplayObjectContainer = infoPane.parent;																						
-			
-			var mouseOverOOI:Boolean = false;
-			var mouseOverDescription:Boolean = false;
-			
-			if(ooiParent)
-				mouseOverOOI = targetOOI.hitTest(new Point(ooiParent.mouseX, ooiParent.mouseY));
-			
-			if(infoPaneParent)
-				mouseOverDescription = infoPane.hitTestPoint(infoPaneParent.mouseX, infoPaneParent.mouseY);
-				
-			var mouseOverEither = mouseOverOOI || mouseOverDescription;
-			return mouseOverEither;
+				objectsOfInterest[i].setInfoPaneContainer(stage);
+			}
 		}
 		
 		//reset the unused object of interest list so that objects can be re-hunted
@@ -219,11 +187,17 @@
 		
 		//suppress or unsuppress hit testing of objects
 		public function setAllOOIHitTestSuppression(suppression:Boolean)
-		{
-			for(var i = 0; i < objectsOfInterest.length; i++)
+		{			
+			if(ooiHitTestSuppression != suppression)
 			{
-				objectsOfInterest[i].setHitTestSuppression(suppression);
+				for(var i = 0; i < objectsOfInterest.length; i++)
+				{
+					objectsOfInterest[i].setHitTestSuppression(suppression);
+					objectsOfInterest[i].hideCaption();
+					objectsOfInterest[i].hideHighlight();
+				}
 			}
+			ooiHitTestSuppression = suppression;
 		}
 				
 		//add all objects whose highlights are visible to a list of bitmaps

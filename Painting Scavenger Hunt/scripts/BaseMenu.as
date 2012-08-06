@@ -193,7 +193,6 @@
 			
 			//add child to content container
 			contentContainer.addChild(child);
-			//this.addChild(child);
 			
 			//ensure that end point is current
 			contentEndPoint.x = contentStartPoint.x + contentContainer.width;
