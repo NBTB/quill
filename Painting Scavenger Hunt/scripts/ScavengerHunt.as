@@ -28,8 +28,8 @@
 		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		/*TODO this should not be static or public*/
-		public static var pauseEvents:Boolean = false;	
-		//private var pauseEvents:Boolean = false;				//flag if certain events should be paused
+		//public static var pauseEvents:Boolean = false;	
+		private var pauseEvents:Boolean = false;				//flag if certain events should be paused
 		
 		//construct scavanger hunt
 		public function ScavengerHunt(/*theInitiator:GameInitiator*/):void
@@ -173,8 +173,8 @@
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for an object of interest's info pan to open and close
-			ooiManager.addEventListener(OOIManager.OPEN_INFO_PANE, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
-			ooiManager.addEventListener(OOIManager.CLOSE_INFO_PANE, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
+			ooiManager.addEventListener(OOIManager.OPEN_INFO_PANE, function(e:Event):void	{	allowEventsOutsideMenu(DisplayObject(e.target), false);	});
+			ooiManager.addEventListener(OOIManager.CLOSE_INFO_PANE, function(e:Event):void	{	allowEventsOutsideMenu(DisplayObject(e.target), true);	});
 			
 			//listen for the next clue button being clicked
 			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -208,8 +208,8 @@
 																					   	});
 			
 			//listen for a menu to open and close
-			mainMenu.addEventListener(MainMenu.OPEN_MENU, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
-			mainMenu.addEventListener(MainMenu.CLOSE_MENU, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
+			mainMenu.addEventListener(MainMenu.OPEN_MENU, function(e:Event):void	{	allowEventsOutsideMenu(DisplayObject(e.target), false);	});
+			mainMenu.addEventListener(MainMenu.CLOSE_MENU, function(e:Event):void	{	allowEventsOutsideMenu(DisplayObject(e.target), true);	});
 			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -242,14 +242,35 @@
 				toggleZoom();
 		}
 		
-		private function allowEventsOutsideMenu(allowEvents:Boolean):void
+		private function allowEventsOutsideMenu(targetMenu:DisplayObject, allowEvents:Boolean):void
 		{
 			//flag the pause/unpause of certain events
 			pauseEvents = !allowEvents;
 						
-			//hide the magnifying glass if not allowed
+			//if events are not allowed, setup special states
 			if(!allowEvents)
+			{
 				toggleZoom(true, false);
+				targetMenu.addEventListener(MouseEvent.ROLL_OVER, suppressMouseUnderMenu);
+				targetMenu.addEventListener(MouseEvent.ROLL_OUT, suppressMouseUnderMenu);
+			}
+			//otherwise, revert to normal states
+			else
+			{
+				targetMenu.removeEventListener(MouseEvent.ROLL_OVER, suppressMouseUnderMenu);
+				targetMenu.removeEventListener(MouseEvent.ROLL_OUT, suppressMouseUnderMenu);
+				ooiManager.setAllOOIHitTestSuppression(false);
+			}
+		}
+		
+		private function suppressMouseUnderMenu(e:MouseEvent)
+		{
+			//if the menu was rolled over, suppress certain mouse input
+			if(e.type == MouseEvent.ROLL_OVER)
+				ooiManager.setAllOOIHitTestSuppression(true);
+			//otherwise, if the menu lost roll over, unsupress certain mouse input
+			else if(e.type == MouseEvent.ROLL_OUT)
+				ooiManager.setAllOOIHitTestSuppression(false);
 		}
 		
 		//toggle use of magnifying glass

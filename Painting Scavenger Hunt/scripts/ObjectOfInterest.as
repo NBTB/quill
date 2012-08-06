@@ -24,13 +24,12 @@
 		private var upperBounds:Point = null;							//upper-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var mousedOver:Boolean = false;							//flag if the object is currently under the cursor
 		private var caption:TextField = null;							//caption that displays name of object
-		private var captionContainer:DisplayObjectContainer = null;		//display container of caption
 		private var infoPane:OOIInfoPane = null;						//pane used to display object's description
-		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info pane
 		private var infoPanePosition:Point = null;						//coordinates of info pane
 		private var infoLoader:OOIInfoImporter = null;					//loader of info pane content
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
 		private var hasBeenOpened:Boolean = false;						//turned true first time objects display pane is showed
+		private var hitTestSuppression:Boolean = false;						//flag if hit testing should be supressed
 		
 		public static var anyMousedOver = false;												//flag if any object is moused over
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
@@ -69,19 +68,10 @@
 			//store bounds
 			this.lowerBounds = lowerBounds;
 			this.upperBounds = upperBounds;
-			
-			//store display containers (default to this object's parent)
-			if(captionContainer)
-				this.captionContainer = captionContainer;
-			else
-				this.captionContainer = this.parent;
-			if(infoPaneContainer)
-				this.infoPaneContainer = captionContainer;
-			else
-				this.infoPaneContainer = this.parent;
-			
+						
 			//create caption textfield to display name
 			caption = new TextField();
+			caption.visible = false;
 			caption.defaultTextFormat = captionFormat;
 			caption.autoSize = TextFieldAutoSize.LEFT;
 			caption.selectable = false;
@@ -90,6 +80,10 @@
 						
 			//create info pane
 			infoPane = new OOIInfoPane(5, 5, 250, 380);
+			infoPane.visible = false;
+			infoPane.mouseEnabled = true;
+			infoPane.mouseChildren = false;
+			infoPane.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void{});
 			
 			//add this as an opener of info pane
 			infoPane.addOpener(this);
@@ -110,6 +104,8 @@
 			//listen for when info Pane closes
 			infoPane.addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void	{	hideInfoPane();	});
 			
+			
+			
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 			
@@ -128,8 +124,8 @@
 			//ensure that the object has a display list parent before depending on it
 			if(parent)
 			{
-				//if the mouse cursor is hovering above the object, dispatch a MOUSE_OVER
-				if(hitTest(new Point(parent.mouseX, parent.mouseY)))
+				//if hit testing is not suppressed the mouse cursor is hovering above the object, dispatch a MOUSE_OVER
+				if(!hitTestSuppression && hitTest(new Point(parent.mouseX, parent.mouseY)))
 				{					
 					//only dispatch the event if the object was not previously hovered over
 					if(!mousedOver && !anyMousedOver)
@@ -398,30 +394,38 @@
 		//display caption
 		public function showCaption()
 		{
-			if(captionContainer && !ScavengerHunt.pauseEvents)
+			/*if(captionContainer)
 			{	
-				captionContainer.addChild(caption);
+				if(captionContainerChildIndex < 0)
+					captionContainer.addChild(caption);
+				else
+					captionContainer.addChildAt(caption, captionContainerChildIndex);
+				
+			}*/
+			caption.visible = true;
 				captionAtMouse();
-			}
 		}
 		
 		//hide caption
 		public function hideCaption()
 		{
-			if(caption.parent)
+			/*if(caption.parent)
 			{
 				caption.parent.removeChild(caption);
-			}
+			}*/
+			caption.visible = false;
 		}		
 		
 		//display info Pane
 		public function showInfoPane()
 		{
-			if(infoPaneContainer)
+			/*if(infoPaneContainer)
 			{					
 				infoPaneContainer.addChild(infoPane);
 				dispatchEvent(new Event(OOIInfoPane.OPEN_PANE));
-			}
+			}*/
+			infoPane.visible = true;
+			dispatchEvent(new Event(OOIInfoPane.OPEN_PANE));
 		}
 		
 		//event listener version of showInfoPane
@@ -434,18 +438,19 @@
 		//hide descrition pane
 		public function hideInfoPane()
 		{
-			if(infoPane.parent)
+			/*if(infoPane.parent)
 			{
 				infoPane.parent.removeChild(infoPane);
 				dispatchEvent(new Event(OOIInfoPane.CLOSE_PANE));
-			}
+			}*/
+			infoPane.visible = false;
+			dispatchEvent(new Event(OOIInfoPane.CLOSE_PANE));
 		}
 		
 		//toggle highlight visibilty
 		public function showHighlight():void				
 		{	
-			if(!ScavengerHunt.pauseEvents)
-				highlight.visible = true;		
+			highlight.visible = true;		
 		}
 		
 		public function hideHighlight():void				{	highlight.visible = false;		}
@@ -463,17 +468,41 @@
 		public function getHighlight():Bitmap							{	return highlight;				}
 		public function getFullsizeHighlight():Bitmap					{	return fullsizeHighlight;		}
 		public function getInfoPane():OOIInfoPane						{	return infoPane;				}
-		public function getCaptionContainer():DisplayObjectContainer	{	return captionContainer;		}
-		public function getInfoPaneContainer():DisplayObjectContainer	{	return infoPaneContainer;		}
 		public function getInfoPanePosition():Point						{	return infoPanePosition;		}
 		public function getHasBeenOpened():Boolean						{	return hasBeenOpened;			}
+		public function getHitTestSuppression():Boolean					{	return hitTestSuppression;		}
 			
-		public function setCaptionContainer(container:DisplayObjectContainer):void		{	this.captionContainer = container;		}
-		public function setDescriptionContainer(container:DisplayObjectContainer):void	{	this.infoPaneContainer = container;		}
-		public function setInfoPanePosition(coordinates:Point):void						
+		public function setCaptionContainer(container:DisplayObjectContainer, childIndex:int = -1):void		
+		{	
+			//if caption already has a parent, remove it as a child
+			if(caption.parent)
+				caption.parent.removeChild(caption);
+		
+			//if the child index is negative, add as a the top child
+			if(childIndex < 0)
+				container.addChild(caption)
+			//otherwise, add at the child index
+			else
+				container.addChildAt(caption, childIndex)
+		}
+		public function setInfoPaneContainer(container:DisplayObjectContainer, childIndex:int = -1):void	
+		{	
+			//if info pane already has a parent, remove it as a child
+			if(infoPane.parent)
+				infoPane.parent.removeChild(infoPane);
+		
+			//if the child index is negative, add as a the top child
+			if(childIndex < 0)
+				container.addChild(infoPane)
+			//otherwise, add at the child index
+			else
+				container.addChildAt(infoPane, childIndex)
+		}
+		public function setInfoPanePosition(coordinates:Point, childIndex:int = -1):void						
 		{	
 			this.infoPane.x = coordinates.x;	
 			this.infoPane.y = coordinates.y;	
 		}
+		public function setHitTestSuppression(suppression:Boolean):void	{	this.hitTestSuppression = suppression	}
 	}
 }

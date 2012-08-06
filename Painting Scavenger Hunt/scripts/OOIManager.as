@@ -38,15 +38,16 @@
 			//add new object to list
 			objectsOfInterest.push(newObject);
 			
-			//add new object as a display list child
-			addChild(newObject);
+			//the new object should appear immediately above the other objects (above nothing else)
+			var childIndex = objectsOfInterest.length - 1;
 			
-			//if the manager is part of the display list, direct the new object's placement of caption and description
-			if(parent)
-			{
-				newObject.setCaptionContainer(stage);
-				newObject.setDescriptionContainer(stage);
-			}
+			//add new object as a display list child
+			addChildAt(newObject, childIndex);
+			
+			//instruct the new object to display its caption above the list of objects 
+			//and display its info pane above everything added previously
+			newObject.setCaptionContainer(this, childIndex+1);
+			newObject.setInfoPaneContainer(this);
 			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
@@ -60,22 +61,22 @@
 			//listen for when the cursor stops hovering over the new object
 			newObject.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
 																					{	
-																						if(!testMouseOverOOI(newObject))
-																						{
+																						//if(!testMouseOverOOI(newObject))
+																						//{
 																							newObject.hideHighlight();	
 																							newObject.hideCaption();
-																						}
+																						//}
 																					});
 			
 			//listen for when the cursor stops hovering over the new object's info Pane
-			newObject.getInfoPane().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
+			/*newObject.getInfoPane().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
 																					{	
 																						if(!testMouseOverOOI(newObject))
 																						{
 																							newObject.hideHighlight();	
 																							newObject.hideCaption();
 																						}
-																					});
+																					});*/
 			
 			//listen for when an object's info pane is being opened
 			newObject.addEventListener(OOIInfoPane.OPEN_PANE, function(e:Event):void
@@ -120,11 +121,11 @@
 
 		private function addedToStage(e:Event)
 		{
-			for(var i:int; i < objectsOfInterest.length; i++)
+			/*for(var i:int; i < objectsOfInterest.length; i++)
 			{
-				objectsOfInterest[i].setCaptionContainer(stage);
-				objectsOfInterest[i].setDescriptionContainer(stage);
-			}
+				objectsOfInterest[i].setCaptionContainer(this);
+				objectsOfInterest[i].setDescriptionContainer(this);
+			}*/
 		}
 		
 		//determine whether or not the mouse is hovering over either the object of interest or its description
@@ -213,6 +214,15 @@
 					if(!closeCaller || !ooi.getInfoPane().isObjectOpener(closeCaller))
 						ooi.hideInfoPane();
 				}
+			}
+		}
+		
+		//suppress or unsuppress hit testing of objects
+		public function setAllOOIHitTestSuppression(suppression:Boolean)
+		{
+			for(var i = 0; i < objectsOfInterest.length; i++)
+			{
+				objectsOfInterest[i].setHitTestSuppression(suppression);
 			}
 		}
 				
