@@ -13,6 +13,8 @@
         var objectiveOption:TextField = new TextField();        //Button to display the objectives
         var tutorialOption:TextField = new TextField();         //Button to display the full tutorial
         var controlsOption:TextField = new TextField();         //Button to display the controls
+		
+		var tut:TutorialMenu;
          
         var textFormat:TextFormat = new TextFormat();           //Formatting
          
@@ -71,43 +73,52 @@
             tutorialOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);
              
             controlsOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            controlsOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+            controlsOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);			
+			
         }
          
         //function called if the button to show the tutorial is pressed
         public function showTutorial(event:MouseEvent):void
         {
-             
+			TutorialMenu.fromHelp = true;
+			TutorialMenu.curSlide = 1;
+			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);				
+			addChild(tut);
+			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
         }
          
         //function called if the button to show the objective is pressed
         public function showObjective(event:MouseEvent):void
         {
-             
+			TutorialMenu.fromHelp = true;
+			TutorialMenu.curSlide = 1;
+			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);	
+			tut.removeChild(tut.continueButton);
+			tut.updateText();
+			addChild(tut);
+			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
         }
          
         //function called if the button to show the controls is pressed
         public function showControls(event:MouseEvent):void
         {
-             
+			TutorialMenu.fromHelp = true;
+			TutorialMenu.curSlide = 5;
+			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);	
+			tut.removeChild(tut.continueButton);			
+			tut.updateText();
+			addChild(tut);
+			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+			
         }
+		
+		function closeTutFromHelp(event:MouseEvent):void
+		{
+			TutorialMenu.fromHelp = false;
+			removeChild(tut);
+		}
+		
          
-        //changes the color of the buttons
-        /*public function colorChange(event:MouseEvent):void
-        {
-            var sender:TextField=event.target as TextField;
-            var myColor:ColorTransform=sender.transform.colorTransform;
-            myColor.color=0xFFC000;
-            sender.transform.colorTransform=myColor;
-        }
-         
-        //reverts the buttons back to their original colors
-        public function revertColor(event:MouseEvent):void
-        {
-            var sender:TextField=event.target as TextField;
-            var myColor:ColorTransform=sender.transform.colorTransform;
-            myColor.color=0xFFFFFF;    
-            sender.transform.colorTransform=myColor;
-        }*/
+       
     }
 }

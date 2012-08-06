@@ -24,7 +24,7 @@
             nextButton = new TextField();
             nextButton.text = "Next Letter";
             nextButton.selectable = false;
-            nextButton.x = 405;
+            nextButton.x = 485;
             nextButton.y = 465;
             nextButton.width = 175;
             buttonFormat.color = 0xE5E5E5;
@@ -61,8 +61,8 @@
                 pieces.push(newPiece);
                  
             //add new object to list
-            newPiece.width = 568;
-            newPiece.height = 540;
+            newPiece.width = 399;
+            newPiece.height = 544;
              
             //add new object as a display list child
             addChild(newPiece);
@@ -70,23 +70,7 @@
              
         }
          
-        //changes the text color of the menu buttons to identify which one you're moused over
-        /*public function colorChange(event:MouseEvent):void {
-            var sender:TextField=event.target as TextField;
-            var myColor:ColorTransform=sender.transform.colorTransform;
-            myColor.color=0xCC9933;
-            sender.transform.colorTransform=myColor;
-  
-        }
-         
-        //reverts the buttons back to their original colors
-        public function revertColor(event:MouseEvent):void {
-            var sender:TextField=event.target as TextField;
-            var myColor:ColorTransform=sender.transform.colorTransform;
-            myColor.color=0xE5E5E5;    
-            sender.transform.colorTransform=myColor;
-  
-        }*/
+        
          
         //next piece is shown
         function clickNext(event:MouseEvent):void

@@ -173,6 +173,7 @@
         //Open the clues menu
         function openCluesMenu():void
         {
+			ScavengerHunt.pauseEvents = true;			
             closeMenus();
             this.addChild(cluesMenu);
             cluesMenu.isOpen = true;
@@ -188,6 +189,7 @@
         //Opens the letter menu
         function openLetterMenu():void
         {
+			ScavengerHunt.pauseEvents = true;
             closeMenus();
             this.addChild(letterMenu);
             letterMenu.isOpen = true;
@@ -230,6 +232,7 @@
         //opens the help menu
         function openHelpMenu():void
         {
+			ScavengerHunt.pauseEvents = true;
             closeMenus();
             this.addChild(helpMenu);
             helpMenu.isOpen = true;
@@ -245,6 +248,7 @@
         //opens the objects menu
         function openObjectsMenu():void
         {
+			ScavengerHunt.pauseEvents = true;
             closeMenus();
             this.addChild(objectsMenu);
             objectsMenu.isOpen = true;
@@ -260,6 +264,7 @@
         //opens the restart menu
         function openRestartMenu():void
         {
+			ScavengerHunt.pauseEvents = true;
             closeMenus();
             this.addChild(restartMenu);
             restartMenu.isOpen = true;
@@ -279,24 +284,28 @@
             if (helpMenu.isOpen == true)
             {
                 helpMenu.isOpen = false;
+				ScavengerHunt.pauseEvents = false;
                 removeChild(helpMenu);
                 helpMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
             }
             if (objectsMenu.isOpen == true)
             {
                 objectsMenu.isOpen = false;
+				ScavengerHunt.pauseEvents = false;
                 removeChild(objectsMenu);
                 objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
             }
             if(cluesMenu.isOpen == true)
             {
                 cluesMenu.isOpen = false;
+				ScavengerHunt.pauseEvents = false;
                 removeChild(cluesMenu);
                 cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
             }
             if(letterMenu.isOpen == true)
             {
-                letterMenu.isOpen = false;
+                letterMenu.isOpen = false;		
+				ScavengerHunt.pauseEvents = false;
                 removeChild(letterMenu);
                 letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
             }
@@ -304,9 +313,12 @@
             if(restartMenu.isOpen == true)
             {
                 restartMenu.isOpen = false;
+				ScavengerHunt.pauseEvents = false;
                 removeChild(restartMenu);
                 restartMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
             }
+			
+			
         }
          
         //Set the background graphics

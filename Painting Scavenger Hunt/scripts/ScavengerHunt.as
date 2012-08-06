@@ -28,6 +28,7 @@
         private var nextClueButton:SimpleButton = null;         //notification button that appears when the next clue becomes available
         private var newRewardButton:SimpleButton = null;        //notification button that appears when a new reward is unlocked
         private var clueTextFormat:TextFormat;                  //text format of the clue textfield
+		public static var pauseEvents:Boolean = false;
          
         //construct scavanger hunt
         public function ScavengerHunt(theInitiator:GameInitiator):void
@@ -224,21 +225,36 @@
             //if the magnifying glass is being used, draw through its lens
             if(zoomed)
                 placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+				if(pauseEvents)
+				{
+					hideClueText();
+				}
+				if(TutorialMenu.fromHelp)
+				{
+					magnifyButton.visible = false;				   
+                    newRewardButton.visible = false;					
+					nextClueButton.visible = false;
+				}
+				else
+				{
+					magnifyButton.visible = true;					
+				}
         }      
          
         //handles the release of keys
         public function checkKeysUp(e:KeyboardEvent):void
         {
             //toggle magnifying glass
-            if(e.keyCode == Keyboard.SPACE)
+            if(e.keyCode == Keyboard.SPACE && !pauseEvents)
                 toggleZoom();
         }
          
         //toggle use of magnifying glass
         public function toggleZoom():void
         {
-            //toggle zoom
-            zoomed = !zoomed;
+			//toggle zoom
+            zoomed = !zoomed;		
+            
              
             //if zoom started, draw magnifying glass
             if(zoomed)
@@ -270,7 +286,7 @@
             //add magnified object highlights
             ooiManager.addObjectHighlightsToList(bitmaps, texturePoints, center, true);
              
-            //magnify
+            //magnify			
             magnifyingGlass.magnifyBitmaps(bitmaps, texturePoints);
         }
          
@@ -293,7 +309,6 @@
             {
                 mainMenu.rewardCounter++;
                 newRewardButton.visible = true;
-                //mainMenu.letterRec.visible = true;
             }
          
             //attempt to pick the next object to hunt and retrieve its clue
@@ -346,15 +361,14 @@
         }
          
         //reset clue time and hide the clue text box
-        private function hideClueText()
-        {
-             
+        public function hideClueText()
+        {             
             clueTimer.reset();
             clueText.text = ""
             clueText.visible = false;
         }
          
-        //add evebt listener to list that will trigger the closing of dismissible overlays
+        //add event listener to list that will trigger the closing of dismissible overlays
         private function addDismissibleOverlayCloser(closer:DisplayObject, eventType:String = MouseEvent.CLICK):void
         {
             closer.addEventListener(eventType, closeDismissibleOverlays);
@@ -365,6 +379,11 @@
         {
             //close captions and descriptions of all objects of interest
             ooiManager.hideAllOOIInfoPanes();
+			//hide magnifying glass 
+			if(zoomed && pauseEvents)
+			{
+				toggleZoom();
+			}
         }
     }
 }

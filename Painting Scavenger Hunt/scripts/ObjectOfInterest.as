@@ -366,7 +366,7 @@
         //display caption
         public function showCaption()
         {
-            if(captionContainer)
+            if(captionContainer && !ScavengerHunt.pauseEvents)
             {  
                 captionContainer.addChild(caption);
                 captionAtMouse();
@@ -385,9 +385,10 @@
         //display info Pane
         public function showInfoPane()
         {
-            if(infoPaneContainer)
+            if(infoPaneContainer )
             {  
                 infoPaneContainer.addChild(infoPane);
+				ScavengerHunt.pauseEvents = true;
                 dispatchEvent(new Event(OOIInfoPane.OPEN_PANE));
             }
         }
@@ -395,7 +396,7 @@
         //event listener version of showInfoPane
         public function displayInfoPane(e:MouseEvent)
         {
-            showInfoPane();
+			showInfoPane();
         }
          
          
@@ -405,12 +406,13 @@
             if(infoPane.parent)
             {
                 infoPane.parent.removeChild(infoPane);
+				ScavengerHunt.pauseEvents = false;
                 dispatchEvent(new Event(OOIInfoPane.CLOSE_PANE));
             }
         }
          
         //toggle highlight visibilty
-        public function showHighlight():void                {   highlight.visible = true;       }
+        public function showHighlight():void                {   if(!ScavengerHunt.pauseEvents) highlight.visible = true;       }
         public function hideHighlight():void                {   highlight.visible = false;      }
          
         //object is opened

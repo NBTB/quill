@@ -176,7 +176,7 @@
 		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
-		<name>Signiture</name>
+		<name>Signature</name>
 		<clue>I'm no mirror, but I'm a reflection you...</clue>
 		<hitmap_filename>../assets/signiture hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/signiture highlight.png</highlight_filename>
