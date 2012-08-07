@@ -5,6 +5,8 @@
 	import flash.text.*;
 	import flash.geom.*;
 
+	import flash.errors.*;
+	
 	public class BaseMenu extends MovieClip
 	{
 		protected var menuBackground:Shape = null;					//background of menu
@@ -17,7 +19,7 @@
 		protected var scrollPoint:Point = null;						//translation of pane content due to scrolling
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
-		var isOpen:Boolean;								//flag if menu is open	/*TODO this should be private*/
+		var isOpen:Boolean;											//flag if menu is open	/*TODO this should be private*/
 		
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
@@ -142,8 +144,16 @@
 																			});
 		}
 		
-		//Shut.  Down.  Everything.  (Well, menus, that is.)
-		protected function closeMenu():void
+		//open this menu
+		public function openMenu():void
+		{
+			visible = true;
+			isOpen = true;
+			dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+		}
+		
+		//close this menu
+		public function closeMenu():void
 		{
 			dispatchEvent(new Event(CLOSE_MENUS_REQUEST));
 		}
@@ -227,6 +237,7 @@
 			var isOpener = false;
 			for(var i:int = 0; i < openers.length && ! isOpener; i++)
 				isOpener = (opener == openers[i])
+			
 			return isOpener;
 		}
 		

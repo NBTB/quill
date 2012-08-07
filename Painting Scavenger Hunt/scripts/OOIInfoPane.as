@@ -19,7 +19,7 @@
 		}
 				
 		/*TODO this should be be overriden, instead use BaseMenu events*/
-		override protected function closeMenu():void
+		override public function closeMenu():void
 		{
 			visible = false;
 			dispatchEvent(new Event(CLOSE_PANE));

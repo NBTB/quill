@@ -29,6 +29,13 @@
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		private var pauseEvents:Boolean = false;				//flag if certain events should be paused
 		
+		//main menu titles
+		private var helpMenuTitle:String = "Help";			//title of help menu
+		private var cluesMenuTitle:String = "Clues";		//title of clues menu
+		private var endGoalMenuTitle:String = "Letter";		//title of end goal menu
+		private var objectsMenuTitle:String = "Objects";	//title of objects menu		
+		private var restartMenuTitle:String = "Restart";	//title of restart menu
+		
 		//construct scavanger hunt
 		public function ScavengerHunt(/*theInitiator:GameInitiator*/):void
 		{
@@ -53,7 +60,8 @@
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(startUpScreen.useTut/*, initiator*/);
+			//mainMenu = new MainMenu(startUpScreen.useTut/*, initiator*/);
+			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, stage);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
@@ -116,18 +124,31 @@
 			magnifyButtonLoader.loadBitmaps("../assets/magnify button up.png", "../assets/magnify button over.png", "../assets/magnify button down.png", "../assets/magnify button hittest.png");
 			
 			
+			/*TODO menu creation and addition to main menu should be put in functions*/
+			//create menus to appear in main menu
+			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
+			var cluesMenu:CluesMenu = new CluesMenu(100, 400, 220, 115);
+			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
+			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
+			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, mainMenu.letterMenu, mainMenu.objectsMenu);
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
 			
+			//add menus to main menu
+			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
+			mainMenu.addChildMenu(cluesMenu, cluesMenuTitle);
+			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
+			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
+			mainMenu.addChildMenu(restartMenu, restartMenuTitle);			
 		}
 		
 		//Actually begin the rest of the game
 		public function startGame():void
 		{
 			useTutorial = startUpScreen.useTut;
-			mainMenu.getObjectManager(ooiManager);	
 			
 			//add in-game children to display list,
 			//ensuring that they are tightly packed
@@ -141,6 +162,9 @@
 			addChildAt(magnifyButton, childIndex++);
 			addChildAt(nextClueButton, childIndex++);
 			addChildAt(newRewardButton, childIndex++);
+			
+			//make menus inside main menu displayable
+			mainMenu.makeChildMenusDisplayable();
 			
 			//add listeners for when in-game children are clicked
 			for(var i = 0; i < this.numChildren; i++)
@@ -158,10 +182,14 @@
 																			hideClueText();
 																		  });
 			
+			//reference the clues and end goal menus
+			var cluesMenu:CluesMenu = CluesMenu(mainMenu.getMenu(cluesMenuTitle));
+			var endGoalMenu:LetterMenu = LetterMenu(mainMenu.getMenu(endGoalMenuTitle));
+			
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
 			var firstClue:String = ooiManager.pickNextOOI();
-			mainMenu.cluesMenu.addClue(firstClue);
+			cluesMenu.addClue(firstClue);
 			
 			//post first clue
 			postToClueText(firstClue);
@@ -185,7 +213,7 @@
 																					});
 			
 			//listen for the clues menu being opened
-			mainMenu.cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	
+			cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	
 																					   {
 																							//if the next clue button is visible, hide it 
 																							//the clue will appear in the clues menu
@@ -196,11 +224,12 @@
 			//listen for the new reward button being clicked
 			newRewardButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																					{	
-																						mainMenu.openLetterMenu();
+																						endGoalMenu.openMenu();
 																					});
 			
+			/*TODO the response of this listener should be moved to letter menu*/
 			//listen for the reward menu being opened
-			mainMenu.letterMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
+			endGoalMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
 																						{
 																						   //if the new reward button is visible, hide it 
 																						   //the new reward is being viewed
@@ -308,6 +337,9 @@
 		//handle a correct answer to a clue
 		private function handleCorrectAnswer(e:Event)
 		{	
+			//reference the clues menu
+			var cluesMenu:CluesMenu = CluesMenu(mainMenu.getMenu(cluesMenuTitle));
+		
 			//hide the current clue
 			hideClueText();
 		
@@ -337,14 +369,14 @@
 				nextClueButton.visible = true;
 				
 				//add new clue to clue menu
-				mainMenu.cluesMenu.addClue(nextClue);
+				cluesMenu.addClue(nextClue);
 			}
 			//otherwise, notify the user that the hunt has been completed
 			else
 				postToClueText(OOIManager.NO_CLUES_NOTIFY);
 				
 			//make the current clue old
-			mainMenu.cluesMenu.outdateCurrentClue();
+			cluesMenu.outdateCurrentClue();
 		}
 		
 		//display the next clue
