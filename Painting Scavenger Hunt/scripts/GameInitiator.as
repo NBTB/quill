@@ -56,21 +56,21 @@
 			//addChild(gameLoader);
 			//removeChild(gameLoader.content);
 			
-			removeChild(gameLoader);
+			//removeChild(gameLoader);
 			//gameLoader.unload();
 			
 			
 			
 			/*TODO this does not work in CS3, find alternative or upgrade*/
 			//gameLoader.unloadAndStop();  //This works, but does not remove event listeners
-			/*
+			
 			//TO BE REMOVED!!!!!
 			var toBeRemovedRestartText:TextField = new TextField();
 			toBeRemovedRestartText.text = "Currently, game does not restart correctly.  Please refresh the page.";
 			toBeRemovedRestartText.width = 500;
 			addChild(toBeRemovedRestartText);
 			//TO BE REMOVED!!!!!
-			*/
+			
 			//removeChild(gameLoader);
 			//loadContent();
 		}

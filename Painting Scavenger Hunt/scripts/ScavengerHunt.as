@@ -260,8 +260,24 @@
 		public function checkEnterFrame(e:Event):void
 		{			
 			//if the magnifying glass is being used, draw through its lens
-			if(zoomed)
-				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+            if(zoomed)
+			{
+                placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+				if(pauseEvents)
+				{
+					hideClueText();
+				}
+				if(TutorialMenu.fromHelp)
+				{
+					magnifyButton.visible = false;				   
+                    newRewardButton.visible = false;					
+					nextClueButton.visible = false;
+				}
+				else
+				{
+					magnifyButton.visible = true;					
+				}
+			}
 		}		
 		
 		//handles the release of keys

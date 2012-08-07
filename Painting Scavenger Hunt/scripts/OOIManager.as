@@ -13,8 +13,8 @@
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
 				
-		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
-		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
+		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 				//message that appears in the clue textfield when the wrong clue is guessed
+		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 	//message that appears in the clue textfield when the wrong clue is guessed
 		
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given

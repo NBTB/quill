@@ -107,8 +107,7 @@
 			removeChild(splashButtonSkip);						
 			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
 			addChild(tut);
-			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
-			
+			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);		
 			
 		}	
 		
@@ -117,15 +116,14 @@
 			tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			startGameListener.triggerListener();
 		}
-			
-			
+
 		//Function chosen if the user chooses not to view the tutorial
 		function startNoTut(event:MouseEvent):void
 		{
 			splashButtonSkip.removeEventListener(MouseEvent.MOUSE_DOWN, startNoTut);
 			useTut = false;
 			gameReady = true;
-			startGameListener.triggerListener();
+			startGameListener.triggerListener();			
 		}
 		
 		function formatText():void
