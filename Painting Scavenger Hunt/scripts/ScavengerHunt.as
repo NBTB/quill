@@ -13,7 +13,7 @@
 	{
 		private var startGameListener:MenuListener;				//Listener to determine when the main game should begin
 		private var paintingCanvas:PaintingCanvas = null;		//The class that displays the painting 
-		private var ooiManager = null;							//Object which keeps track of objects in the painting
+		private var ooiManager:OOIManager = null;				//Object which keeps track of objects in the painting
 		private var startUpScreen:SplashScreen;					//Splash screen which displays when program is first started
 		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
@@ -33,6 +33,8 @@
 		private var endGoalMenuTitle:String = "Letter";		//title of end goal menu
 		private var objectsMenuTitle:String = "Objects";	//title of objects menu		
 		private var restartMenuTitle:String = "Restart";	//title of restart menu
+		
+		var myArrayListeners:Array=[];						//Array of Event Listeners in BaseMenu
 		
 		//construct scavanger hunt
 		public function ScavengerHunt():void
@@ -164,7 +166,10 @@
 			mainMenu.makeChildMenusDisplayable();	
 			
 			//give OOIManager reference to objects menu
-			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).getObjectManager(ooiManager);		
+			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).getObjectManager(ooiManager);	
+			
+			//give restart menu reference to ScavengerHunt
+			RestartMenu(mainMenu.getMenu(restartMenuTitle)).addScavengerHunt(this);
 			
 			//add listeners for when in-game children are clicked
 			for(var i = 0; i < this.numChildren; i++)
@@ -190,6 +195,10 @@
 			ooiManager.resetUnusedOOIList();
 			var firstClue:String = ooiManager.pickNextOOI();
 			cluesMenu.addClue(firstClue);
+			
+			//post first clue
+			postToClueText(firstClue);
+			nextClueButton.visible = false;
 			
 			//post first clue
 			postToClueText(firstClue);
@@ -446,6 +455,28 @@
 			
 			//close captions and descriptions of all objects of interest
 			ooiManager.hideAllOOIInfoPanes(e.target);
+		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		public function clearEvents():void 
+		{
+			ooiManager.clearEvents();
+			startUpScreen.clearEvents();
+			mainMenu.clearEvents();
+			magnifyingGlass.clearEvents();
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
 		}
 	}
 }

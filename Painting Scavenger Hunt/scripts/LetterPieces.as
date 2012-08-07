@@ -1,36 +1,38 @@
 ﻿package
 {
-    import flash.display.*;
-    import flash.events.*;
-    import flash.ui.*; 
-    import flash.geom.Point;
-    import flash.geom.Matrix;  
-    import flash.net.URLRequest;
-     
-    public class LetterPieces extends MovieClip
-    {
-        var pieceName:String;
-        private var id:Number = 0;                              //identification number of piece
-        var fileName:String;
-        var yPos:Number;
-        private var letter:Bitmap = null;
-        private var scaleFactor:Number = 1;
-     
-        private static var staticID:Number = 0;                 //counter of pieces used to determine each objects ID
-         
-        function LetterPieces(pieceName:String, fileName:String, yPos:Number)
-        {
-            this.pieceName = pieceName;
-            this.fileName = fileName;
-            this.yPos = yPos;
-            y = yPos;
-            x = 78;
-             
-            //set ID and increment static counter
-            this.id = staticID;
-            staticID++;
-             
-            //store scale to be used when loading bitmaps
+	import flash.display.*;
+	import flash.events.*;
+	import flash.ui.*;	
+	import flash.geom.Point;
+    import flash.geom.Matrix;	
+	import flash.net.URLRequest;
+	
+	public class LetterPieces extends MovieClip
+	{
+		var pieceName:String;
+		private var id:Number = 0;								//identification number of piece
+		var fileName:String;
+		var yPos:Number;
+		private var letter:Bitmap = null;
+		private var scaleFactor:Number = 1; 
+	
+		private static var staticID:Number = 0;					//counter of pieces used to determine each objects ID
+		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+		
+		function LetterPieces(pieceName:String, fileName:String, yPos:Number)
+		{
+			this.pieceName = pieceName;
+			this.fileName = fileName;
+			this.yPos = yPos;
+			y = yPos;
+			x = 78;
+			
+			//set ID and increment static counter
+			this.id = staticID;
+			staticID++;
+			
+			//store scale to be used when loading bitmaps
             if(scaleFactor  <= 0)
                 scaleFactor = 1;
             this.scaleFactor = scaleFactor;
@@ -44,12 +46,8 @@
              
             //add bitmap to container
             addChild(letter);      
-             
         }
-                 
-         
-         
-         
+        
         //load the object's outline image
         public function loadPiece():void
         {
@@ -86,7 +84,25 @@
             //begin loading image
             loader.load(new URLRequest(fileName));
         }
-         
-        public function getID():Number  {   return id;              }
-    }  
+		
+		public function getID():Number	{	return id;				}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
+	}	
 }

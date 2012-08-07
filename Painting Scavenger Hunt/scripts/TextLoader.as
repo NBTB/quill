@@ -10,11 +10,11 @@
 		private var textFiles:Array = null;			//list of text fils that have been read in (cleared on load completion)
 		private var textImports:Array = null;		//list of imported text strings (cleared on load completion)
 		private var sectionTrackers:Array = null;	//list of numbers that track the next section to read in each text string (cleared on load completion)
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//event types
 		public static const TEXT_FILE_IMPORTED:String = "Text file imported";
 		public static const TEXT_FILE_IMPORT_FAILED:String = "Text file import failed";
-		
 		
 		public function TextLoader()
 		{
@@ -144,6 +144,24 @@
 			for(var i:int = 0; i < sectionNumber && index >= 0; i++)
 				index = fullText.indexOf(headerString, index+1);
 			return index;
+		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
 		}
 	}
 }

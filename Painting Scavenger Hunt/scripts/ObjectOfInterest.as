@@ -35,6 +35,8 @@
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
 		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{			
@@ -84,6 +86,9 @@
 			infoPane.mouseEnabled = true;
 			infoPane.mouseChildren = false;
 			infoPane.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void{});
+			
+			//add this as an opener of info pane
+			infoPane.addOpener(this);
 			
 			//add this as an opener of info pane
 			infoPane.addOpener(this);
@@ -473,6 +478,25 @@
 			this.infoPane.x = coordinates.x;	
 			this.infoPane.y = coordinates.y;	
 		}
+		
 		public function setHitTestSuppression(suppression:Boolean):void	{	this.hitTestSuppression = suppression	}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
 	}
 }

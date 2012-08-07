@@ -117,8 +117,5 @@
 			TutorialMenu.fromHelp = false;
 			removeChild(tut);
 		}
-		
-         
-       
-    }
+	}
 }

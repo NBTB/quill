@@ -12,13 +12,15 @@
 		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
-				
+		
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 				//message that appears in the clue textfield when the wrong clue is guessed
 		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 	//message that appears in the clue textfield when the wrong clue is guessed
-		
+
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
 		public static const INCORRECT:String = "An incorrect answer was given";				//dispatched when an incorrect answer is given
+		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//construct Object of Interest Manager
 		public function OOIManager()
@@ -216,5 +218,29 @@
 		public function getUsableOOICount():int					{	return usableOOICount;				}
 		
 		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			var i:int;
+			for (i = 0; i < objectsOfInterest.length; i++)
+			{
+				//trace(objectsOfInterest[i].objectName);
+				objectsOfInterest[i].clearEvents();
+			}
+			for (i = 0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
 	}
 }

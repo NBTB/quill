@@ -31,17 +31,16 @@
 		var splashButtonTutorial:TextField = new TextField();
 		var splashButtonSkip:TextField = new TextField();
 		
-		
 		var splashTitleFormat:TextFormat = new TextFormat();
 		var splashButtonFormat:TextFormat = new TextFormat();
-		
 		
 		var buttonX:int = 285;
 		var buttonSeparation = 75;
 		var buttonY1:int = 265;
 		var buttonY2:int = buttonY1+buttonSeparation;
 		var buttonY3:int = buttonY2+buttonSeparation;
-		
+
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		public function SplashScreen(theTrigger:MenuListener) 
 		{
@@ -107,8 +106,7 @@
 			removeChild(splashButtonSkip);						
 			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
 			addChild(tut);
-			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);		
-			
+			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 		}	
 		
 		function proceedFromTut(event:MouseEvent):void
@@ -116,8 +114,7 @@
 			tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			startGameListener.triggerListener();
 		}
-
-		//Function chosen if the user chooses not to view the tutorial
+		
 		function startNoTut(event:MouseEvent):void
 		{
 			splashButtonSkip.removeEventListener(MouseEvent.MOUSE_DOWN, startNoTut);
@@ -189,9 +186,6 @@
 			splashButtonSkip.height = 50;
 			splashButtonSkip.width = 275;
 			splashButtonSkip.text = "Skip Tutorial";
-			
-			
-
 		}
 		
 		//changes the text color of the menu buttons to identify which one you're moused over
@@ -209,7 +203,6 @@
 			var myColor:ColorTransform=sender.transform.colorTransform;	
 			myColor.color=0xE5E5E5;		
 			sender.transform.colorTransform=myColor;
-
 		}
 		
 		function mainSplash(event:MouseEvent):void
@@ -288,6 +281,24 @@
 			theBackground.graphics.beginFill(0x2F2720);
 			theBackground.graphics.drawRect(0, 0, 764, 572);
 			theBackground.graphics.endFill();
+		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
 		}
 	}
 }

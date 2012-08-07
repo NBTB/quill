@@ -1,4 +1,5 @@
-﻿package {
+﻿﻿package
+{
 	import flash.text.TextField;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -11,7 +12,6 @@
 	import flash.events.EventDispatcher;
 	import flash.display.Loader;
 	import flash.geom.ColorTransform;
-
 
 
 	public class TutorialMenu extends BaseMenu {
@@ -203,12 +203,10 @@
 			if (curSlide==6) {
 				controls.text="The next clue will be given to you when you can identify the object behind this first one. Click Proceed to begin.  Good Luck!";
 			}
-
+			
 			//reset the text format
 			controls.setTextFormat(tutText);
-		}
-		
-		
+		}		
 
 		//brings you to the next page in the tutorial
 		function continueReading(event:MouseEvent):void {
@@ -247,7 +245,5 @@
 		override public function createCloseButton(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			return;
 		}
-
-
 	}
 }

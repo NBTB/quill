@@ -4,8 +4,6 @@
 	import flash.events.*;
 	import flash.text.*;
 	import flash.geom.*;
-
-	import flash.errors.*;
 	
 	public class BaseMenu extends MovieClip
 	{
@@ -20,6 +18,8 @@
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
 		protected var isOpen:Boolean;								//flag if menu is open
+		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
@@ -124,7 +124,6 @@
 			contentStartPoint = new Point(0, 0);
 			contentEndPoint = new Point(0, 0);
 			scrollPoint = new Point(0, 0);
-			
 			//listen for close button click
 			closeMenuButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void
 																						 {
@@ -266,7 +265,7 @@
 			var isOpener = false;
 			for(var i:int = 0; i < openers.length && ! isOpener; i++)
 				isOpener = (opener == openers[i])
-			
+				
 			return isOpener;
 		}
 		
@@ -305,5 +304,23 @@
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}
 		public static function getBodyFormat():TextFormat		{	return bodyFormat;		}
 		public static function getCaptionFormat():TextFormat	{	return captionFormat;	}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
 	}
 }

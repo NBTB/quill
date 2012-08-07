@@ -8,6 +8,7 @@
 	import flash.net.URLRequest;
 	import flash.events.Event;
 	import flash.events.ProgressEvent;
+	
 	import flash.text.TextField;
 
 	public class GameInitiator extends MovieClip
@@ -27,11 +28,7 @@
 			
 			/*TODO loadContent causing infinite loop and not creating hunt, temporary solution here*/
 			//load the game for the first time
-			loadContent();
-			//var scavengerHunt:ScavengerHunt = new ScavengerHunt();
-			//addChild(scavengerHunt);
-			//removeChild(scavengerHunt);
-			
+			loadContent();			
 			
 			//check for the restart event to restart the game
 			this.addEventListener(RestartEvent.RESTART_GAME, restartHandler);
@@ -64,15 +61,11 @@
 			/*TODO this does not work in CS3, find alternative or upgrade*/
 			//gameLoader.unloadAndStop();  //This works, but does not remove event listeners
 			
-			//TO BE REMOVED!!!!!
-			var toBeRemovedRestartText:TextField = new TextField();
-			toBeRemovedRestartText.text = "Currently, game does not restart correctly.  Please refresh the page.";
-			toBeRemovedRestartText.width = 500;
-			addChild(toBeRemovedRestartText);
-			//TO BE REMOVED!!!!!
+			removeChild(gameLoader);
+			gameLoader = null;
+			gameLoader = new Loader();
 			
-			//removeChild(gameLoader);
-			//loadContent();
+			loadContent();
 		}
 
 		/*public function reloadGame():void

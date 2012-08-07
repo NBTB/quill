@@ -9,7 +9,7 @@
 	{
 		private var upButton:SimpleButton = null;				//button used for scrolling up
 		private var downButton:SimpleButton = null;				//button used for scrolling down
-		private var scroller:FakeAButton = null;				//indicates the current scroll distance and can be dragged
+		private var scroller:SimpleButton = null;				//indicates the current scroll distance and can be dragged
 		private var contentHeight:Number = 0;					//total height of content
 		private var visibleHeight:Number = 0;					//height visible at any given moment
 		private var contentScrollSpeed:Number = 0;				//desired speed of content scolling
@@ -19,6 +19,8 @@
 		private var upDownButtonSize:Point = null;				//size of up and down buttons
 		private var scrollerSize:Point = null;					//size of scroller
 		private var scrollerDragged:Boolean = false;			//flag if scroller is being dragged
+		
+		var myArrayListeners:Array=[];							//Array of Event Listeners in BaseMenu
 		
 		//event types
 		public static const SCROLLED:String = "Scrolled";
@@ -56,7 +58,7 @@
 			scrollerSize.y = calculateScrollerHeight();
 			
 			//place scroller
-			scroller = new FakeAButton();
+			scroller = new SimpleButton();
 			scroller.x = 0;
 			scroller.y = upDownButtonSize.y;
 			addChild(scroller);
@@ -84,15 +86,14 @@
 			
 			
 			//listen for being added to display list
-			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-			
+			addEventListener(Event.ADDED_TO_STAGE, addedToStage);			
 			
 			//listen for new frames
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 			
 			//listen for up and down buttons being pressed
-			upButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	trace("up");moveScroller(-1);	});
-			downButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	trace("down");moveScroller(1);	});
+			upButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	moveScroller(-1);	});
+			downButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	moveScroller(1);	});
 			
 			//listen for up and down buttons being releases
 			upButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		{	stopScroller();	});
@@ -158,7 +159,6 @@
 				//dispatch scroll event
 				dispatchEvent(new Event(SCROLLED));
 			}
-			
 			
 			//calculate the amount of movement
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
@@ -249,11 +249,13 @@
 			var upState:BitmapData = style.getScrollerState(ScrollBarStyle.UP);
 			var overState:BitmapData = style.getScrollerState(ScrollBarStyle.OVER);
 			var downState:BitmapData = style.getScrollerState(ScrollBarStyle.DOWN);
+			//var hittestState:BitmapData = style.getScrollerState(ScrollBarStyle.HITTEST);
 			
 			///update scroller
-			scroller.setUpState(new Bitmap(upState));
-			scroller.setOverState(new Bitmap(overState));
-			scroller.setDownState(new Bitmap(downState));
+			scroller.upState = new Bitmap(upState);
+			scroller.overState = new Bitmap(overState);
+			scroller.downState = new Bitmap(downState);
+			//scroller.hitTestState = new Bitmap(hittestState);
 			scroller.width = scrollerSize.x;
 			scroller.height = scrollerSize.y;
 		}
@@ -335,6 +337,24 @@
 			
 			//calculate scroller movement speed
 			movementSpeed = calculateScrollSpeed();
+		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
 		}
 	}
 }

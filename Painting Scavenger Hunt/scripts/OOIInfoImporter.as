@@ -9,6 +9,8 @@
 	{	
 		private var xmlData:XMLList = null; 		//XML specifications
 		private var doneLoading:Boolean = false;	//flag if loading has been completed
+		
+		var myArrayListeners:Array=[];				//Array of Event Listeners in BaseMenu
 	
 		public function OOIInfoImporter(xmlData:XMLList)
 		{
@@ -88,5 +90,23 @@
 		}
 		
 		public function isDone():Boolean	{	return doneLoading;	}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
 	}
 }

@@ -12,7 +12,8 @@
 	import flash.events.EventDispatcher;
 	
 	class RestartMenu extends BaseMenu
-	{
+	{		
+		var scavengerHunt:ScavengerHunt;						//A copy of the ScavengerHunt class
 		var startOverQuestion:TextField = new TextField();		//Question asking if the user wants to start over
 		var startOverYes:TextField = new TextField();			//yes button
 		var startOverNo:TextField = new TextField();			//no button
@@ -79,13 +80,15 @@
 		public function startOverProgram(event:MouseEvent):void
 		{
 			//initiator.reloadGame();
+			scavengerHunt.clearEvents();
+			trace("here");
 			this.dispatchEvent(new RestartEvent(RestartEvent.RESTART_GAME, true));
 		}
 		
 		//Adds the initiator which launches the game, currently redundant
-		public function addInitiator(theInitiator:GameInitiator)
+		public function addScavengerHunt(theHunt:ScavengerHunt)
 		{
-			//initiator = theInitiator;
+			scavengerHunt = theHunt;
 		}
 		
 		//changes the color of buttons

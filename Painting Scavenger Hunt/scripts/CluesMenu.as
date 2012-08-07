@@ -73,7 +73,6 @@
              
             //no clue is current now
             currentClue = null;
-        }
-     
+        }     
     }
 }
