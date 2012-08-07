@@ -6,12 +6,14 @@
 	
 	public class ButtonBitmapLoader extends SimpleButton
 	{
-		private var upImage:Bitmap = null;
-		private var overImage:Bitmap = null;
-		private var downImage:Bitmap = null;
-		private var hittestImage:Bitmap = null;
+		private var upImage:BitmapData = null;
+		private var overImage:BitmapData = null;
+		private var downImage:BitmapData = null;
+		private var hittestImage:BitmapData = null;
 		
 		public static const IMAGE_LOAD_ERROR = "An image failed to load";
+		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 	
 		public function loadBitmaps(upFilename:String = null, overFilename:String = null, downFilename:String = null, hittestFilename = null)
 		{
@@ -100,16 +102,16 @@
 			switch(stateIndex)
 			{
 				case 0:
-					upImage = image;
+					upImage = image.bitmapData;
 					break;
 				case 1:
-					overImage = image;
+					overImage = image.bitmapData;
 					break;
 				case 2:
-					downImage = image;
+					downImage = image.bitmapData;
 					break;
 				case 3:
-					hittestImage = image;
+					hittestImage = image.bitmapData;
 					break;
 			}
 			
@@ -147,9 +149,27 @@
 				dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
-		public function getUpImage():Bitmap				{	return upImage;			}
-		public function getOverImage():Bitmap			{	return overImage;		}
-		public function getDownImage():Bitmap			{	return downImage;		}
-		public function getHittestImage():Bitmap		{	return hittestImage;	}
+		public function getUpImage():BitmapData				{	return upImage;										}
+		public function getOverImage():BitmapData			{	return (overImage) ? overImage : upImage;			}
+		public function getDownImage():BitmapData			{	return (downImage) ? downImage : upImage;			}
+		public function getHittestImage():BitmapData		{	return (hittestImage) ? hittestImage : upImage;		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
 	}
 }

@@ -35,21 +35,17 @@
 		
 		var buttonY:int = 517;										//Y location of the menu
 		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+		
 		//Create the main menu
 		public function MainMenu(startWTutorial:Boolean/*, theInitiator:GameInitiator*/):void
-		{
-			//letterRec.graphics.beginFill(0x000000);
-			//letterRec.graphics.drawRect(300, buttonY, 175, 50); 	
-			//recTransform = letterRec.transform.colorTransform;
-			//recTransform.color = 0x00CCFF;
-			//letterRec.transform.colorTransform = recTransform; 
-			
+		{			
 			//Create the 5 sub-menus
-			helpMenu = new HelpMenu(5, 350, 120, 165, this);
-			cluesMenu = new CluesMenu(100, 400, 220, 115, this);
-			letterMenu = new LetterMenu(75, 0, 600, 515, this);
-			objectsMenu = new ObjectsMenu(370, 50, 170, 465, this);
-			restartMenu = new RestartMenu (200, 150, 375, 200, this);
+			helpMenu = new HelpMenu(5, 350, 120, 165);
+			cluesMenu = new CluesMenu(100, 400, 220, 115);
+			letterMenu = new LetterMenu(75, 0, 600, 515);
+			objectsMenu = new ObjectsMenu(370, 150, 170, 365);
+			restartMenu = new RestartMenu (200, 150, 375, 200);
 			
 			//Add the buttons and background as children
 			this.addChild(menuBackground);
@@ -58,6 +54,13 @@
 			this.addChild(menuButtonLetter);
 			this.addChild(menuButtonObjects);
 			this.addChild(menuButtonRestart);
+			
+			//add buttons as menu openers
+			helpMenu.addOpener(menuButtonHelp);
+			cluesMenu.addOpener(menuButtonClues);
+			letterMenu.addOpener(menuButtonLetter);
+			objectsMenu.addOpener(menuButtonObjects);			
+			restartMenu.addOpener(menuButtonRestart);
 			
 			//Something to do with the letter.
 			letterRec = new Shape();
@@ -71,29 +74,41 @@
 			createBackground();
 			formatText();
 			
+			menuButtonHelp.selectable = false;
+			menuButtonClues.selectable = false;
+			menuButtonLetter.selectable = false;
+			
 			//restartMenu.addInitiator(theInitiator);
 			
 			//Add event listeners to the buttons to open their respective menus
-			menuButtonHelp.addEventListener(MouseEvent.MOUSE_DOWN, clickHelpMenu);
-			menuButtonClues.addEventListener(MouseEvent.MOUSE_DOWN, clickCluesMenu);
-			menuButtonLetter.addEventListener(MouseEvent.MOUSE_DOWN, clickLetterMenu);
-			menuButtonObjects.addEventListener(MouseEvent.MOUSE_DOWN, clickObjectsMenu);
-			menuButtonRestart.addEventListener(MouseEvent.MOUSE_DOWN, clickRestartMenu);
+			menuButtonHelp.addEventListener(MouseEvent.CLICK, clickHelpMenu);
+			menuButtonClues.addEventListener(MouseEvent.CLICK, clickCluesMenu);
+			menuButtonLetter.addEventListener(MouseEvent.CLICK, clickLetterMenu);
+			menuButtonObjects.addEventListener(MouseEvent.CLICK, clickObjectsMenu);
+			menuButtonRestart.addEventListener(MouseEvent.CLICK, clickRestartMenu);
 			
-			menuButtonHelp.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonHelp.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			//listen for mouse movement to highlight menus
+			menuButtonHelp.addEventListener(MouseEvent.ROLL_OVER, helpMenu.colorChange);
+			menuButtonHelp.addEventListener(MouseEvent.ROLL_OUT, helpMenu.revertColor);			
+			menuButtonClues.addEventListener(MouseEvent.ROLL_OVER, cluesMenu.colorChange);
+			menuButtonClues.addEventListener(MouseEvent.ROLL_OUT, cluesMenu.revertColor);			
+			menuButtonLetter.addEventListener(MouseEvent.ROLL_OVER, letterMenu.colorChange);
+			menuButtonLetter.addEventListener(MouseEvent.ROLL_OUT, letterMenu.revertColor);			
+			menuButtonObjects.addEventListener(MouseEvent.ROLL_OVER, objectsMenu.colorChange);
+			menuButtonObjects.addEventListener(MouseEvent.ROLL_OUT, objectsMenu.revertColor);			
+			menuButtonRestart.addEventListener(MouseEvent.ROLL_OVER, restartMenu.colorChange);
+			menuButtonRestart.addEventListener(MouseEvent.ROLL_OUT, restartMenu.revertColor);
 			
-			menuButtonClues.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonClues.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-
-			menuButtonLetter.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonLetter.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
-			menuButtonObjects.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonObjects.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
-			menuButtonRestart.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			menuButtonRestart.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			//listen for when the main menu is added to the stage
+			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
+																	{
+																		//listen for request to close menus
+																		helpMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		cluesMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		letterMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		objectsMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																		restartMenu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+																	});
 		}
 		
 		//formatting for the menu buttons
@@ -152,6 +167,12 @@
 			objectsMenu.getObjectManager(ooiManager);
 		}
 		
+		//Get the ScavengerHunt for the Restart menu
+		public function getScavengerHunt(scavengerHunt:ScavengerHunt)
+		{
+			restartMenu.addScavengerHunt(scavengerHunt);
+		}
+		
 		//notifies the letter
 		function letterNotifyer():void
 		{
@@ -196,6 +217,22 @@
 			{
 				//trace(letterMenu.pieces[i].pieceName);
 				letterMenu.pieces[i].visible = true;							
+			}
+			//if the search is over, you find the hidden letter!
+			//the other pieces become invisible 
+			if(rewardCounter == 8 && letterMenu.pieces[7].visible == true)
+			{
+			
+				letterMenu.nextButton.visible = true;
+                letterMenu.pieces[0].visible = false; 
+				letterMenu.pieces[1].visible = false; 
+				letterMenu.pieces[2].visible = false; 
+				letterMenu.pieces[3].visible = false; 
+				letterMenu.pieces[4].visible = false; 
+				letterMenu.pieces[5].visible = false; 
+				letterMenu.pieces[6].visible = false; 			 
+				
+            
 			}
 		}
 		
@@ -250,60 +287,56 @@
 			openRestartMenu();
 		}
 		
-		//Close all open menus, so there's no overlap when a new one is opened.
+		//Close all open menus (except those connected to the optional closeCaller), so there's no overlap when a new one is opened.
 		//Always called when a new menu is opened
-		function closeMenus():void
+		function closeMenus(closeCaller:Object = null):void
 		{
 			if (helpMenu.isOpen == true)
 			{
-				helpMenu.isOpen = false;
-				removeChild(helpMenu);
-				helpMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !helpMenu.isObjectOpener(closeCaller))
+				{
+					helpMenu.isOpen = false;
+					removeChild(helpMenu);
+					helpMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			if (objectsMenu.isOpen == true)
 			{
-				objectsMenu.isOpen = false;
-				removeChild(objectsMenu);
-				objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !objectsMenu.isObjectOpener(closeCaller))
+				{
+					objectsMenu.isOpen = false;
+					removeChild(objectsMenu);
+					objectsMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			if(cluesMenu.isOpen == true)
 			{
-				cluesMenu.isOpen = false;
-				removeChild(cluesMenu);
-				cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !cluesMenu.isObjectOpener(closeCaller))
+				{
+					cluesMenu.isOpen = false;
+					removeChild(cluesMenu);
+					cluesMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			if(letterMenu.isOpen == true)
 			{
-				letterMenu.isOpen = false;
-				letterRec.visible = false;
-				removeChild(letterMenu);
-				letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !letterMenu.isObjectOpener(closeCaller))
+				{
+					letterMenu.isOpen = false;
+					removeChild(letterMenu);
+					letterMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
 			
 			if(restartMenu.isOpen == true)
 			{
-				restartMenu.isOpen = false;
-				removeChild(restartMenu);
-				restartMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				if(!closeCaller || !restartMenu.isObjectOpener(closeCaller))
+				{
+					restartMenu.isOpen = false;
+					removeChild(restartMenu);
+					restartMenu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
+				}
 			}
-		}
-		
-		//changes the text color of the menu buttons to identify which one you're moused over
-		public function colorChange(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;
-			myColor.color=0xFFC000;
-			sender.transform.colorTransform=myColor;
-		}
-		
-		//reverts the buttons back to their original colors
-		public function revertColor(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;	
-			myColor.color=0xFFFFFF;		
-			sender.transform.colorTransform=myColor;
 		}
 		
 		//Set the background graphics
@@ -314,6 +347,29 @@
 			menuBackground.graphics.beginFill(0x2F2720);
 			menuBackground.graphics.drawRect(0, buttonY, 764, 55);
 			menuBackground.graphics.endFill();
+		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			helpMenu.clearEvents();
+			objectsMenu.clearEvents();
+			restartMenu.clearEvents();
+			letterMenu.clearEvents();
+			cluesMenu.clearEvents();
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
 		}
 	}
 }

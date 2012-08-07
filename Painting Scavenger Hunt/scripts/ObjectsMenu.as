@@ -1,6 +1,7 @@
 ﻿package
 {
 	import flash.display.MovieClip;
+	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
@@ -19,12 +20,12 @@
 		private var linksArray:Array = null;						//Array which holds all of the links
 		
 		//Construct the objects menu, using the base x, y, width, height, and main menu as arguments.  Also sets up the linksArray.
-		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
+		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
-			thisX = xPos;					
-			thisWidth = widthVal;
+			//thisX = xPos;					
+			//thisWidth = widthVal;
 			linksArray = new Array();
-			super(0, 0, 0, 0, theMenu);		//As the objects menu makes it's own background based on the number of objects, send 0's to indicate the background doesn't need making.
+			super(xPos, yPos, widthVal, heightVal);			//As the objects menu makes it's own background based on the number of objects, send 0's to indicate the background doesn't need making.
 		}
 		
 		//get the Object Manager, set up the initial size of the background for the object menu, then populate the menu with links to each object
@@ -35,8 +36,8 @@
 			ooiManager.getObjectMenu(this);
 			
 			//Determine location of menu, then create background
-			thisY = 515-(numObjects*42);
-			createBackground(thisX, thisY, thisWidth, numObjects * 42);
+			//thisY = 515-(numObjects*42);
+			//createBackground(thisX, thisY, thisWidth, numObjects * 42);
 			
 			//Set up initial link formatting
 			linkFormat.align = "center";
@@ -61,7 +62,7 @@
 				tempLink.selectable = false;
 				tempLink.setTextFormat(linkFormat);
 				linksArray.push(tempLink);
-				addChild(tempLink);
+				addListChild(tempLink);
 			}		
 		}
 		
@@ -75,17 +76,11 @@
 			
 			//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
 			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, ooi.displayInfoPane);
-			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, closeThis);
-			linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, theMainMenu.colorChange);
-			linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, theMainMenu.revertColor);
+			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void	{	closeMenu();	});
+			linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			
 			curLink++;
-		}
-		
-		//Close the object menu when opening an object pane
-		public function closeThis(e:MouseEvent)
-		{
-			theMainMenu.closeMenus();
 		}
 	}
 }

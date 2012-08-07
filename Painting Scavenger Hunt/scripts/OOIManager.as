@@ -13,11 +13,13 @@
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 				
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 	//message that appears in the clue textfield when the wrong clue is guessed
-		public static const NO_CLUES_NOTIFY:String = "No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
+		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 							//message that appears in the clue textfield when the wrong clue is guessed
 		
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
 		public static const INCORRECT:String = "An incorrect answer was given";				//dispatched when an incorrect answer is given
+		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//construct Object of Interest Manager
 		public function OOIManager()
@@ -62,7 +64,6 @@
 																						{
 																							newObject.hideHighlight();	
 																							newObject.hideCaption();
-																							//newObject.unprepareInfoPane();
 																						}
 																					});
 			
@@ -76,10 +77,10 @@
 																						}
 																					});
 			
-			//llisten for when an object's info pane is being opened
+			//listen for when an object's info pane is being opened
 			newObject.addEventListener(OOIInfoPane.OPEN_PANE, function(e:Event):void
 																					{	
-																						hideAllOOIInfoPanes(new Array(ObjectOfInterest(e.target)));
+																						hideAllOOIInfoPanes(e.target);
 																					});
 			
 			
@@ -154,7 +155,7 @@
 			if(usableOOICount >= 0)
 			{
 				//if the maxium number of usable objects of interest has been reached, return a failure
-				if(ooiUnused.length < objectsOfInterest.length - usableOOICount + 1)
+				if(ooiUnused.length < objectsOfInterest.length - usableOOICount)
 				{
 					currentOOI = null;
 					return null;
@@ -189,8 +190,8 @@
 			return currentOOI.getClue();
 		}
 		
-		//hide all captions and info panes of non-ignored objects
-		public function hideAllOOIInfoPanes(ignoreOOIs:Array = null)
+		//hide all captions and info panes of non-ignored objects (except those connected to the optional closeCaller)
+		public function hideAllOOIInfoPanes(closeCaller:Object = null)
 		{
 			//hide each object of interest's info pane
 			for(var i = 0; i < objectsOfInterest.length; i++)
@@ -200,16 +201,9 @@
 				
 				//if the object's info pane is in the display list, hide it
 				if(ooi.getInfoPane().parent)
-				{
-					//determine if the current object of interest should actually be ignored and skipped
-					var ignoreOOI:Boolean = false;
-					if(ignoreOOIs != null)
-						for(var j = 0; j < ignoreOOIs.length && !ignoreOOI; j++)
-							if(ooi.getID() == ignoreOOIs[j].getID())
-								ignoreOOI = true;
-					
-					//if the object of interest is not to be ignored, hide its info pane
-					if(!ignoreOOI)
+				{					
+					//only close if the pane is not connected to the caller of the close
+					if(!closeCaller || !ooi.getInfoPane().isObjectOpener(closeCaller))
 						ooi.hideInfoPane();
 				}
 			}
@@ -230,5 +224,29 @@
 		public function getCurrentClue():String					{	return currentOOI.getClue();		}
 		
 		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			var i:int;
+			for (i = 0; i < objectsOfInterest.length; i++)
+			{
+				//trace(objectsOfInterest[i].objectName);
+				objectsOfInterest[i].clearEvents();
+			}
+			for (i = 0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
 	}
 }

@@ -26,8 +26,9 @@
 		private var caption:TextField = null;							//caption that displays name of object
 		private var captionContainer:DisplayObjectContainer = null;		//display container of caption
 		private var infoPane:OOIInfoPane = null;						//pane used to display object's description
-		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info Pane
-		private var infoPanePosition:Point = null;						//coordinates of info Pane
+		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info pane
+		private var infoPanePosition:Point = null;						//coordinates of info pane
+		private var infoLoader:OOIInfoImporter = null;					//loader of info pane content
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
 		private var hasBeenOpened:Boolean = false;						//turned true first time objects display pane is showed
 		
@@ -35,9 +36,11 @@
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
-		{
+		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
+		{			
 			//set name, and clue
 			this.objectName = objectName;
 			this.clue = clue;
@@ -49,6 +52,9 @@
 			//store locations of hitmap and highlight image files
 			this.hitmapFilename = hitmapFilename;
 			this.highlightFilename = highlightFilename;
+			
+			//store info loader 
+			this.infoLoader = infoLoader;
 			
 			//set coordinates
 			this.x = x;
@@ -80,20 +86,27 @@
 			caption = new TextField();
 			caption.defaultTextFormat = captionFormat;
 			caption.autoSize = TextFieldAutoSize.LEFT;
+			caption.selectable = false;
 			caption.mouseEnabled = false;
 			caption.text = objectName;
 						
-			//create info Pane
+			//create info pane
 			infoPane = new OOIInfoPane(5, 5, 250, 380);
+			
+			//add this as an opener of info pane
+			infoPane.addOpener(this);
 			
 			//add title to object info Pane
 			var titleText:TextField = new TextField();
 			titleText.defaultTextFormat = OOIInfoPane.getTitleFormat();
 			titleText.text = objectName;	
-			titleText.width = 200;
+			titleText.width = 180;
 			titleText.x = 5;
 			titleText.y = 5;
 			titleText.wordWrap = true;
+			titleText.autoSize = TextFieldAutoSize.LEFT;
+			titleText.selectable = false;
+			titleText.mouseWheelEnabled = false;
 			infoPane.addListChild(titleText);
 			
 			//listen for when info Pane closes
@@ -142,6 +155,13 @@
 		{
 			loadHitmap();
 			loadHighlight();
+			loadInfo();
+		}
+		
+		//determine if all components have been loaded
+		private function componentsLoaded():Boolean
+		{
+			return hitmap && highlight && (!infoLoader || infoLoader.isDone());
 		}
 				
 		//load the object's hitmap image
@@ -164,7 +184,7 @@
 																								tempHitmap.bitmapData.dispose();
 																								
 																								//if both the hitmap and highlight are now loaded, dispatch a completion event
-																								if(hitmap && highlight)
+																								if(componentsLoaded())
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							 });
 			
@@ -204,7 +224,7 @@
 																								hideHighlight();
 																								
 																								//if both the hitmap and highlight are now loaded, dispatch a completion event
-																								if(hitmap && highlight)
+																								if(componentsLoaded())
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							  });
 			
@@ -217,6 +237,33 @@
 			
 			//begin loading image
 			highlightLoader.load(new URLRequest(highlightFilename));
+		}
+		
+		//load objects info to be displayed in the info pane
+		private function loadInfo():void
+		{
+			if(infoLoader)
+			{
+				infoLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																			{
+																				//if all components have been loaded, dispatch a completion event
+																			if(componentsLoaded())
+																				dispatchEvent(new Event(Event.COMPLETE)); 
+																			});
+				infoLoader.loadInfoToOOI(this);
+			}
+		}
+			
+		//add display object as a child of info pane
+		public function addInfoToPane(newInfo:DisplayObject)
+		{
+			infoPane.addListChild(newInfo);
+		}
+		
+		//add display object as the tail child of info pane
+		public function addInfoToPaneTail(newInfo:DisplayObject)
+		{
+			infoPane.addListChildToTail(newInfo);
 		}
 				
 		//test hitmap against a given point, determine hit using a minimum alpha value		
@@ -416,6 +463,24 @@
 		{	
 			this.infoPane.x = coordinates.x;	
 			this.infoPane.y = coordinates.y;	
+		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
 		}
 	}
 }

@@ -12,10 +12,10 @@
 		private var oldClues:Array = null;						//Keeps track of all previous clues
 		
 		//Creates the clues menu
-		public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
+		public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//Feeds in the variables for the backgrounds position to the base menu
-			super(xPos, yPos, widthVal, heightVal, theMenu);
+			super(xPos, yPos, widthVal, heightVal);
 			
 			
 			oldClues = new Array();

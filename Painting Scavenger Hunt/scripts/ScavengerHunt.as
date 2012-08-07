@@ -13,10 +13,11 @@
 	{
 		private var startGameListener:MenuListener;				//Listener to determine when the main game should begin
 		private var paintingCanvas:PaintingCanvas = null;		//The class that displays the painting 
-		private var ooiManager = null;							//Object which keeps track of objects in the painting
+		private var ooiManager:OOIManager = null;				//Object which keeps track of objects in the painting
 		private var startUpScreen:SplashScreen;					//Splash screen which displays when program is first started
-		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting
+		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting 
 		private var useTutorial:Boolean;						//Boolean which determines whether the user wants to use the tutorial or not when starting the game
+		var initiator:GameInitiator;							//controller of game start and restart
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
@@ -27,16 +28,12 @@
 		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+		
 		//construct scavanger hunt
-		public function ScavengerHunt():void
-		{	
-			//if(this.parent.parent != null){
-			//var parentObj:Object = this.parent.parent as Object;
-			//(root.loaderInfo.loader.root as Object).traceMe()
-			//}
-			//initiator = theInitiator;
-			//show start menu
-			//trace("In ScavengerHunt");
+		public function ScavengerHunt(/*theInitiator:GameInitiator*/):void
+		{
+			//initiator = theInitiator;		
 			startMenu();			
 		}
 		
@@ -62,8 +59,7 @@
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
 			newRewardButton = new SimpleButton();
-			
-			
+						
 			//setup clue text format
 			clueTextFormat = new TextFormat("Edwardian Script ITC", 25, 0x40E0D0);
 			clueTextFormat.align = TextFormatAlign.CENTER;
@@ -75,16 +71,16 @@
 			clueText.y=90;
 			clueText.width=474;
 			clueText.visible = false;
-			clueText.mouseEnabled = false;
+			clueText.selectable = false;
 			
 			var notificationButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			notificationButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																					   {
 																						   //setup next clue button
-																							nextClueButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getOverImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getDownImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getHittestImage().bitmapData));
+																							nextClueButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage()), 
+																																new Bitmap(notificationButtonLoader.getOverImage()), 
+																																new Bitmap(notificationButtonLoader.getDownImage()), 
+																																new Bitmap(notificationButtonLoader.getHittestImage()));
 																							nextClueButton.x = 185;
 																							nextClueButton.y = 500;
 																							nextClueButton.width /= 5;
@@ -92,11 +88,11 @@
 																							nextClueButton.visible = true;
 																							
 																							//setup new reward button
-																							newRewardButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getOverImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getDownImage().bitmapData), 
-																																new Bitmap(notificationButtonLoader.getHittestImage().bitmapData));
-																							newRewardButton.x = 315;
+																							newRewardButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage()), 
+																																new Bitmap(notificationButtonLoader.getOverImage()), 
+																																new Bitmap(notificationButtonLoader.getDownImage()), 
+																																new Bitmap(notificationButtonLoader.getHittestImage()));
+																							newRewardButton.x = 315
 																							newRewardButton.y = 500;
 																							newRewardButton.width /= 5;
 																							newRewardButton.height /= 5;
@@ -108,10 +104,10 @@
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																					   {
 																						   //setup next clue button
-																							magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage().bitmapData), 
-																																new Bitmap(magnifyButtonLoader.getOverImage().bitmapData), 
-																																new Bitmap(magnifyButtonLoader.getDownImage().bitmapData), 
-																																new Bitmap(magnifyButtonLoader.getHittestImage().bitmapData));
+																							magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage()), 
+																																new Bitmap(magnifyButtonLoader.getOverImage()), 
+																																new Bitmap(magnifyButtonLoader.getDownImage()), 
+																																new Bitmap(magnifyButtonLoader.getHittestImage()));
 																							magnifyButton.x = 685;
 																							magnifyButton.y = 520;
 																							magnifyButton.width /= 5;
@@ -132,10 +128,8 @@
 		public function startGame():void
 		{
 			useTutorial = startUpScreen.useTut;
-			mainMenu.getObjectManager(ooiManager);
-			
-			//remove start up menu from display list
-			removeChild(startUpScreen);							
+			mainMenu.getObjectManager(ooiManager);	
+			mainMenu.getScavengerHunt(this);
 			
 			//add in-game children to display list
 			addChild(paintingCanvas);
@@ -155,21 +149,22 @@
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
 			//create clue timer
-			clueTimer = new Timer(3 * 1000, 1);
+			clueTimer = new Timer(10 * 1000, 1);
 			
 			//listen for the completion of the clue timer
 			clueTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
 																		  {
-																			//reset clue time and hide the clue text box
-																			clueTimer.reset();
-																			clueText.text = ""
-																			clueText.visible = false;
+																			hideClueText();
 																		  });
 			
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
 			var firstClue:String = ooiManager.pickNextOOI();
 			mainMenu.cluesMenu.addClue(firstClue);
+			
+			//post first clue
+			postToClueText(firstClue);
+			nextClueButton.visible = false;
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
@@ -281,14 +276,17 @@
 		//handle a correct answer to a clue
 		private function handleCorrectAnswer(e:Event)
 		{	
+			//hide the current clue
+			hideClueText();
+		
 			//close menus
 			mainMenu.closeMenus();
 		
 			//add the piece of the end goal
 			/*TODO make not hard coded and perhaps not linear*/
-			if(mainMenu.rewardCounter > 7)
+			if(mainMenu.rewardCounter > 8)
 			{
-				mainMenu.rewardCounter = 7;
+				mainMenu.rewardCounter = 8;
 			}
 			else
 			{
@@ -346,7 +344,16 @@
 			clueTimer.start();
 		}
 		
-		//add evebt listener to list that will trigger the closing of dismissible overlays
+		//reset clue time and hide the clue text box
+		private function hideClueText()
+		{
+			
+			clueTimer.reset();
+			clueText.text = ""
+			clueText.visible = false;
+		}
+		
+		//add event listener to list that will trigger the closing of dismissible overlays
 		private function addDismissibleOverlayCloser(closer:DisplayObject, eventType:String = MouseEvent.CLICK):void
 		{
 			closer.addEventListener(eventType, closeDismissibleOverlays);
@@ -354,9 +361,35 @@
 		
 		//close overlays that are to be dismissed by a click anywhere else on screen
 		private function closeDismissibleOverlays(e:MouseEvent):void
-		{
+		{					
+			//close all menus
+			mainMenu.closeMenus(e.target);
+			
 			//close captions and descriptions of all objects of interest
-			ooiManager.hideAllOOIInfoPanes();
+			
+			ooiManager.hideAllOOIInfoPanes(e.target);
+		}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		public function clearEvents():void 
+		{
+			ooiManager.clearEvents();
+			startUpScreen.clearEvents();
+			mainMenu.clearEvents();
+			magnifyingGlass.clearEvents();
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
 		}
 	}
 }

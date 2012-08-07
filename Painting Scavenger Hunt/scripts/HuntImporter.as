@@ -14,6 +14,8 @@
 		public static const OBJECTS_LOADED:String = "Objects loaded";
 		public static const END_GOAL_LOADED:String = "End goal loaded";
 		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+		
 		//load XML scavenger hunt specification and call parser when done
 		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
 		{
@@ -124,8 +126,13 @@
 					//increment the number of objects parsed
 					objectsParsed++;
 					
+					//if information for the object's info pane has been provided, create a loader
+					var ooiInfoLoader:OOIInfoImporter = null;
+					if(ooi.hasOwnProperty("info"))
+						ooiInfoLoader = new OOIInfoImporter(ooi.info);
+					
 					//create new object of interest
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
 					
 					//set the display position of the object of interest's info pane
 					var infoPaneX:Number = 0;
@@ -223,5 +230,23 @@
             //flag that all objects have been parsed (not necessarily fully loaded)
             allPiecesParsed = true; 
         }
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
     }
 }
