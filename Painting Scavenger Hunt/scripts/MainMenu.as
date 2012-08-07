@@ -30,6 +30,8 @@
 		//construct main menu in a given area, to allow access to a number of menus, and display menus under a given parent
 		public function MainMenu(placementRect:Rectangle, menuCapacity:int, menuContainer:DisplayObjectContainer = null)
 		{
+			trace("testing");
+			
 			//create arrays for menus, openers, and titles
 			menus = new Array();
 			menuOpeners = new Array();
