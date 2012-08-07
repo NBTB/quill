@@ -19,7 +19,7 @@
 		protected var scrollPoint:Point = null;						//translation of pane content due to scrolling
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
-		var isOpen:Boolean;											//flag if menu is open	/*TODO this should be private*/
+		protected var isOpen:Boolean;								//flag if menu is open
 		
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
@@ -147,15 +147,32 @@
 		//open this menu
 		public function openMenu():void
 		{
-			visible = true;
-			isOpen = true;
-			dispatchEvent(new Event(BaseMenu.MENU_OPENED));
+			if(!isOpen)
+			{
+				//request the closure of other menus to avoid clutter and overlap
+				dispatchEvent(new Event(CLOSE_MENUS_REQUEST));
+				
+				//appear and open
+				visible = true;
+				isOpen = true;
+				
+				//announce being opened
+				dispatchEvent(new Event(MENU_OPENED));
+			}
 		}
 		
 		//close this menu
 		public function closeMenu():void
 		{
-			dispatchEvent(new Event(CLOSE_MENUS_REQUEST));
+			if(isOpen)
+			{
+				//disappear and close
+				visible = false;
+				isOpen = false;
+				
+				//announce being closed
+				dispatchEvent(new Event(MENU_CLOSED));
+			}
 		}
 		
 		//Set the background graphics

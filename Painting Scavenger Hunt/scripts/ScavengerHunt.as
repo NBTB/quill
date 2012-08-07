@@ -15,9 +15,7 @@
 		private var paintingCanvas:PaintingCanvas = null;		//The class that displays the painting 
 		private var ooiManager = null;							//Object which keeps track of objects in the painting
 		private var startUpScreen:SplashScreen;					//Splash screen which displays when program is first started
-		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting 
-		private var useTutorial:Boolean;						//Boolean which determines whether the user wants to use the tutorial or not when starting the game
-		var initiator:GameInitiator;							//controller of game start and restart
+		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
@@ -37,7 +35,7 @@
 		private var restartMenuTitle:String = "Restart";	//title of restart menu
 		
 		//construct scavanger hunt
-		public function ScavengerHunt(/*theInitiator:GameInitiator*/):void
+		public function ScavengerHunt():void
 		{
 			//initiator = theInitiator;		
 			startMenu();			
@@ -60,7 +58,6 @@
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
-			//mainMenu = new MainMenu(startUpScreen.useTut/*, initiator*/);
 			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, stage);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
@@ -142,19 +139,19 @@
 			mainMenu.addChildMenu(cluesMenu, cluesMenuTitle);
 			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
-			mainMenu.addChildMenu(restartMenu, restartMenuTitle);			
+			mainMenu.addChildMenu(restartMenu, restartMenuTitle);				
 		}
 		
 		//Actually begin the rest of the game
 		public function startGame():void
 		{
-			useTutorial = startUpScreen.useTut;
+			//remove pre-game children from display list
+			removeChild(startUpScreen);
 			
 			//add in-game children to display list,
 			//ensuring that they are tightly packed
-			var childIndex:int;
-			addChild(paintingCanvas);
-			childIndex = getChildIndex(paintingCanvas) + 1;
+			var childIndex:int = 0;
+			addChildAt(paintingCanvas, childIndex++);
 			addChildAt(ooiManager, childIndex++);
 			addChildAt(mainMenu, childIndex++);
 			addChildAt(magnifyingGlass, childIndex++);
@@ -164,7 +161,10 @@
 			addChildAt(newRewardButton, childIndex++);
 			
 			//make menus inside main menu displayable
-			mainMenu.makeChildMenusDisplayable();
+			mainMenu.makeChildMenusDisplayable();	
+			
+			//give OOIManager reference to objects menu
+			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).getObjectManager(ooiManager);		
 			
 			//add listeners for when in-game children are clicked
 			for(var i = 0; i < this.numChildren; i++)
@@ -347,16 +347,15 @@
 			mainMenu.closeMenus();
 		
 			//add the piece of the end goal
-			/*TODO make not hard coded and perhaps not linear*/
-			if(mainMenu.rewardCounter > 8)
+			var completionRequirement:int = ooiManager.getUsableOOICount();
+			if(mainMenu.rewardCounter > completionRequirement)
 			{
-				mainMenu.rewardCounter = 8;
+				mainMenu.rewardCounter = completionRequirement;
 			}
 			else
 			{
 				mainMenu.rewardCounter++;
 				newRewardButton.visible = true;
-				//mainMenu.letterRec.visible = true;
 			}
 		
 			//attempt to pick the next object to hunt and retrieve its clue

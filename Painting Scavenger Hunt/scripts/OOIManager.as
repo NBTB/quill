@@ -213,6 +213,7 @@
 		
 		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
 		public function getCurrentClue():String					{	return currentOOI.getClue();		}
+		public function getUsableOOICount():int					{	return usableOOICount;				}
 		
 		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}
 	}

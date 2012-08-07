@@ -18,14 +18,16 @@
 		
 		public var rewardCounter:Number = 0;						//???	/*TODO this should be a part of letter menu*/
 		
+		//text format of menu opening buttons
 		private static var menuOpenerTextFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5, 
 																			null, null, null, null, null, 
 																			TextFormatAlign.CENTER);
 		
 		//event types 
-		public static const OPEN_MENU = "A menu has opened"
-		public static const CLOSE_MENU = "A menu has closed"
+		public static const OPEN_MENU = "A menu has opened"			//dispatched when a child menu opens
+		public static const CLOSE_MENU = "A menu has closed"		//dispatched when a child menu closes
 		
+		//construct main menu in a given area, to allow access to a number of menus, and display menus under a given parent
 		public function MainMenu(placementRect:Rectangle, menuCapacity:int, menuContainer:DisplayObjectContainer = null)
 		{
 			//create arrays for menus, openers, and titles
@@ -57,8 +59,10 @@
 			menuBackground.graphics.beginFill(0x2F2720);
 			menuBackground.graphics.drawRect(0, 0, placementRect.width, placementRect.height);
 			menuBackground.graphics.endFill();
+			addChild(menuBackground);
 		}
 		
+		//add menu to the list and give access to it via the menu bar
 		public function addChildMenu(menu:BaseMenu, menuTitle:String):Boolean
 		{
 			//check if the given name is taken already
@@ -107,6 +111,9 @@
 			//listen for request to close child menus
 			menu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
 			
+			//listen for menu closing
+			menu.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void	{	dispatchEvent(new Event(CLOSE_MENU));	});
+			
 			return true;
 		}
 		
@@ -128,13 +135,10 @@
 				var menu:BaseMenu = BaseMenu(menus[i]);
 				if(!closeCaller || !menu.isObjectOpener(closeCaller))
 				{					
-					/*TODO this should go in BaseMenu's closeMenu*/
-					menu.isOpen = false;
-					menu.visible = false;
-					menu.dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
-					dispatchEvent(new Event(CLOSE_MENU));
+					menu.closeMenu();
 				}
 			}
+			dispatchEvent(new Event(CLOSE_MENU));
 		}
 		
 		//retrieve a child menu based on name

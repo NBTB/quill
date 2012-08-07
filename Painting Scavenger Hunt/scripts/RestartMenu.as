@@ -13,8 +13,6 @@
 	
 	class RestartMenu extends BaseMenu
 	{
-		
-		var initiator:GameInitiator;							//A copy of the GameInitiator class, currently redundant as it is in another .swf
 		var startOverQuestion:TextField = new TextField();		//Question asking if the user wants to start over
 		var startOverYes:TextField = new TextField();			//yes button
 		var startOverNo:TextField = new TextField();			//no button
