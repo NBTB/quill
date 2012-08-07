@@ -1,0 +1,112 @@
+﻿package
+{
+	import flash.events.*;
+	import flash.events.EventDispatcher;
+	import flash.xml.*;
+	import flash.text.*;
+	
+	public class OOIInfoImporter extends EventDispatcher
+	{	
+		private var xmlData:XMLList = null; 		//XML specifications
+		private var doneLoading:Boolean = false;	//flag if loading has been completed
+		
+		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+	
+		public function OOIInfoImporter(xmlData:XMLList)
+		{
+			this.xmlData = xmlData;
+		}
+	
+		public function loadInfoToOOI(targetOOI:ObjectOfInterest)
+		{
+			//extract list of children
+			var children:XMLList = xmlData.children();
+			
+			//child counter and total
+			var childNum:int = 0;
+			var childCount = children.length();
+			
+			//create text loader and listen for when it finishes importing a file (or fails to do so)
+			var textLoader:TextLoader = new TextLoader();
+			textLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
+																						{
+																							/*TODO take in section number*/
+																							//parse text file
+																							var newText:String = textLoader.parseText();
+																							
+																							//if text was found, add a textfield to the object's info pane
+																							if(newText)
+																							{
+																								var newTextField:TextField = new TextField();
+																								newTextField.defaultTextFormat = OOIInfoPane.getBodyFormat();
+																								newTextField.text = newText;	
+																								newTextField.width = 180;
+																								newTextField.wordWrap = true;
+																								newTextField.autoSize = TextFieldAutoSize.LEFT;
+																								newTextField.selectable = false;
+																								newTextField.mouseWheelEnabled = false;
+																								targetOOI.addInfoToPaneTail(newTextField);
+																							}
+																							
+																							//access next child
+																							childNum++;
+																							accessChild(children, childNum, childCount, textLoader);
+																						});
+			textLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																					   {
+																							//display error in debug trace
+																							trace("Failed to load a piece of info about " + targetOOI.getObjectName());
+																							
+																							//access next child
+																							childNum++;
+																							accessChild(children, childNum, childCount, textLoader);
+																					   });
+																						
+			
+			//access first child of info list
+			accessChild(children, childNum, childCount, textLoader);
+		}
+		
+		//attempt to begin loading the next child of the info list
+		private function accessChild(children:XMLList, childNum:int, childCount:int, textLoader:TextLoader)
+		{
+			//if the total number of children has been reached, flag and return before attempting to load any more
+			if(childNum >= childCount)
+			{
+				doneLoading = true;
+				dispatchEvent(new Event(Event.COMPLETE));
+				return;
+			}
+			
+			//extract child
+			var child:XML = children[childNum];
+			
+			//if the child is a text file, load the text
+			if(child.name() == "text_file")
+			{
+				//import text file
+				textLoader.importText(child);
+			}
+		}
+		
+		public function isDone():Boolean	{	return doneLoading;	}
+		
+		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
+		{ 
+			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
+			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		function clearEvents():void 
+		{
+			for (var i:Number=0; i < myArrayListeners.length; i++) 
+			{
+				if (this.hasEventListener(myArrayListeners[i].type)) 
+				{
+					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
+				}
+			}
+			myArrayListeners=null;
+		}
+	}
+}
