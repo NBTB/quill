@@ -6,14 +6,17 @@
 	
 	class CluesMenu extends BaseMenu
 	{
-		private var currentClueText:TextField = null;
-		private var oldClueText:TextField = null;
-		private var currentClue:String = null;
-		private var oldClues:Array = null;
+		private var currentClueText:TextField = null;			//The displayed current clue the user is searching for
+		private var oldClueText:TextField = null;				//displays the previous clue(s)
+		private var currentClue:String = null;					//The text of the current clue
+		private var oldClues:Array = null;						//Keeps track of all previous clues
 		
-		public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
+		//Creates the clues menu
+		public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
-			super(xPos, yPos, widthVal, heightVal, theMenu);
+			//Feeds in the variables for the backgrounds position to the base menu
+			super(xPos, yPos, widthVal, heightVal);
+			
 			
 			oldClues = new Array();
 			
@@ -40,7 +43,8 @@
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			
 		}
-
+		
+		//Add the elements to the stage
 		public function addedToStage(e:Event)
 		{
 			addChild(currentClueText);

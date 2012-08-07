@@ -4,6 +4,7 @@
     import flash.events.Event;
     import flash.events.EventDispatcher;
     
+	//Event to determine if the game wants to start
     public class MenuListener extends EventDispatcher {
 
 		public static const GAME_START:String = 'game_started';

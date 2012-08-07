@@ -10,20 +10,24 @@
 	class HelpMenu extends BaseMenu
 	{
 		
-		var objectiveOption:TextField = new TextField();
-		var tutorialOption:TextField = new TextField();
-		var controlsOption:TextField = new TextField();
+		var objectiveOption:TextField = new TextField();		//Button to display the objectives
+		var tutorialOption:TextField = new TextField();			//Button to display the full tutorial
+		var controlsOption:TextField = new TextField();			//Button to display the controls
 		
-		var textFormat:TextFormat = new TextFormat();
+		var textFormat:TextFormat = new TextFormat();			//Formatting
 		
-		public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
+		//Creates the help menu
+		public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
-			super(xPos, yPos, widthVal, heightVal, theMenu);
+			//sends variables to create background to the base menu
+			super(xPos, yPos, widthVal, heightVal);
 			
+			//set up start position and size of link textfields
 			var startX = 10;
 			var startY = 10;
 			var elementHeight = 40;
 			
+			//set up objective button
 			objectiveOption.text = "Objective";
 			objectiveOption.x = startX;
 			objectiveOption.y = startY;
@@ -31,6 +35,7 @@
 			objectiveOption.selectable = false;
 			addListChild(objectiveOption);
 			
+			//set up controls button
 			controlsOption.text = "Controls";
 			controlsOption.x = startX;
 			controlsOption.y = contentEndPoint.y;
@@ -38,6 +43,7 @@
 			controlsOption.selectable = false;
 			addListChild(controlsOption);
 			
+			//set up tutorial button
 			tutorialOption.text = "Tutorial";
 			tutorialOption.x = startX;
 			tutorialOption.y = contentEndPoint.y;
@@ -45,6 +51,7 @@
 			tutorialOption.selectable = false;
 			addListChild(tutorialOption);
 			
+			//format buttons
 			textFormat.color = 0xE5E5E5;
 			textFormat.font = "Gabriola";
 			textFormat.size = 26;
@@ -52,10 +59,7 @@
 			tutorialOption.setTextFormat(textFormat);
 			controlsOption.setTextFormat(textFormat);
 			
-			/*addChild(objectiveOption);
-			addChild(tutorialOption);
-			addChild(controlsOption);*/
-			
+			//add event listeners to the buttons
 			objectiveOption.addEventListener(MouseEvent.MOUSE_DOWN, showObjective);
 			tutorialOption.addEventListener(MouseEvent.MOUSE_DOWN, showTutorial);
 			controlsOption.addEventListener(MouseEvent.MOUSE_DOWN, showControls);
@@ -70,22 +74,26 @@
 			controlsOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 		
+		//function called if the button to show the tutorial is pressed
 		public function showTutorial(event:MouseEvent):void
 		{
 			
 		}
 		
+		//function called if the button to show the objective is pressed
 		public function showObjective(event:MouseEvent):void
 		{
 			
 		}
 		
+		//function called if the button to show the controls is pressed
 		public function showControls(event:MouseEvent):void
 		{
 			
 		}
 		
-		public function colorChange(event:MouseEvent):void 
+		//changes the color of the buttons
+		/*public function colorChange(event:MouseEvent):void 
 		{
 			var sender:TextField=event.target as TextField;
 			var myColor:ColorTransform=sender.transform.colorTransform;
@@ -100,6 +108,6 @@
 			var myColor:ColorTransform=sender.transform.colorTransform;	
 			myColor.color=0xFFFFFF;		
 			sender.transform.colorTransform=myColor;
-		}
+		}*/
 	}
 }

@@ -11,12 +11,13 @@
 	import flash.geom.ColorTransform;
 	
 //TODO: Add code to read in the About and Credit page information
-
+//TODO: Try to find a way to have the title keep its formatting, without having to constantly reset it
 
 	public class SplashScreen extends MovieClip
 	{
 		var theBackground:Shape = new Shape();
 		var splashTitle:TextField = new TextField();
+		var tut:TutorialMenu;
 		
 		var startGameListener:MenuListener;
 		var useTut:Boolean;
@@ -29,14 +30,11 @@
 		var splashButtonTitle:TextField = new TextField();
 		var splashButtonTutorial:TextField = new TextField();
 		var splashButtonSkip:TextField = new TextField();
-		var proceedButton:TextField = new TextField();
-		var continueButton:TextField = new TextField();
-		var controls:TextField = new TextField();
-		var controls2:TextField = new TextField();
+		
 		
 		var splashTitleFormat:TextFormat = new TextFormat();
 		var splashButtonFormat:TextFormat = new TextFormat();
-		var tutText:TextFormat = new TextFormat();
+		
 		
 		var buttonX:int = 285;
 		var buttonSeparation = 75;
@@ -67,10 +65,15 @@
 			splashButtonTitle.setTextFormat(splashButtonFormat);
 			splashButtonTutorial.setTextFormat(splashButtonFormat);
 			splashButtonSkip.setTextFormat(splashButtonFormat);
-			proceedButton.setTextFormat(splashButtonFormat);
-			continueButton.setTextFormat(splashButtonFormat);
-			controls.setTextFormat(tutText);
-			controls2.setTextFormat(tutText);
+			
+			//make the buttons so the text cursor doesn't appear over them
+			splashTitle.selectable = false;
+			splashButtonStart.selectable = false;
+			splashButtonAbout.selectable = false;
+			splashButtonCredits.selectable = false;
+			splashButtonTitle.selectable = false;
+			splashButtonTutorial.selectable = false;
+			splashButtonSkip.selectable = false;		
 			
 			//Event listeners for the different buttons in the project.
 			splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, tutorialStart);
@@ -82,62 +85,44 @@
 			
 			splashButtonStart.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonStart.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
 			splashButtonAbout.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonAbout.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
 			splashButtonCredits.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonCredits.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
 			splashButtonTitle.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonTitle.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
 			splashButtonTutorial.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonTutorial.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
 			splashButtonSkip.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonSkip.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
-			proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
-			continueButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			continueButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 		
 		function startWithTut(event:MouseEvent):void
 		{
 			//Function chosen if the user chooses to view the tutorial
 			useTut = true;
-			//gameReady = true;
+			gameReady = true;
 			removeChild(splashTitle);
 			removeChild(splashButtonTutorial);
-			removeChild(splashButtonSkip);				
+			removeChild(splashButtonSkip);						
+			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
+			addChild(tut);
+			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 			
-			addChild(controls);
-			addChild(continueButton);
-			continueButton.addEventListener(MouseEvent.MOUSE_DOWN, tutorialContinue);
-		}
-		function tutorialContinue(event:MouseEvent):void
-		{			
 			
-			removeChild(controls);
-			removeChild(continueButton);
-			addChild(controls2);
-			addChild(proceedButton);
-			proceedButton.addEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
-		}
+		}	
 		
 		function proceedFromTut(event:MouseEvent):void
-		{
-			gameReady = true;
-			useTut = false;
+		{			
+			tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			startGameListener.triggerListener();
 		}
-		
+			
+			
+		//Function chosen if the user chooses not to view the tutorial
 		function startNoTut(event:MouseEvent):void
 		{
-			//Function chosen if the user chooses not to view the tutorial
+			splashButtonSkip.removeEventListener(MouseEvent.MOUSE_DOWN, startNoTut);
 			useTut = false;
 			gameReady = true;
 			startGameListener.triggerListener();
@@ -171,7 +156,6 @@
 			splashButtonStart.height = 50;
 			splashButtonStart.width = 175;
 			splashButtonStart.text = "Start Game";
-			splashButtonStart.selectable = false;
 			
 			//Details of the about button
 			splashButtonAbout.x = buttonX;
@@ -179,7 +163,6 @@
 			splashButtonAbout.height = 50;
 			splashButtonAbout.width = 175;
 			splashButtonAbout.text = "About";
-			splashButtonAbout.selectable = false;
 			
 			//Details of the credits button
 			splashButtonCredits.x = buttonX;
@@ -187,7 +170,6 @@
 			splashButtonCredits.height = 50;
 			splashButtonCredits.width = 175;
 			splashButtonCredits.text = "Credits";
-			splashButtonCredits.selectable = false;
 			
 			//Details of the main page button
 			splashButtonTitle.x = buttonX;
@@ -195,7 +177,6 @@
 			splashButtonTitle.height = 50;
 			splashButtonTitle.width = 175;
 			splashButtonTitle.text = "Main Page";
-			splashButtonTitle.selectable = false;
 			
 			//Details of the view tutorial button
 			splashButtonTutorial.x = buttonX-50;
@@ -203,7 +184,6 @@
 			splashButtonTutorial.height = 50;
 			splashButtonTutorial.width = 275;
 			splashButtonTutorial.text = "View Tutorial";
-			splashButtonTutorial.selectable = false;
 			
 			//Details of the skip tutorial button
 			splashButtonSkip.x = buttonX-50;
@@ -211,37 +191,26 @@
 			splashButtonSkip.height = 50;
 			splashButtonSkip.width = 275;
 			splashButtonSkip.text = "Skip Tutorial";
-			splashButtonSkip.selectable = false;
 			
-			tutText.color = 0xCC9933;
-			tutText.font = "Gabriola";
-			tutText.size = 32;			
 			
-			proceedButton.x = 500;
-			proceedButton.y = 500;
-			proceedButton.height = 50;
-			proceedButton.width = 275;
-			proceedButton.text = "Proceed";
-			proceedButton.selectable = false;
-			
-			continueButton.x = 500;
-			continueButton.y = 500;
-			continueButton.height = 50;
-			continueButton.width = 275;
-			continueButton.text = "Continue Reading";
-			continueButton.selectable = false;
-			
-			controls.width = 750;
-			controls.height = 800;
-			controls.wordWrap = true;
-			controls.selectable = false;
-			controls.text = "Welcome to The Night Before The Battle Interactive Scavenger Hunt.  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.  In this games there is a collection of objects for you to discover throughout the painting. Left-clicking one of these objects will highlight it, and clicking again will open a description.";
-			
-			controls2.width = 750;
-			controls2.height = 700;
-			controls2.wordWrap = true;
-			controls2.selectable = false;
-			controls2.text = "In a few moments you will be given a clue to the first object you need to look for.  By clicking on the correct object that the riddle references, the object will be added to your collection.  You will also be given a brief description of the object, as well as some background on its history and its purpose in the painting.   Along with this description, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole.  The next clue will be given to you when you can identify the object behind this first one. Click Proceed to begin.";
+
+		}
+		
+		//changes the text color of the menu buttons to identify which one you're moused over
+		public function colorChange(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xCC9933;
+			sender.transform.colorTransform=myColor;
+
+		}
+		
+		//reverts the buttons back to their original colors
+		public function revertColor(event:MouseEvent):void {
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;	
+			myColor.color=0xE5E5E5;		
+			sender.transform.colorTransform=myColor;
 
 		}
 		
@@ -260,6 +229,7 @@
 			//Set which buttons are visible or not on the main splash page
 			this.addChild(splashButtonAbout);
 			this.addChild(splashButtonCredits);
+
 			this.addChild(splashButtonStart);
 			//Only remove child if it's coming from a page where it has been added.
 			if (firstStart != true)
@@ -312,22 +282,6 @@
 			removeChild(splashButtonStart);
 		}
 		
-		public function colorChange(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;
-			myColor.color=0xFFC000;
-			sender.transform.colorTransform=myColor;
-		}
-		
-		//reverts the buttons back to their original colors
-		public function revertColor(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;	
-			myColor.color=0xFFFFFF;		
-			sender.transform.colorTransform=myColor;
-		}
 		
 		function createBackground():void
 		{

@@ -15,19 +15,19 @@
 		public static const END_GOAL_LOADED:String = "End goal loaded";
 		
 		//load XML scavenger hunt specification and call parser when done
-		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
+		public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
 		{
 			//load XML file
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																		{
-																			parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu);
+																			parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu);
 																		});
 			xmlLoader.load(new URLRequest(filename));
 		}
 		
 		//parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu):void
+		private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
 		{				
 			//parse hunt attributes
 			var mgZoom:Number = 1;
@@ -109,16 +109,6 @@
 		//parse XML specification of obejcts of interest
 		private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number, paintingWidth:Number, paintingHeight:Number)
 		{
-			//temporary
-			var objImp:OOIInfoImporter = new OOIInfoImporter();
-			objImp.addEventListener(OOIInfoImporter.TEXT_FILE_IMPORTED, function(e:Event):void
-																						 {
-																							trace(objImp.parseText("../assets/testText.txt", 1));
-																							trace(objImp.parseText());
-																						 });
-			objImp.importText("../assets/testText.txt");
-			
-			
 			//object of interest loading counters
 			var objectsParsed:Number = 0;
 			var objectsLoaded:Number = 0;
@@ -134,8 +124,13 @@
 					//increment the number of objects parsed
 					objectsParsed++;
 					
+					//if information for the object's info pane has been provided, create a loader
+					var ooiInfoLoader:OOIInfoImporter = null;
+					if(ooi.hasOwnProperty("info"))
+						ooiInfoLoader = new OOIInfoImporter(ooi.info);
+					
 					//create new object of interest
-					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
+					var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
 					
 					//set the display position of the object of interest's info pane
 					var infoPaneX:Number = 0;

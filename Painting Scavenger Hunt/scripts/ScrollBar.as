@@ -7,17 +7,18 @@
 	
 	public class ScrollBar extends MovieClip
 	{
-		private var upButton:SimpleButton = null;
-		private var downButton:SimpleButton = null;
-		private var scroller:SimpleButton = null;			//indicates the current scroll distance and can be dragged
-		private var contentHeight:Number = 0;
-		private var visibleHeight:Number = 0;
+		private var upButton:SimpleButton = null;				//button used for scrolling up
+		private var downButton:SimpleButton = null;				//button used for scrolling down
+		private var scroller:FakeAButton = null;				//indicates the current scroll distance and can be dragged
+		private var contentHeight:Number = 0;					//total height of content
+		private var visibleHeight:Number = 0;					//height visible at any given moment
 		private var contentScrollSpeed:Number = 0;				//desired speed of content scolling
 		private var movementSpeed:Number = 0;					//speed of scroller 
 		private var movementFactor:Number = 0;					//factor of scroller movement (often 1 or -1)
 		private var scrolledPercentage:Number = 0;				//portion of full scroll away from rest
-		private var upDownButtonSize:Point = null;
-		private var scrollerSize:Point = null;
+		private var upDownButtonSize:Point = null;				//size of up and down buttons
+		private var scrollerSize:Point = null;					//size of scroller
+		private var scrollerDragged:Boolean = false;			//flag if scroller is being dragged
 		
 		//event types
 		public static const SCROLLED:String = "Scrolled";
@@ -55,10 +56,13 @@
 			scrollerSize.y = calculateScrollerHeight();
 			
 			//place scroller
-			scroller = new SimpleButton();
+			scroller = new FakeAButton();
 			scroller.x = 0;
 			scroller.y = upDownButtonSize.y;
 			addChild(scroller);
+			
+			//create bounding rectangle between up and down buttons to be used in scroller dragging
+			var scrollerBounds:Rectangle = new Rectangle(scroller.x, upButton.y + upButton.height, scroller.x + scroller.width, downButton.y);
 			
 			//store desired content scrolling speed and calcuate the speed of the scroller
 			this.contentScrollSpeed = contentScrollSpeed;
@@ -78,29 +82,97 @@
 			style.addEventListener(ScrollBarStyle.UP_DOWN_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateUpDownButtonStates(style);	});
 			style.addEventListener(ScrollBarStyle.SCROLL_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateScrollerStates(style);	});
 			
+			
+			//listen for being added to display list
+			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			
+			
 			//listen for new frames
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 			
 			//listen for up and down buttons being pressed
-			upButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	moveScroller(-1);	});
-			downButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	moveScroller(1);	});
+			upButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	trace("up");moveScroller(-1);	});
+			downButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	trace("down");moveScroller(1);	});
 			
 			//listen for up and down buttons being releases
 			upButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		{	stopScroller();	});
 			upButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void		{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void	{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	stopScroller();	});
+			
+			/*TODO make scroller dragging work*/
+			//listen for scroller being pressed
+			/*scroller.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	
+																				   {	
+																				  	 scroller.startDrag(false, scrollerBounds);	
+																					 scrollerDragged = true;
+																				   });
+			
+			//listen for scroller being released
+			scroller.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void		
+																				 {	
+																				 	scroller.stopDrag();	
+																					scrollerDragged = false;
+																				 });*/
+			
+			//listen for scroller is no longer hovered over
+			/*scroller.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void		
+																				 {	
+																				 	scroller.stopDrag();	
+																					scrollerDragged = false;
+																				 });*/
+		}
+		
+		private function addedToStage(e:Event)
+		{
+			//listen for mouse wheel movement
+			stage.addEventListener(MouseEvent.MOUSE_WHEEL, function(e:MouseEvent):void
+																	   {
+																		   //only respond if visible and on the stage
+																		   if(visible && stage)
+																		   {
+																			   //if the wheel is moved down, scroll down
+																			   if(e.delta < 0)
+																					moveScroller(1); 
+																				//otherwise, if the wheel is moved up, scroll up
+																			   	else if(e.delta > 0)
+																					moveScroller(-1);
+																				
+																				//stop scroller after initial movement
+																				stopScroller();																													
+																		   }
+																	   });
 		}
 		
 		private function enterFrame(e:Event)
 		{
+			//if scroller is being dragged, track it
+			if(scrollerDragged)
+			{
+				//clamp scoller between up and down buttons
+				if(scroller.y < upButton.y + upButton.height)
+					scroller.y = upButton.y + upButton.height;
+				if(scroller.y > downButton.y - scroller.height)
+					scroller.y = downButton.y - scroller.height;
+					
+				//dispatch scroll event
+				dispatchEvent(new Event(SCROLLED));
+			}
+			
+			
+			//calculate the amount of movement
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
+			
+			//if any movement is happening, update scroller and dispatch event
 			if(totalMovement)
 			{
 				scroller.y += totalMovement;
 				scrolledPercentage = calculateScrolledPercentage();
 				dispatchEvent(new Event(SCROLLED));
-			}
+				
+				//stop movement
+				//stopScroller();
+			}			
 		}
 		
 		private function moveScroller(movement:Number)
@@ -114,6 +186,12 @@
 		private function stopScroller()
 		{
 			movementFactor = 0;
+		}
+		
+		private function resetScroller()
+		{
+			scroller.y = upButton.y + upButton.height;
+			dispatchEvent(new Event(SCROLLED));
 		}
 		
 		private function scrollerMoveableFactor()
@@ -171,13 +249,11 @@
 			var upState:BitmapData = style.getScrollerState(ScrollBarStyle.UP);
 			var overState:BitmapData = style.getScrollerState(ScrollBarStyle.OVER);
 			var downState:BitmapData = style.getScrollerState(ScrollBarStyle.DOWN);
-			var hittestState:BitmapData = style.getScrollerState(ScrollBarStyle.HITTEST);
 			
 			///update scroller
-			scroller.upState = new Bitmap(upState);
-			scroller.overState = new Bitmap(overState);
-			scroller.downState = new Bitmap(downState);
-			scroller.hitTestState = new Bitmap(hittestState);
+			scroller.setUpState(new Bitmap(upState));
+			scroller.setOverState(new Bitmap(overState));
+			scroller.setDownState(new Bitmap(downState));
 			scroller.width = scrollerSize.x;
 			scroller.height = scrollerSize.y;
 		}

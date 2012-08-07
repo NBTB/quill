@@ -5,7 +5,9 @@
 	import flash.text.*;
 	import flash.geom.*;
 
-	class BaseMenu extends MovieClip
+	import flash.errors.*;
+	
+	public class BaseMenu extends MovieClip
 	{
 		protected var menuBackground:Shape = null;					//background of menu
 		protected var menuMask:Shape = null;						//mask of menu to determine what is seen
@@ -16,22 +18,23 @@
 		protected var contentEndPoint:Point = null;					//bottom-rightmost point of content
 		protected var scrollPoint:Point = null;						//translation of pane content due to scrolling
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
+		protected var openers:Array = null;							//list of objects that would cause the menu to open
+		protected var isOpen:Boolean;								//flag if menu is open
 		
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
 		protected static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		
-		private static var scrollBarStyle = null;
-		var theMainMenu:MainMenu;
-		
-		var isOpen:Boolean;
+		private static var scrollBarStyle = null;		
 		
 		//event types
 		public static const MENU_OPENED = "Menu Opened";
 		public static const MENU_CLOSED = "Menu Closed";
+		public static const CLOSE_MENUS_REQUEST = "Close all menus";
 
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, theMenu:MainMenu):void
-		{
+		//Sets up variables used by all the menus
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		{			
 			//if the scroll bar style has not yet been setup, do so now
 			if(!scrollBarStyle)
 			{
@@ -69,9 +72,13 @@
 				scrollBitmapLoader.loadBitmaps("../assets/scrollbar scroller up.png");				
 			}
 			
+			//Add the background and close button, and make sure it's open
 			//this.addChild(menuBackground);
 			//this.addChild(closeMenuButton);
 			isOpen = false;
+			
+			//start new array of openers
+			openers = new Array();
 			
 			//position menu
 			this.x = xPos;
@@ -92,9 +99,12 @@
 			menuMask.graphics.endFill();
 			addChild(menuMask);
 			
-			createBackground(paneDimensions.x, paneDimensions.y);
-			theMainMenu = theMenu;
-			
+			//If the variables read in are not 0, create the background.  Otherwise, let the subclass handle it.
+			if (xPos != 0 || yPos != 0 || widthVal != 0 || heightVal != 0)
+			{
+				createBackground(xPos, yPos, widthVal, heightVal);
+			}
+						
 			//create content container
 			contentContainer = new MovieClip();
 			contentContainer.mask = menuMask;
@@ -103,14 +113,14 @@
 			//create close button
 			closeMenuButton = new Sprite();
 			addChild(closeMenuButton);
-			createCloseButton(widthVal, heightVal);
+			createCloseButton(xPos, yPos, widthVal, heightVal);
 			
 			//create scroll bar
 			scrollBar = new ScrollBar(new Rectangle(width - 20, 50, 10, height - 100), scrollBarStyle, contentContainer.height, paneDimensions.y, 20);
 			addChild(scrollBar);
 			
 			//currently no scrolling is available
-			//scrollBar.visible = false;
+			scrollBar.visible = false;
 			contentStartPoint = new Point(0, 0);
 			contentEndPoint = new Point(0, 0);
 			scrollPoint = new Point(0, 0);
@@ -134,21 +144,60 @@
 																			});
 		}
 		
-		protected function closeMenu():void
+		//attempt to open this menu and return result
+		public function openMenu():Boolean
 		{
-			theMainMenu.closeMenus();
+			//if the menu is already open, return a failure
+			if(isOpen)
+				return false;
+			//otherwise, open now
+			else
+			{
+				//request the closure of other menus to avoid clutter and overlap
+				dispatchEvent(new Event(CLOSE_MENUS_REQUEST));
+				
+				//appear and open
+				visible = true;
+				isOpen = true;
+				
+				//announce being opened
+				dispatchEvent(new Event(MENU_OPENED));
+			}
+			
+			return true
 		}
 		
-		public function createBackground(widthVal:int, heightVal:int):void
+		//attempt to open this menu and return result
+		public function closeMenu():Boolean
 		{
-			//Set the background graphics
+			//if the menu is not already open, return a failure
+			if(!isOpen)
+				return false;
+			//otherwise, close
+			if(isOpen)
+			{
+				//disappear and close
+				visible = false;
+				isOpen = false;
+				
+				//announce being closed
+				dispatchEvent(new Event(MENU_CLOSED));
+			}
+			
+			return true;
+		}
+		
+		//Set the background graphics
+		public function createBackground(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		{
 			menuBackground.graphics.lineStyle(1, 0x836A35);
 			menuBackground.graphics.beginFill(0x2F2720);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
 		}
 		
-		public function createCloseButton(widthVal:int, heightVal:int):void
+		//Create the button used to close the menu
+		public function createCloseButton(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			closeMenuButton.graphics.lineStyle(1, 0x000000);
 			closeMenuButton.graphics.beginFill(0xFF0000);
@@ -158,6 +207,7 @@
 		
 		public function addListChild(child:DisplayObject, position:Point = null)
 		{				
+			
 			//position child and add it to the display list
 			if(position)
 			{
@@ -195,6 +245,31 @@
 				scrollBar.visible = true;			
 		}
 		
+		public function addListChildToTail(child:DisplayObject)
+		{
+			addListChild(child, new Point(contentStartPoint.x, contentEndPoint.y));
+		}
+		
+		public function addOpener(opener:Object)
+		{
+			openers.push(opener);
+		}
+		
+		//determine if the given object is an opener of the menu
+		public function isObjectOpener(opener:Object)
+		{
+			//if no opener was given, return a false
+			if(!opener)
+				return false;
+			
+			//check caller against list of openers
+			var isOpener = false;
+			for(var i:int = 0; i < openers.length && ! isOpener; i++)
+				isOpener = (opener == openers[i])
+			
+			return isOpener;
+		}
+		
 		private function scrollContent(distance:Point):void
 		{
 			//move content
@@ -206,7 +281,29 @@
 			scrollPoint.y += distance.y;			
 		}
 		
+		//changes the text color of the menu buttons to identify which one you're moused over
+		public function colorChange(event:MouseEvent):void 
+		{
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;
+			myColor.color=0xCC9933;
+			sender.transform.colorTransform=myColor;
+		}
+		
+		//reverts the buttons back to their original colors
+		public function revertColor(event:MouseEvent):void 
+		{
+			var sender:TextField=event.target as TextField;
+			var myColor:ColorTransform=sender.transform.colorTransform;	
+			myColor.color=0xE5E5E5;		
+			sender.transform.colorTransform=myColor;
+		}
+		
 		public function getContentStartPoint():Point	{	return contentStartPoint;	}
-		public function getContentEndPoint():Point	{	return contentEndPoint;	}
+		public function getContentEndPoint():Point		{	return contentEndPoint;	}
+		
+		public static function getTitleFormat():TextFormat		{	return titleFormat;		}
+		public static function getBodyFormat():TextFormat		{	return bodyFormat;		}
+		public static function getCaptionFormat():TextFormat	{	return captionFormat;	}
 	}
 }

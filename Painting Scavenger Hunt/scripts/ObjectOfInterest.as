@@ -24,18 +24,19 @@
 		private var upperBounds:Point = null;							//upper-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var mousedOver:Boolean = false;							//flag if the object is currently under the cursor
 		private var caption:TextField = null;							//caption that displays name of object
-		private var captionContainer:DisplayObjectContainer = null;		//display container of caption
 		private var infoPane:OOIInfoPane = null;						//pane used to display object's description
-		private var infoPaneContainer:DisplayObjectContainer = null;	//display container of info Pane
-		private var infoPanePosition:Point = null;						//coordinates of info Pane
+		private var infoPanePosition:Point = null;						//coordinates of info pane
+		private var infoLoader:OOIInfoImporter = null;					//loader of info pane content
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
+		private var hasBeenOpened:Boolean = false;						//turned true first time objects display pane is showed
+		private var hitTestSuppression:Boolean = false;					//flag if hit testing should be supressed
 		
-		private static var anyMousedOver = false;												//flag if any object is moused over
+		public static var anyMousedOver = false;												//flag if any object is moused over
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
+		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{			
 			//set name, and clue
 			this.objectName = objectName;
@@ -48,6 +49,9 @@
 			//store locations of hitmap and highlight image files
 			this.hitmapFilename = hitmapFilename;
 			this.highlightFilename = highlightFilename;
+			
+			//store info loader 
+			this.infoLoader = infoLoader;
 			
 			//set coordinates
 			this.x = x;
@@ -64,55 +68,49 @@
 			//store bounds
 			this.lowerBounds = lowerBounds;
 			this.upperBounds = upperBounds;
-			
-			//store display containers (default to this object's parent)
-			if(captionContainer)
-				this.captionContainer = captionContainer;
-			else
-				this.captionContainer = this.parent;
-			if(infoPaneContainer)
-				this.infoPaneContainer = captionContainer;
-			else
-				this.infoPaneContainer = this.parent;
-			
+						
 			//create caption textfield to display name
 			caption = new TextField();
+			caption.visible = false;
 			caption.defaultTextFormat = captionFormat;
 			caption.autoSize = TextFieldAutoSize.LEFT;
 			caption.selectable = false;
+			caption.mouseEnabled = false;
 			caption.text = objectName;
 						
-			//create info Pane
+			//create info pane
 			infoPane = new OOIInfoPane(5, 5, 250, 380);
+			infoPane.visible = false;
+			infoPane.mouseEnabled = true;
+			infoPane.mouseChildren = false;
+			infoPane.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void{});
+			
+			//add this as an opener of info pane
+			infoPane.addOpener(this);
 			
 			//add title to object info Pane
 			var titleText:TextField = new TextField();
-			titleText.defaultTextFormat = OOIInfoPane.getTitleFormat();
+			titleText.defaultTextFormat = BaseMenu.getTitleFormat();
 			titleText.text = objectName;	
 			titleText.width = 180;
 			titleText.x = 5;
 			titleText.y = 5;
 			titleText.wordWrap = true;
+			titleText.autoSize = TextFieldAutoSize.LEFT;
 			titleText.selectable = false;
+			titleText.mouseWheelEnabled = false;
 			infoPane.addListChild(titleText);
-			
-			//temporary
-			var bodyText:TextField = new TextField();
-			bodyText.defaultTextFormat = OOIInfoPane.getBodyFormat();
-			bodyText.text = "//store locations of hitmap and highlight image files			this.hitmapFilename = hitmapFilename;			this.highlightFilename = highlightFilename;						//set coordinates			this.x = x;			this.y = y;						//by default position the info pane at the origin			infoPanePosition = new Point(0, 0);						//store scale to be used when loading bitmaps			if(scaleFactor  <= 0)				scaleFactor = 1;			this.scaleFactor = scaleFactor;		//store bounds			this.lowerBounds = lowerBounds;			this.upperBounds = upperBounds;						//store display containers (default to this object's parent)			if(captionContainer)				this.captionContainer = captionContainer;			else				this.captionContainer = this.parent;			if(infoPaneContainer)				this.infoPaneContainer = captionContainer;			else				this.infoPaneContainer = this.parent;						//create caption textfield to display name			caption = new TextField();			caption.defaultTextFormat = captionFormat;			caption.autoSize = TextFieldAutoSize.LEFT;			caption.selectable = false;	caption.text = objectName;									//create info Pane			infoPane = new OOIInfoPane(5, 5, 250, 380);						//add title to object info Pane			var titleText:TextField = new TextField();			titleText.defaultTextFormat = OOIInfoPane.getTitleFormat();			titleText.text = objectName;				titleText.width = 200;			titleText.x = 5;			titleText.y = 5;			titleText.wordWrap = true;			titleText.selectable = false;infoPane.addListChild(titleText);"
-			bodyText.height = 1000;
-			bodyText.width = 180;
-			bodyText.x = 5;
-			bodyText.y = 50;
-			bodyText.wordWrap = true;
-			bodyText.selectable = false;
-			infoPane.addListChild(bodyText);
-			
-			//listen for when info Pane closes
-			infoPane.addEventListener(OOIInfoPane.CLOSE_PANE, function(e:Event):void	{	hideInfoPane();	});
-			
+						
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
+			
+			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
+															{
+																//trace("remove from stage " + objectName);
+																hitmap.bitmapData.dispose();
+																highlight.bitmapData.dispose();
+																removeEventListener(Event.ENTER_FRAME, enterFrame);
+															});
 		}
 		
 		//handle new frames
@@ -121,8 +119,8 @@
 			//ensure that the object has a display list parent before depending on it
 			if(parent)
 			{
-				//if the mouse cursor is hovering above the object, dispatch a MOUSE_OVER
-				if(hitTest(new Point(parent.mouseX, parent.mouseY)))
+				//if hit testing is not suppressed the mouse cursor is hovering above the object, dispatch a MOUSE_OVER
+				if(!hitTestSuppression && hitTest(new Point(parent.mouseX, parent.mouseY)))
 				{					
 					//only dispatch the event if the object was not previously hovered over
 					if(!mousedOver && !anyMousedOver)
@@ -154,6 +152,13 @@
 		{
 			loadHitmap();
 			loadHighlight();
+			loadInfo();
+		}
+		
+		//determine if all components have been loaded
+		private function componentsLoaded():Boolean
+		{
+			return hitmap && highlight && (!infoLoader || infoLoader.isDone());
 		}
 				
 		//load the object's hitmap image
@@ -176,7 +181,7 @@
 																								tempHitmap.bitmapData.dispose();
 																								
 																								//if both the hitmap and highlight are now loaded, dispatch a completion event
-																								if(hitmap && highlight)
+																								if(componentsLoaded())
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							 });
 			
@@ -216,7 +221,7 @@
 																								hideHighlight();
 																								
 																								//if both the hitmap and highlight are now loaded, dispatch a completion event
-																								if(hitmap && highlight)
+																								if(componentsLoaded())
 																									dispatchEvent(new Event(Event.COMPLETE)); 
 																							  });
 			
@@ -229,6 +234,33 @@
 			
 			//begin loading image
 			highlightLoader.load(new URLRequest(highlightFilename));
+		}
+		
+		//load objects info to be displayed in the info pane
+		private function loadInfo():void
+		{
+			if(infoLoader)
+			{
+				infoLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																			{
+																				//if all components have been loaded, dispatch a completion event
+																			if(componentsLoaded())
+																				dispatchEvent(new Event(Event.COMPLETE)); 
+																			});
+				infoLoader.loadInfoToOOI(this);
+			}
+		}
+			
+		//add display object as a child of info pane
+		public function addInfoToPane(newInfo:DisplayObject)
+		{
+			infoPane.addListChild(newInfo);
+		}
+		
+		//add display object as the tail child of info pane
+		public function addInfoToPaneTail(newInfo:DisplayObject)
+		{
+			infoPane.addListChildToTail(newInfo);
 		}
 				
 		//test hitmap against a given point, determine hit using a minimum alpha value		
@@ -289,6 +321,7 @@
 																						
 																						//display info Pane
 																						showInfoPane();
+																						
 																					}
 																				  });
 			
@@ -356,66 +389,90 @@
 		//display caption
 		public function showCaption()
 		{
-			if(captionContainer)
-			{	
-				captionContainer.addChild(caption);
+			caption.visible = true;
 				captionAtMouse();
-			}
 		}
 		
 		//hide caption
 		public function hideCaption()
 		{
-			if(caption.parent)
-			{
-				caption.parent.removeChild(caption);
-			}
+			caption.visible = false;
 		}		
 		
 		//display info Pane
 		public function showInfoPane()
 		{
-			if(infoPaneContainer)
-			{	
-				infoPaneContainer.addChild(infoPane);
-				dispatchEvent(new Event(OOIInfoPane.OPEN_PANE));
-			}
+			infoPane.openMenu();
 		}
 		
+		//event listener version of showInfoPane
+		public function displayInfoPane(e:MouseEvent)
+		{
+			showInfoPane();
+		}
+				
 		//hide descrition pane
 		public function hideInfoPane()
 		{
-			if(infoPane.parent)
-			{
-				infoPane.parent.removeChild(infoPane);
-				dispatchEvent(new Event(OOIInfoPane.CLOSE_PANE));
-			}
+			infoPane.closeMenu();
 		}
 		
 		//toggle highlight visibilty
-		public function showHighlight():void				{	highlight.visible = true;		}
+		public function showHighlight():void				
+		{	
+			highlight.visible = true;		
+		}
+		
 		public function hideHighlight():void				{	highlight.visible = false;		}
 		
-		//retrieve highlight visibility
-		public function isHighlightd():Boolean			{	return highlight.visible;		}
+		//object is opened
+		public function hasOpened():void					{	hasBeenOpened = true;			}
 		
-		public function getObjectName():String							{	return objectName;					}
-		public function getID():Number									{	return id;							}
-		public function getClue():String								{	return clue;						}
-		public function getHitmap():Bitmap								{	return hitmap;						}
-		public function getHighlight():Bitmap							{	return highlight;					}
-		public function getFullsizeHighlight():Bitmap					{	return fullsizeHighlight;			}
+		//retrieve highlight visibility
+		public function isHighlightd():Boolean				{	return highlight.visible;		}
+		
+		public function getObjectName():String							{	return objectName;				}
+		public function getID():Number									{	return id;						}
+		public function getClue():String								{	return clue;					}
+		public function getHitmap():Bitmap								{	return hitmap;					}
+		public function getHighlight():Bitmap							{	return highlight;				}
+		public function getFullsizeHighlight():Bitmap					{	return fullsizeHighlight;		}
 		public function getInfoPane():OOIInfoPane						{	return infoPane;				}
-		public function getCaptionContainer():DisplayObjectContainer	{	return captionContainer;			}
-		public function getInfoPaneContainer():DisplayObjectContainer	{	return infoPaneContainer;	}
-		public function getInfoPanePosition():Point						{	return infoPanePosition	}
+		public function getInfoPanePosition():Point						{	return infoPanePosition;		}
+		public function getHasBeenOpened():Boolean						{	return hasBeenOpened;			}
+		public function getHitTestSuppression():Boolean					{	return hitTestSuppression;		}
 			
-		public function setCaptionContainer(container:DisplayObjectContainer):void		{	this.captionContainer = container;		}
-		public function setDescriptionContainer(container:DisplayObjectContainer):void	{	this.infoPaneContainer = container;		}
-		public function setInfoPanePosition(coordinates:Point):void						
+		public function setCaptionContainer(container:DisplayObjectContainer, childIndex:int = -1):void		
+		{	
+			//if caption already has a parent, remove it as a child
+			if(caption.parent)
+				caption.parent.removeChild(caption);
+		
+			//if the child index is negative, add as a the top child
+			if(childIndex < 0)
+				container.addChild(caption)
+			//otherwise, add at the child index
+			else
+				container.addChildAt(caption, childIndex)
+		}
+		public function setInfoPaneContainer(container:DisplayObjectContainer, childIndex:int = -1):void	
+		{	
+			//if info pane already has a parent, remove it as a child
+			if(infoPane.parent)
+				infoPane.parent.removeChild(infoPane);
+		
+			//if the child index is negative, add as a the top child
+			if(childIndex < 0)
+				container.addChild(infoPane)
+			//otherwise, add at the child index
+			else
+				container.addChildAt(infoPane, childIndex)
+		}
+		public function setInfoPanePosition(coordinates:Point, childIndex:int = -1):void						
 		{	
 			this.infoPane.x = coordinates.x;	
 			this.infoPane.y = coordinates.y;	
 		}
+		public function setHitTestSuppression(suppression:Boolean):void	{	this.hitTestSuppression = suppression	}
 	}
 }

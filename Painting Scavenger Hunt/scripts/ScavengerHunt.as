@@ -11,13 +11,11 @@
 		
 	public class ScavengerHunt extends MovieClip
 	{
-		var startGameListener:MenuListener;
-		var paintingCanvas:PaintingCanvas = null;
-		var ooiManager = null;
-		var startUpScreen:SplashScreen;
-		static var mainMenu:MainMenu;							/*TODO this should not be static, instead main menu should be a singleton*/
-		var useTutorial:Boolean;				
-		var initiator:GameInitiator;
+		private var startGameListener:MenuListener;				//Listener to determine when the main game should begin
+		private var paintingCanvas:PaintingCanvas = null;		//The class that displays the painting 
+		private var ooiManager = null;							//Object which keeps track of objects in the painting
+		private var startUpScreen:SplashScreen;					//Splash screen which displays when program is first started
+		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
@@ -27,14 +25,23 @@
 		private var nextClueButton:SimpleButton = null;			//notification button that appears when the next clue becomes available
 		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
+		private var pauseEvents:Boolean = false;				//flag if certain events should be paused
+		
+		//main menu titles
+		private var helpMenuTitle:String = "Help";			//title of help menu
+		private var cluesMenuTitle:String = "Clues";		//title of clues menu
+		private var endGoalMenuTitle:String = "Letter";		//title of end goal menu
+		private var objectsMenuTitle:String = "Objects";	//title of objects menu		
+		private var restartMenuTitle:String = "Restart";	//title of restart menu
 		
 		//construct scavanger hunt
-		public function ScavengerHunt(theInitiator:GameInitiator):void
+		public function ScavengerHunt():void
 		{
-			initiator = theInitiator;		
-			startMenu();
+			//initiator = theInitiator;		
+			startMenu();			
 		}
-				
+		
+		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
 		public function startMenu():void
 		{
 			startGameListener = new MenuListener();
@@ -44,19 +51,19 @@
 			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
 		}
 		
+		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
 		{			
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(startUpScreen.useTut, initiator);
+			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, stage);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
 			newRewardButton = new SimpleButton();
-			
-			
+						
 			//setup clue text format
 			clueTextFormat = new TextFormat("Edwardian Script ITC", 25, 0x40E0D0);
 			clueTextFormat.align = TextFormatAlign.CENTER;
@@ -114,28 +121,50 @@
 			magnifyButtonLoader.loadBitmaps("../assets/magnify button up.png", "../assets/magnify button over.png", "../assets/magnify button down.png", "../assets/magnify button hittest.png");
 			
 			
+			/*TODO menu creation and addition to main menu should be put in functions*/
+			//create menus to appear in main menu
+			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
+			var cluesMenu:CluesMenu = new CluesMenu(100, 400, 220, 115);
+			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
+			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
+			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, mainMenu.letterMenu);
+			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
+			
+			//add menus to main menu
+			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
+			mainMenu.addChildMenu(cluesMenu, cluesMenuTitle);
+			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
+			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
+			mainMenu.addChildMenu(restartMenu, restartMenuTitle);				
 		}
 		
+		//Actually begin the rest of the game
 		public function startGame():void
 		{
-			useTutorial = startUpScreen.useTut;
+			//remove pre-game children from display list
+			removeChild(startUpScreen);
 			
-			//remove start up menu from display list
-			removeChild(startUpScreen);							
+			//add in-game children to display list,
+			//ensuring that they are tightly packed
+			var childIndex:int = 0;
+			addChildAt(paintingCanvas, childIndex++);
+			addChildAt(ooiManager, childIndex++);
+			addChildAt(mainMenu, childIndex++);
+			addChildAt(magnifyingGlass, childIndex++);
+			addChildAt(clueText, childIndex++);	
+			addChildAt(magnifyButton, childIndex++);
+			addChildAt(nextClueButton, childIndex++);
+			addChildAt(newRewardButton, childIndex++);
 			
-			//add in-game children to display list
-			addChild(paintingCanvas);
-			addChild(ooiManager);
-			addChild(magnifyingGlass);
-			addChild(clueText);	
-			addChild(mainMenu);
-			addChild(magnifyButton);
-			addChild(nextClueButton);
-			addChild(newRewardButton);
+			//make menus inside main menu displayable
+			mainMenu.makeChildMenusDisplayable();	
+			
+			//give OOIManager reference to objects menu
+			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).getObjectManager(ooiManager);		
 			
 			//add listeners for when in-game children are clicked
 			for(var i = 0; i < this.numChildren; i++)
@@ -145,27 +174,36 @@
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
 			//create clue timer
-			clueTimer = new Timer(3 * 1000, 1);
+			clueTimer = new Timer(10 * 1000, 1);
 			
 			//listen for the completion of the clue timer
 			clueTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
 																		  {
-																			//reset clue time and hide the clue text box
-																			clueTimer.reset();
-																			clueText.text = ""
-																			clueText.visible = false;
+																			hideClueText();
 																		  });
+			
+			//reference the clues and end goal menus
+			var cluesMenu:CluesMenu = CluesMenu(mainMenu.getMenu(cluesMenuTitle));
+			var endGoalMenu:LetterMenu = LetterMenu(mainMenu.getMenu(endGoalMenuTitle));
 			
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
 			var firstClue:String = ooiManager.pickNextOOI();
-			mainMenu.cluesMenu.addClue(firstClue);
+			cluesMenu.addClue(firstClue);
+			
+			//post first clue
+			postToClueText(firstClue);
+			nextClueButton.visible = false;
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
 			
 			//listen for incorrect answers to clues
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
+			
+			//listen for an object of interest's info pan to open and close
+			ooiManager.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
+			ooiManager.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
 			
 			//listen for the next clue button being clicked
 			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -175,7 +213,7 @@
 																					});
 			
 			//listen for the clues menu being opened
-			mainMenu.cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	
+			cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	
 																					   {
 																							//if the next clue button is visible, hide it 
 																							//the clue will appear in the clues menu
@@ -186,11 +224,12 @@
 			//listen for the new reward button being clicked
 			newRewardButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																					{	
-																						mainMenu.openLetterMenu();
+																						endGoalMenu.openMenu();
 																					});
 			
+			/*TODO the response of this listener should be moved to letter menu*/
 			//listen for the reward menu being opened
-			mainMenu.letterMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
+			endGoalMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
 																						{
 																						   //if the new reward button is visible, hide it 
 																						   //the new reward is being viewed
@@ -198,11 +237,16 @@
 																								newRewardButton.visible = false;
 																					   	});
 			
+			//listen for a menu to open and close
+			mainMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
+			mainMenu.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
+			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																					{	
 																						toggleZoom();
 																					});
+			
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
@@ -228,11 +272,33 @@
 				toggleZoom();
 		}
 		
-		//toggle use of magnifying glass
-		public function toggleZoom():void
+		private function allowEventsOutsideMenu(allowEvents:Boolean):void
 		{
-			//toggle zoom
-			zoomed = !zoomed;
+			//flag the pause/unpause of certain events
+			pauseEvents = !allowEvents;
+						
+			//if events are not allowed, setup special states
+			if(!allowEvents)
+			{
+				toggleZoom(true, false);
+				ooiManager.setAllOOIHitTestSuppression(true);
+			}
+			//otherwise, revert to normal states
+			else
+			{
+				ooiManager.setAllOOIHitTestSuppression(false);
+			}
+		}
+		
+		//toggle use of magnifying glass
+		public function toggleZoom(forceResult:Boolean = false, forceTo:Boolean = false):void
+		{
+			//if the result is to be forced, do so
+			if(forceResult)
+				zoomed = forceTo;
+			//otherwise, toggle zoom
+			else
+				zoomed = !zoomed && !pauseEvents;
 			
 			//if zoom started, draw magnifying glass
 			if(zoomed)
@@ -271,20 +337,25 @@
 		//handle a correct answer to a clue
 		private function handleCorrectAnswer(e:Event)
 		{	
+			//reference the clues menu
+			var cluesMenu:CluesMenu = CluesMenu(mainMenu.getMenu(cluesMenuTitle));
+		
+			//hide the current clue
+			hideClueText();
+		
 			//close menus
 			mainMenu.closeMenus();
 		
 			//add the piece of the end goal
-			/*TODO make not hard coded and perhaps not linear*/
-			if(mainMenu.rewardCounter > 7)
+			var completionRequirement:int = ooiManager.getUsableOOICount();
+			if(mainMenu.rewardCounter > completionRequirement)
 			{
-				mainMenu.rewardCounter = 7;
+				mainMenu.rewardCounter = completionRequirement;
 			}
 			else
 			{
 				mainMenu.rewardCounter++;
 				newRewardButton.visible = true;
-				//mainMenu.letterRec.visible = true;
 			}
 		
 			//attempt to pick the next object to hunt and retrieve its clue
@@ -297,14 +368,14 @@
 				nextClueButton.visible = true;
 				
 				//add new clue to clue menu
-				mainMenu.cluesMenu.addClue(nextClue);
+				cluesMenu.addClue(nextClue);
 			}
 			//otherwise, notify the user that the hunt has been completed
 			else
 				postToClueText(OOIManager.NO_CLUES_NOTIFY);
 				
 			//make the current clue old
-			mainMenu.cluesMenu.outdateCurrentClue();
+			cluesMenu.outdateCurrentClue();
 		}
 		
 		//display the next clue
@@ -326,7 +397,7 @@
 		
 		//display clue text in textfield on screen
 		private function postToClueText(textToPost:String)
-		{
+		{				
 			//display notification
 			clueText.visible = true;
 			clueText.text = textToPost;
@@ -336,7 +407,16 @@
 			clueTimer.start();
 		}
 		
-		//add evebt listener to list that will trigger the closing of dismissible overlays
+		//reset clue time and hide the clue text box
+		private function hideClueText()
+		{
+			
+			clueTimer.reset();
+			clueText.text = ""
+			clueText.visible = false;
+		}
+		
+		//add event listener to list that will trigger the closing of dismissible overlays
 		private function addDismissibleOverlayCloser(closer:DisplayObject, eventType:String = MouseEvent.CLICK):void
 		{
 			closer.addEventListener(eventType, closeDismissibleOverlays);
@@ -344,9 +424,12 @@
 		
 		//close overlays that are to be dismissed by a click anywhere else on screen
 		private function closeDismissibleOverlays(e:MouseEvent):void
-		{
+		{					
+			//close all menus
+			mainMenu.closeMenus(e.target);
+			
 			//close captions and descriptions of all objects of interest
-			ooiManager.hideAllOOIInfoPanes();
+			ooiManager.hideAllOOIInfoPanes(e.target);
 		}
 	}
 }
