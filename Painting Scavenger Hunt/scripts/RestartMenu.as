@@ -78,7 +78,7 @@
 		//function which throws the event to restart the game
 		public function startOverProgram(event:MouseEvent):void
 		{
-			//initiator.reloadGame();
+			//dispatch restart event
 			this.dispatchEvent(new RestartEvent(RestartEvent.RESTART_GAME, true));
 		}
 		
