@@ -20,7 +20,7 @@
 		
 		//Function to load the game
 		public function GameInitiator():void
-		{
+		{			
 			//trace("Initial Load");
 			
 			//set the domain, so they can refer to each other
@@ -31,7 +31,7 @@
 			loadContent();			
 			
 			//check for the restart event to restart the game
-			this.addEventListener(RestartEvent.RESTART_GAME, restartHandler);
+			//this.addEventListener(RestartEvent.RESTART_GAME, restartHandler);
 		}
 		
 		//when the game loader has correclty obtained the game, start it.
@@ -45,6 +45,7 @@
 		function onCompleteHandler(loadEvent:Event)
 		{
 			addChild(gameLoader);
+			gameLoader.content.addEventListener(RestartEvent.RESTART_GAME, restartHandler);
 		}
 		
 		//restart the game (currently non-functional)
@@ -57,17 +58,18 @@
 			//gameLoader.unload();
 			
 			
-			
 			/*TODO this does not work in CS3, find alternative or upgrade*/
 			//gameLoader.unloadAndStop();  //This works, but does not remove event listeners
 			
+			
 			removeChild(gameLoader);
+			gameLoader.unload();
 			gameLoader = null;
 			gameLoader = new Loader();
 			
 			loadContent();
 		}
-
+		
 		/*public function reloadGame():void
 		{
 			removeChild(theGame);
