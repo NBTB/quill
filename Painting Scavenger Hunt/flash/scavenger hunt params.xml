@@ -7,12 +7,12 @@
 	<End_Goal>
 	</End_Goal>
 	<Object_Of_Interest>
-		<name>Quill</name>
+		<name>Quill & Parchment</name>
 		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 		<hitmap_filename>../assets/quill hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/quill highlight.png</highlight_filename>
-		<x>0.7834827</x>
-		<y>0.7008636</y>
+		<x>0.7844827</x>
+		<y>0.70186368636</y>
 		<info_pane_x>0.45</info_pane_x>
 		<info_pane_y>0.25</info_pane_y>
 		<info>
@@ -46,16 +46,16 @@
 		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
-		<name>Skull</name>
+		<name>Skeleton</name>
 		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
-		<hitmap_filename>../assets/skull hitmap.png</hitmap_filename>
-		<highlight_filename>../assets/skull highlight.png</highlight_filename>
-		<x>0.4845827</x>
+		<hitmap_filename>../assets/skeleton hitmap.png</hitmap_filename>
+		<highlight_filename>../assets/skeleton highlight.png</highlight_filename>
+		<x>0.4705827</x>
 		<y>0.3307687</y>
 		<info_pane_x>0.15</info_pane_x>
 		<info_pane_y>0.10</info_pane_y>
 		<info>
-			<text_file>../assets/skull info.txt</text_file>
+			<text_file>../assets/skeleton info.txt</text_file>
 		</info>
 	</Object_Of_Interest>
 	<Object_Of_Interest>

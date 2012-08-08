@@ -351,8 +351,8 @@
 			if(caption.parent)
 			{
 				//place caption near mouse
-				caption.x = caption.parent.mouseX + 10;
-				caption.y = caption.parent.mouseY;
+				caption.x = caption.parent.mouseX + 5;
+				caption.y = caption.parent.mouseY - 25;
 				
 				//if the caption exceeds bounds, clamp it
 				var captionFarX = caption.x + caption.width;
