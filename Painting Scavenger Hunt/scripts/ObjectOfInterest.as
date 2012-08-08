@@ -84,7 +84,7 @@
 			infoPane = new OOIInfoPane(5, 5, 250, 380);
 			infoPane.visible = false;
 			infoPane.mouseEnabled = true;
-			infoPane.mouseChildren = false;
+			infoPane.mouseChildren = true;
 			infoPane.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void{});
 			
 			//add this as an opener of info pane

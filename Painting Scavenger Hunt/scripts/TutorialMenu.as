@@ -77,7 +77,7 @@
 
 		function loadImages() {
 
-			var url:URLRequest=new URLRequest("../assets/letterTutImage.png");
+			var url:URLRequest=new URLRequest("../assets/interface/letterTutImage.png");
 
 			letterLoader.load(url);
 			letterLoader.scaleX=.8;
@@ -85,7 +85,7 @@
 			letterLoader.x=90;
 			letterLoader.y=300;
 
-			var url2:URLRequest=new URLRequest("../assets/clueTutImage.png");
+			var url2:URLRequest=new URLRequest("../assets/interface/clueTutImage.png");
 
 			clueLoader.load(url2);
 			clueLoader.scaleX=.8;
@@ -93,7 +93,7 @@
 			clueLoader.x=90;
 			clueLoader.y=350;
 
-			var url3:URLRequest=new URLRequest("../assets/mouseLeftClick.swf");
+			var url3:URLRequest=new URLRequest("../assets/interface/mouseLeftClick.swf");
 
 			mouseLoader.load(url3);
 			mouseLoader.scaleX=.6;
@@ -101,7 +101,7 @@
 			mouseLoader.x=50;
 			mouseLoader.y=250;
 
-			var url4:URLRequest=new URLRequest("../assets/mouseOver.swf");
+			var url4:URLRequest=new URLRequest("../assets/interface/mouseOver.swf");
 
 			mouseOverLoader.load(url4);
 			mouseOverLoader.scaleX=.8;

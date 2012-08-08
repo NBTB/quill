@@ -104,7 +104,8 @@
 																							newRewardButton.height /= 5;
 																							newRewardButton.visible = true;
 																					   });
-			notificationButtonLoader.loadBitmaps("../assets/notification button up.png", "../assets/notification button over.png", "../assets/notification button down.png", "../assets/notification button hittest.png");
+			notificationButtonLoader.loadBitmaps("../assets/interface/notification button up.png", "../assets/interface/notification button over.png", 
+												 "../assets/interface/notification button down.png", "../assets/interface/notification button hittest.png");
 			
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
@@ -120,7 +121,8 @@
 																							magnifyButton.height /= 5;
 																							magnifyButton.visible = true;
 																					   });
-			magnifyButtonLoader.loadBitmaps("../assets/magnify button up.png", "../assets/magnify button over.png", "../assets/magnify button down.png", "../assets/magnify button hittest.png");
+			magnifyButtonLoader.loadBitmaps("../assets/interface/magnify button up.png", "../assets/interface/magnify button over.png", 
+											"../assets/interface/magnify button down.png", "../assets/interface/magnify button hittest.png");
 			
 			
 			/*TODO menu creation and addition to main menu should be put in functions*/

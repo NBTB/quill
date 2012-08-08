@@ -44,7 +44,8 @@
 			{
 				closeButtonLoader = new ButtonBitmapLoader();
 				closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
-				closeButtonLoader.loadBitmaps("../assets/close button up.png", "../assets/close button over.png", "../assets/close button down.png", "../assets/close button hit.png");
+				closeButtonLoader.loadBitmaps("../assets/interface/close button up.png", "../assets/interface/close button over.png", 
+											  "../assets/interface/close button down.png", "../assets/interface/close button hit.png");
 			}
 			//otherwise if the style has begun loading, listen of completion
 			else if(closeButtonLoader.isLoading())
@@ -76,7 +77,8 @@
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());								
 																					 });
-				upDownBitmapLoader.loadBitmaps("../assets/scroll bar up-down button up.png", "../assets/scroll bar up-down button over.png", "../assets/scroll bar up-down button down.png", "../assets/scroll bar up-down button hit.png");
+				upDownBitmapLoader.loadBitmaps("../assets/interface/scroll bar up-down button up.png", "../assets/interface/scroll bar up-down button over.png", 
+											   "../assets/interface/scroll bar up-down button down.png", "../assets/interface/scroll bar up-down button hit.png");
 				
 				//load bitmaps to be used by scroller
 				var scrollBitmapLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
@@ -91,7 +93,7 @@
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());	
 																					 });
-				scrollBitmapLoader.loadBitmaps("../assets/scroll bar scroller up.png");				
+				scrollBitmapLoader.loadBitmaps("../assets/interface/scroll bar scroller up.png");				
 			}
 			
 			//Add the background and close button, and make sure it's open
