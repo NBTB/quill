@@ -15,8 +15,7 @@
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //Feeds in the variables for the backgrounds position to the base menu
-            super(xPos, yPos, widthVal, heightVal);
-             
+            super(xPos, yPos, widthVal, heightVal);             
              
             oldClues = new Array();
              
@@ -25,13 +24,13 @@
                          
             //temporary
             currentClueText.wordWrap = true;
-            currentClueText.x = xPos+20;
-            currentClueText.y = yPos+20;
+            currentClueText.x = 20;
+            currentClueText.y = 20;
             currentClueText.width = 150;           
             currentClueText.selectable = false;
             oldClueText.wordWrap = true;
-            oldClueText.x = xPos+40;
-            oldClueText.y = yPos+40;
+            oldClueText.x = 40;
+            oldClueText.y = 40;
             oldClueText.width = 150;   
             oldClueText.selectable = false;
              

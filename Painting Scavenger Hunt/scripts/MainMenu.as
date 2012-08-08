@@ -18,8 +18,6 @@
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
-		public var rewardCounter:Number = 0;						//???	/*TODO this should be a part of letter menu*/
-		
 		//text format of menu opening buttons
 		private static var menuOpenerTextFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5, 
 																			null, null, null, null, null, 

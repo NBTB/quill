@@ -91,7 +91,7 @@
 																							nextClueButton.y = 500;
 																							nextClueButton.width /= 5;
 																							nextClueButton.height /= 5;
-																							nextClueButton.visible = true;
+																							nextClueButton.visible = false;
 																							
 																							//setup new reward button
 																							newRewardButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage()), 
@@ -102,7 +102,7 @@
 																							newRewardButton.y = 500;
 																							newRewardButton.width /= 5;
 																							newRewardButton.height /= 5;
-																							newRewardButton.visible = true;
+																							newRewardButton.visible = false;
 																					   });
 			notificationButtonLoader.loadBitmaps("../assets/interface/notification button up.png", "../assets/interface/notification button over.png", 
 												 "../assets/interface/notification button down.png", "../assets/interface/notification button hittest.png");
@@ -238,8 +238,7 @@
 																						endGoalMenu.openMenu();
 																					});
 			
-			/*TODO the response of this listener should be moved to letter menu*/
-			//listen for the reward menu being opened
+						//listen for the reward menu being opened
 			endGoalMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
 																						{
 																						   //if the new reward button is visible, hide it 
@@ -274,20 +273,6 @@
             if(zoomed)
 			{
                 placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
-				if(pauseEvents)
-				{
-					hideClueText();
-				}
-				if(TutorialMenu.fromHelp)
-				{
-					magnifyButton.visible = false;				   
-                    newRewardButton.visible = false;					
-					nextClueButton.visible = false;
-				}
-				else
-				{
-					magnifyButton.visible = true;					
-				}
 			}
 		}		
 		
@@ -307,6 +292,7 @@
 			//if events are not allowed, setup special states
 			if(!allowEvents)
 			{
+				hideClueText();
 				toggleZoom(true, false);
 				ooiManager.setAllOOIHitTestSuppression(true);
 			}
@@ -364,8 +350,9 @@
 		//handle a correct answer to a clue
 		private function handleCorrectAnswer(e:Event)
 		{	
-			//reference the clues menu
+			//reference the clues and end goal menus
 			var cluesMenu:CluesMenu = CluesMenu(mainMenu.getMenu(cluesMenuTitle));
+			var endGoalMenu:LetterMenu = LetterMenu(mainMenu.getMenu(endGoalMenuTitle));
 		
 			//hide the current clue
 			hideClueText();
@@ -375,15 +362,17 @@
 		
 			//add the piece of the end goal
 			var completionRequirement:int = ooiManager.getUsableOOICount();
-			if(mainMenu.rewardCounter > completionRequirement)
+			if(endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD))
+					newRewardButton.visible = true;
+					
+			/*if(mainMenu.rewardCounter > completionRequirement)
 			{
 				mainMenu.rewardCounter = completionRequirement;
 			}
 			else
 			{
 				mainMenu.rewardCounter++;
-				newRewardButton.visible = true;
-			}
+			}*/
 		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			

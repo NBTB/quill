@@ -12,7 +12,10 @@
   
         var pieces:Array=new Array();                       //stores all of the letterPieces
         public var nextButton:TextField;                    //button to go to the next part of the letter, currently redundant?
-        var buttonFormat:TextFormat = new TextFormat();     //formatting
+        var buttonFormat:TextFormat = new TextFormat();     //formatting		
+		public var rewardCounter:Number = 0;						//???	/*TODO this should be a part of letter menu*/
+		
+		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
         //Creates the letter menu
         public function LetterMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -38,7 +41,7 @@
             nextButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
         }
          
-        //If a piece of the letter is unlocked, display it
+        //add new letter piece to list
         public function addPiece(newPiece:LetterPieces)
         {
             var newID:int = newPiece.getID();
@@ -69,7 +72,19 @@
              
              
         }
-         
+        
+		//unlock the reward
+		public function unlockReward(completionRequirement:int, rewardNumber:int = NEXT_REWARD)
+		{
+			/*make unlocking depend on reward number given*/
+			if(rewardCounter < completionRequirement)
+			{
+				pieces[rewardCounter].visible = true;
+				rewardCounter++;
+				return true;
+			}
+			return false;
+		}
         
          
         //next piece is shown
