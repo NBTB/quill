@@ -245,6 +245,8 @@
 			//flip down button so it opposes up button
 			downButton.upState.rotation = downButton.overState.rotation 
 				= downButton.downState.rotation = downButton.hitTestState.rotation = 180;
+			downButton.upState.x = downButton.overState.x
+				= downButton.downState.x = downButton.hitTestState.x  = downButton.width * 2;
 		}
 		
 		private function updateScrollerStates(style:ScrollBarStyle):void

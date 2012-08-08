@@ -60,7 +60,7 @@
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, stage);
+			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, this);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
@@ -144,6 +144,13 @@
 			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);				
+			
+			//temporary
+			restartMenu.addEventListener(RestartEvent.RESTART_GAME, function(e:RestartEvent):void	
+																							{	
+																								dispatchEvent(e);	
+																								clearEvents();
+																							});
 		}
 		
 		//Actually begin the rest of the game
@@ -153,7 +160,7 @@
 			removeChild(startUpScreen);
 			
 			//add in-game children to display list,
-			//ensuring that they are tightly packed
+			//ensuring that they are tightly packed on the bottom layers
 			var childIndex:int = 0;
 			addChildAt(paintingCanvas, childIndex++);
 			addChildAt(ooiManager, childIndex++);

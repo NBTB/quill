@@ -80,8 +80,9 @@
 		public function startOverProgram(event:MouseEvent):void
 		{
 			//initiator.reloadGame();
-			scavengerHunt.clearEvents();
-			trace("here");
+			//scavengerHunt.clearEvents();
+			//trace("here");
+			//GameInitiator.restart();
 			this.dispatchEvent(new RestartEvent(RestartEvent.RESTART_GAME, true));
 		}
 		
