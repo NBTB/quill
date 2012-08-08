@@ -10,7 +10,7 @@
 		protected var menuBackground:Shape = null;					//background of menu
 		protected var menuMask:Shape = null;						//mask of menu to determine what is seen
 		protected var contentContainer:MovieClip = null;			//container of display objects that populate the pane
-		protected var closeMenuButton:Sprite = null;				//button to close window
+		protected var closeMenuButton:SimpleButton = null;			//button to close window
 		protected var scrollBar:ScrollBar = null;					//scroll bar used to scroll through pane content
 		protected var contentStartPoint:Point = null;				//top-leftmost point of content
 		protected var contentEndPoint:Point = null;					//bottom-rightmost point of content
@@ -24,6 +24,7 @@
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
 		protected static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
+		protected static var closeButtonLoader:ButtonBitmapLoader = null;
 		
 		private static var scrollBarStyle = null;		
 		
@@ -35,7 +36,28 @@
 		//Sets up variables used by all the menus
 		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{			
-			//if the scroll bar style has not yet been setup, do so now
+			//create rectangle for close button
+			var closeButtonRect:Rectangle = new Rectangle(widthVal - 20, 10, 10, 10);
+			
+			//if the close button style has not yet been loaded, do so now
+			if(!closeButtonLoader)
+			{
+				closeButtonLoader = new ButtonBitmapLoader();
+				closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
+				closeButtonLoader.loadBitmaps("../assets/close button up.png", "../assets/close button over.png", "../assets/close button down.png", "../assets/close button hit.png");
+			}
+			//otherwise if the style has begun loading, listen of completion
+			else if(closeButtonLoader.isLoading())
+			{
+				closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
+			}
+			//otherwise, use the loaded style
+			else
+			{
+				createCloseButton(closeButtonRect);
+			}
+		
+			//if the scroll bar style has not yet been loaded, do so now
 			if(!scrollBarStyle)
 			{
 				//create new style
@@ -54,7 +76,7 @@
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());								
 																					 });
-				upDownBitmapLoader.loadBitmaps("../assets/scrollbar up-down button up.png");
+				upDownBitmapLoader.loadBitmaps("../assets/scroll bar up-down button up.png", "../assets/scroll bar up-down button over.png", "../assets/scroll bar up-down button down.png", "../assets/scroll bar up-down button hit.png");
 				
 				//load bitmaps to be used by scroller
 				var scrollBitmapLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
@@ -69,7 +91,7 @@
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());	
 																					 });
-				scrollBitmapLoader.loadBitmaps("../assets/scrollbar scroller up.png");				
+				scrollBitmapLoader.loadBitmaps("../assets/scroll bar scroller up.png");				
 			}
 			
 			//Add the background and close button, and make sure it's open
@@ -111,9 +133,9 @@
 			addChild(contentContainer);
 			
 			//create close button
-			closeMenuButton = new Sprite();
-			addChild(closeMenuButton);
-			createCloseButton(xPos, yPos, widthVal, heightVal);
+			//closeMenuButton = new Sprite();
+			//addChild(closeMenuButton);
+			//createCloseButton(xPos, yPos, widthVal, heightVal);
 			
 			//create scroll bar
 			scrollBar = new ScrollBar(new Rectangle(width - 20, 50, 10, height - 100), scrollBarStyle, contentContainer.height, paneDimensions.y, 20);
@@ -124,11 +146,6 @@
 			contentStartPoint = new Point(0, 0);
 			contentEndPoint = new Point(0, 0);
 			scrollPoint = new Point(0, 0);
-			//listen for close button click
-			closeMenuButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void
-																						 {
-																							  closeMenu();
-																						 });
 																							
 			//listen for the scrolling of the scroll bar
 			scrollBar.addEventListener(ScrollBar.SCROLLED, function(e:Event):void
@@ -196,12 +213,26 @@
 		}
 		
 		//Create the button used to close the menu
-		public function createCloseButton(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		public function createCloseButton(placementRect):void
 		{
-			closeMenuButton.graphics.lineStyle(1, 0x000000);
-			closeMenuButton.graphics.beginFill(0xFF0000);
-			closeMenuButton.graphics.drawRect(width-20, 10, 10, 10);
-			closeMenuButton.graphics.endFill();
+			//create close button
+			closeMenuButton = new SimpleButton(new Bitmap(closeButtonLoader.getUpImage()), 
+											   new Bitmap(closeButtonLoader.getOverImage()), 
+											   new Bitmap(closeButtonLoader.getDownImage()), 
+											   new Bitmap(closeButtonLoader.getHittestImage()));
+			
+			//position close button
+			closeMenuButton.x = placementRect.x;
+			closeMenuButton.y = placementRect.y;
+			closeMenuButton.width = placementRect.width;
+			closeMenuButton.height = placementRect.height;
+			addChild(closeMenuButton);
+			
+			//listen for close button click
+			closeMenuButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void
+																						 {
+																							  closeMenu();
+																						 });
 		}
 		
 		public function addListChild(child:DisplayObject, position:Point = null)

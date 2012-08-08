@@ -241,6 +241,10 @@
 			downButton.hitTestState = new Bitmap(hittestState);
 			downButton.width = upDownButtonSize.x;
 			downButton.height = upDownButtonSize.y;
+			
+			//flip down button so it opposes up button
+			downButton.upState.rotation = downButton.overState.rotation 
+				= downButton.downState.rotation = downButton.hitTestState.rotation = 180;
 		}
 		
 		private function updateScrollerStates(style:ScrollBarStyle):void

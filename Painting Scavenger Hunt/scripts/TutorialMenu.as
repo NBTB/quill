@@ -242,7 +242,7 @@
 			updateText();
 		}
 
-		override public function createCloseButton(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
+		override public function createCloseButton(placementRect):void {
 			return;
 		}
 	}

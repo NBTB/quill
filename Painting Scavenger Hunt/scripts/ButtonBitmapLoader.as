@@ -10,6 +10,7 @@
 		private var overImage:BitmapData = null;
 		private var downImage:BitmapData = null;
 		private var hittestImage:BitmapData = null;
+		private var loading:Boolean = false;
 		
 		public static const IMAGE_LOAD_ERROR = "An image failed to load";
 		
@@ -22,6 +23,9 @@
 			var overNeeded:Boolean = overFilename != null;
 			var downNeeded:Boolean = downFilename != null;
 			var hittestNeeded:Boolean = hittestFilename != null;
+			
+			//flag as loading
+			loading = true;
 			
 			//load up image if needed
 			if(upNeeded)
@@ -115,9 +119,12 @@
 					break;
 			}
 			
-			//if no more loading is required, dispatch a completion event
+			//if no more loading is required, dispatch a completion event and flag as not loading
 			if(!(upNeeded || overNeeded || downNeeded || hittestNeeded))
+			{
+				loading = false;
 				dispatchEvent(new Event(Event.COMPLETE));
+			}
 		}
 		
 		private function errorBitmap(stateIndex:int, upNeeded:Boolean, overNeeded:Boolean, downNeeded:Boolean, hittestNeeded:Boolean):void
@@ -144,15 +151,19 @@
 			//dispatch an error event
 			dispatchEvent(new Event(IMAGE_LOAD_ERROR));
 			
-			//if no more loading is required, dispatch a completion event
+			//if no more loading is required, dispatch a completion event and flag as not loading
 			if(!(upNeeded || overNeeded || downNeeded || hittestNeeded))
+			{
+				loading = false;
 				dispatchEvent(new Event(Event.COMPLETE));
+			}
 		}
 		
 		public function getUpImage():BitmapData				{	return upImage;										}
 		public function getOverImage():BitmapData			{	return (overImage) ? overImage : upImage;			}
 		public function getDownImage():BitmapData			{	return (downImage) ? downImage : upImage;			}
 		public function getHittestImage():BitmapData		{	return (hittestImage) ? hittestImage : upImage;		}
+		public function isLoading():Boolean					{	return loading;										}
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 
