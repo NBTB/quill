@@ -47,9 +47,12 @@
 			
 			//instruct the new object to display its caption above the list of objects 
 			//and display its info pane on the stage
-			newObject.setCaptionContainer(this, childIndex+1);
-			if(stage)
-				newObject.setInfoPaneContainer(stage);
+			//newObject.setCaptionContainer(this, childIndex+1);
+			if(parent)
+			{
+				newObject.setCaptionContainer(parent); /*TODO make captions appear above magnifying glass*/
+				newObject.setInfoPaneContainer(parent);
+			}
 			
 			//get the new object's info pane
 			var infoPane:OOIInfoPane = newObject.getInfoPane();

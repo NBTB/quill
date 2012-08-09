@@ -177,7 +177,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Signature</name>
-		<clue>I'm no mirror, but I'm a reflection you...</clue>
+		<clue>Without me, what shame, oh, to not even know the artist's name...</clue>
 		<hitmap_filename>../assets/ooi images/signature hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/signature highlight.png</highlight_filename>
 		<x>0.0060307</x>

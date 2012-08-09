@@ -360,6 +360,9 @@
 		
 			//hide the current clue
 			hideClueText();
+			
+			//post feedback
+			postToClueText("Correct!");
 		
 			//close menus
 			mainMenu.closeMenus();
@@ -368,15 +371,6 @@
 			var completionRequirement:int = ooiManager.getUsableOOICount();
 			if(endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD))
 					newRewardButton.visible = true;
-					
-			/*if(mainMenu.rewardCounter > completionRequirement)
-			{
-				mainMenu.rewardCounter = completionRequirement;
-			}
-			else
-			{
-				mainMenu.rewardCounter++;
-			}*/
 		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			
