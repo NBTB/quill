@@ -144,18 +144,11 @@
 			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);				
-			
-			//temporary
-			restartMenu.addEventListener(RestartEvent.RESTART_GAME, function(e:RestartEvent):void	
-																							{	
-																								dispatchEvent(e);	
-																								clearEvents();
-																							});
 		}
 		
 		//Actually begin the rest of the game
 		public function startGame():void
-		{
+		{			
 			//remove pre-game children from display list
 			removeChild(startUpScreen);
 			

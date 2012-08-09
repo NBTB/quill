@@ -162,11 +162,13 @@
 				dispatchEvent(new Event(SCROLLED));
 			}
 			
-			//clamp scoller between up and down buttons
+			//clamp scoller to its bounds
+			if(scroller.x != scrollerBounds.x)
+				scroller.x = scrollerBounds.x;
 			if(scroller.y < scrollerBounds.y)
 				scroller.y = scrollerBounds.y;
-			if(scroller.y > scrollerBounds.y + scrollerBounds.height)
-				scroller.y = scrollerBounds.y + scrollerBounds.height;
+			else if(scroller.y > scrollerBounds.y + scrollerBounds.height - scroller.height)
+				scroller.y = scrollerBounds.y + scrollerBounds.height - scroller.height;
 			
 			//calculate the amount of movement
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();

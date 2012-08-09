@@ -19,8 +19,6 @@
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
 		protected var isOpen:Boolean;								//flag if menu is open
 		
-		var dismissible:Boolean = false;
-		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
@@ -95,21 +93,7 @@
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());	
 																					 });
-				scrollBitmapLoader.loadBitmaps("../assets/interface/scroll bar scroller up.png");	
-				
-				
-				
-				addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void
-																			 {
-																				if(isOpen)
-																					dismissible = false;
-																			 });
-				addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void
-																			 {
-																				if(isOpen)
-																					dismissible = true;
-																			 });
-														
+				scrollBitmapLoader.loadBitmaps("../assets/interface/scroll bar scroller up.png");															
 			}
 			
 			//Add the background and close button, and make sure it's open
@@ -198,7 +182,6 @@
 				dispatchEvent(new Event(MENU_OPENED));
 			}
 			
-			dismissible = true;
 			return true
 		}
 		
@@ -219,7 +202,6 @@
 				dispatchEvent(new Event(MENU_CLOSED));
 			}
 			
-			dismissible = false;
 			return true;
 		}
 		
