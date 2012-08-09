@@ -173,16 +173,18 @@
 			//hide each object of interest's info pane
 			for(var i = 0; i < objectsOfInterest.length; i++)
 			{
-				//address the current object of interest
+				//address the current object of interest and its info pane
 				var ooi:ObjectOfInterest = objectsOfInterest[i];
+				var infoPane:OOIInfoPane = ooi.getInfoPane();
 				
-				//if the object's info pane is in the display list, hide it
-				if(ooi.getInfoPane().parent)
+				//if the object's info pane is in the display list and visible, hide it
+				if(infoPane.parent && infoPane.visible)
 				{					
 					//only close if the pane is not connected to the caller of the close
-					var infoPane:OOIInfoPane = ooi.getInfoPane();
 					if(!closeCaller || (!infoPane.isObjectOpener(closeCaller) && closeCaller != infoPane))
-						ooi.hideInfoPane();
+						//only close if the mouse is not in the pane's bounds
+						if(!infoPane.isMouseInBounds())
+							ooi.hideInfoPane();
 				}
 			}
 		}

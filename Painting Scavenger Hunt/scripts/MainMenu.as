@@ -152,8 +152,9 @@
 			{
 				var menu:BaseMenu = BaseMenu(menus[i]);
 				if(!closeCaller || (!menu.isObjectOpener(closeCaller) && closeCaller != menu))
-				{					
-					menu.closeMenu()
+				{				
+					if(!menu.isMouseInBounds())
+						menu.closeMenu();
 				}
 			}
 		}
