@@ -15,12 +15,15 @@
         public static const PAINTING_LOADED:String = "Painting loaded";
         public static const OBJECTS_LOADED:String = "Objects loaded";
         public static const END_GOAL_LOADED:String = "End goal loaded";
+		
+		private var objectMenu:ObjectsMenu;
          
         //load XML scavenger hunt specification and call parser when done
         public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
         {
             //load XML file
             var xmlLoader:URLLoader = new URLLoader();
+			objectMenu = objectsMenu;
             xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                         {
                                                                             parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu);
@@ -132,7 +135,7 @@
                         ooiInfoLoader = new OOIInfoImporter(ooi.info);
                      
                     //create new object of interest
-                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
+                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, objectMenu.getMenuColor(), ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
                      
                     //set the display position of the object of interest's info pane
                     var infoPaneX:Number = 0;

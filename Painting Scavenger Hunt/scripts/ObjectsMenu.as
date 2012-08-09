@@ -20,12 +20,12 @@
 		private var linksArray:Array = null;						//Array which holds all of the links
 		
 		//Construct the objects menu, using the base x, y, width, height, and main menu as arguments.  Also sets up the linksArray.
-		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, menusColor:uint):void
 		{
 			//thisX = xPos;					
 			//thisWidth = widthVal;
 			linksArray = new Array();
-			super(xPos, yPos, widthVal, heightVal);			//As the objects menu makes it's own background based on the number of objects, send 0's to indicate the background doesn't need making.
+			super(xPos, yPos, widthVal, heightVal,  menusColor);			//As the objects menu makes it's own background based on the number of objects, send 0's to indicate the background doesn't need making.
 		}
 		
 		//get the Object Manager, set up the initial size of the background for the object menu, then populate the menu with links to each object

@@ -33,8 +33,8 @@
 		var mouseOverLoader:Loader = new Loader();
 		public static var fromHelp:Boolean=false;
 
-		public function TutorialMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
-			super(xPos, yPos, widthVal, heightVal);
+		public function TutorialMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, menusColor:uint):void {
+			super(xPos, yPos, widthVal, heightVal, menusColor);
 
 			initText();
 			loadImages();

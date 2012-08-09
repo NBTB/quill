@@ -19,10 +19,10 @@
         var textFormat:TextFormat = new TextFormat();           //Formatting
          
         //Creates the help menu
-        public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+        public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, menusColor:uint):void
         {
             //sends variables to create background to the base menu
-            super(xPos, yPos, widthVal, heightVal);
+            super(xPos, yPos, widthVal, heightVal,  menusColor);
              
             //set up start position and size of link textfields
             var startX = 10;
@@ -82,7 +82,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 1;
-			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);				
+			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight, menuColor);				
 			addChild(tut);
 			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
         }
@@ -92,7 +92,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 1;
-			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);	
+			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight, menuColor);	
 			tut.removeChild(tut.continueButton);
 			tut.updateText();
 			addChild(tut);
@@ -104,7 +104,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 5;
-			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);	
+			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight, menuColor);	
 			tut.removeChild(tut.continueButton);			
 			tut.updateText();
 			addChild(tut);

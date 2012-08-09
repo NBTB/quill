@@ -30,6 +30,7 @@
 		private var descriptionTimer:Timer = null;						//time used to trigger description display		
 		private var hasBeenOpened:Boolean = false;						//turned true first time objects display pane is showed
 		private var hitTestSuppression:Boolean = false;					//flag if hit testing should be supressed
+		private var ooiPaneColor:uint;
 		
 		public static var anyMousedOver = false;												//flag if any object is moused over
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
@@ -38,7 +39,7 @@
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
+		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, menusColor:uint, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{			
 			//set name, and clue
 			this.objectName = objectName;
@@ -47,6 +48,8 @@
 			//set ID and increment static counter
 			this.id = staticID;
 			staticID++;
+			
+			ooiPaneColor = menusColor;
 			
 			//store locations of hitmap and highlight image files
 			this.hitmapFilename = hitmapFilename;
@@ -81,7 +84,7 @@
 			caption.text = objectName;
 						
 			//create info pane
-			infoPane = new OOIInfoPane(5, 5, 250, 380);
+			infoPane = new OOIInfoPane(5, 5, 250, 380, ooiPaneColor);
 			infoPane.visible = false;
 			infoPane.mouseEnabled = true;
 			infoPane.mouseChildren = true;

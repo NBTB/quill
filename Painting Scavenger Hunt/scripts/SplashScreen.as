@@ -39,13 +39,17 @@
 		var buttonY1:int = 265;
 		var buttonY2:int = buttonY1+buttonSeparation;
 		var buttonY3:int = buttonY2+buttonSeparation;
+		
+		var splashColor:uint;
 
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
-		public function SplashScreen(theTrigger:MenuListener) 
+		public function SplashScreen(theTrigger:MenuListener, menusColor:uint) 
 		{
 			//Copy of the MenuListener, to be triggered at start of game.
 			startGameListener = theTrigger;
+			
+			splashColor = menusColor;
 			
 			//Add the elements of the SplashScreen to the game.
 			this.addChild(theBackground);
@@ -104,7 +108,7 @@
 			removeChild(splashTitle);
 			removeChild(splashButtonTutorial);
 			removeChild(splashButtonSkip);						
-			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
+			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight, splashColor);
 			addChild(tut);
 			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 		}	
@@ -278,7 +282,7 @@
 		{
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
-			theBackground.graphics.beginFill(0x2F2720);
+			theBackground.graphics.beginFill(splashColor);
 			theBackground.graphics.drawRect(0, 0, 764, 572);
 			theBackground.graphics.endFill();
 		}

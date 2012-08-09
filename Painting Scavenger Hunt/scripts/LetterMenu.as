@@ -18,10 +18,10 @@
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
         //Creates the letter menu
-        public function LetterMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+        public function LetterMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, menusColor:uint):void
         {
             //Pass in variables to the base menu to create background
-            super(xPos, yPos, widthVal, heightVal);
+            super(xPos, yPos, widthVal, heightVal, menusColor);
              
             //Create the next button
             nextButton = new TextField();

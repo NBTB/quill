@@ -16,6 +16,8 @@
 		private var menuOpenerSize:Point = null;					//dimensions of child menu openers
 		private var menuContainer:DisplayObjectContainer = null;
 		
+		private var mainMenuColor:uint;
+		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//text format of menu opening buttons
@@ -28,12 +30,14 @@
 		public static const CLOSE_MENU = "A menu has closed"		//dispatched when a child menu closes
 		
 		//construct main menu in a given area, to allow access to a number of menus, and display menus under a given parent
-		public function MainMenu(placementRect:Rectangle, menuCapacity:int, menuContainer:DisplayObjectContainer = null)
+		public function MainMenu(placementRect:Rectangle, menuCapacity:int, menusColor:uint, menuContainer:DisplayObjectContainer = null)
 		{			
 			//create arrays for menus, openers, and titles
 			menus = new Array();
 			menuOpeners = new Array();
 			menuTitles = new Array();
+			
+			mainMenuColor = menusColor;
 			
 			//set position
 			x = placementRect.x;
@@ -56,7 +60,7 @@
 			
 			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);
-			menuBackground.graphics.beginFill(0x2F2720);
+			menuBackground.graphics.beginFill(mainMenuColor);
 			menuBackground.graphics.drawRect(0, 0, placementRect.width, placementRect.height);
 			menuBackground.graphics.endFill();
 			addChild(menuBackground);

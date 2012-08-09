@@ -8,10 +8,10 @@
 	
 	public class OOIInfoPane extends BaseMenu
 	{
-		public function OOIInfoPane(x:Number, y:Number, widthVal:Number, heightVal:Number)
+		public function OOIInfoPane(x:Number, y:Number, widthVal:Number, heightVal:Number, menusColor:uint)
 		{
 			//call super constructor
-			super(x, y, widthVal, heightVal);
+			super(x, y, widthVal, heightVal, menusColor);
 		}
 	}
 }

@@ -25,6 +25,7 @@
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
 		protected static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		protected static var closeButtonLoader:ButtonBitmapLoader = null;
+		protected static var menuColor:uint;
 		
 		private static var scrollBarStyle = null;		
 		
@@ -34,10 +35,12 @@
 		public static const CLOSE_MENUS_REQUEST = "Close all menus";
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, menusColor:uint):void
 		{			
 			//create rectangle for close button
 			var closeButtonRect:Rectangle = new Rectangle(widthVal - 20, 10, 10, 10);
+			
+			menuColor = menusColor;
 			
 			//if the close button style has not yet been loaded, do so now
 			if(!closeButtonLoader)
@@ -209,7 +212,7 @@
 		public function createBackground(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			menuBackground.graphics.lineStyle(1, 0x836A35);
-			menuBackground.graphics.beginFill(0x2F2720);
+			menuBackground.graphics.beginFill(menuColor);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
 		}
@@ -339,10 +342,12 @@
 		
 		public function getContentStartPoint():Point	{	return contentStartPoint;	}
 		public function getContentEndPoint():Point		{	return contentEndPoint;	}
+		public function getMenuColor():uint				{	return menuColor;		}
 		
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}
 		public static function getBodyFormat():TextFormat		{	return bodyFormat;		}
 		public static function getCaptionFormat():TextFormat	{	return captionFormat;	}
+		
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 

@@ -26,6 +26,7 @@
 		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		private var pauseEvents:Boolean = false;				//flag if certain events should be paused
+		private var menusColor:uint;
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -46,21 +47,26 @@
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
 		public function startMenu():void
 		{
+			initGame();
+			menusColor = 0x010417;
+			
 			startGameListener = new MenuListener();
-			startUpScreen = new SplashScreen(startGameListener);
+			startUpScreen = new SplashScreen(startGameListener, menusColor);
 			
 			addChild(startUpScreen);
-			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
+			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	startGame()	});
 		}
 		
 		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
-		{			
+		{					
+			
+		
 			//create in-game children that will handle specific interaction
-			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
+			paintingCanvas = new PaintingCanvas(0, 0, 765, 574);
 			ooiManager = new OOIManager();
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, this);
+			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, menusColor, this);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
@@ -127,15 +133,16 @@
 			
 			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
-			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
-			var cluesMenu:CluesMenu = new CluesMenu(100, 400, 220, 115);
-			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
-			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
-			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
+			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165, menusColor);
+			var cluesMenu:CluesMenu = new CluesMenu(100, 400, 220, 115, menusColor);
+			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515, menusColor);	
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465, menusColor);					
+			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200,  menusColor);
+			
 			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
-			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
+			//importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
 			
 			//add menus to main menu
