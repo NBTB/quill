@@ -140,7 +140,7 @@
 			continueButton.height=50;
 			continueButton.width=275;
 			continueButton.text="Continue";
-			previousButton.x=0;
+			previousButton.x=20;
 			previousButton.y=500;
 			previousButton.height=50;
 			previousButton.width=275;
@@ -184,23 +184,27 @@
 				controls.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt.  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.";
 			}
 			if (curSlide==2) {
-				controls.text="In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and clicking upon it will open a description. A magnifying glass is available to help you see objects more clearly. Hit space to toggle this function on and off, or click the magnifying glass icon in the bottom right of the screen.";
+				controls.text="In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and double clicking upon it will open a description. A magnifying glass is available to help you see objects more clearly. Hit space to toggle this function on and off, or click the magnifying glass icon in the bottom right of the screen.";
 				addChild(mouseLoader);
 				addChild(mouseOverLoader);
 			}
 			if (curSlide==3) {
-				controls.text="In a few moments you will be given a clue to the first object you need to look for.  When the game begins, click on the little icon above the Clues Menu in the bottom of the game screen to obtain your first clue. By clicking on the correct object that the riddle references, the object will be added to your collection.  You will also be given a brief description of the object, as well as some background on its history and its purpose in the painting.";
+				controls.text="In a few moments you will be given a clue to the first object you need to look for.  When the game begins, click on the little icon above the Clues Menu in the bottom of the game screen to obtain your first clue. By clicking on the correct object that the riddle references, the object will be added to your collection.";
 				addChild(clueLoader);
+			}			
+			if(curSlide==4) {
+				controls.text = "Double Clicking on an object will open a description panel about the object, providing some background on the objects history and its relevance in the painting.";
+				addChild(mouseLoader);
 			}
-			if (curSlide==4) {
+			if (curSlide==5) {
 				controls.text="Along with this description, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole. Click on the Letter Menu icon to review your progress";
 				addChild(letterLoader);
 			}
-			if (curSlide==5) {
-				controls.text="\n\n\nLeft Click: Select\nSpace: Toggle Magnifying glass";
+			if (curSlide==6) {
+				controls.text="\n\n\nSingle Left Click: Select\nDouble Left Click (on objects of interest only): Open Object Info Panel\nSpace: Toggle Magnifying glass";
 				addChild(titleField);
 			}
-			if (curSlide==6) {
+			if (curSlide==7) {
 				controls.text="The next clue will be given to you when you can identify the object behind this first one. Click Proceed to begin.  Good Luck!";
 			}
 			
@@ -213,7 +217,7 @@
 			curSlide++;
 			addChild(previousButton);
 			//if on last slide, continue button is replaced by proceed button
-			if (curSlide>=6) {
+			if (curSlide>=7) {
 				if (! fromHelp) {
 					addChild(proceedButton);
 				}
@@ -231,7 +235,7 @@
 				removeChild(previousButton);
 			}
 			//if your in the help menu, there is no proceed, just close
-			if (curSlide>=5&&fromHelp) {
+			if (curSlide>=6&&fromHelp) {
 				addChild(continueButton);
 			}
 			if (contains(proceedButton)) {

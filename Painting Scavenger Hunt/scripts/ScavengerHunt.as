@@ -26,6 +26,9 @@
 		private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		private var pauseEvents:Boolean = false;				//flag if certain events should be paused
+		public var ending:Ending;								//the menu displayed when you win
+		
+		var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -129,7 +132,7 @@
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
 			var cluesMenu:CluesMenu = new CluesMenu(100, 400, 220, 115);
-			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
+			//var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
@@ -143,7 +146,11 @@
 			mainMenu.addChildMenu(cluesMenu, cluesMenuTitle);
 			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
-			mainMenu.addChildMenu(restartMenu, restartMenuTitle);				
+			mainMenu.addChildMenu(restartMenu, restartMenuTitle);
+			
+			ending = new Ending(0, 0, stage.stageWidth, stage.stageHeight);
+			ending.returnButton.addEventListener(MouseEvent.MOUSE_DOWN, returnBack);
+			ending.viewLetterButton.addEventListener(MouseEvent.MOUSE_DOWN, viewLetter);
 		}
 		
 		//Actually begin the rest of the game
@@ -386,7 +393,11 @@
 			}
 			//otherwise, notify the user that the hunt has been completed
 			else
+			{
 				postToClueText(OOIManager.NO_CLUES_NOTIFY);
+				
+				addChild(ending);
+			}
 				
 			//make the current clue old
 			cluesMenu.outdateCurrentClue();
@@ -450,6 +461,17 @@
 		{ 
 			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
 			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
+		}
+		
+		//in the end menu, hitting return will bring you back to the painting
+		function returnBack(event:MouseEvent):void{
+			removeChild(ending);
+		}
+		
+		//in the end menu, if you click to view the letter, the end menu is closed and the letter menu is opened
+		function viewLetter(event:MouseEvent):void{
+			removeChild(ending);
+			endGoalMenu.openMenu();
 		}
 		
 		public function clearEvents():void 

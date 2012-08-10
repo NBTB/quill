@@ -25,8 +25,8 @@
             super(xPos, yPos, widthVal, heightVal);
              
             //set up start position and size of link textfields
-            var startX = 10;
-            var startY = 10;
+            var startX = 20;
+            var startY = 20;
             var elementHeight = 40;
              
             //set up objective button
@@ -82,7 +82,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 1;
-			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);				
+			tut = new TutorialMenu(-5,-350, stage.stageWidth, stage.stageHeight);				
 			addChild(tut);
 			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
         }
@@ -92,7 +92,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 1;
-			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);	
+			tut = new TutorialMenu(-5,-350, stage.stageWidth, stage.stageHeight);	
 			tut.removeChild(tut.continueButton);
 			tut.updateText();
 			addChild(tut);
@@ -103,8 +103,8 @@
         public function showControls(event:MouseEvent):void
         {
 			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 5;
-			tut = new TutorialMenu(0,-350, stage.stageWidth, stage.stageHeight);	
+			TutorialMenu.curSlide = 6;
+			tut = new TutorialMenu(-5,-350, stage.stageWidth, stage.stageHeight);	
 			tut.removeChild(tut.continueButton);			
 			tut.updateText();
 			addChild(tut);
