@@ -177,6 +177,9 @@
 				
 				//announce being closed
 				dispatchEvent(new Event(MENU_CLOSED));
+				
+				//reset scroller position
+				scrollBar.resetScroller();
 			}
 			
 			return true;

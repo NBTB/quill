@@ -6,8 +6,8 @@
 	
 	public class ContentContainer extends MovieClip
 	{
-		 var contentHead:Point = null;						//top-leftmost point of content
-		 var contentTail:Point = null;						//bottom-rightmost point of content
+		protected var contentHead:Point = null;						//top-leftmost point of content
+		protected var contentTail:Point = null;						//bottom-rightmost point of content
 		protected var autoContentPadding:Number = 0;				//padding put between content when added to head or tail
 		protected var focalRectangle:Rectangle = null;				//rectangle in which content is expected to appear
 		protected var scrollBar:ScrollBar = null;					//attached scroll bar
@@ -27,11 +27,14 @@
 																				{
 																					//compute how much content must be scrolled
 																					var scrollFactor:Number = scrollBar.getScrolledPercentage();
-																					scrollFactor *= contentTail.y - contentHead.y;
-																					scrollFactor += y;																					
+																					if(scrollFactor >= 0)
+																					{
+																						scrollFactor *= contentTail.y - contentHead.y;
+																						scrollFactor += y;	
 																					
-																					//scroll content
-																					scrollContent(new Point(0, scrollFactor));
+																						//scroll content
+																						scrollContent(new Point(0, scrollFactor));
+																					}
 																				});
 			}
 		}
@@ -99,6 +102,12 @@
 			//so if the new child is not responsible for the tail, move the tail down
 			if(contentTail.y > child.y)
 				contentTail.y += displacement;			
+				
+			trace(contentTail.y);
+			if(numChildren > 0)
+				trace(getChildAt(0).y + getChildAt(0).height);
+			trace(focalRectangle.y + focalRectangle.height);
+			trace("\n")
 				
 			return child;
 		}

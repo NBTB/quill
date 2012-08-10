@@ -78,6 +78,7 @@
 			clueText.width=474;
 			clueText.visible = false;
 			clueText.selectable = false;
+			clueText.mouseEnabled = false;
 			
 			var notificationButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			notificationButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
@@ -128,7 +129,7 @@
 			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
-			var cluesMenu:CluesMenu = new CluesMenu(100, 200, 220, 315);
+			var cluesMenu:CluesMenu = new CluesMenu(100, 200-150, 220, 315);
 			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);

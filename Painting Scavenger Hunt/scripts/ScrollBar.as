@@ -19,7 +19,8 @@
 		private var upDownButtonSize:Point = null;				//size of up and down buttons
 		private var scrollerSize:Point = null;					//size of scroller
 		private var scrollerDragged:Boolean = false;			//flag if scroller is being dragged
-		private var scrollerBounds:Rectangle = null;			//bounding rectangle of scroller movement
+		private var scrollerBounds:Rectangle = null;			//bounding rectangle of scroller movement		
+		protected var scrollerFillsGap:Boolean = false;			//flag if the scroll spans the gap between up and down buttons
 		
 		var myArrayListeners:Array=[];							//Array of Event Listeners in BaseMenu
 		
@@ -76,20 +77,18 @@
 			this.contentScrollSpeed = contentScrollSpeed;
 			movementSpeed = calculateScrollSpeed();
 			
-			//make buttons use hand cursor when hovered over
-			upButton.useHandCursor = true;
-			downButton.useHandCursor = true;
-			/*TODO make scroller work and let it trigger the hand cursor*/
-			scroller.useHandCursor = false;
-			
 			//attach button images
 			updateUpDownButtonStates(style);
 			updateScrollerStates(style);			
+						
+			//disable hand cursor on mouse over
+			upButton.useHandCursor = false;
+			downButton.useHandCursor = false;
+			scroller.useHandCursor = false;
 			
 			//listen for updates to style changes
 			style.addEventListener(ScrollBarStyle.UP_DOWN_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateUpDownButtonStates(style);	});
-			style.addEventListener(ScrollBarStyle.SCROLL_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateScrollerStates(style);	});
-			
+			style.addEventListener(ScrollBarStyle.SCROLL_BUTTON_STATES_CHANGED, function(e:Event):void	{	updateScrollerStates(style);		});			
 			
 			//listen for being added to display list
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);			
@@ -107,7 +106,6 @@
 			downButton.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void	{	stopScroller();	});
 			downButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	stopScroller();	});
 			
-			/*TODO make scroller dragging work*/
 			//listen for scroller being pressed
 			scroller.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	
 																				   {	
@@ -152,41 +150,40 @@
 		}
 		
 		private function enterFrame(e:Event)
-		{
-			//if scroller is being dragged, track it
-			if(scrollerDragged)
-			{
-				
-					
-				//dispatch scroll event
-				dispatchEvent(new Event(SCROLLED));
-			}
-			
+		{			
 			//clamp scoller to its bounds
+			scroller.x = upButton.x;
 			var maxScrollerHeight:Number = (downButton.y - downButton.height) - (upButton.y + upButton.height);
 			if(scroller.height >= maxScrollerHeight)
 			{
 				scroller.height = maxScrollerHeight;
 				scroller.y = upButton.y + upButton.height;
+				scrollerFillsGap = true;
 			}			
 			else
 			{
-				if(scroller.height < (downButton.y - downButton.height) - (upButton.y + upButton.height))
-				{
-					if(scroller.x != scrollerBounds.x)
-						scroller.x = scrollerBounds.x;
-					if(scroller.y < scrollerBounds.y)
-						scroller.y = scrollerBounds.y;
-					else if(scroller.y > scrollerBounds.y + scrollerBounds.height - scroller.height)
-						scroller.y = scrollerBounds.y + scrollerBounds.height - scroller.height;
-				}
+				scrollerFillsGap = false;
+				if(scroller.x != scrollerBounds.x)
+					scroller.x = scrollerBounds.x;
+				if(scroller.y < scrollerBounds.y)
+					scroller.y = scrollerBounds.y;
+				else if(scroller.y > scrollerBounds.y + scrollerBounds.height - scroller.height)
+					scroller.y = scrollerBounds.y + scrollerBounds.height - scroller.height;				
+			}
+			
+			//if scroller is being dragged, track it
+			if(scrollerDragged)
+			{					
+				//dispatch scroll event
+				scrolledPercentage = calculateScrolledPercentage();
+				dispatchEvent(new Event(SCROLLED));
 			}
 			
 			//calculate the amount of movement
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
 			
 			//if any movement is happening, update scroller and dispatch event
-			if(totalMovement)
+			if(totalMovement && !scrollerFillsGap)
 			{
 				scroller.y += totalMovement;
 				scrolledPercentage = calculateScrolledPercentage();
@@ -213,6 +210,7 @@
 		public function resetScroller()
 		{
 			scroller.y = upButton.y + upButton.height;
+			scrolledPercentage = calculateScrolledPercentage();
 			dispatchEvent(new Event(SCROLLED));
 		}
 		

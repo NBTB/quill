@@ -69,6 +69,10 @@
 			newClueTextField.width = width - 40;
 			newClueTextField.autoSize = TextFieldAutoSize.LEFT;
 			
+			//temporary
+			newClueTextField.border = true;
+			newClueTextField.borderColor = 0xFFFFFF;
+			
 			return newClueTextField;
 		}
     }
