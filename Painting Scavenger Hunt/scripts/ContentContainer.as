@@ -31,8 +31,7 @@
 																					{
 																						scrollFactor *= contentTail.y - contentHead.y;
 																						scrollFactor += y;	
-																					
-																						//scroll content
+																						
 																						scrollContent(new Point(0, scrollFactor));
 																					}
 																				});
@@ -79,70 +78,54 @@
 			//if other content exists, place new child at the top
 			if(numChildren > 0)
 				child.y = contentHead.y;
+			//otherwise, just add child
+			else
+				return addChild(child);
 			
-			//add new content
-			addChild(child);
-			
-			//if other content is not being repositioned, return
+			//if other content is not being repositioned, add new content and return
 			if(!repositionContent)
-				return child;
+				return addChild(child);
 				
 			//determine how much other content will have to be moved
 			var displacement = child.height + autoContentPadding;
 			
 			//push other content down
 			for(var i:int = 0; i < numChildren; i++)
-			{
-				var checkChild:DisplayObject = getChildAt(i);
-				if(checkChild != child)
-					checkChild.y += displacement;
-			}
+				getChildAt(i).y += displacement;
 				
-			//content was moved after tail was last updated, 
-			//so if the new child is not responsible for the tail, move the tail down
-			if(contentTail.y > child.y)
-				contentTail.y += displacement;			
-				
-			trace(contentTail.y);
-			if(numChildren > 0)
-				trace(getChildAt(0).y + getChildAt(0).height);
-			trace(focalRectangle.y + focalRectangle.height);
-			trace("\n")
-				
-			return child;
+			//add the child to the list
+			return addChild(child);	
 		}
 		
 		public function addChildToTail(child:DisplayObject, repositionContent:Boolean = false):DisplayObject
 		{
 			//if no content exists, place new child at the bottom
-			if(numChildren > 0);
+			if(numChildren > 0)
 				child.y = contentTail.y + autoContentPadding;
+			//otherwise, just add new child
+			else
+				return addChild(child);
 			
 			//if content is not being displaced, simply add the new child below other content and return
 			if(!repositionContent)
 				return addChild(child);
-			
-			//add the child so that it ends at the bottom
-			child.y -= child.height;
-			addChild(child);
 			
 			//determine how much other content will have to be moved
 			var displacement = child.height + autoContentPadding;
 			
 			//push other content up
 			for(var i:int = 0; i < numChildren; i++)
-			{
-				var checkChild:DisplayObject = getChildAt(i);
-				if(checkChild != child)
-					checkChild.y -= displacement;
-			}
+				getChildAt(i).y -= displacement;
 				
-			//content was moved after head was last updated, 
-			//so if the new child is not responsible for the head, move the head up
-			if(contentHead.y < child.y)
-				contentHead.y -= displacement;			
+			//position the child so that it ends at the bottom of content
+			child.y -= child.height;
 			
-			return child;
+			/*TODO make this work, currently the scroller is not scrollable (may need whole overhaul or somehting simple)
+				also space looks double expected padding*/
+			contentHead.y -= displacement;
+			
+			//add the child to the list
+			return addChild(child);
 		}
 		
 		override public function removeChild(child:DisplayObject):DisplayObject
@@ -186,18 +169,18 @@
 		override public function removeChildAt(index:int):DisplayObject	{	return removeChild(getChildAt(index));	}
 		
 		private function updateScrollBar():void
-		{
-			//move scroller back to top
-			scrollBar.resetScroller();
-			
+		{			
 			//update scroller bar height
-			scrollBar.setContentHeight(contentTail.y - contentHead.y);
+			scrollBar.setContentHeight(contentTail.y);
 			
 			//determine if scroll bar should be visible
 			if((contentHead.y < focalRectangle.y) || (contentTail.y > focalRectangle.y + focalRectangle.height))
 				scrollBar.visible = true;	
 			else if(hideUnecessaryScrollBar)
 				scrollBar.visible = false;
+				
+			//move scroller back to top
+			scrollBar.resetScroller();
 		}
 		
 		//translate content for scrolling (note that content moves opposite scroll)

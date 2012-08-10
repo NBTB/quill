@@ -9,8 +9,6 @@
         private var currentClueText:TextField = null;           //The displayed current clue
         private var currentClue:String = null;                  //The text of the current clue
         private var oldClues:Array = null;                      //Keeps track of all previous clues
-		
-		private static var currentClueTextFormat:TextFormat = new TextFormat("Arial", 14, 0xFFFFFF);	//default text format of clues
          
         //Creates the clues menu
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -36,7 +34,6 @@
 				
 				//add new text box to content
 				addListChildToHead(currentClueText);
-				//addChild(currentClueText);
 			}
         }
          
@@ -61,17 +58,13 @@
 		private function createClueTextField():TextField
 		{
 			var newClueTextField = new TextField();
-			newClueTextField.defaultTextFormat = currentClueTextFormat;
+			newClueTextField.defaultTextFormat = BaseMenu.bodyFormat;
 			newClueTextField.selectable = false;
 			newClueTextField.wordWrap = true;
 			newClueTextField.x = 10;
 			newClueTextField.y = 10;
 			newClueTextField.width = width - 40;
 			newClueTextField.autoSize = TextFieldAutoSize.LEFT;
-			
-			//temporary
-			newClueTextField.border = true;
-			newClueTextField.borderColor = 0xFFFFFF;
 			
 			return newClueTextField;
 		}

@@ -127,7 +127,7 @@
 			}
 						
 			//create scroll bar
-			scrollBar = new ScrollBar(new Rectangle(width - 20, 50, 10, height - 100), scrollBarStyle, 0, paneDimensions.y, 20);
+			scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y, 20);
 			addChild(scrollBar);
 			
 			//create content container

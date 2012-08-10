@@ -151,47 +151,47 @@
 		
 		private function enterFrame(e:Event)
 		{			
-			//clamp scoller to its bounds
-			scroller.x = upButton.x;
-			var maxScrollerHeight:Number = (downButton.y - downButton.height) - (upButton.y + upButton.height);
-			if(scroller.height >= maxScrollerHeight)
+			if(visible)
 			{
-				scroller.height = maxScrollerHeight;
-				scroller.y = upButton.y + upButton.height;
-				scrollerFillsGap = true;
-			}			
-			else
-			{
-				scrollerFillsGap = false;
-				if(scroller.x != scrollerBounds.x)
-					scroller.x = scrollerBounds.x;
-				if(scroller.y < scrollerBounds.y)
-					scroller.y = scrollerBounds.y;
-				else if(scroller.y > scrollerBounds.y + scrollerBounds.height - scroller.height)
-					scroller.y = scrollerBounds.y + scrollerBounds.height - scroller.height;				
-			}
-			
-			//if scroller is being dragged, track it
-			if(scrollerDragged)
-			{					
-				//dispatch scroll event
-				scrolledPercentage = calculateScrolledPercentage();
-				dispatchEvent(new Event(SCROLLED));
-			}
-			
-			//calculate the amount of movement
-			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
-			
-			//if any movement is happening, update scroller and dispatch event
-			if(totalMovement && !scrollerFillsGap)
-			{
-				scroller.y += totalMovement;
-				scrolledPercentage = calculateScrolledPercentage();
-				dispatchEvent(new Event(SCROLLED));
+				//clamp scoller to its bounds
+				scroller.x = upButton.x;
+				var maxScrollerHeight:Number = (downButton.y - downButton.height) - (upButton.y + upButton.height);
+				if(scroller.height >= maxScrollerHeight)
+				{
+					scroller.height = maxScrollerHeight;
+					scroller.y = upButton.y + upButton.height;
+					scrollerFillsGap = true;
+				}			
+				else
+				{
+					scrollerFillsGap = false;
+					if(scroller.x != scrollerBounds.x)
+						scroller.x = scrollerBounds.x;
+					if(scroller.y < scrollerBounds.y)
+						scroller.y = scrollerBounds.y;
+					else if(scroller.y > scrollerBounds.y + scrollerBounds.height - scroller.height)
+						scroller.y = scrollerBounds.y + scrollerBounds.height - scroller.height;				
+				}
 				
-				//stop movement
-				//stopScroller();
-			}			
+				//if scroller is being dragged, track it
+				if(scrollerDragged)
+				{					
+					//dispatch scroll event
+					scrolledPercentage = calculateScrolledPercentage();
+					dispatchEvent(new Event(SCROLLED));
+				}
+				
+				//calculate the amount of movement
+				var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
+				
+				//if any movement is happening, update scroller and dispatch event
+				if(totalMovement && !scrollerFillsGap)
+				{
+					scroller.y += totalMovement;
+					scrolledPercentage = calculateScrolledPercentage();
+					dispatchEvent(new Event(SCROLLED));
+				}			
+			}
 		}
 		
 		private function moveScroller(movement:Number)
@@ -287,7 +287,11 @@
 						
 			//if both the total content height and displayable height are positive, use the ratio to determine scroller height
 			if(contentHeight > 0 && visibleHeight > 0)
-				calcHeight *= visibleHeight/contentHeight;
+			{
+				var visibleTotalRatio:Number = visibleHeight/contentHeight;				
+				if(visibleTotalRatio < 1)
+					calcHeight *= visibleTotalRatio;
+			}
 				
 			return calcHeight;
 		}
