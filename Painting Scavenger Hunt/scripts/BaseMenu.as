@@ -15,6 +15,7 @@
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
 		protected var isOpen:Boolean;								//flag if menu is open
+		public static var menuColor:uint = 0x010417;				//color of menu backgroun /*TODO should be read-in through XML*/
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -189,7 +190,7 @@
 		public function createBackground(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			menuBackground.graphics.lineStyle(1, 0x836A35);
-			menuBackground.graphics.beginFill(0x2F2720);
+			menuBackground.graphics.beginFill(menuColor);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
 		}
@@ -307,6 +308,7 @@
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}
 		public static function getBodyFormat():TextFormat		{	return bodyFormat;		}
 		public static function getCaptionFormat():TextFormat	{	return captionFormat;	}
+		
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 

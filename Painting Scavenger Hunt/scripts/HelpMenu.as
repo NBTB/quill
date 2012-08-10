@@ -80,7 +80,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 1;
-			tut = new TutorialMenu(-5,-350, stage.stageWidth, stage.stageHeight);				
+			tut = new TutorialMenu(-5,-350, stage.stageWidth, stage.stageHeight);
 			addChild(tut);
 			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
         }
@@ -102,7 +102,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 6;
-			tut = new TutorialMenu(-5,-350, stage.stageWidth, stage.stageHeight);	
+			tut = new TutorialMenu(-5,-350, stage.stageWidth, stage.stageHeight);
 			tut.removeChild(tut.continueButton);			
 			tut.updateText();
 			addChild(tut);

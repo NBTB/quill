@@ -14,7 +14,7 @@
 		private var menuTitles:Array = null;						//list of menu names
 		private var menuCapacity:Number = 0;						//number of menus to fit across bounds
 		private var menuOpenerSize:Point = null;					//dimensions of child menu openers
-		private var menuContainer:DisplayObjectContainer = null;
+		private var menuContainer:DisplayObjectContainer = null;	//container of menu panes
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -56,7 +56,7 @@
 			
 			//Set the background graphics
 			menuBackground.graphics.lineStyle(1, 0x836A35);
-			menuBackground.graphics.beginFill(0x2F2720);
+			menuBackground.graphics.beginFill(BaseMenu.menuColor);
 			menuBackground.graphics.drawRect(0, 0, placementRect.width, placementRect.height);
 			menuBackground.graphics.endFill();
 			addChild(menuBackground);

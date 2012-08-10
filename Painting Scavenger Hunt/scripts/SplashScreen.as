@@ -278,7 +278,7 @@
 		{			
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
-			theBackground.graphics.beginFill(0x2F2720);
+			theBackground.graphics.beginFill(BaseMenu.menuColor);
 			theBackground.graphics.drawRect(0, 0, 764, 572);
 			theBackground.graphics.endFill();
 		}
