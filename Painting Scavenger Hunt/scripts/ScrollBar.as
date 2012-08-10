@@ -26,7 +26,7 @@
 		//event types
 		public static const SCROLLED:String = "Scrolled";
 		
-		public function ScrollBar(fillableRect:Rectangle, style:ScrollBarStyle, contentHeight:Number = 0, visibleHeight = 0, contentScrollSpeed = 0)
+		public function ScrollBar(fillableRect:Rectangle, style:ScrollBarStyle, contentHeight:Number = 0, visibleHeight:Number = 0, contentScrollSpeed:Number = 0)
 		{
 			//set location
 			this.x = fillableRect.x;
@@ -163,12 +163,24 @@
 			}
 			
 			//clamp scoller to its bounds
-			if(scroller.x != scrollerBounds.x)
-				scroller.x = scrollerBounds.x;
-			if(scroller.y < scrollerBounds.y)
-				scroller.y = scrollerBounds.y;
-			else if(scroller.y > scrollerBounds.y + scrollerBounds.height - scroller.height)
-				scroller.y = scrollerBounds.y + scrollerBounds.height - scroller.height;
+			var maxScrollerHeight:Number = (downButton.y - downButton.height) - (upButton.y + upButton.height);
+			if(scroller.height >= maxScrollerHeight)
+			{
+				scroller.height = maxScrollerHeight;
+				scroller.y = upButton.y + upButton.height;
+			}			
+			else
+			{
+				if(scroller.height < (downButton.y - downButton.height) - (upButton.y + upButton.height))
+				{
+					if(scroller.x != scrollerBounds.x)
+						scroller.x = scrollerBounds.x;
+					if(scroller.y < scrollerBounds.y)
+						scroller.y = scrollerBounds.y;
+					else if(scroller.y > scrollerBounds.y + scrollerBounds.height - scroller.height)
+						scroller.y = scrollerBounds.y + scrollerBounds.height - scroller.height;
+				}
+			}
 			
 			//calculate the amount of movement
 			var totalMovement:Number = movementSpeed * movementFactor * scrollerMoveableFactor();
@@ -198,7 +210,7 @@
 			movementFactor = 0;
 		}
 		
-		private function resetScroller()
+		public function resetScroller()
 		{
 			scroller.y = upButton.y + upButton.height;
 			dispatchEvent(new Event(SCROLLED));

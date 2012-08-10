@@ -6,72 +6,68 @@
      
     class CluesMenu extends BaseMenu
     {
-        private var currentClueText:TextField = null;           //The displayed current clue the user is searching for
-        private var oldClueText:TextField = null;               //displays the previous clue(s)
+        private var currentClueText:TextField = null;           //The displayed current clue
         private var currentClue:String = null;                  //The text of the current clue
         private var oldClues:Array = null;                      //Keeps track of all previous clues
+		
+		private static var currentClueTextFormat:TextFormat = new TextFormat("Arial", 14, 0xFFFFFF);	//default text format of clues
          
         //Creates the clues menu
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
-            //Feeds in the variables for the backgrounds position to the base menu
+            //call base constructor
             super(xPos, yPos, widthVal, heightVal);             
-             
-            oldClues = new Array();
-             
-            currentClueText = new TextField();
-            oldClueText = new TextField();
-                         
-            //temporary
-            currentClueText.wordWrap = true;
-            currentClueText.x = 20;
-            currentClueText.y = 20;
-            currentClueText.width = 150;           
-            currentClueText.selectable = false;
-            oldClueText.wordWrap = true;
-            oldClueText.x = 40;
-            oldClueText.y = 40;
-            oldClueText.width = 150;   
-            oldClueText.selectable = false;
-             
-            var clueTextFormat:TextFormat = new TextFormat("Arial", 14, 0xFFFFFFFF);
-            currentClueText.defaultTextFormat = clueTextFormat;
-            oldClueText.defaultTextFormat = clueTextFormat;
-            oldClueText.textColor = 0xFFFFFF99;
-             
-            addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-             
-        }
-         
-        //Add the elements to the stage
-        public function addedToStage(e:Event)
-        {
-            addChild(currentClueText);
-            addChild(oldClueText);
+            
+			//create array to store old clues
+            oldClues = new Array();             
         }
          
         //add a new clue and update the list of old clues
         public function addClue(newClue:String)
         {          
-            //make the new clue current
-            currentClue = newClue;
-             
-            /*TODO make list of clues*/
-            //list clues
-            if(currentClue)
-                currentClueText.text = newClue;
-            else
-                currentClueText.text = "";
+			if(newClue)
+			{
+				//make the new clue current
+				currentClue = newClue;
+				 
+				//create new clue textfield and use the new clue's text
+				currentClueText = createClueTextField();
+				currentClueText.text = currentClue;			
+				
+				//add new text box to content
+				addListChildToHead(currentClueText);
+			}
         }
          
         //make the current clue old
         public function outdateCurrentClue()
         {
-            //add current clue to array of old clues
-            oldClues.push(currentClue);
-             
-            //no clue is current now
-            currentClue = null;
+			if(currentClue)
+			{
+				//grey the textfield
+				currentClueText.textColor = 0x999999;
+				
+				//add current clue to array of old clues
+				oldClues.push(currentClue);
+				 
+				//no clue is current now
+				currentClue = null;
+				currentClueText = null;
+			}
         }     
+		
+		//create a new textfield to be used for a clue
+		private function createClueTextField():TextField
+		{
+			var newClueTextField = new TextField();
+			newClueTextField.defaultTextFormat = currentClueTextFormat;
+			newClueTextField.selectable = false;
+			newClueTextField.wordWrap = true;
+			newClueTextField.x = 10;
+			newClueTextField.y = 10;
+			newClueTextField.width = 150;
+			
+			return newClueTextField;
+		}
     }
 }

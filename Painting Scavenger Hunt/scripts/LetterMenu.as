@@ -34,7 +34,7 @@
             buttonFormat.font = "Gabriola";
             buttonFormat.size = 30;
             nextButton.setTextFormat(buttonFormat);
-            addChild(nextButton);
+           	addChild(nextButton);
             nextButton.visible = false;
             nextButton.addEventListener(MouseEvent.MOUSE_DOWN, clickNext);
             nextButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);

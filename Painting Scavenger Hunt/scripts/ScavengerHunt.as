@@ -58,7 +58,7 @@
 		{			
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
-			ooiManager = new OOIManager();
+			ooiManager = new OOIManager(this, this);
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(new Rectangle(0, 517, 764, 55), 6, this);
 			clueText = new TextField();
@@ -128,7 +128,7 @@
 			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
-			var cluesMenu:CluesMenu = new CluesMenu(100, 400, 220, 115);
+			var cluesMenu:CluesMenu = new CluesMenu(100, 200, 220, 315);
 			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
@@ -164,6 +164,15 @@
 			addChildAt(nextClueButton, childIndex++);
 			addChildAt(newRewardButton, childIndex++);
 			
+			//add listeners for when in-game children are clicked
+			addDismissibleOverlayCloser(paintingCanvas);
+			addDismissibleOverlayCloser(ooiManager);
+			addDismissibleOverlayCloser(mainMenu);
+			addDismissibleOverlayCloser(magnifyingGlass);
+			addDismissibleOverlayCloser(magnifyButton);
+			addDismissibleOverlayCloser(nextClueButton);
+			addDismissibleOverlayCloser(newRewardButton);
+			
 			//make menus inside main menu displayable
 			mainMenu.makeChildMenusDisplayable();	
 			
@@ -176,10 +185,6 @@
 																																	dispatchEvent(e);	
 																																	clearEvents();
 																																});
-			
-			//add listeners for when in-game children are clicked
-			for(var i = 0; i < this.numChildren; i++)
-				addDismissibleOverlayCloser(this.getChildAt(i));
 			
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
@@ -381,15 +386,15 @@
 				//show next clue button
 				nextClueButton.visible = true;
 				
+				//make the current clue old
+				cluesMenu.outdateCurrentClue();
+				
 				//add new clue to clue menu
 				cluesMenu.addClue(nextClue);
 			}
 			//otherwise, notify the user that the hunt has been completed
 			else
-				postToClueText(OOIManager.NO_CLUES_NOTIFY);
-				
-			//make the current clue old
-			cluesMenu.outdateCurrentClue();
+				postToClueText(OOIManager.NO_CLUES_NOTIFY);		
 		}
 		
 		//display the next clue

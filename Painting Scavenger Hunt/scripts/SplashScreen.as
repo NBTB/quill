@@ -275,7 +275,7 @@
 		
 		
 		function createBackground():void
-		{
+		{			
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
 			theBackground.graphics.beginFill(0x2F2720);

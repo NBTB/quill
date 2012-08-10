@@ -9,12 +9,9 @@
 	{
 		protected var menuBackground:Shape = null;					//background of menu
 		protected var menuMask:Shape = null;						//mask of menu to determine what is seen
-		protected var contentContainer:MovieClip = null;			//container of display objects that populate the pane
+		protected var contentContainer:ContentContainer = null;		//container of display objects that populate the pane
 		protected var closeMenuButton:SimpleButton = null;			//button to close window
 		protected var scrollBar:ScrollBar = null;					//scroll bar used to scroll through pane content
-		protected var contentStartPoint:Point = null;				//top-leftmost point of content
-		protected var contentEndPoint:Point = null;					//bottom-rightmost point of content
-		protected var scrollPoint:Point = null;						//translation of pane content due to scrolling
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
 		protected var isOpen:Boolean;								//flag if menu is open
@@ -129,37 +126,17 @@
 				createBackground(xPos, yPos, widthVal, heightVal);
 			}
 						
+			//create scroll bar
+			scrollBar = new ScrollBar(new Rectangle(width - 20, 50, 10, height - 100), scrollBarStyle, 0, paneDimensions.y, 20);
+			addChild(scrollBar);
+			
 			//create content container
-			contentContainer = new MovieClip();
+			contentContainer = new ContentContainer(10, new Rectangle(0, 0, paneDimensions.x, paneDimensions.y), scrollBar, true);
 			contentContainer.mask = menuMask;
 			addChild(contentContainer);
 			
-			//create close button
-			//closeMenuButton = new Sprite();
-			//addChild(closeMenuButton);
-			//createCloseButton(xPos, yPos, widthVal, heightVal);
-			
-			//create scroll bar
-			scrollBar = new ScrollBar(new Rectangle(width - 20, 50, 10, height - 100), scrollBarStyle, contentContainer.height, paneDimensions.y, 20);
-			addChild(scrollBar);
-			
 			//currently no scrolling is available
 			scrollBar.visible = false;
-			contentStartPoint = new Point(0, 0);
-			contentEndPoint = new Point(0, 0);
-			scrollPoint = new Point(0, 0);
-																							
-			//listen for the scrolling of the scroll bar
-			scrollBar.addEventListener(ScrollBar.SCROLLED, function(e:Event):void
-																			{
-																				//compute how much content must be scrolled 
-																				var scrollFactor = scrollBar.getScrolledPercentage();
-																				scrollFactor *= contentContainer.height;
-																				scrollFactor -= scrollPoint.y;
-																				
-																				//scroll content
-																				scrollContent(new Point(0, scrollFactor));
-																			});
 		}
 		
 		//attempt to open this menu and return result
@@ -238,8 +215,7 @@
 		}
 		
 		public function addListChild(child:DisplayObject, position:Point = null)
-		{				
-			
+		{							
 			//position child and add it to the display list
 			if(position)
 			{
@@ -247,40 +223,45 @@
 				child.y = position.y;
 			}
 						
-			//if the new content is the first content, update the content start point			
-			if(contentContainer.numChildren < 1)
-			{
-				contentStartPoint.x = child.y;
-				contentStartPoint.y = child.x;
-			}
-			//otherwise if the new content appears before all other content, update the content start point
-			else
-			{
-				if(child.x < contentStartPoint.x)
-					contentStartPoint.x = child.x;
-				if(child.y < contentStartPoint.y)
-					contentStartPoint.y = child.y;
-			}
-			
-			//add child to content container
-			contentContainer.addChild(child);
-			
-			//ensure that end point is current
-			contentEndPoint.x = contentStartPoint.x + contentContainer.width;
-			contentEndPoint.y = contentStartPoint.y + contentContainer.height;
-			
-			//update scroll bar
-			scrollBar.setContentHeight(contentContainer.height);
-							
-			//if the bottom-rightmost point exceeds the pane's own dimensions, make scrolling possible
-			if(contentContainer.height > paneDimensions.y)
-				scrollBar.visible = true;			
+			//add content to container
+			contentContainer.addChild(child);	
 		}
 		
-		public function addListChildToTail(child:DisplayObject)
+		public function addListChildToHead(child:DisplayObject, displaceContent:Boolean = true)
 		{
-			addListChild(child, new Point(contentStartPoint.x, contentEndPoint.y));
+			contentContainer.addChildToHead(child, displaceContent);	
 		}
+		
+		public function addListChildToTail(child:DisplayObject, displaceContent:Boolean = false)
+		{
+			contentContainer.addChildToTail(child, displaceContent);
+		}
+		
+		public function removeListChild(child:DisplayObject)
+		{													
+			//remove content from container
+			contentContainer.removeChild(child);
+		}
+		
+		//override addChildAt to add childr to the list of objects that will not dismiss the menu
+		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
+		{						
+			//addOpener(child);
+			return super.addChildAt(child, index);
+		}
+		
+		//override addChild to add child to the list of objects that will not dismiss the menu 
+		override public function addChild(child:DisplayObject):DisplayObject	{	return addChildAt(child, numChildren);	}
+				
+		//override removeChild to remove child from the list of objects that will not dismiss the menu
+		override public function removeChild(child:DisplayObject):DisplayObject
+		{				
+			//addOpener(child);
+			return super.removeChild(child);
+		}		
+		
+		//override removeChildAt to remove child from the list of objects that will not dismiss the menu
+		override public function removeChildAt(index:int):DisplayObject	{	return removeChild(getChildAt(index));	}
 		
 		public function addOpener(opener:Object)
 		{
@@ -302,23 +283,6 @@
 			return isOpener;
 		}
 		
-		//determine if mouse is in menu bounds
-		public function isMouseInBounds()
-		{
-			return (parent && hitTestPoint(parent.mouseX, parent.mouseY));
-		}
-		
-		private function scrollContent(distance:Point):void
-		{
-			//move content
-			contentContainer.x -= distance.x;
-			contentContainer.y -= distance.y;
-			
-			//update total scroll distance
-			scrollPoint.x += distance.x;
-			scrollPoint.y += distance.y;			
-		}
-		
 		//changes the text color of the menu buttons to identify which one you're moused over
 		public function colorChange(event:MouseEvent):void 
 		{
@@ -336,9 +300,6 @@
 			myColor.color=0xE5E5E5;		
 			sender.transform.colorTransform=myColor;
 		}
-		
-		public function getContentStartPoint():Point	{	return contentStartPoint;	}
-		public function getContentEndPoint():Point		{	return contentEndPoint;	}
 		
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}
 		public static function getBodyFormat():TextFormat		{	return bodyFormat;		}

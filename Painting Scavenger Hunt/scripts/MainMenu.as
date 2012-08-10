@@ -153,8 +153,7 @@
 				var menu:BaseMenu = BaseMenu(menus[i]);
 				if(!closeCaller || (!menu.isObjectOpener(closeCaller) && closeCaller != menu))
 				{				
-					if(!menu.isMouseInBounds())
-						menu.closeMenu();
+					menu.closeMenu();
 				}
 			}
 		}

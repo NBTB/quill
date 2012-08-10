@@ -36,22 +36,20 @@
             objectiveOption.height = elementHeight;
             objectiveOption.selectable = false;
             addListChild(objectiveOption);
-             
+          	
             //set up controls button
             controlsOption.text = "Controls";
-            controlsOption.x = startX;
-            controlsOption.y = contentEndPoint.y;
+			controlsOption.x = startX;
             controlsOption.height = elementHeight;
             controlsOption.selectable = false;
-            addListChild(controlsOption);
+            addListChildToTail(controlsOption);
              
             //set up tutorial button
             tutorialOption.text = "Tutorial";
             tutorialOption.x = startX;
-            tutorialOption.y = contentEndPoint.y;
             tutorialOption.height = elementHeight;
             tutorialOption.selectable = false;
-            addListChild(tutorialOption);
+            addListChildToTail(tutorialOption);
              
             //format buttons
             textFormat.color = 0xE5E5E5;
