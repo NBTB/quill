@@ -48,21 +48,17 @@
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
 		public function startMenu():void
-		{
-			initGame();
-			
+		{			
 			startGameListener = new MenuListener();
 			startUpScreen = new SplashScreen(startGameListener);
 			
 			addChild(startUpScreen);
-			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	startGame()	});
+			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame();	});
 		}
 		
 		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
 		{					
-			
-		
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 0, stage.stageWidth, stage.stageHeight);
 			ooiManager = new OOIManager(this, this);
@@ -143,7 +139,7 @@
 			
 			//load hunt information and listen for completion
 			var importer:HuntImporter = new HuntImporter();
-			//importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
+			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
 			
 			//add menus to main menu
