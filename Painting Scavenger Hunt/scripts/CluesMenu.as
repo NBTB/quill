@@ -36,6 +36,7 @@
 				
 				//add new text box to content
 				addListChildToHead(currentClueText);
+				//addChild(currentClueText);
 			}
         }
          
@@ -65,7 +66,8 @@
 			newClueTextField.wordWrap = true;
 			newClueTextField.x = 10;
 			newClueTextField.y = 10;
-			newClueTextField.width = 150;
+			newClueTextField.width = width - 40;
+			newClueTextField.autoSize = TextFieldAutoSize.LEFT;
 			
 			return newClueTextField;
 		}

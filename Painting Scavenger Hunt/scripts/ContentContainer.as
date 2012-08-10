@@ -89,7 +89,11 @@
 			
 			//push other content down
 			for(var i:int = 0; i < numChildren; i++)
-				getChildAt(i).y += displacement;
+			{
+				var checkChild:DisplayObject = getChildAt(i);
+				if(checkChild != child)
+					checkChild.y += displacement;
+			}
 				
 			//content was moved after tail was last updated, 
 			//so if the new child is not responsible for the tail, move the tail down
@@ -118,7 +122,11 @@
 			
 			//push other content up
 			for(var i:int = 0; i < numChildren; i++)
-				getChildAt(i).y -= displacement;
+			{
+				var checkChild:DisplayObject = getChildAt(i);
+				if(checkChild != child)
+					checkChild.y -= displacement;
+			}
 				
 			//content was moved after head was last updated, 
 			//so if the new child is not responsible for the head, move the head up
