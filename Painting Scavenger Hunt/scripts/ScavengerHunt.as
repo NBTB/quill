@@ -229,6 +229,7 @@
 			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																					{	
 																						mainMenu.closeMenus();
+																						toggleZoom(true, false);
 																						showNextClue();	
 																					});
 			
@@ -244,10 +245,11 @@
 			//listen for the new reward button being clicked
 			newRewardButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																					{	
+																						allowEventsOutsideMenu(false);
 																						endGoalMenu.openMenu();
 																					});
 			
-						//listen for the reward menu being opened
+			//listen for the reward menu being opened
 			endGoalMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
 																						{
 																						   //if the new reward button is visible, hide it 
@@ -290,7 +292,10 @@
 		{
 			//toggle magnifying glass
 			if(e.keyCode == Keyboard.SPACE)
+			{
+				closeDismissibleOverlays(magnifyButton);
 				toggleZoom();
+			}
 		}
 		
 		private function allowEventsOutsideMenu(allowEvents:Boolean):void
@@ -438,17 +443,17 @@
 		//add event listener to list that will trigger the closing of dismissible overlays
 		private function addDismissibleOverlayCloser(closer:DisplayObject, eventType:String = MouseEvent.CLICK):void
 		{
-			closer.addEventListener(eventType, closeDismissibleOverlays);
+			closer.addEventListener(eventType, function(e:Event):void	{	closeDismissibleOverlays(e.target);	});
 		}
 		
 		//close overlays that are to be dismissed by a click anywhere else on screen
-		private function closeDismissibleOverlays(e:MouseEvent):void
+		private function closeDismissibleOverlays(caller:Object):void
 		{					
 			//close all menus
-			mainMenu.closeMenus(e.target);
+			mainMenu.closeMenus(caller);
 			
 			//close captions and descriptions of all objects of interest
-			ooiManager.hideAllOOIInfoPanes(e.target);
+			ooiManager.hideAllOOIInfoPanes(caller);
 		}
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
