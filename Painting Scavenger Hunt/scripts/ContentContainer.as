@@ -29,7 +29,7 @@
 																					var scrollFactor:Number = scrollBar.getScrolledPercentage();
 																					if(scrollFactor >= 0)
 																					{
-																						scrollFactor *= contentTail.y - contentHead.y;
+																						scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
 																						scrollFactor += y;	
 																						
 																						scrollContent(new Point(0, scrollFactor));

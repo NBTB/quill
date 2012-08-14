@@ -183,9 +183,22 @@
 		<x>0.0060307</x>
 		<y>0.9580287</y>
 		<info_pane_x>0.02</info_pane_x>
-		<info_pane_y>0.10</info_pane_y>
+		<info_pane_y>0.15</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/signature info.txt</text_file>
+		</info>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Uniform</name>
+		<clue>UNIFORM CLUE NEEDED</clue>
+		<hitmap_filename>../assets/ooi images/uniform hitmap.png</hitmap_filename>
+		<highlight_filename>../assets/ooi images/uniform highlight.png</highlight_filename>
+		<x>0.2960307</x>
+		<y>0.6780287</y>
+		<info_pane_x>0.42</info_pane_x>
+		<info_pane_y>0.20</info_pane_y>
+		<info>
+			<text_file>../assets/ooi info/uniform info.txt</text_file>
 		</info>
 	</Object_Of_Interest>
 	<Letter_Piece>
