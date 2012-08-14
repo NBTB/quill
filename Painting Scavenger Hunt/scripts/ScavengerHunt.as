@@ -69,7 +69,7 @@
 			magnifyButton = new SimpleButton();
 			nextClueButton = new SimpleButton();
 			newRewardButton = new SimpleButton();
-						
+			
 			//setup clue text format
 			clueTextFormat = new TextFormat("Edwardian Script ITC", 25, 0x40E0D0);
 			clueTextFormat.align = TextFormatAlign.CENTER;
@@ -305,7 +305,7 @@
 			//if the magnifying glass is being used, draw through its lens
             if(zoomed)
 			{
-                placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+                placeMagnifyingGlass(new Point(mouseX, mouseY));
 			}
 		}		
 		
@@ -375,7 +375,7 @@
 			//if zoom started, draw magnifying glass
 			if(zoomed)
 			{
-				placeMagnifyingGlass(new Point(paintingCanvas.mouseX, paintingCanvas.mouseY));
+				placeMagnifyingGlass(new Point(mouseX, mouseY));
 				magnifyingGlass.visible = true;
 			}
 			//otherwise, remove magnifying glass
@@ -392,12 +392,13 @@
 			var canvasBounds:Rectangle = new Rectangle(x + paintingCanvas.x, y + paintingCanvas.y, paintingCanvas.width, paintingCanvas.height);
 			center = magnifyingGlass.place(center, canvasBounds);
 			
+			
 			//create arrays to pass to magnifying glass
 			var bitmaps:Array = new Array();
 			var texturePoints:Array = new Array();
 			
 			//add magnified canvas
-			paintingCanvas.addPaintingToList(bitmaps, texturePoints, center, true);
+			paintingCanvas.addPaintingToList(bitmaps, texturePoints, new Point(center.x - paintingCanvas.x, center.y - paintingCanvas.y), true);
 			
 			//add magnified object highlights
 			ooiManager.addObjectHighlightsToList(bitmaps, texturePoints, center, true);

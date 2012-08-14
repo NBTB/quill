@@ -5,7 +5,7 @@
     import flash.events.*;
     import flash.xml.*;
     import flash.display.*
-    import flash.geom.Point;
+    import flash.geom.*;
      
     public class HuntImporter extends EventDispatcher
     {              
@@ -76,7 +76,7 @@
                                                                                                                       });
                                                                      
                                                                     //parse objects of interest to be used in hunt
-                                                                    parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager, paintingCanvas.getPaintingScale(), paintingCanvas.getPaintingWidth(), paintingCanvas.getPaintingHeight()); 
+                                                                    parseObjectsOfInterest(hunt.Object_Of_Interest, ooiManager, paintingCanvas.getPaintingScale(), new Rectangle(paintingCanvas.x, paintingCanvas.y, paintingCanvas.getPaintingWidth(), paintingCanvas.getPaintingHeight())); 
                                                                     
                                                                     //listen for all of the end goal pieces to be fully loaded
                                                                     addEventListener(OBJECTS_LOADED, function(e:Event):void
@@ -112,7 +112,7 @@
         }
                  
         //parse XML specification of obejcts of interest
-        private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number, paintingWidth:Number, paintingHeight:Number)
+        private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number, canvasRectangle:Rectangle)
         {
             //object of interest loading counters
             var objectsParsed:Number = 0;
@@ -135,15 +135,15 @@
                         ooiInfoLoader = new OOIInfoImporter(ooi.info);
                      
                     //create new object of interest
-                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
+                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, ooiScaleFactor, new Point(0, 0), new Point(canvasRectangle.width, canvasRectangle.height));
                      
                     //set the display position of the object of interest's info pane
                     var infoPaneX:Number = 0;
                     var infoPaneY:Number = 0;
                     if(ooi.hasOwnProperty("info_pane_x"))
-                        infoPaneX = ooi.info_pane_x * paintingWidth;
+                        infoPaneX = ooi.info_pane_x * canvasRectangle.width;
                     if(ooi.hasOwnProperty("info_pane_y"))
-                        infoPaneY = ooi.info_pane_y * paintingHeight;
+                        infoPaneY = ooi.info_pane_y * canvasRectangle.height;
                     newObject.setInfoPanePosition(new Point(infoPaneX, infoPaneY));
                      
                      
