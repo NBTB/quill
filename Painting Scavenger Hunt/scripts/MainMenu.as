@@ -157,15 +157,6 @@
 			}
 		}
 		
-		//determine if any child menu is open
-		public function isChildMenuOpen()
-		{
-			var childMenuOpen:Boolean = false;
-			for(var i:int = 0; i < menus.length && !childMenuOpen; i++)
-				childMenuOpen = menus[i].isMenuOpen();
-			return childMenuOpen;
-		}
-		
 		//retrieve a child menu based on name
 		public function getMenu(menuTitle:String):BaseMenu
 		{

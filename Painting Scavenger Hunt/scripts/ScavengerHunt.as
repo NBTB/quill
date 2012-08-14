@@ -192,8 +192,9 @@
 			//listen for a request to open objects menu after object of interest info pane closure
 			objectsMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
 																							 {
-																								if(!mainMenu.isChildMenuOpen())
-																									objectsMenu.openMenu();
+																								//if events that depend on all other menus being closed are allowed, open
+																								if(!pauseEvents)
+																									objectsMenu.openMenu();																								
 																							 });
 			
 			//listen for restart
