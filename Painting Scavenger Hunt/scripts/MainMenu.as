@@ -98,22 +98,20 @@
 			menu.addOpener(menuOpener);			
 			
 			//listen for the opener being clicked
-			menuOpener.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
-																				{																		
-																					//if the menu is opened dispatch an event from here to announce the event
-																					if(menu.openMenu())
-																						dispatchEvent(new Event(BaseMenu.MENU_OPENED));
-																				});
+			menuOpener.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	menu.openMenu()	});
 			
 			//listen for the mouse hovering over the opener and hovering out of the openers bounds
 			menuOpener.addEventListener(MouseEvent.ROLL_OVER, menu.colorChange);
 			menuOpener.addEventListener(MouseEvent.ROLL_OUT, menu.revertColor);			
 			
 			//listen for request to close child menus
-			menu.addEventListener(BaseMenu.CLOSE_MENUS_REQUEST, function(e:Event):void	{	closeMenus();	});
+			menu.addEventListener(MenuEvent.CLOSE_MENUS_REQUEST, function(e:MenuEvent):void	{	closeMenus();	});
+			
+			//listen for menu opening
+			menu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_OPENED));	});
 			
 			//listen for menu closing
-			menu.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void	{	dispatchEvent(new Event(BaseMenu.MENU_CLOSED));	});
+			menu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_CLOSED));	});
 			
 			return true;
 		}

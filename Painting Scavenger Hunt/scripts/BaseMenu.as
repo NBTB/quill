@@ -31,12 +31,6 @@
 		
 		public static const FIRST_PAGE = 0;		//enumeration to conveniently reference the first page
 		public static const LAST_PAGE = -1;		//enumeration to conveniently reference the last page
-		
-		//event types
-		public static const MENU_OPENED = "Menu Opened";
-		public static const MENU_CLOSED = "Menu Closed";
-		public static const CLOSE_MENUS_REQUEST = "Close all menus";
-		public static const SPECIAL_OPEN_REQUEST = "Open menu under special circumstances"
 
 		//Sets up variables used by all the menus
 		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -162,14 +156,15 @@
 			else
 			{
 				//request the closure of other menus to avoid clutter and overlap
-				dispatchEvent(new Event(CLOSE_MENUS_REQUEST));
+				dispatchEvent(new MenuEvent(this, MenuEvent.CLOSE_MENUS_REQUEST));
 				
 				//appear and open
 				visible = true;
 				isOpen = true;
 				
 				//announce being opened
-				dispatchEvent(new Event(MENU_OPENED));
+				var a:MenuEvent = new MenuEvent(this, MenuEvent.MENU_OPENED);
+				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_OPENED));
 			}
 			
 			return true
@@ -189,7 +184,7 @@
 				isOpen = false;
 				
 				//announce being closed
-				dispatchEvent(new Event(MENU_CLOSED));
+				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_CLOSED));
 				
 				//reset scroller position
 				scrollBar.resetScroller();

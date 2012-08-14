@@ -103,17 +103,10 @@
 																					});
 			
 			//listen for when an object's info pane is being opened
-			infoPane.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
-																					{	
-																						hideAllOOIInfoPanes(e.target);
-																						dispatchEvent(new Event(BaseMenu.MENU_OPENED));
-																					});
+			infoPane.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_OPENED));	});
 			
 			//listen for when an object's info pane is being closed
-			infoPane.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void
-																					{	
-																						dispatchEvent(new Event(BaseMenu.MENU_CLOSED));
-																					});
+			infoPane.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_CLOSED));	});
 			
 		}
 

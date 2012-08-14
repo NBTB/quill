@@ -16,6 +16,7 @@
 		private var ooiManager:OOIManager = null;				//Object which keeps track of objects in the painting
 		private var startUpScreen:SplashScreen;					//Splash screen which displays when program is first started
 		private var mainMenu:MainMenu;							//The main menu displayed beneath the painting
+		private var openedMenus:Array = null;					//list of currently open menus
 		private var zoomed:Boolean = false;						//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;			//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;			//button that toggles magnifying glass
@@ -189,7 +190,7 @@
 			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
 			objectsMenu.getObjectManager(ooiManager);	
 			//listen for a request to open objects menu after object of interest info pane closure
-			objectsMenu.addEventListener(BaseMenu.SPECIAL_OPEN_REQUEST, function(e:Event):void
+			objectsMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
 																							 {
 																								if(!mainMenu.isChildMenuOpen())
 																									objectsMenu.openMenu();
@@ -201,6 +202,9 @@
 																																	dispatchEvent(e);	
 																																	clearEvents();
 																																});
+			
+			//create list of opened menus
+			openedMenus = new Array();
 			
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
@@ -238,8 +242,8 @@
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for an object of interest's info pan to open and close
-			ooiManager.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
-			ooiManager.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
+			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
+			ooiManager.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
 			
 			//listen for the next clue button being clicked
 			nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -249,8 +253,9 @@
 																						showNextClue();	
 																					});
 			
+			/*TODO the listeners for clue notification button and reward notification button will be obsolete in new version*/
 			//listen for the clues menu being opened
-			cluesMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	
+			cluesMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
 																					   {
 																							//if the next clue button is visible, hide it 
 																							//the clue will appear in the clues menu
@@ -266,7 +271,7 @@
 																					});
 			
 			//listen for the reward menu being opened
-			endGoalMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void
+			endGoalMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void
 																						{
 																						   //if the new reward button is visible, hide it 
 																						   //the new reward is being viewed
@@ -275,8 +280,8 @@
 																					   	});
 			
 			//listen for a menu to open and close
-			mainMenu.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
-			mainMenu.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
+			mainMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
+			mainMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
 			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -312,6 +317,29 @@
 				closeDismissibleOverlays(magnifyButton);
 				toggleZoom();
 			}
+		}
+		
+		//handle the openeing of a menu
+		private function menuOpened(targetMenu:BaseMenu)
+		{
+			//disallow actions that depend on all menus being closed
+			allowEventsOutsideMenu(false);
+			
+			//
+			openedMenus.push(targetMenu);
+		}
+		
+		//handle the closing of a menu
+		private function menuClosed(targetMenu:BaseMenu)
+		{
+			//if the given menu is being tracking as open, remove it from the list
+			var indexOfMenu = openedMenus.indexOf(targetMenu)
+			if(indexOfMenu >= 0)
+				openedMenus.splice(indexOfMenu, 1);
+				
+			//if all opened menus have been closed, allow actions that depend on all menus being closed
+			if(openedMenus.length < 1)
+				allowEventsOutsideMenu(true);
 		}
 		
 		private function allowEventsOutsideMenu(allowEvents:Boolean):void
