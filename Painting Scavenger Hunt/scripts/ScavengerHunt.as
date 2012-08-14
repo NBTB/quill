@@ -234,6 +234,9 @@
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
 			
+			//listen for incorrect answers to clues
+			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
+			
 			//listen for an object of interest's info pan to open and close
 			ooiManager.addEventListener(BaseMenu.MENU_OPENED, function(e:Event):void	{	allowEventsOutsideMenu(false);	});
 			ooiManager.addEventListener(BaseMenu.MENU_CLOSED, function(e:Event):void	{	allowEventsOutsideMenu(true);	});
@@ -417,6 +420,12 @@
 				
 				addChild(ending);
 			}
+		}
+		
+		//handle a incorrect answer to a clue
+		private function handleIncorrectAnswer(e:Event)
+		{	
+			postToClueText("Try Again");
 		}
 		
 		//display the next clue
