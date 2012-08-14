@@ -81,7 +81,7 @@
 			caption.text = objectName;
 						
 			//create info pane
-			infoPane = new OOIInfoPane(5, 5, 250, 380);
+			infoPane = new OOIInfoPane(5, 5, 320, 400);
 			infoPane.visible = false;
 			infoPane.mouseEnabled = true;
 			infoPane.mouseChildren = true;
@@ -97,7 +97,7 @@
 			var titleText:TextField = new TextField();
 			titleText.defaultTextFormat = BaseMenu.getTitleFormat();
 			titleText.text = objectName;	
-			titleText.width = 180;
+			titleText.width = 280;
 			titleText.x = 5;
 			titleText.y = 5;
 			titleText.wordWrap = true;

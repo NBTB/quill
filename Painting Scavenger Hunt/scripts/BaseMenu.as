@@ -141,7 +141,7 @@
 			}
 						
 			//create scroll bar
-			scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y, 40);
+			scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y, 30);
 			addChild(scrollBar);
 			
 			//create list of pages and add first page

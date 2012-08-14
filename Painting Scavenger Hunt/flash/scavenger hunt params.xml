@@ -13,8 +13,8 @@
 		<highlight_filename>../assets/ooi images/quill highlight.png</highlight_filename>
 		<x>0.7844827</x>
 		<y>0.70186368636</y>
-		<info_pane_x>0.45</info_pane_x>
-		<info_pane_y>0.25</info_pane_y>
+		<info_pane_x>0.35</info_pane_x>
+		<info_pane_y>0.20</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/quill info.txt</text_file>
 		</info>
@@ -39,8 +39,8 @@
 		<highlight_filename>../assets/ooi images/flag highlight.png</highlight_filename>
 		<x>0.5396551</x>
 		<y>0.6855720</y>
-		<info_pane_x>0.20</info_pane_x>
-		<info_pane_y>0.25</info_pane_y>
+		<info_pane_x>0.12</info_pane_x>
+		<info_pane_y>0.20</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/flag info.txt</text_file>
 		</info>
@@ -52,7 +52,7 @@
 		<highlight_filename>../assets/ooi images/skeleton highlight.png</highlight_filename>
 		<x>0.4705827</x>
 		<y>0.3307687</y>
-		<info_pane_x>0.15</info_pane_x>
+		<info_pane_x>0.05</info_pane_x>
 		<info_pane_y>0.10</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/skeleton info.txt</text_file>
@@ -65,8 +65,8 @@
 		<highlight_filename>../assets/ooi images/musket highlight.png</highlight_filename>
 		<x>0.6232068</x>
 		<y>0.6401487</y>
-		<info_pane_x>0.28</info_pane_x>
-		<info_pane_y>0.25</info_pane_y>
+		<info_pane_x>0.20</info_pane_x>
+		<info_pane_y>0.20</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/musket info.txt</text_file>
 		</info>
@@ -78,7 +78,7 @@
 		<highlight_filename>../assets/ooi images/silhouette highlight.png</highlight_filename>
 		<x>0.8701379</x>
 		<y>0.1251726</y>
-		<info_pane_x>0.53</info_pane_x>
+		<info_pane_x>0.45</info_pane_x>
 		<info_pane_y>0.02</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/silhouette info.txt</text_file>
@@ -92,7 +92,7 @@
 		<x>0.1772068</x>
 		<y>0.7695784</y>
 		<info_pane_x>0.24</info_pane_x>
-		<info_pane_y>0.25</info_pane_y>
+		<info_pane_y>0.20</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/fire info.txt</text_file>
 		</info>
@@ -104,8 +104,8 @@
 		<highlight_filename>../assets/ooi images/cannonball highlight.png</highlight_filename>
 		<x>0.0606896</x>
 		<y>0.9174942</y>
-		<info_pane_x>0.53</info_pane_x>
-		<info_pane_y>0.25</info_pane_y>
+		<info_pane_x>0.40</info_pane_x>
+		<info_pane_y>0.20</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/cannonball info.txt</text_file>
 		</info>
@@ -117,8 +117,8 @@
 		<highlight_filename>../assets/ooi images/sword highlight.png</highlight_filename>
 		<x>0.8485517</x>
 		<y>0.7722242</y>
-		<info_pane_x>0.51</info_pane_x>
-		<info_pane_y>0.25</info_pane_y>
+		<info_pane_x>0.41</info_pane_x>
+		<info_pane_y>0.20</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/sword info.txt</text_file>
 		</info>
@@ -131,7 +131,7 @@
 		<x>0.3913793</x>
 		<y>0.9123970</y>
 		<info_pane_x>0.47</info_pane_x>
-		<info_pane_y>0.25</info_pane_y>
+		<info_pane_y>0.20</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/cards info.txt</text_file>
 		</info>
@@ -156,7 +156,7 @@
 		<highlight_filename>../assets/ooi images/sergeant highlight.png</highlight_filename>
 		<x>0.4800000</x>
 		<y>0.6920000</y>
-		<info_pane_x>0.02</info_pane_x>
+		<info_pane_x>0.10</info_pane_x>
 		<info_pane_y>0.10</info_pane_y>
 		<info>
 			<text_file>../assets/ooi info/sergeant info.txt</text_file>
@@ -190,7 +190,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Uniform</name>
-		<clue>UNIFORM CLUE NEEDED</clue>
+		<clue>For most, selecting me should be part of your daily routine...</clue>
 		<hitmap_filename>../assets/ooi images/uniform hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/uniform highlight.png</highlight_filename>
 		<x>0.2960307</x>

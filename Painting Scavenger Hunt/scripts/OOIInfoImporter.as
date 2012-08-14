@@ -40,7 +40,8 @@
 																								var newTextField:TextField = new TextField();
 																								newTextField.defaultTextFormat = BaseMenu.getBodyFormat();
 																								newTextField.text = newText;	
-																								newTextField.width = 180;
+																								newTextField.width = 280;
+																								newTextField.x = 5;
 																								newTextField.wordWrap = true;
 																								newTextField.autoSize = TextFieldAutoSize.LEFT;
 																								newTextField.selectable = false;
