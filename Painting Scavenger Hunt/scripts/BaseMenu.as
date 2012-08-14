@@ -9,31 +9,46 @@
 	{
 		protected var menuBackground:Shape = null;					//background of menu
 		protected var menuMask:Shape = null;						//mask of menu to determine what is seen
-		protected var contentContainer:ContentContainer = null;		//container of display objects that populate the pane
+		protected var pages:Array = null;							//list of content containers that mimic seperate pages of content
+		protected var currentPage:int = -1;							//page to be displayed in menu
+		protected var previousPageButton:TextField = null;			//button to move to the previous page of the menu
+		protected var nextPageButton:TextField = null;				//button to move to the next page of the menu
 		protected var closeMenuButton:SimpleButton = null;			//button to close window
 		protected var scrollBar:ScrollBar = null;					//scroll bar used to scroll through pane content
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
 		protected var isOpen:Boolean;								//flag if menu is open
-		public static var menuColor:uint = 0x010417;				//color of menu backgroun /*TODO should be read-in through XML*/
+		
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
+		public static var menuColor:uint = 0x010417;				//color of menu backgroun /*TODO should be read-in through XML*/
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
 		protected static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		protected static var closeButtonLoader:ButtonBitmapLoader = null;
+		protected static var scrollBarStyle = null;		
 		
-		private static var scrollBarStyle = null;		
+		public static const FIRST_PAGE = 0;		//enumeration to conveniently reference the first page
+		public static const LAST_PAGE = -1;		//enumeration to conveniently reference the last page
 		
 		//event types
 		public static const MENU_OPENED = "Menu Opened";
 		public static const MENU_CLOSED = "Menu Closed";
 		public static const CLOSE_MENUS_REQUEST = "Close all menus";
+		public static const SPECIAL_OPEN_REQUEST = "Open menu under special circumstances"
 
 		//Sets up variables used by all the menus
 		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{			
+			//create previous and next page buttons
+			previousPageButton = new TextField();
+			previousPageButton.text = "Previous";
+			addChild(previousPageButton);
+			nextPageButton = new TextField();
+			nextPageButton.text = "Previous";
+			addChild(nextPageButton);
+					
 			//create rectangle for close button
 			var closeButtonRect:Rectangle = new Rectangle(widthVal - 20, 10, 10, 10);
 			
@@ -94,9 +109,7 @@
 				scrollBitmapLoader.loadBitmaps("../assets/interface/scroll bar scroller up.png");															
 			}
 			
-			//Add the background and close button, and make sure it's open
-			//this.addChild(menuBackground);
-			//this.addChild(closeMenuButton);
+			//flag the menu as closed
 			isOpen = false;
 			
 			//start new array of openers
@@ -131,10 +144,9 @@
 			scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y, 20);
 			addChild(scrollBar);
 			
-			//create content container
-			contentContainer = new ContentContainer(10, new Rectangle(0, 0, paneDimensions.x, paneDimensions.y), scrollBar, true);
-			contentContainer.mask = menuMask;
-			addChild(contentContainer);
+			//create list of pages and add first page
+			pages = new Array();
+			addPage();
 			
 			//currently no scrolling is available
 			scrollBar.visible = false;
@@ -218,8 +230,54 @@
 																						 });
 		}
 		
-		public function addListChild(child:DisplayObject, position:Point = null)
-		{							
+		public function addPage(pageNumber:int = LAST_PAGE)
+		{
+			//create new content container to use a page
+			var newPage:ContentContainer = new ContentContainer(10, new Rectangle(0, 0, paneDimensions.x, paneDimensions.y), scrollBar, true);
+			
+			//if the page number is not array valid, add a new page to the end
+			if(pageNumber < 0 || pageNumber > pages.length)
+				pages.push(newPage);
+			//otherwise, splice the new page in
+			else
+				pages.splice(pageNumber, 0, newPage);
+			
+			//switch to new page
+			changePage(pageNumber);
+		}
+		
+		public function changePage(pageNumber:int = LAST_PAGE)
+		{
+			//if the page number is not array valid, use the last page
+			if(pageNumber < 0 || pageNumber > pages.length)
+				pageNumber = pages.length - 1;
+				
+			//leave the old page
+			if(currentPage >= 0)	
+				removeChild(pages[currentPage]);
+				
+			//switch to desired page
+			var focusPage:ContentContainer = pages[pageNumber];			
+			focusPage.mask = menuMask;
+			addChild(focusPage);
+			currentPage = pageNumber;
+			
+			//determine whether or not the previous page button should be shown
+			previousPageButton.visible = currentPage > 0;
+			
+			//determine whether or not the next page button should be shown
+			nextPageButton.visible = currentPage < pages.length - 1;
+		}
+		
+		public function addContent(child:DisplayObject, pageNumber:int = LAST_PAGE, position:Point = null)
+		{						
+			//if the page number is not array valid, use the last page
+			if(pageNumber < 0 || pageNumber > pages.length)
+				pageNumber = pages.length - 1;
+			
+			//reference the given page
+			var contentContainer:ContentContainer = pages[pageNumber];
+		
 			//position child and add it to the display list
 			if(position)
 			{
@@ -231,41 +289,55 @@
 			contentContainer.addChild(child);	
 		}
 		
-		public function addListChildToHead(child:DisplayObject, displaceContent:Boolean = true)
-		{
+		public function addContentToHead(child:DisplayObject, pageNumber:int = FIRST_PAGE, displaceContent:Boolean = true)
+		{			
+			//if the page number is not array valid, use the last page
+			if(pageNumber < 0 || pageNumber > pages.length)
+				pageNumber = pages.length - 1;
+			
+			//reference the given page
+			var contentContainer:ContentContainer = pages[pageNumber];		
+				
+			//add content to page
 			contentContainer.addChildToHead(child, displaceContent);	
 		}
 		
-		public function addListChildToTail(child:DisplayObject, displaceContent:Boolean = false)
+		public function addContentToTail(child:DisplayObject, pageNumber:int = LAST_PAGE, displaceContent:Boolean = false)
 		{
+			//if the page number is not array valid, use the last page
+			if(pageNumber < 0 || pageNumber > pages.length)
+				pageNumber = pages.length - 1;
+			
+			//reference the given page
+			var contentContainer:ContentContainer = pages[pageNumber];		
+			
+			//add content to page
 			contentContainer.addChildToTail(child, displaceContent);
 		}
 		
-		public function removeListChild(child:DisplayObject)
-		{													
+		public function removeContent(child:DisplayObject, pageNumber:int = LAST_PAGE)
+		{	
+			//container of given content
+			var contentContainer:ContentContainer = null;
+		
+			//if no pageNumber was given attempt, attempt find the one that contains the child
+			if(pageNumber < 0)
+			{
+				for(var i:int = 0; i < pages.length && ! contentContainer; i++)
+					if(pages[i].contentResidesHere(child))
+						contentContainer = pages[i];
+			}
+			//otherwise, if the given pageNumber contains the content, reference that page
+			else if(pageNumber < pages.length && pages[pageNumber].contentResidesHere(child))
+				contentContainer = pages[pageNumber];
+			
+			//if the content could not be found, return
+			if(!contentContainer)
+				return;			
+			
 			//remove content from container
 			contentContainer.removeChild(child);
 		}
-		
-		//override addChildAt to add childr to the list of objects that will not dismiss the menu
-		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
-		{						
-			//addOpener(child);
-			return super.addChildAt(child, index);
-		}
-		
-		//override addChild to add child to the list of objects that will not dismiss the menu 
-		override public function addChild(child:DisplayObject):DisplayObject	{	return addChildAt(child, numChildren);	}
-				
-		//override removeChild to remove child from the list of objects that will not dismiss the menu
-		override public function removeChild(child:DisplayObject):DisplayObject
-		{				
-			//addOpener(child);
-			return super.removeChild(child);
-		}		
-		
-		//override removeChildAt to remove child from the list of objects that will not dismiss the menu
-		override public function removeChildAt(index:int):DisplayObject	{	return removeChild(getChildAt(index));	}
 		
 		public function addOpener(opener:Object)
 		{
@@ -304,6 +376,8 @@
 			myColor.color=0xE5E5E5;		
 			sender.transform.colorTransform=myColor;
 		}
+		
+		public function isMenuOpen():Boolean	{	return isOpen;	}
 		
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}
 		public static function getBodyFormat():TextFormat		{	return bodyFormat;		}

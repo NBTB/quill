@@ -62,7 +62,7 @@
 				tempLink.selectable = false;
 				tempLink.setTextFormat(linkFormat);
 				linksArray.push(tempLink);
-				addListChild(tempLink);
+				addContent(tempLink);
 			}		
 		}
 		
@@ -75,12 +75,26 @@
 			linksArray[curLink].setTextFormat(linkFormat);
 			
 			//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
-			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, ooi.displayInfoPane);
+			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});
 			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void	{	closeMenu();	});
 			linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			
 			curLink++;
+		}
+		
+		//handle the event of a object of interest link being clicked
+		private function objectLinkClicked(ooi:ObjectOfInterest):void
+		{
+			ooi.getInfoPane().addEventListener(BaseMenu.MENU_CLOSED, paneFromLinkClosed);
+			ooi.showInfoPane();
+		}
+		
+		private function paneFromLinkClosed(e:Event):void
+		{
+			e.target.removeEventListener(BaseMenu.MENU_CLOSED, paneFromLinkClosed);
+			
+			dispatchEvent(new Event(BaseMenu.SPECIAL_OPEN_REQUEST));
 		}
 	}
 }

@@ -104,7 +104,7 @@
 			titleText.autoSize = TextFieldAutoSize.LEFT;
 			titleText.selectable = false;
 			titleText.mouseWheelEnabled = false;
-			infoPane.addListChild(titleText);
+			infoPane.addContent(titleText);
 						
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
@@ -259,13 +259,13 @@
 		//add display object as a child of info pane
 		public function addInfoToPane(newInfo:DisplayObject)
 		{
-			infoPane.addListChild(newInfo);
+			infoPane.addContent(newInfo);
 		}
 		
 		//add display object as the tail child of info pane
 		public function addInfoToPaneTail(newInfo:DisplayObject)
 		{
-			infoPane.addListChildToTail(newInfo);
+			infoPane.addContentToTail(newInfo);
 		}
 				
 		//test hitmap against a given point, determine hit using a minimum alpha value		
@@ -408,12 +408,6 @@
 		public function showInfoPane()
 		{
 			infoPane.openMenu();
-		}
-		
-		//event listener version of showInfoPane
-		public function displayInfoPane(e:MouseEvent)
-		{
-			showInfoPane();
 		}
 				
 		//hide descrition pane

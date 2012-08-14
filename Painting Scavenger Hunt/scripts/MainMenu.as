@@ -99,7 +99,8 @@
 			
 			//listen for the opener being clicked
 			menuOpener.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
-																				{	
+																				{																		
+																					//if the menu is opened dispatch an event from here to announce the event
 																					if(menu.openMenu())
 																						dispatchEvent(new Event(BaseMenu.MENU_OPENED));
 																				});
@@ -156,6 +157,15 @@
 					menu.closeMenu();
 				}
 			}
+		}
+		
+		//determine if any child menu is open
+		public function isChildMenuOpen()
+		{
+			var childMenuOpen:Boolean = false;
+			for(var i:int = 0; i < menus.length && !childMenuOpen; i++)
+				childMenuOpen = menus[i].isMenuOpen();
+			return childMenuOpen;
 		}
 		
 		//retrieve a child menu based on name

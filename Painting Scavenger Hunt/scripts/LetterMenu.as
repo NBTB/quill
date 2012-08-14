@@ -24,7 +24,7 @@
             super(xPos, yPos, widthVal, heightVal);
              
             //Create the next button
-            nextButton = new TextField();
+            /*nextButton = new TextField();
             nextButton.text = "Next Letter";
             nextButton.selectable = false;
             nextButton.x = 485;
@@ -38,7 +38,7 @@
             nextButton.visible = false;
             nextButton.addEventListener(MouseEvent.MOUSE_DOWN, clickNext);
             nextButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            nextButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+            nextButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);*/
         }
          
         //add new letter piece to list

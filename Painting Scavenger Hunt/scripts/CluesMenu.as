@@ -33,7 +33,7 @@
 				currentClueText.text = currentClue;			
 				
 				//add new text box to content
-				addListChildToHead(currentClueText);
+				addContentToHead(currentClueText);
 			}
         }
          

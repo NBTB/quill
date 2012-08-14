@@ -148,6 +148,7 @@
 			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);
+																								
 			
 			ending = new Ending(0, 0, stage.stageWidth, stage.stageHeight);
 			ending.returnButton.addEventListener(MouseEvent.MOUSE_DOWN, returnBack);
@@ -185,7 +186,14 @@
 			mainMenu.makeChildMenusDisplayable();	
 			
 			//give OOIManager reference to objects menu
-			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).getObjectManager(ooiManager);	
+			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
+			objectsMenu.getObjectManager(ooiManager);	
+			//listen for a request to open objects menu after object of interest info pane closure
+			objectsMenu.addEventListener(BaseMenu.SPECIAL_OPEN_REQUEST, function(e:Event):void
+																							 {
+																								if(!mainMenu.isChildMenuOpen())
+																									objectsMenu.openMenu();
+																							 });
 			
 			//listen for restart
 			RestartMenu(mainMenu.getMenu(restartMenuTitle)).addEventListener(RestartEvent.RESTART_GAME, function(e:RestartEvent):void	
