@@ -77,8 +77,16 @@
 			//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
 			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});
 			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void	{	closeMenu();	});
-			linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void
+																							 {
+																								 colorChange(e);
+																								 ooi.showHighlight();
+																							 });
+			linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void
+																							 {
+																								 revertColor(e);
+																								 ooi.hideHighlight();
+																							 });
 			
 			curLink++;
 		}
@@ -88,6 +96,7 @@
 		{
 			ooi.getInfoPane().addEventListener(BaseMenu.MENU_CLOSED, paneFromLinkClosed);
 			ooi.showInfoPane();
+			ooi.showHighlight();
 		}
 		
 		private function paneFromLinkClosed(e:Event):void

@@ -238,7 +238,6 @@
 			var i:int;
 			for (i = 0; i < objectsOfInterest.length; i++)
 			{
-				//trace(objectsOfInterest[i].objectName);
 				objectsOfInterest[i].clearEvents();
 			}
 			for (i = 0; i < myArrayListeners.length; i++) 

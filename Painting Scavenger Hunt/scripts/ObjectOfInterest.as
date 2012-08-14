@@ -141,7 +141,7 @@
 				//otherwise, dispatch a MOUSE_OUT event
 				else
 				{
-					//only dispatch the event if the object was not previously hovered over
+					//only dispatch the event if the object was previously hovered over
 					if(mousedOver)
 					{
 						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
