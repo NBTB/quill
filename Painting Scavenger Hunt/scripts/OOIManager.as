@@ -12,6 +12,8 @@
 		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
+		private var ooiCaptionContainer = null;					//container for object of interest captions
+		private var ooiInfoPaneContainer = null;				//container for object of interest info panes
 		
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 				//message that appears in the clue textfield when the wrong clue is guessed
 		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 	//message that appears in the clue textfield when the wrong clue is guessed
@@ -23,10 +25,18 @@
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//construct Object of Interest Manager
-		public function OOIManager()
+		public function OOIManager(ooiCaptionContainer:DisplayObjectContainer = null, ooiInfoPaneContainer:DisplayObjectContainer = null)
 		{
 			//create empty array of objects of interest
 			objectsOfInterest = new Array();
+			
+			//store containers of for object of interest captions and info panes
+			if(!ooiCaptionContainer)
+				ooiCaptionContainer = this;
+			this.ooiCaptionContainer = ooiCaptionContainer;
+			if(!ooiInfoPaneContainer)
+				ooiInfoPaneContainer = this;
+			this.ooiInfoPaneContainer = ooiInfoPaneContainer;
 			
 			//listen for being added to the display list
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
@@ -45,11 +55,9 @@
 			//add new object as a display list child
 			addChildAt(newObject, childIndex);
 			
-			//instruct the new object to display its caption above the list of objects 
-			//and display its info pane on the stage
-			newObject.setCaptionContainer(this, childIndex+1);
-			if(stage)
-				newObject.setInfoPaneContainer(stage);
+			//instruct the new object to display its caption and info pane in the specified containers
+			newObject.setCaptionContainer(ooiCaptionContainer);
+			newObject.setInfoPaneContainer(ooiInfoPaneContainer);
 			
 			//get the new object's info pane
 			var infoPane:OOIInfoPane = newObject.getInfoPane();
@@ -173,14 +181,14 @@
 			//hide each object of interest's info pane
 			for(var i = 0; i < objectsOfInterest.length; i++)
 			{
-				//address the current object of interest
+				//address the current object of interest and its info pane
 				var ooi:ObjectOfInterest = objectsOfInterest[i];
+				var infoPane:OOIInfoPane = ooi.getInfoPane();
 				
-				//if the object's info pane is in the display list, hide it
-				if(ooi.getInfoPane().parent)
+				//if the object's info pane is in the display list and visible, hide it
+				if(infoPane.parent && infoPane.visible)
 				{					
 					//only close if the pane is not connected to the caller of the close
-					var infoPane:OOIInfoPane = ooi.getInfoPane();
 					if(!closeCaller || (!infoPane.isObjectOpener(closeCaller) && closeCaller != infoPane))
 						ooi.hideInfoPane();
 				}

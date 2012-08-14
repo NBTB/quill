@@ -16,9 +16,7 @@
 
 	public class TutorialMenu extends BaseMenu {
 
-		public var proceedButton:TextField = new TextField();
-		var continueButton:TextField = new TextField();
-		var previousButton:TextField = new TextField();
+		public var proceedButton:TextField = new TextField();		
 		var resumeButton:TextField = new TextField();
 		var controls:TextField = new TextField();
 		public static var curSlide:Number;
@@ -44,28 +42,20 @@
 		function init() {
 
 			titleField.setTextFormat(titleText);
-			continueButton.setTextFormat(buttonFormat);
-			previousButton.setTextFormat(buttonFormat);
 			controls.setTextFormat(tutText);
-			controls.selectable=false;
-			continueButton.selectable=false;
-			previousButton.selectable=false;
+			controls.selectable=false;			
+			
 			titleField.selectable=false;
 			addChild(controls);
-			addChild(continueButton);
-			continueButton.addEventListener(MouseEvent.MOUSE_DOWN,continueReading);
-			previousButton.addEventListener(MouseEvent.MOUSE_DOWN,previousPage);
-			continueButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			continueButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			previousButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			previousButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
+			addChild(proceedButton);
+						
 			if (! fromHelp) {
 				curSlide=1;
 				proceedButton.setTextFormat(buttonFormat);
 				proceedButton.selectable=false;
 				proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 				proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+				
 			} else {
 				resumeButton.setTextFormat(buttonFormat);
 				resumeButton.selectable=false;
@@ -135,17 +125,7 @@
 			proceedButton.height=50;
 			proceedButton.width=275;
 			proceedButton.text="Proceed";
-			continueButton.x=630;
-			continueButton.y=500;
-			continueButton.height=50;
-			continueButton.width=275;
-			continueButton.text="Continue";
-			previousButton.x=0;
-			previousButton.y=500;
-			previousButton.height=50;
-			previousButton.width=275;
-			previousButton.text="Previous";
-
+			
 			resumeButton.x=315;
 			resumeButton.y=500;
 			resumeButton.height=50;
@@ -155,8 +135,7 @@
 			controls.width=750;
 			controls.height=800;
 			controls.wordWrap=true;
-			controls.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt.  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.";
-
+			controls.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt!  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas.  Hit 'Space' or the little icon in the bottom corner of your screen to toggle the magnifying glass to help you see things more clearly.  Follow the clues to progress through the scavenger hunt. Good Luck!";
 		}
 
 
@@ -181,66 +160,40 @@
 			}
 			//change the text depending on what slide you are on. Add images if necessary on that slide
 			if (curSlide==1) {
-				controls.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt.  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.";
+				controls.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt!  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas.  Hit 'Space' or the little icon in the bottom corner of your screen to toggle the magnifying glass to help you see things more clearly";
 			}
+			//help menu:Objectives
 			if (curSlide==2) {
-				controls.text="In this games there is a collection of objects for you to discover throughout the painting. Mousing over one of these objects will highlight it, and clicking upon it will open a description. A magnifying glass is available to help you see objects more clearly. Hit space to toggle this function on and off, or click the magnifying glass icon in the bottom right of the screen.";
-				addChild(mouseLoader);
-				addChild(mouseOverLoader);
+				controls.text="The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork.";
+				//addChild(mouseLoader);
+				//addChild(mouseOverLoader);
 			}
+			//help menu:Clues
 			if (curSlide==3) {
-				controls.text="In a few moments you will be given a clue to the first object you need to look for.  When the game begins, click on the little icon above the Clues Menu in the bottom of the game screen to obtain your first clue. By clicking on the correct object that the riddle references, the object will be added to your collection.  You will also be given a brief description of the object, as well as some background on its history and its purpose in the painting.";
-				addChild(clueLoader);
+				controls.text="At the top of the screen is your clue bar.  This riddle points to a certain object on the screen.  Correctly solving the riddle will unlock the next clue to be displayed here.";
+				//addChild(clueLoader);
+			}	
+			//help menu:Objects
+			if(curSlide==4) {
+				controls.text = "Many objects important to the painting are scattered acrossed the canvas.  You will know when you've found one because the object will become highlighted. Double Clicking on an object will open a description panel about the object, providing some background on the objects history and its relevance in the painting. It will then be sent to the objects menu where you can review this and other objects you have discovered";
+				//addChild(mouseLoader);
 			}
-			if (curSlide==4) {
-				controls.text="Along with this description, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole. Click on the Letter Menu icon to review your progress";
-				addChild(letterLoader);
-			}
+			//help menu:Letter
 			if (curSlide==5) {
-				controls.text="\n\n\nLeft Click: Select\nSpace: Toggle Magnifying glass";
+				controls.text="As you progress, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  The panel to the right of the main screen shows you your progress. As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole.";
+				//addChild(letterLoader);
+			}
+			//help menu:Controls
+			if (curSlide==6) {
+				controls.text="\n\n\nSingle Left Click: Select\nDouble Left Click (on objects of interest only): Open Object Info Panel\nSpace: Toggle Magnifying glass";
 				addChild(titleField);
 			}
-			if (curSlide==6) {
-				controls.text="The next clue will be given to you when you can identify the object behind this first one. Click Proceed to begin.  Good Luck!";
-			}
-			
+						
 			//reset the text format
 			controls.setTextFormat(tutText);
 		}		
 
-		//brings you to the next page in the tutorial
-		function continueReading(event:MouseEvent):void {
-			curSlide++;
-			addChild(previousButton);
-			//if on last slide, continue button is replaced by proceed button
-			if (curSlide>=6) {
-				if (! fromHelp) {
-					addChild(proceedButton);
-				}
-				removeChild(continueButton);
-
-			}
-			updateText();
-		}
-
-		//returns you to the previous menu in the tutorial if you wish to read it again
-		function previousPage(event:MouseEvent):void {
-			curSlide--;
-			//if on first slide, remove the previous button
-			if (curSlide<=1) {
-				removeChild(previousButton);
-			}
-			//if your in the help menu, there is no proceed, just close
-			if (curSlide>=5&&fromHelp) {
-				addChild(continueButton);
-			}
-			if (contains(proceedButton)) {
-				addChild(continueButton);
-				removeChild(proceedButton);
-			}
-
-			updateText();
-		}
+		
 
 		override public function createCloseButton(placementRect):void {
 			return;

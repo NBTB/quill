@@ -15,12 +15,15 @@
         public static const PAINTING_LOADED:String = "Painting loaded";
         public static const OBJECTS_LOADED:String = "Objects loaded";
         public static const END_GOAL_LOADED:String = "End goal loaded";
+		
+		private var objectMenu:ObjectsMenu;
          
         //load XML scavenger hunt specification and call parser when done
         public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
         {
             //load XML file
             var xmlLoader:URLLoader = new URLLoader();
+			objectMenu = objectsMenu;
             xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                         {
                                                                             parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu);

@@ -28,9 +28,7 @@
 		var splashButtonAbout:TextField = new TextField();
 		var splashButtonCredits:TextField = new TextField();
 		var splashButtonTitle:TextField = new TextField();
-		var splashButtonTutorial:TextField = new TextField();
-		var splashButtonSkip:TextField = new TextField();
-		
+				
 		var splashTitleFormat:TextFormat = new TextFormat();
 		var splashButtonFormat:TextFormat = new TextFormat();
 		
@@ -62,26 +60,20 @@
 			splashButtonAbout.setTextFormat(splashButtonFormat);
 			splashButtonCredits.setTextFormat(splashButtonFormat);
 			splashButtonTitle.setTextFormat(splashButtonFormat);
-			splashButtonTutorial.setTextFormat(splashButtonFormat);
-			splashButtonSkip.setTextFormat(splashButtonFormat);
-			
+						
 			//make the buttons so the text cursor doesn't appear over them
 			splashTitle.selectable = false;
 			splashButtonStart.selectable = false;
 			splashButtonAbout.selectable = false;
 			splashButtonCredits.selectable = false;
 			splashButtonTitle.selectable = false;
-			splashButtonTutorial.selectable = false;
-			splashButtonSkip.selectable = false;		
-			
+						
 			//Event listeners for the different buttons in the project.
-			splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, tutorialStart);
+			splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, startWithTut);
 			splashButtonAbout.addEventListener(MouseEvent.MOUSE_DOWN, aboutInfo);
 			splashButtonCredits.addEventListener(MouseEvent.MOUSE_DOWN, creditsInfo);
 			splashButtonTitle.addEventListener(MouseEvent.MOUSE_DOWN, mainSplash);
-			splashButtonTutorial.addEventListener(MouseEvent.MOUSE_DOWN, startWithTut);
-			splashButtonSkip.addEventListener(MouseEvent.MOUSE_DOWN, startNoTut);
-			
+						
 			splashButtonStart.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonStart.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			splashButtonAbout.addEventListener(MouseEvent.ROLL_OVER, colorChange);
@@ -90,10 +82,6 @@
 			splashButtonCredits.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			splashButtonTitle.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			splashButtonTitle.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			splashButtonTutorial.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			splashButtonTutorial.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			splashButtonSkip.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			splashButtonSkip.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 		
 		function startWithTut(event:MouseEvent):void
@@ -102,8 +90,9 @@
 			useTut = true;
 			gameReady = true;
 			removeChild(splashTitle);
-			removeChild(splashButtonTutorial);
-			removeChild(splashButtonSkip);						
+			removeChild(splashButtonAbout);
+			removeChild(splashButtonCredits);
+			removeChild(splashButtonStart);									
 			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
 			addChild(tut);
 			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
@@ -113,15 +102,8 @@
 		{			
 			tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			startGameListener.triggerListener();
-		}
+		}	
 		
-		function startNoTut(event:MouseEvent):void
-		{
-			splashButtonSkip.removeEventListener(MouseEvent.MOUSE_DOWN, startNoTut);
-			useTut = false;
-			gameReady = true;
-			startGameListener.triggerListener();			
-		}
 		
 		function formatText():void
 		{
@@ -171,21 +153,8 @@
 			splashButtonTitle.y = buttonY3;
 			splashButtonTitle.height = 50;
 			splashButtonTitle.width = 175;
-			splashButtonTitle.text = "Main Page";
+			splashButtonTitle.text = "Main Page";			
 			
-			//Details of the view tutorial button
-			splashButtonTutorial.x = buttonX-50;
-			splashButtonTutorial.y = buttonY1;
-			splashButtonTutorial.height = 50;
-			splashButtonTutorial.width = 275;
-			splashButtonTutorial.text = "View Tutorial";
-			
-			//Details of the skip tutorial button
-			splashButtonSkip.x = buttonX-50;
-			splashButtonSkip.y = buttonY2;
-			splashButtonSkip.height = 50;
-			splashButtonSkip.width = 275;
-			splashButtonSkip.text = "Skip Tutorial";
 		}
 		
 		//changes the text color of the menu buttons to identify which one you're moused over
@@ -258,27 +227,11 @@
 			splashTitle.setTextFormat(splashTitleFormat);
 		}
 		
-		//Display the page asking whether the user wants to use the tutorial or not
-		function tutorialStart(event:MouseEvent):void
-		{
-			//Set the title for the tutorial page, and make sure formatting stays correct
-			splashTitle.text = "The Night Before the Battle Scavenger Hunt";
-			splashTitle.setTextFormat(splashTitleFormat);
-			
-			//Set which code buttons are visible or not on the tutorial inquisition part of the splash page
-			addChild(splashButtonTutorial);
-			addChild(splashButtonSkip);
-			removeChild(splashButtonAbout);
-			removeChild(splashButtonCredits);
-			removeChild(splashButtonStart);
-		}
-		
-		
 		function createBackground():void
-		{
+		{			
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
-			theBackground.graphics.beginFill(0x2F2720);
+			theBackground.graphics.beginFill(BaseMenu.menuColor);
 			theBackground.graphics.drawRect(0, 0, 764, 572);
 			theBackground.graphics.endFill();
 		}
