@@ -169,7 +169,8 @@
 		//determine if a piece of content resides in the container
 		public function contentResidesHere(child:DisplayObject)
 		{
-			return (child.parent == this);
+			
+			return (child && child.parent == this);
 		}
 		
 		//translate content for scrolling (note that content moves opposite scroll)

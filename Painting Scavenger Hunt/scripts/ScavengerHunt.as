@@ -68,8 +68,6 @@
 			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
 			clueText = new TextField();
 			magnifyButton = new SimpleButton();
-			//nextClueButton = new SimpleButton();
-			//newRewardButton = new SimpleButton();
 			
 			//setup clue text format
 			clueTextFormat = new TextFormat("Times New Roman", 25, 0x40E0D0);
@@ -84,34 +82,6 @@
 			clueText.visible = false;
 			clueText.selectable = false;
 			clueText.mouseEnabled = false;
-			
-			/*var notificationButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
-			notificationButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
-																					   {
-																						   //setup next clue button
-																							nextClueButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage()), 
-																																new Bitmap(notificationButtonLoader.getOverImage()), 
-																																new Bitmap(notificationButtonLoader.getDownImage()), 
-																																new Bitmap(notificationButtonLoader.getHittestImage()));
-																							nextClueButton.x = 185;
-																							nextClueButton.y = 500;
-																							nextClueButton.width /= 5;
-																							nextClueButton.height /= 5;
-																							nextClueButton.visible = false;
-																							
-																							//setup new reward button
-																							newRewardButton = new SimpleButton(new Bitmap(notificationButtonLoader.getUpImage()), 
-																																new Bitmap(notificationButtonLoader.getOverImage()), 
-																																new Bitmap(notificationButtonLoader.getDownImage()), 
-																																new Bitmap(notificationButtonLoader.getHittestImage()));
-																							newRewardButton.x = 315
-																							newRewardButton.y = 500;
-																							newRewardButton.width /= 5;
-																							newRewardButton.height /= 5;
-																							newRewardButton.visible = false;
-																					   });
-			notificationButtonLoader.loadBitmaps("../assets/interface/notification button up.png", "../assets/interface/notification button over.png", 
-												 "../assets/interface/notification button down.png", "../assets/interface/notification button hittest.png");*/
 			
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
@@ -133,10 +103,7 @@
 			
 			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
-//<<<<<<< HEAD
 			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
-			//var cluesMenu:CluesMenu = new CluesMenu(100, 200, 220, 315);
-			//var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
@@ -144,28 +111,15 @@
 			var importer:HuntImporter = new HuntImporter();
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu, startUpScreen);
-/*=======
-			var helpMenu:HelpMenu = new HelpMenu(25, 405, 120, 165, menusColor);
-			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 170, 465, menusColor);					
-			var restartMenu:RestartMenu = new RestartMenu (200, 200, 375, 200,  menusColor);
-			
-			cluesMenu = new CluesMenu(0, 0, 765, 55, menusColor);
-			endGoalMenu = new LetterMenu(765, 0, 500, 630, menusColor);	
-			
-			//load hunt information and listen for completion
-			var importer:HuntImporter = new HuntImporter();
-			//importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu, startUpScreen);
->>>>>>> 07ae10e106d7c5d92776e53c21a08bbc851afccc*/
 			
 			//add menus to main menu
 			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);
 			
+			//create ending
 			ending = new Ending(0, 0, stage.stageWidth, stage.stageHeight);
 			ending.returnButton.addEventListener(MouseEvent.MOUSE_DOWN, returnBack);
-			//ending.viewLetterButton.addEventListener(MouseEvent.MOUSE_DOWN, viewLetter);	
 		}
 		
 		//Actually begin the rest of the game
@@ -173,9 +127,7 @@
 		{			
 			//remove pre-game children from display list
 			removeChild(startUpScreen);
-			
-			
-			
+						
 			//add in-game children to display list,
 			//ensuring that they are tightly packed on the bottom layers
 			var childIndex:int = 0;
@@ -185,8 +137,6 @@
 			addChildAt(magnifyingGlass, childIndex++);
 			addChildAt(clueText, childIndex++);	
 			addChildAt(magnifyButton, childIndex++);
-			//addChildAt(nextClueButton, childIndex++);
-			//addChildAt(newRewardButton, childIndex++);
 			
 			addChild(endGoalMenu);				
 			endGoalMenu.removeCloseButton();
@@ -199,14 +149,14 @@
 			addDismissibleOverlayCloser(mainMenu);
 			addDismissibleOverlayCloser(magnifyingGlass);
 			addDismissibleOverlayCloser(magnifyButton);
-			//addDismissibleOverlayCloser(nextClueButton);
-			//addDismissibleOverlayCloser(newRewardButton);
 			
 			//make menus inside main menu displayable
 			mainMenu.makeChildMenusDisplayable();	
+			
 			//give OOIManager reference to objects menu
 			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
 			objectsMenu.getObjectManager(ooiManager);	
+			
 			//listen for a request to open objects menu after object of interest info pane closure
 			objectsMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
 																							 {
@@ -244,55 +194,12 @@
 			var firstClue:String = ooiManager.pickNextOOI();
 			cluesMenu.addClue(firstClue);
 			
-			
-			//post first clue
-			//postToClueText(firstClue);
-			//nextClueButton.visible = false;
-			
-			//post first clue
-			postToClueText(firstClue);
-			//nextClueButton.visible = false;
-			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
 			
 			//listen for an object of interest's info pan to open and close
 			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
 			ooiManager.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
-			
-			//listen for the next clue button being clicked
-			/*nextClueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
-																					{	
-																						mainMenu.closeMenus();
-																						toggleZoom(true, false);
-																						showNextClue();	
-																					});
-			
-			/*TODO the listeners for clue notification button and reward notification button will be obsolete in new version*/
-			//listen for the clues menu being opened
-			/*cluesMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
-																					   {
-																							//if the next clue button is visible, hide it 
-																							//the clue will appear in the clues menu
-																							if(nextClueButton.visible)
-																						   		nextClueButton.visible = false;
-																					   });*/
-			
-			//listen for the new reward button being clicked
-			/*newRewardButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
-																					{	
-																						allowEventsOutsideMenu(false);
-																						endGoalMenu.openMenu();
-																					});*/
-			
-			//listen for the reward menu being opened
-			/*endGoalMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void
-																						{
-																						   //if the new reward button is visible, hide it 
-																						   //the new reward is being viewed
-																						   if(newRewardButton.visible)
-																								newRewardButton.visible = false;
-																					   	});*/
 			
 			//listen for a menu to open and close
 			mainMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
@@ -435,18 +342,13 @@
 			//add the piece of the end goal
 			var completionRequirement:int = ooiManager.getUsableOOICount();
 			endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD);
-			//if(endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD))
-			//		newRewardButton.visible = true;
 		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			
 			
 			//if a new clue was picked, display it and pass it to the clues menu
 			if(nextClue)
-			{
-				//show next clue button
-				//nextClueButton.visible = true;
-				
+			{				
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
 				
@@ -473,9 +375,6 @@
 		{
 			//post the new clue to the clue textfield
 			postToClueText(ooiManager.getCurrentClue());			
-			
-			//hide the next clue button
-			//nextClueButton.visible = false;
 		}
 		
 		//display clue text in textfield on screen

@@ -2,8 +2,8 @@
 {
     import flash.display.*;
     import flash.text.*;
-    import flash.events.*;
-     
+    import flash.events.*;	
+	 
     class CluesMenu extends BaseMenu
     {
         private var currentClueText:TextField = null;           //The displayed current clue
@@ -14,17 +14,18 @@
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //call base constructor
-            super(xPos, yPos, widthVal, heightVal);             
-            
+            super(xPos, yPos, widthVal, heightVal, false);  
+			
 			//create array to store old clues
             oldClues = new Array();             
         }
          
         //add a new clue and update the list of old clues
         public function addClue(newClue:String)
-        {          
+        {   		
+			//if a new clue was given, add it
 			if(newClue)
-			{
+			{				
 				//make the new clue current
 				currentClue = newClue;
 				 
@@ -42,8 +43,8 @@
         {
 			if(currentClue)
 			{
-				//grey the textfield
-				currentClueText.textColor = 0x999999;
+				//remove the old clue text field
+				removeContent(currentClueText)
 				
 				//add current clue to array of old clues
 				oldClues.push(currentClue);
@@ -63,7 +64,7 @@
 			newClueTextField.wordWrap = true;
 			newClueTextField.x = 10;
 			newClueTextField.y = 10;
-			newClueTextField.width = width - 40;
+			newClueTextField.width = width - 20;
 			newClueTextField.autoSize = TextFieldAutoSize.LEFT;
 			
 			return newClueTextField;

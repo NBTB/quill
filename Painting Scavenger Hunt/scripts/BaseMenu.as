@@ -32,7 +32,7 @@
 		public static const LAST_PAGE = -1;		//enumeration to conveniently reference the last page
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, scrollable:Boolean = true):void
 		{			
 			//create previous and next page buttons
 			previousPageButton = new TextField();
@@ -133,16 +133,17 @@
 				createBackground(xPos, yPos, widthVal, heightVal);
 			}
 						
-			//create scroll bar
-			scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y, 30);
-			addChild(scrollBar);
+			//if the menu is scrollable, create scroll bar
+			if(scrollable)
+			{
+				scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y, 30);
+				addChild(scrollBar);
+				scrollBar.visible = false;
+			}
 			
 			//create list of pages and add first page
 			pages = new Array();
 			addPage();
-			
-			//currently no scrolling is available
-			scrollBar.visible = false;
 		}
 		
 		//attempt to open this menu and return result
@@ -322,7 +323,7 @@
 		}
 		
 		public function removeContent(child:DisplayObject, pageNumber:int = LAST_PAGE)
-		{	
+		{			
 			//container of given content
 			var contentContainer:ContentContainer = null;
 		
