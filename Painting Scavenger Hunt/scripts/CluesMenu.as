@@ -23,15 +23,15 @@
             oldClueText = new TextField();
                          
             //temporary
-            currentClueText.wordWrap = true;
+            //currentClueText.wordWrap = true;
             currentClueText.x = 20;
             currentClueText.y = 20;
-            currentClueText.width = 150;           
+            currentClueText.width = 765;           
             currentClueText.selectable = false;
-            oldClueText.wordWrap = true;
+            //oldClueText.wordWrap = true;
             oldClueText.x = 40;
             oldClueText.y = 40;
-            oldClueText.width = 150;   
+            oldClueText.width = 765;   
             oldClueText.selectable = false;
              
             var clueTextFormat:TextFormat = new TextFormat("Arial", 14, 0xFFFFFFFF);
@@ -59,7 +59,7 @@
             /*TODO make list of clues*/
             //list clues
             if(currentClue)
-                currentClueText.text = newClue;
+                currentClueText.text = "Clue: " + newClue;
             else
                 currentClueText.text = "";
         }

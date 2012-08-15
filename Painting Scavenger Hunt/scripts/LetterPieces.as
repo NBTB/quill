@@ -25,8 +25,8 @@
 			this.pieceName = pieceName;
 			this.fileName = fileName;
 			this.yPos = yPos;
-			y = yPos;
-			x = 78;
+			y = yPos+20;
+			x = 25;
 			
 			//set ID and increment static counter
 			this.id = staticID;

@@ -43,7 +43,7 @@
 		{
 			//place magnifying glass at the given center point
 			x = center.x;
-			y = center.y;
+			y = center.y+55;
 			
 			//if a boundary was given, ensure that the magnifying glass's center does not exceed it
 			if(boundary)

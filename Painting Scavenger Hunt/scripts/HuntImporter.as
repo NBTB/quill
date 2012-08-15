@@ -19,20 +19,20 @@
 		private var objectMenu:ObjectsMenu;
          
         //load XML scavenger hunt specification and call parser when done
-        public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
+        public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu, startUpScreen:SplashScreen):void
         {
             //load XML file
             var xmlLoader:URLLoader = new URLLoader();
 			objectMenu = objectsMenu;
             xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                         {
-                                                                            parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu);
+                                                                            parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu, startUpScreen);
                                                                         });
             xmlLoader.load(new URLRequest(filename));
         }
          
         //parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-        private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
+        private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu, startUpScreen:SplashScreen):void
         {              
             //parse hunt attributes
             var mgZoom:Number = 1;
@@ -57,7 +57,7 @@
             ooiManager.setUsableOOICount(huntCount);
              
             //if the hunt is missing necessary information, return
-            if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest") || !hunt.hasOwnProperty("Letter_Piece"))
+            if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest") || !hunt.hasOwnProperty("Letter_Piece") || !hunt.hasOwnProperty("Splash_Screen"))
                 return;
              
             //listen for the painting to be fully loaded
@@ -93,7 +93,54 @@
             //find the first painting specified and parse it
             var painting:XML = hunt.Painting[0];   
             parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);        
+			
+			var splashScreenInfo:XML = hunt.Splash_Screen[0];
+			parseSplashScreen(splashScreenInfo, startUpScreen);
         }
+		
+		private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
+		{
+			var splashLoader:TextLoader = new TextLoader();
+			
+			
+			if(splashScreenInfo.hasOwnProperty("credits_text_file"))
+			{
+				splashLoader.importText(splashScreenInfo.credits_text_file);
+			
+			}
+			if(splashScreenInfo.hasOwnProperty("about_text_file"))
+			{
+			   splashLoader.importText(splashScreenInfo.about_text_file);
+			
+			}
+			if(splashScreenInfo.hasOwnProperty("tutorial_text_file"))
+			{
+				   
+			}
+			
+			splashLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
+																							{
+																								/*TODO take in section number*/
+																								//parse text file
+																								var newText:String = splashLoader.parseText();
+																								
+																								trace (splashLoader.returnFile());
+																								trace (newText);
+																								
+																								//if text was found, add a textfield to the object's info pane
+																								if(newText)
+																								{
+																									if(splashScreenInfo.credits_text_file)
+																									{
+																										startUpScreen.getCreditsText(newText);
+																									}
+																									if(splashScreenInfo.about_text_file)
+																									{
+																										startUpScreen.getAboutText(newText);
+																									}
+																								}
+																							});
+		}
          
         //parse XML specification of painting to be applied to canvas
         private function parsePainting(hunt:XML, painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)
@@ -131,18 +178,17 @@
                      
                     //if information for the object's info pane has been provided, create a loader
                     var ooiInfoLoader:OOIInfoImporter = null;
-                    if(ooi.hasOwnProperty("info"))
-                        ooiInfoLoader = new OOIInfoImporter(ooi.info);
+                    if(ooi.hasOwnProperty("info"))                       ooiInfoLoader = new OOIInfoImporter(ooi.info);
                      
                     //create new object of interest
-                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, Number(ooi.x) * paintingWidth, Number(ooi.y) * paintingHeight, objectMenu.getMenuColor(), ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
+                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, Number(ooi.x)* paintingWidth, Number(ooi.y) * paintingHeight, objectMenu.getMenuColor(), ooiScaleFactor, new Point(0, 0), new Point(paintingWidth, paintingHeight));
                      
                     //set the display position of the object of interest's info pane
                     var infoPaneX:Number = 0;
                     var infoPaneY:Number = 0;
                     if(ooi.hasOwnProperty("info_pane_x"))
                         infoPaneX = ooi.info_pane_x * paintingWidth;
-                    if(ooi.hasOwnProperty("info_pane_y"))
+                    if(ooi.hasOwnProperty("info_pane_y"+55))
                         infoPaneY = ooi.info_pane_y * paintingHeight;
                     newObject.setInfoPanePosition(new Point(infoPaneX, infoPaneY));
                      

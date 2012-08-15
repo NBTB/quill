@@ -60,7 +60,7 @@
 			
 			//set coordinates
 			this.x = x;
-			this.y = y;
+			this.y = y+55;
 			
 			//by default position the info pane at the origin
 			infoPanePosition = new Point(0, 0);

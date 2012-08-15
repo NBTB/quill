@@ -33,14 +33,20 @@
 		
 		var splashTitleFormat:TextFormat = new TextFormat();
 		var splashButtonFormat:TextFormat = new TextFormat();
+		var infoTextFormat:TextFormat = new TextFormat();
 		
-		var buttonX:int = 285;
+		var buttonX:int = 535;
 		var buttonSeparation = 75;
 		var buttonY1:int = 265;
 		var buttonY2:int = buttonY1+buttonSeparation;
 		var buttonY3:int = buttonY2+buttonSeparation;
 		
 		var splashColor:uint;
+		
+		var aboutText:TextField = new TextField();
+		var creditsText:TextField = new TextField();
+		
+		var whichChild:String = "";
 
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -61,7 +67,6 @@
 			createBackground();	
 			
 			//Make sure all the elements have their text formatted correctly.
-			splashTitle.setTextFormat(splashTitleFormat);
 			splashButtonStart.setTextFormat(splashButtonFormat);
 			splashButtonAbout.setTextFormat(splashButtonFormat);
 			splashButtonCredits.setTextFormat(splashButtonFormat);
@@ -127,6 +132,16 @@
 			startGameListener.triggerListener();			
 		}
 		
+		function getAboutText(theAboutText:String):void
+		{
+			aboutText.text = theAboutText;
+		}
+		
+		function getCreditsText(theCreditsText:String):void
+		{
+			creditsText.text = theCreditsText;
+		}
+		
 		function formatText():void
 		{
 			//Details regarding the title
@@ -135,13 +150,33 @@
 			splashTitleFormat.font = "Gabriola";
 			splashTitleFormat.size = 44;
 			
+			//Formatting for the credits and about info
+			infoTextFormat.align = "center";
+			infoTextFormat.color = 0xCC9933;
+			infoTextFormat.font = "Gabriola";
+			infoTextFormat.size = 18;
+			
 			//More details regarding the title
 			splashTitle.wordWrap = true;
 			splashTitle.selectable = false;
-			splashTitle.x = 160;
-			splashTitle.y = 110;
+			splashTitle.x = 410;
+			splashTitle.y = 70;
 			splashTitle.height = 168;
 			splashTitle.width = 425;
+			
+			creditsText.wordWrap = true;
+			creditsText.selectable = false;
+			creditsText.x = 410;
+			creditsText.y = 250;
+			creditsText.height = 180;
+			creditsText.width = 425;
+			
+			aboutText.wordWrap = true;
+			aboutText.selectable = false;
+			aboutText.x = 410;
+			aboutText.y = 250;
+			aboutText.height = 180;
+			aboutText.width = 425;
 			
 			//Details which apply to all of the buttons
 			splashButtonFormat.align = "center";
@@ -230,7 +265,17 @@
 			if (firstStart != true)
 			{
 				this.removeChild(splashButtonTitle);
+				
+				if (whichChild == "credits")
+				{
+					this.removeChild(creditsText);
+				}
+				if (whichChild == "about")
+				{
+					this.removeChild(aboutText);
+				}
 			}
+			
 			
 			//No longer the first time on page...
 			firstStart = false;
@@ -240,26 +285,34 @@
 		{
 			//Set which code buttons are visible or not on the credits part of the splash page
 			addChild(splashButtonTitle);
+			addChild(creditsText);
 			removeChild(splashButtonAbout);
 			removeChild(splashButtonCredits);
 			removeChild(splashButtonStart);
 			
+			whichChild = "credits";
+			
 			//Set the title for the credits page, and make sure formatting stays correct
 			splashTitle.text = "The Night Before the Battle Scavenger Hunt";
 			splashTitle.setTextFormat(splashTitleFormat);
+			creditsText.setTextFormat(infoTextFormat);
 		}
 
    		function aboutInfo(event:MouseEvent):void
 		{
 			//Set which code buttons are visible or not on the about part of the splash page
 			addChild(splashButtonTitle);
+			addChild(aboutText);
 			removeChild(splashButtonAbout);
 			removeChild(splashButtonCredits);
 			removeChild(splashButtonStart);
 			
+			whichChild = "about";
+			
 			//Set the title for the about page, and make sure formatting stays correct
 			splashTitle.text = "The Night Before the Battle Scavenger Hunt";
 			splashTitle.setTextFormat(splashTitleFormat);
+			aboutText.setTextFormat(infoTextFormat);
 		}
 		
 		//Display the page asking whether the user wants to use the tutorial or not
@@ -283,7 +336,7 @@
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
 			theBackground.graphics.beginFill(splashColor);
-			theBackground.graphics.drawRect(0, 0, 764, 572);
+			theBackground.graphics.drawRect(0, 0, 1264, 627);
 			theBackground.graphics.endFill();
 		}
 		

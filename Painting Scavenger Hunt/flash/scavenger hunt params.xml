@@ -5,7 +5,12 @@
 		<filename>../assets/interface/NightBeforeTheBattle_HDR.jpg</filename>
 	</Painting>
 	<End_Goal>
-	</End_Goal>
+	</End_Goal>	
+	<Splash_Screen>
+		<credits_text_file>../assets/menu info/credits.txt</credits_text_file>
+		<about_text_file>../assets/menu info/about.txt</about_text_file>
+		<tutorial_text_file>../assets/menu info/tutorial.txt</tutorial_text_file>
+	</Splash_Screen>
 	<Object_Of_Interest>
 		<name>Quill & Parchment</name>
 		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>

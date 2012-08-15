@@ -188,6 +188,18 @@
 			return true
 		}
 		
+		//remove the close button (for letter and clue)
+		public function removeCloseButton():void
+		{
+			removeChild(closeMenuButton);
+		}
+		
+		//if needed
+		public function addMenuButton():void
+		{
+			addChild(closeMenuButton);
+		}
+		
 		//attempt to open this menu and return result
 		public function closeMenu():Boolean
 		{
