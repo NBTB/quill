@@ -17,8 +17,7 @@
 		protected var scrollBar:ScrollBar = null;					//scroll bar used to scroll through pane content
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
-		protected var isOpen:Boolean;								//flag if menu is open
-		
+		protected var isOpen:Boolean;								//flag if menu is open		
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -297,7 +296,7 @@
 			contentContainer.addChildToHead(child, displaceContent);	
 		}
 		
-		public function addContentToTail(child:DisplayObject, pageNumber:int = LAST_PAGE, displaceContent:Boolean = false)
+		public function addContentToTail(child:DisplayObject, pageNumber:int = LAST_PAGE)
 		{
 			//if the page number is not array valid, use the last page
 			if(pageNumber < 0 || pageNumber > pages.length)
@@ -307,7 +306,7 @@
 			var contentContainer:ContentContainer = pages[pageNumber];		
 			
 			//add content to page
-			contentContainer.addChildToTail(child, displaceContent);
+			contentContainer.addChildToTail(child);
 		}
 		
 		public function removeContent(child:DisplayObject, pageNumber:int = LAST_PAGE)
@@ -334,6 +333,7 @@
 			contentContainer.removeChild(child);
 		}
 		
+		//mark object as a opener of this menu
 		public function addOpener(opener:Object)
 		{
 			openers.push(opener);

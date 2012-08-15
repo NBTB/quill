@@ -50,7 +50,7 @@
 		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
 		<hitmap_filename>../assets/ooi images/skeleton hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/skeleton highlight.png</highlight_filename>
-		<x>0.4705827</x>
+		<x>0.4555827</x>
 		<y>0.3307687</y>
 		<info_pane_x>0.05</info_pane_x>
 		<info_pane_y>0.10</info_pane_y>

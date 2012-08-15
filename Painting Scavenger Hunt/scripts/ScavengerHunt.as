@@ -29,8 +29,6 @@
 		private var pauseEvents:Boolean = false;				//flag if certain events should be paused
 		public var ending:Ending;								//the menu displayed when you win
 		
-		var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
-		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
 		private var cluesMenuTitle:String = "Clues";		//title of clues menu
@@ -71,7 +69,7 @@
 			newRewardButton = new SimpleButton();
 			
 			//setup clue text format
-			clueTextFormat = new TextFormat("Edwardian Script ITC", 25, 0x40E0D0);
+			clueTextFormat = new TextFormat("Times New Roman", 25, 0x40E0D0);
 			clueTextFormat.align = TextFormatAlign.CENTER;
 			
 			//set clue textfield location and settings
@@ -134,7 +132,7 @@
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
 			var cluesMenu:CluesMenu = new CluesMenu(100, 200, 220, 315);
-			//var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
+			var endGoalMenu:LetterMenu = new LetterMenu(75, 0, 600, 515);	
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
@@ -149,11 +147,10 @@
 			mainMenu.addChildMenu(endGoalMenu, endGoalMenuTitle);	/*TODO should be read in from XML file*/
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);
-																								
 			
 			ending = new Ending(0, 0, stage.stageWidth, stage.stageHeight);
 			ending.returnButton.addEventListener(MouseEvent.MOUSE_DOWN, returnBack);
-			ending.viewLetterButton.addEventListener(MouseEvent.MOUSE_DOWN, viewLetter);
+			//ending.viewLetterButton.addEventListener(MouseEvent.MOUSE_DOWN, viewLetter);	
 		}
 		
 		//Actually begin the rest of the game
@@ -203,7 +200,7 @@
 																																	dispatchEvent(e);	
 																																	clearEvents();
 																																});
-			
+
 			//create list of opened menus
 			openedMenus = new Array();
 			
@@ -238,9 +235,6 @@
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
-			
-			//listen for incorrect answers to clues
-			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for an object of interest's info pan to open and close
 			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
@@ -517,9 +511,10 @@
 		}
 		
 		//in the end menu, if you click to view the letter, the end menu is closed and the letter menu is opened
-		function viewLetter(event:MouseEvent):void{
+		function viewLetter(event:MouseEvent):void
+		{
 			removeChild(ending);
-			endGoalMenu.openMenu();
+			LetterMenu(mainMenu.getMenu(endGoalMenuTitle)).openMenu();
 		}
 		
 		public function clearEvents():void 

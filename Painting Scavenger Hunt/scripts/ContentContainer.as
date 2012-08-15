@@ -30,6 +30,7 @@
 																					if(scrollFactor >= 0)
 																					{
 																						scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
+
 																						scrollFactor += y;	
 																						
 																						scrollContent(new Point(0, scrollFactor));
@@ -97,7 +98,7 @@
 			return addChild(child);	
 		}
 		
-		public function addChildToTail(child:DisplayObject, repositionContent:Boolean = false):DisplayObject
+		public function addChildToTail(child:DisplayObject):DisplayObject
 		{
 			//if no content exists, place new child at the bottom
 			if(numChildren > 0)
@@ -106,25 +107,7 @@
 			else
 				return addChild(child);
 			
-			//if content is not being displaced, simply add the new child below other content and return
-			if(!repositionContent)
-				return addChild(child);
-			
-			//determine how much other content will have to be moved
-			var displacement = child.height + autoContentPadding;
-			
-			//push other content up
-			for(var i:int = 0; i < numChildren; i++)
-				getChildAt(i).y -= displacement;
-				
-			//position the child so that it ends at the bottom of content
-			child.y -= child.height;
-			
-			/*TODO make this work, currently the scroller is not scrollable (may need whole overhaul or somehting simple)
-				also space looks double expected padding*/
-			contentHead.y -= displacement;
-			
-			//add the child to the list
+			//add the new child below other content and return
 			return addChild(child);
 		}
 		

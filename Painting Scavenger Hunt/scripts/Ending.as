@@ -12,7 +12,6 @@
 		
 		var returnButton:TextField = new TextField();
 		var newGameButton:TextField = new TextField();
-		var viewLetterButton:TextField = new TextField();
 		var ending:TextField = new TextField();		
 		
 		var endText:TextFormat = new TextFormat();
@@ -29,27 +28,20 @@
 		
 		function init()
 		{
-			returnButton.setTextFormat(buttonText);
-			viewLetterButton.setTextFormat(buttonText);
+			returnButton.setTextFormat(buttonText);			
 			newGameButton.setTextFormat(buttonText);
 			ending.setTextFormat(endText);
 			addChild(ending);
-			addChild(viewLetterButton);
 			addChild(newGameButton);
 			addChild(returnButton);
 			ending.selectable = false;
-			viewLetterButton.selectable = false;
 			newGameButton.selectable = false;
 			returnButton.selectable = false;
 			returnButton.addEventListener(MouseEvent.ROLL_OVER,colorChange);
 			returnButton.addEventListener(MouseEvent.ROLL_OUT,revertColor);
-			//returnButton.addEventListener(MouseEvent.MOUSE_DOWN, returnBack);
 			newGameButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			newGameButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			newGameButton.addEventListener(MouseEvent.MOUSE_DOWN, newGame);
-			viewLetterButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			viewLetterButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			//viewLetterButton.addEventListener(MouseEvent.MOUSE_DOWN, viewLetter);
 		}
 		
 		function initText()
@@ -75,17 +67,11 @@
 			returnButton.height=60;
 			returnButton.width=275;
 			returnButton.text="Return to Painting";
-
-			viewLetterButton.x=315;
-			viewLetterButton.y=500;
-			viewLetterButton.height=60;
-			viewLetterButton.width=275;
-			viewLetterButton.text="View Letter Menu";
-			
+						
 			ending.width=750;
 			ending.height=800;
 			ending.wordWrap=true;
-			ending.text="Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Click the link at the bottom of the screen to read it. Click the link on the bottom left to return to the painting, or click the link on the bottom right to start a new hunt!";
+			ending.text="Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Click the link on the bottom left to return to the painting and read it, or click the link on the bottom right to start a new hunt!";
 		}
 		
 		
