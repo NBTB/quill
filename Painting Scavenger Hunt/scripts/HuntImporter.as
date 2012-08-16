@@ -20,12 +20,12 @@
 		private var objectMenu:ObjectsMenu;
          
 		//load XML start up specification
-		public function importStartUp(filename:String)
+		public function importStartUp(filename:String, startUpScreen:SplashScreen)
 		{
 			var xmlLoader:URLLoader = new URLLoader();
             xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                         {
-																			parseStartUp(new XML(e.target.data));
+																			parseStartUp(new XML(e.target.data), startUpScreen);
                                                                         });
 			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																			   {
@@ -36,13 +36,13 @@
 		
 		
         //load XML scavenger hunt specification
-        public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu, startUpScreen:SplashScreen):void
+        public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
         {
             var xmlLoader:URLLoader = new URLLoader();
 			objectMenu = objectsMenu;
             xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                         {
-                                                                        	parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu, startUpScreen);
+                                                                        	parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu);
                                                                         });
 			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																			   {
@@ -52,16 +52,19 @@
         }
          
 		 //parse XML specification of start-up
-		 private function parseStartUp(startUp:XML)
+		 private function parseStartUp(startUp:XML, startUpScreen:SplashScreen)
 		 {
 			 if(startUp.hasOwnProperty("menu_color"))
-			 	BaseMenu.menuColor = startUp.menu_color;
+				BaseMenu.menuColor = startUp.menu_color;
+			
+			if(startUp.hasOwnProperty("Splash_Screen"))
+				parseSplashScreen(startUp.Splash_Screen[0], startUpScreen);
 				
 			dispatchEvent(new Event(START_UP_LOADED));
 		 }
 		 
         //parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-        private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu, startUpScreen:SplashScreen):void
+        private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
         {              
             //parse hunt attributes
             var mgZoom:Number = 1;
@@ -86,7 +89,7 @@
             ooiManager.setUsableOOICount(huntCount);
              
             //if the hunt is missing necessary information, return
-            if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest") || !hunt.hasOwnProperty("Letter_Piece") || !hunt.hasOwnProperty("Splash_Screen"))
+            if(!hunt.hasOwnProperty("Painting") || !hunt.hasOwnProperty("End_Goal") || !hunt.hasOwnProperty("Object_Of_Interest") || !hunt.hasOwnProperty("Letter_Piece"))
                 return;
              
             //listen for the painting to be fully loaded
@@ -121,10 +124,7 @@
              
             //find the first painting specified and parse it
             var painting:XML = hunt.Painting[0];   
-            parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);        
-			
-			var splashScreenInfo:XML = hunt.Splash_Screen[0];
-			parseSplashScreen(splashScreenInfo, startUpScreen);
+            parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);        			
         }
 		
 		private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
@@ -200,8 +200,9 @@
              
             for each(var ooi in objectsOfInterest)
             {
-                if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"), ooi.hasOwnProperty("clue"))
+                if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("info_snippet"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"), ooi.hasOwnProperty("clue"))
                 {
+					
                     //increment the number of objects parsed
                     objectsParsed++;
                      
@@ -210,15 +211,15 @@
                     if(ooi.hasOwnProperty("info"))                       ooiInfoLoader = new OOIInfoImporter(ooi.info);
                      
                     //create new object of interest
-                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, ooiScaleFactor, new Point(0, 0), new Point(canvasRectangle.width, canvasRectangle.height));
+                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.info_snippet, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, ooiScaleFactor, new Point(canvasRectangle.x, canvasRectangle.y), new Point(canvasRectangle.x + canvasRectangle.width, canvasRectangle.y + canvasRectangle.height));
                      
                     //set the display position of the object of interest's info pane
                     var infoPaneX:Number = 0;
                     var infoPaneY:Number = 0;
                     if(ooi.hasOwnProperty("info_pane_x"))
-                        infoPaneX = ooi.info_pane_x * canvasRectangle.width;
+                        infoPaneX = canvasRectangle.x + ooi.info_pane_x * canvasRectangle.width;
                     if(ooi.hasOwnProperty("info_pane_y"))
-                        infoPaneY = ooi.info_pane_y * canvasRectangle.height;
+                        infoPaneY = canvasRectangle.y + ooi.info_pane_y * canvasRectangle.height;
                     newObject.setInfoPanePosition(new Point(infoPaneX, infoPaneY));
                      
                      

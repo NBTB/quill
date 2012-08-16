@@ -13,6 +13,7 @@
 	{
 		private var objectName:String = null;							//name of object
 		private var id:Number = 0;										//identification number of object
+		private var infoSnippet:String = null;							//short object description
 		private var clue:String = null;									//clue associated with object
 		private var hitmapFilename = null;								//filename of hitmap
 		private var highlightFilename = null;							//filename of highlight
@@ -38,10 +39,11 @@
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
-		public function ObjectOfInterest(objectName:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
+		public function ObjectOfInterest(objectName:String, infoSnippet:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{			
-			//set name, and clue
+			//set name, info snippet, and clue
 			this.objectName = objectName;
+			this.infoSnippet = infoSnippet;
 			this.clue = clue;
 			
 			//set ID and increment static counter
@@ -78,7 +80,7 @@
 			caption.autoSize = TextFieldAutoSize.LEFT;
 			caption.selectable = false;
 			caption.mouseEnabled = false;
-			caption.text = objectName;
+			caption.text = objectName + "\n" + infoSnippet + "\n(double click for info)";
 						
 			//create info pane
 			infoPane = new OOIInfoPane(5, 5, 320, 400);
@@ -351,8 +353,8 @@
 			if(caption.parent)
 			{
 				//place caption near mouse
-				caption.x = caption.parent.mouseX + 5;
-				caption.y = caption.parent.mouseY - 25;
+				caption.x = caption.parent.mouseX + 10;
+				caption.y = caption.parent.mouseY - caption.height / 2;
 				
 				//if the caption exceeds bounds, clamp it
 				var captionFarX = caption.x + caption.width;
@@ -362,7 +364,7 @@
 				if(caption.y < lowerBounds.y)
 					caption.y = lowerBounds.y;
 				if(captionFarX > upperBounds.x)
-					caption.x -= captionFarX - upperBounds.x;
+					caption.x = caption.parent.mouseX - caption.width - 10;
 				if(captionFarY > upperBounds.y)
 					caption.y -= captionFarY - upperBounds.y;
 			}
@@ -432,6 +434,7 @@
 		
 		public function getObjectName():String							{	return objectName;				}
 		public function getID():Number									{	return id;						}
+		public function getInfoSnippet():String							{	return infoSnippet;				}
 		public function getClue():String								{	return clue;					}
 		public function getHitmap():Bitmap								{	return hitmap;					}
 		public function getHighlight():Bitmap							{	return highlight;				}

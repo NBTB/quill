@@ -6,13 +6,9 @@
 	</Painting>
 	<End_Goal>
 	</End_Goal>	
-	<Splash_Screen>
-		<credits_text_file>../assets/menu info/credits.txt</credits_text_file>
-		<about_text_file>../assets/menu info/about.txt</about_text_file>
-		<tutorial_text_file>../assets/menu info/tutorial.txt</tutorial_text_file>
-	</Splash_Screen>
 	<Object_Of_Interest>
 		<name>Quill & Parchment</name>
+		<info_snippet>Quill Info</info_snippet>
 		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 		<hitmap_filename>../assets/ooi images/quill hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/quill highlight.png</highlight_filename>
@@ -26,6 +22,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Moon</name>
+		<info_snippet>Moon Info</info_snippet>
 		<clue>My appearance is always different, but I always have the same face...</clue>
 		<hitmap_filename>../assets/ooi images/moon hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/moon highlight.png</highlight_filename>
@@ -39,6 +36,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Flag</name>
+		<info_snippet>Flag Info</info_snippet>
 		<clue>I have no arms or hands, but I am always willing to give a friendly wave...</clue>
 		<hitmap_filename>../assets/ooi images/flag hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/flag highlight.png</highlight_filename>
@@ -52,6 +50,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Skeleton</name>
+		<info_snippet>Skeleton Info</info_snippet>
 		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
 		<hitmap_filename>../assets/ooi images/skeleton hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/skeleton highlight.png</highlight_filename>
@@ -65,6 +64,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Musket</name>
+		<info_snippet>Market Info</info_snippet>
 		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
 		<hitmap_filename>../assets/ooi images/musket hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/musket highlight.png</highlight_filename>
@@ -78,6 +78,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Silhouette</name>
+		<info_snippet>Silhouette Info</info_snippet>
 		<clue>You have stripped me of my color, but I still look like you...</clue>
 		<hitmap_filename>../assets/ooi images/silhouette hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/silhouette highlight.png</highlight_filename>
@@ -91,6 +92,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
+		<info_snippet>Fire Info</info_snippet>
 		<clue>You can look, but don't touch. I'm just too hot to handle...</clue>
 		<hitmap_filename>../assets/ooi images/fire hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/fire highlight.png</highlight_filename>
@@ -104,6 +106,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cannonball</name>
+		<info_snippet>Cannonball Info</info_snippet>
 		<clue>I've been known to be quite the gate crasher...</clue>
 		<hitmap_filename>../assets/ooi images/cannonball hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/cannonball highlight.png</highlight_filename>
@@ -117,6 +120,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Sword</name>
+		<info_snippet>Sword Info</info_snippet>
 		<clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
 		<hitmap_filename>../assets/ooi images/sword hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/sword highlight.png</highlight_filename>
@@ -130,6 +134,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cards</name>
+		<info_snippet>Cards Info</info_snippet>
 		<clue>We are always dressed our best in many different suits...</clue>
 		<hitmap_filename>../assets/ooi images/cards hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/cards highlight.png</highlight_filename>
@@ -143,6 +148,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Parrott Rifle</name>
+		<info_snippet>Parrott Rifle Info</info_snippet>
 		<clue>Better run for cover because when I sneeze it'll bring the whole building down...</clue>
 		<hitmap_filename>../assets/ooi images/parrott rifle hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/parrott rifle highlight.png</highlight_filename>
@@ -156,6 +162,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Sergeant</name>
+		<info_snippet>Sergeant Info</info_snippet>
 		<clue>I literally call of the shots...</clue>
 		<hitmap_filename>../assets/ooi images/sergeant hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/sergeant highlight.png</highlight_filename>
@@ -169,6 +176,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Gabions</name>
+		<info_snippet>Gabions Info</info_snippet>
 		<clue>The bigger we are, the harder it is for you to fall...</clue>
 		<hitmap_filename>../assets/ooi images/gabions hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/gabions highlight.png</highlight_filename>
@@ -182,6 +190,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Signature</name>
+		<info_snippet>Signature Info</info_snippet>
 		<clue>Without me, what shame, oh, to not even know the artist's name...</clue>
 		<hitmap_filename>../assets/ooi images/signature hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/signature highlight.png</highlight_filename>
@@ -195,6 +204,7 @@
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Uniform</name>
+		<info_snippet>Uniform Info</info_snippet>
 		<clue>For most, selecting me should be part of your daily routine...</clue>
 		<hitmap_filename>../assets/ooi images/uniform hitmap.png</hitmap_filename>
 		<highlight_filename>../assets/ooi images/uniform highlight.png</highlight_filename>
