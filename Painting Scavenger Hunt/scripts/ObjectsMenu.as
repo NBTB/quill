@@ -54,15 +54,14 @@
 			{
 				objCount ++;
 				tempLink = new TextField;
-				tempLink.x = thisX + 20;
-				tempLink.y = thisY - 20 + (40*objCount);
+				tempLink.x = 20;
 				tempLink.height = 35;
 				tempLink.width = thisWidth - 40;
 				tempLink.text = "???";
 				tempLink.selectable = false;
 				tempLink.setTextFormat(linkFormat);
 				linksArray.push(tempLink);
-				addContent(tempLink);
+				addContentToTail(tempLink);
 			}		
 		}
 		

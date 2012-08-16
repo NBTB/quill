@@ -26,7 +26,7 @@
 		private var needNewClue:Boolean = false;					//flag that tracks whether or not a new clue is needed
 		private var notificationTextFormat:TextFormat;				 //text format of the notification textfield
 		private var pauseEvents:Boolean = false;					//flag if certain events should be paused
-		public var ending:Ending;									//the menu displayed when you win
+		private var ending:Ending;									//the menu displayed when you win
 		
 		var cluesMenu:CluesMenu = new CluesMenu(0, 0, 765, 55);
 		var endGoalMenu:LetterMenu = new LetterMenu(765, 0, 500, 630);	
@@ -111,7 +111,7 @@
 			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 240, 120, 330);
-			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(210, 105, 170, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
 			//load hunt information and listen for completion
@@ -124,8 +124,9 @@
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);
 			
 			//create ending
-			ending = new Ending(0, 0, stage.stageWidth, stage.stageHeight);
-			ending.returnButton.addEventListener(MouseEvent.MOUSE_DOWN, returnBack);
+			ending = new Ending(200, 150, 450, 300);
+			ending.visible = false;
+			addChild(ending);
 		}
 		
 		//Actually begin the rest of the game
@@ -167,15 +168,6 @@
 																								if(!pauseEvents)
 																									objectsMenu.openMenu();																								
 																							 });
-			
-			
-			
-			//listen for restart
-			RestartMenu(mainMenu.getMenu(restartMenuTitle)).addEventListener(RestartEvent.RESTART_GAME, function(e:RestartEvent):void	
-																																{	
-																																	dispatchEvent(e);	
-																																	clearEvents();
-																																});
 
 			//create list of opened menus
 			openedMenus = new Array();
@@ -206,13 +198,17 @@
 			//listen for incorrect answers to clues
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
-			//listen for an object of interest's info pan to open and close
+			//listen for an object of interest's info pane to open and close
 			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
 			ooiManager.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
 			
 			//listen for a menu to open and close
 			mainMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
 			mainMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
+			
+			//listen for ending pane to open and close
+			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
+			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
 			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -341,9 +337,6 @@
 		{			
 			//hide the current clue
 			hideNotificationText();
-			
-			//post feedback
-			postNotification("Correct!\nYou unlocked a piece of the letter.");
 		
 			//close menus
 			mainMenu.closeMenus();
@@ -363,19 +356,25 @@
 				
 				//add new clue to clue menu
 				cluesMenu.addClue(nextClue);
+				
+				//post correct answer notification
+				postNotification("Correct!\nYou unlocked a piece of the letter.");
 			}
 			//otherwise, end the game
 			else
-			{
+			{				
 				//add a new page to the end goal menu and show final reward
 				endGoalMenu.addPage();
 				endGoalMenu.unlockFinalReward();				
 				
-				//post notification
+				//make the current clue old
+				cluesMenu.outdateCurrentClue();
+				
+				//post no clues remaining notification
 				postNotification(OOIManager.NO_CLUES_NOTIFY);
 				
 				//show ending
-				addChild(ending);
+				ending.openMenu();
 			}
 		}
 		
@@ -426,11 +425,6 @@
 		{ 
 			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
 			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
-		}
-		
-		//in the end menu, hitting return will bring you back to the painting
-		function returnBack(event:MouseEvent):void{
-			removeChild(ending);
 		}
 		
 		//in the end menu, if you click to view the letter, the end menu is closed and the letter menu is opened

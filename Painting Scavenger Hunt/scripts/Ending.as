@@ -3,32 +3,46 @@
     import flash.display.MovieClip;
     import flash.text.TextField;
     import flash.display.Shape;
-    import flash.text.TextFormat;
+    import flash.text.*;
     import flash.events.MouseEvent;
     import flash.geom.ColorTransform;
   
-    class Ending extends BaseMenu
+    class Ending extends RestartMenu
     {
 		
-		var returnButton:TextField = new TextField();
+		/*var returnButton:TextField = new TextField();
 		var newGameButton:TextField = new TextField();
 		var ending:TextField = new TextField();		
 		
 		var endText:TextFormat = new TextFormat();
-		var buttonText:TextFormat = new TextFormat();
+		var buttonText:TextFormat = new TextFormat();*/
 		
 		 //Creates the ending menu
         public function Ending(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //sends variables to create background to the base menu
             super(xPos, yPos, widthVal, heightVal);
-			initText();
-			init();
+			
+			startOverQuestion.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Would you like play again and discover new clues, or continue learning about the objects here?";
+			startOverYes.text = "New Game"
+			startOverNo.text = "Continue"
+			startOverQuestion.setTextFormat(textFormat);
+			startOverYes.setTextFormat(textFormat);
+			startOverNo.setTextFormat(textFormat);
+			
+			startOverQuestion.autoSize = TextFieldAutoSize.LEFT;
+			startOverYes.autoSize = TextFieldAutoSize.LEFT;
+			startOverNo.autoSize = TextFieldAutoSize.LEFT;
+			
+			startOverYes.y = startOverQuestion.y + startOverQuestion.height + 5;
+			startOverNo.y = startOverQuestion.y + startOverQuestion.height + 5;
+			//initText();
+			//init();
 		}
 		
 		function init()
 		{
-			returnButton.setTextFormat(buttonText);			
+			/*returnButton.setTextFormat(buttonText);			
 			newGameButton.setTextFormat(buttonText);
 			ending.setTextFormat(endText);
 			addChild(ending);
@@ -41,12 +55,12 @@
 			returnButton.addEventListener(MouseEvent.ROLL_OUT,revertColor);
 			newGameButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			newGameButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			newGameButton.addEventListener(MouseEvent.MOUSE_DOWN, newGame);
+			newGameButton.addEventListener(MouseEvent.MOUSE_DOWN, newGame);*/
 		}
 		
 		function initText()
 		{
-			buttonText.color=0xE5E5E5;
+			/*buttonText.color=0xE5E5E5;
 			buttonText.font="Gabriola";
 			buttonText.size=36;
 			
@@ -73,20 +87,14 @@
 			ending.height=800;
 			ending.wordWrap=true;
 			ending.text="Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Click the link on the bottom left to return to the painting and read it, or click the link on the bottom right to start a new hunt!";
+			*/
 		}
 		
 		
 		
-		function newGame(event:MouseEvent):void{
+		/*function newGame(event:MouseEvent):void{
 			this.dispatchEvent(new RestartEvent(RestartEvent.RESTART_GAME, true));
-		}
-		
-		
-		
-		override public function createCloseButton(placementRect):void {
-			return;
-		}
-		
+		}*/		
 		
 	}
 	
