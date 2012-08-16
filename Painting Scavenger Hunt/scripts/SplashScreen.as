@@ -38,9 +38,7 @@
 		var buttonY1:int = 265;
 		var buttonY2:int = buttonY1+buttonSeparation;
 		var buttonY3:int = buttonY2+buttonSeparation;
-		
-		var splashColor:uint;
-		
+				
 		var aboutText:TextField = new TextField();
 		var creditsText:TextField = new TextField();
 		
@@ -286,7 +284,7 @@
 		{			
 			//Set the background graphics
 			theBackground.graphics.lineStyle(1, 0x836A35);
-			theBackground.graphics.beginFill(splashColor);
+			theBackground.graphics.beginFill(BaseMenu.menuColor);
 			theBackground.graphics.drawRect(0, 0, 1264, 627);
 			theBackground.graphics.endFill();
 		}

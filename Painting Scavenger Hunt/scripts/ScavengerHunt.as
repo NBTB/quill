@@ -11,6 +11,7 @@
 		
 	public class ScavengerHunt extends MovieClip
 	{
+		private var importer:HuntImporter = null;				//importer used to load start-up and hunt
 		private var startGameListener:MenuListener;				//Listener to determine when the main game should begin
 		private var paintingCanvas:PaintingCanvas = null;		//The class that displays the painting 
 		private var ooiManager:OOIManager = null;				//Object which keeps track of objects in the painting
@@ -48,12 +49,20 @@
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
 		public function startMenu():void
-		{			
-			startGameListener = new MenuListener();
-			startUpScreen = new SplashScreen(startGameListener);
+		{						
+			//load start-up information and listen for completion
+			importer = new HuntImporter();
+			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
+																					 {
+																						startGameListener = new MenuListener();
+																						startUpScreen = new SplashScreen(startGameListener);
+																						
+																						addChild(startUpScreen);
+																						startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame();	});
+																					 });
+			importer.importStartUp("start-up params.xml");
 			
-			addChild(startUpScreen);
-			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame();	});
+			
 		}
 		
 		//When splash screen ends, set up the rest of the game.
@@ -106,7 +115,6 @@
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
 			//load hunt information and listen for completion
-			var importer:HuntImporter = new HuntImporter();
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu, startUpScreen);
 			

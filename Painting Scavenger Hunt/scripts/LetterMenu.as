@@ -13,7 +13,7 @@
         var pieces:Array=new Array();                       //stores all of the letterPieces
         public var nextButton:TextField;                    //button to go to the next part of the letter, currently redundant?
         var buttonFormat:TextFormat = new TextFormat();     //formatting		
-		public var rewardCounter:Number = 0;						//???	/*TODO this should be a part of letter menu*/
+		public var rewardCounter:Number = 0;				//counter of rewards given
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
@@ -22,23 +22,6 @@
         {
             //Pass in variables to the base menu to create background
             super(xPos, yPos, widthVal, heightVal, false);
-			
-            //Create the next button
-            /*nextButton = new TextField();
-            nextButton.text = "Next Letter";
-            nextButton.selectable = false;
-            nextButton.x = 485;
-            nextButton.y = 465;
-            nextButton.width = 175;
-            buttonFormat.color = 0xE5E5E5;
-            buttonFormat.font = "Gabriola";
-            buttonFormat.size = 30;
-            nextButton.setTextFormat(buttonFormat);
-           	addChild(nextButton);
-            nextButton.visible = false;
-            nextButton.addEventListener(MouseEvent.MOUSE_DOWN, clickNext);
-            nextButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            nextButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);*/
         }
          
         //add new letter piece to list

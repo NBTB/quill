@@ -8,29 +8,58 @@
     import flash.geom.*;
      
     public class HuntImporter extends EventDispatcher
-    {              
-		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+    {              	
+		var myArrayListeners:Array=[];					//Array of Event Listeners in BaseMenu
 	
         //event types
+		public static const START_UP_LOADED:String = "Start-up loaded";
         public static const PAINTING_LOADED:String = "Painting loaded";
         public static const OBJECTS_LOADED:String = "Objects loaded";
         public static const END_GOAL_LOADED:String = "End goal loaded";
 		
 		private var objectMenu:ObjectsMenu;
          
-        //load XML scavenger hunt specification and call parser when done
+		//load XML start up specification
+		public function importStartUp(filename:String)
+		{
+			var xmlLoader:URLLoader = new URLLoader();
+            xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+                                                                        {
+																			parseStartUp(new XML(e.target.data));
+                                                                        });
+			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																			   {
+																				   trace("Failed to load start-up parameters.");
+																			   });
+            xmlLoader.load(new URLRequest(filename));
+		}
+		
+		
+        //load XML scavenger hunt specification
         public function importHunt(filename:String, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu, startUpScreen:SplashScreen):void
         {
-            //load XML file
             var xmlLoader:URLLoader = new URLLoader();
 			objectMenu = objectsMenu;
             xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                         {
-                                                                            parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu, startUpScreen);
+                                                                        	parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu, startUpScreen);
                                                                         });
+			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																			   {
+																				   trace("Failed to load hunt parameters.");
+																			   });
             xmlLoader.load(new URLRequest(filename));
         }
          
+		 //parse XML specification of start-up
+		 private function parseStartUp(startUp:XML)
+		 {
+			 if(startUp.hasOwnProperty("menu_color"))
+			 	BaseMenu.menuColor = startUp.menu_color;
+				
+			dispatchEvent(new Event(START_UP_LOADED));
+		 }
+		 
         //parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
         private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu, startUpScreen:SplashScreen):void
         {              
