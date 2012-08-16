@@ -25,15 +25,18 @@
 			{
 				scrollBar.addEventListener(ScrollBar.SCROLLED, function(e:Event):void
 																				{
-																					//compute how much content must be scrolled
-																					var scrollFactor:Number = scrollBar.getScrolledPercentage();
-																					if(scrollFactor >= 0)
+																					//if content is valid, compute how much content must be scrolled
+																					if(contentHead && contentTail)
 																					{
-																						scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
-
-																						scrollFactor += y;	
-																						
-																						scrollContent(new Point(0, scrollFactor));
+																						var scrollFactor:Number = scrollBar.getScrolledPercentage();
+																						if(scrollFactor >= 0)
+																						{
+																							scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
+	
+																							scrollFactor += y;	
+																							
+																							scrollContent(new Point(0, scrollFactor));
+																						}
 																					}
 																				});
 			}

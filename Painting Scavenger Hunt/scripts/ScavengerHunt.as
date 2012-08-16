@@ -23,8 +23,6 @@
 		private var clueTimer:Timer = null;						//timer used to trigger the hiding of the clue textfield
 		private var clueText:TextField = new TextField(); 		//textfield to hold a newly unlocked clue
 		private var needNewClue:Boolean = false;				//flag that tracks whether or not a new clue is needed
-		//private var nextClueButton:SimpleButton = null;		//notification button that appears when the next clue becomes available
-		//private var newRewardButton:SimpleButton = null;		//notification button that appears when a new reward is unlocked
 		private var clueTextFormat:TextFormat;				 	//text format of the clue textfield
 		private var pauseEvents:Boolean = false;				//flag if certain events should be paused
 		public var ending:Ending;								//the menu displayed when you win
@@ -103,7 +101,7 @@
 			
 			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
-			var helpMenu:HelpMenu = new HelpMenu(5, 350, 120, 165);
+			var helpMenu:HelpMenu = new HelpMenu(5, 240, 120, 330);
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(370, 50, 170, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
@@ -196,6 +194,9 @@
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
+			
+			//listen for incorrect answers to clues
+			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for an object of interest's info pan to open and close
 			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
@@ -339,27 +340,33 @@
 			//close menus
 			mainMenu.closeMenus();
 		
-			//add the piece of the end goal
-			var completionRequirement:int = ooiManager.getUsableOOICount();
-			endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD);
-		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			
 			
 			//if a new clue was picked, display it and pass it to the clues menu
 			if(nextClue)
 			{				
+				//add the piece of the end goal
+				var completionRequirement:int = ooiManager.getUsableOOICount();
+				endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD);
+			
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
 				
 				//add new clue to clue menu
 				cluesMenu.addClue(nextClue);
 			}
-			//otherwise, notify the user that the hunt has been completed
+			//otherwise, end the game
 			else
 			{
+				//add a new page to the end goal menu and show final reward
+				endGoalMenu.addPage();
+				endGoalMenu.unlockFinalReward();				
+				
+				//post notification
 				postToClueText(OOIManager.NO_CLUES_NOTIFY);
 				
+				//show ending
 				addChild(ending);
 			}
 		}

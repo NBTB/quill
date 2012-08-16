@@ -56,19 +56,20 @@
 			endText.align="center";
 			
 			
-			newGameButton.x=630;
-			newGameButton.y=500;
+			newGameButton.x=1110;
+			newGameButton.y=550;
 			newGameButton.height=60;
 			newGameButton.width=275;
 			newGameButton.text="New Game";
 			
 			returnButton.x=20;
-			returnButton.y=500;
+			returnButton.y=550;
 			returnButton.height=60;
 			returnButton.width=275;
 			returnButton.text="Return to Painting";
-						
-			ending.width=750;
+			
+			ending.x=100;
+			ending.width=1050;
 			ending.height=800;
 			ending.wordWrap=true;
 			ending.text="Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Click the link on the bottom left to return to the painting and read it, or click the link on the bottom right to start a new hunt!";

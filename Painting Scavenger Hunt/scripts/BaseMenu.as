@@ -34,13 +34,31 @@
 		//Sets up variables used by all the menus
 		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, scrollable:Boolean = true):void
 		{			
-			//create previous and next page buttons
+			//create previous button
 			previousPageButton = new TextField();
+			previousPageButton.defaultTextFormat = titleFormat;
+			previousPageButton.autoSize = TextFieldAutoSize.CENTER;
 			previousPageButton.text = "Previous";
+			previousPageButton.x = 5;
+			previousPageButton.y = heightVal - 5 - previousPageButton.height;
+			previousPageButton.selectable = false;
 			addChild(previousPageButton);
+			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage > 0){	changePage(currentPage - 1);	}	});
+			previousPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			previousPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);						
+			
+			//create next button
 			nextPageButton = new TextField();
-			nextPageButton.text = "Previous";
+			nextPageButton.defaultTextFormat = titleFormat;
+			nextPageButton.autoSize = TextFieldAutoSize.CENTER;
+			nextPageButton.text = "Next";
+			nextPageButton.x = widthVal - 5 - nextPageButton.width;
+			nextPageButton.y = heightVal - 5 - nextPageButton.height;
+			nextPageButton.selectable = false;
 			addChild(nextPageButton);
+			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage < pages.length - 1){	changePage(currentPage + 1);	}	});
+			nextPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			nextPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);		
 					
 			//create rectangle for close button
 			var closeButtonRect:Rectangle = new Rectangle(widthVal - 20, 10, 10, 10);
@@ -262,12 +280,16 @@
 			//leave the old page
 			if(currentPage >= 0)	
 				removeChild(pages[currentPage]);
-				
+			
 			//switch to desired page
 			var focusPage:ContentContainer = pages[pageNumber];			
 			focusPage.mask = menuMask;
 			addChild(focusPage);
-			currentPage = pageNumber;
+			currentPage = pageNumber;			
+			
+			//if scroll bar exists, reset scrolling
+			if(scrollBar)
+				scrollBar.resetScroller();
 			
 			//determine whether or not the previous page button should be shown
 			previousPageButton.visible = currentPage > 0;

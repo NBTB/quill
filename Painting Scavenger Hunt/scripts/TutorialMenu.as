@@ -116,23 +116,24 @@
 			tutText.size=32;
 			tutText.align="center";
 
-			titleField.x=300;
+			titleField.x=570;
 			titleField.width=300;
 			titleField.text="Controls";
 
-			proceedButton.x=630;
-			proceedButton.y=500;
+			proceedButton.x=580;
+			proceedButton.y=550;
 			proceedButton.height=50;
 			proceedButton.width=275;
 			proceedButton.text="Proceed";
 			
-			resumeButton.x=315;
-			resumeButton.y=500;
+			resumeButton.x=570;
+			resumeButton.y=550;
 			resumeButton.height=50;
 			resumeButton.width=275;
 			resumeButton.text="Resume Game";
 
-			controls.width=750;
+			controls.x = 100;
+			controls.width=1050;
 			controls.height=800;
 			controls.wordWrap=true;
 			controls.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt!  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas.  Hit 'Space' or the little icon in the bottom corner of your screen to toggle the magnifying glass to help you see things more clearly.  Follow the clues to progress through the scavenger hunt. Good Luck!";

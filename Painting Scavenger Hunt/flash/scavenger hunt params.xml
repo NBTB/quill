@@ -209,37 +209,37 @@
 	<Letter_Piece>
 		<name>Unfinished</name>
 		<filename>../assets/end goal images/unfinishedLetter.png</filename>
-		<y>0</y>		
+		<y>-30</y>		
 	</Letter_Piece>
 		<Letter_Piece>
 		<name>Piece2</name>
 		<filename>../assets/end goal images/letterPiece2.png</filename>	
-		<y>-127.8947368421052631578947368421</y>	
+		<y>-195.5</y>	
 	</Letter_Piece>
 	<Letter_Piece>
 		<name>Piece3</name>
 		<filename>../assets/end goal images/letterPiece3.png</filename>	
-		<y>-95.210526315789473684210526315786</y>	
+		<y>-124.75</y>	
 	</Letter_Piece>	
 	<Letter_Piece>
 		<name>Piece4</name>
 		<filename>../assets/end goal images/letterPiece4.png</filename>	
-		<y>-46.894736842105263157894736842104</y>	
+		<y>-57.5</y>	
 	</Letter_Piece>	
 	<Letter_Piece>
 		<name>Piece5</name>
 		<filename>../assets/end goal images/letterPiece5.png</filename>	
-		<y>0</y>	
+		<y>.58</y>	
 	</Letter_Piece>	
 		<Letter_Piece>
 		<name>Piece6</name>
 		<filename>../assets/end goal images/letterPiece6.png</filename>	
-		<y>41.210526315789473684210526315788</y>	
+		<y>53.5</y>	
 	</Letter_Piece>	
 	<Letter_Piece>
 		<name>Piece7</name>
 		<filename>../assets/end goal images/letterPiece7.png</filename>	
-		<y>135</y>	
+		<y>-35.5</y>	
 	</Letter_Piece>
 	<Letter_Piece>
 		<name>HiddenLetter</name>

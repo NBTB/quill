@@ -21,8 +21,8 @@
         public function LetterMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //Pass in variables to the base menu to create background
-            super(xPos, yPos, widthVal, heightVal);
-             
+            super(xPos, yPos, widthVal, heightVal, false);
+			
             //Create the next button
             /*nextButton = new TextField();
             nextButton.text = "Next Letter";
@@ -65,27 +65,30 @@
                  
             //add new object to list
             newPiece.width = 399;
-            newPiece.height = 544;
-             
-            //add new object as a display list child
-            addChild(newPiece);
-             
-             
+            newPiece.height = 544;         
         }
         
 		//unlock the reward
-		public function unlockReward(completionRequirement:int, rewardNumber:int = NEXT_REWARD)
+		public function unlockReward(completionRequirement:int, rewardNumber:int = NEXT_REWARD):Boolean
 		{
-			/*make unlocking depend on reward number given*/
+			/*TODO make unlocking depend on reward number given*/
 			if(rewardCounter < completionRequirement)
 			{
+            	addContent(pieces[rewardCounter]);    
 				pieces[rewardCounter].visible = true;
 				rewardCounter++;
 				return true;
 			}
 			return false;
-		}
-        
+		}    
+		
+		//unlock the final reward
+		public function unlockFinalReward():Boolean
+		{
+			addContent(pieces[pieces.length - 1]); 
+			pieces[pieces.length - 1].visible = true;
+			return true;
+		} 
          
         //next piece is shown
         function clickNext(event:MouseEvent):void
