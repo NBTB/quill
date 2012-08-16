@@ -143,11 +143,8 @@
 			addChildAt(magnifyingGlass, childIndex++);
 			addChildAt(notificationText, childIndex++);	
 			addChildAt(magnifyButton, childIndex++);
-			
-			addChild(endGoalMenu);				
-			endGoalMenu.removeCloseButton();
-			addChild(cluesMenu);			
-			cluesMenu.removeCloseButton();
+			addChildAt(endGoalMenu, childIndex++);	
+			addChildAt(cluesMenu, childIndex++);		
 			
 			//add listeners for when in-game children are clicked
 			addDismissibleOverlayCloser(paintingCanvas);
@@ -194,6 +191,9 @@
 																		  {
 																			hideNotificationText();
 																		  });			
+			//post directions to first clue
+			postNotification("Clues will appear above the painting.");
+			
 			
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
@@ -343,7 +343,7 @@
 			hideNotificationText();
 			
 			//post feedback
-			postNotification("Correct!");
+			postNotification("Correct!\nYou unlocked a piece of the letter.");
 		
 			//close menus
 			mainMenu.closeMenus();

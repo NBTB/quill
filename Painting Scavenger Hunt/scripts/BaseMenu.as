@@ -32,7 +32,7 @@
 		public static const LAST_PAGE = -1;		//enumeration to conveniently reference the last page
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, scrollable:Boolean = true):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable = true, scrollable:Boolean = true):void
 		{			
 			//create previous button
 			previousPageButton = new TextField();
@@ -59,27 +59,31 @@
 			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage < pages.length - 1){	changePage(currentPage + 1);	}	});
 			nextPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			nextPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);		
-					
-			//create rectangle for close button
-			var closeButtonRect:Rectangle = new Rectangle(widthVal - 20, 10, 10, 10);
 			
-			//if the close button style has not yet been loaded, do so now
-			if(!closeButtonLoader)
+			//if closeable, create close button
+			if(closeable)
 			{
-				closeButtonLoader = new ButtonBitmapLoader();
-				closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
-				closeButtonLoader.loadBitmaps("../assets/interface/close button up.png", "../assets/interface/close button over.png", 
-											  "../assets/interface/close button down.png", "../assets/interface/close button hit.png");
-			}
-			//otherwise if the style has begun loading, listen of completion
-			else if(closeButtonLoader.isLoading())
-			{
-				closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
-			}
-			//otherwise, use the loaded style
-			else
-			{
-				createCloseButton(closeButtonRect);
+				//create rectangle for close button
+				var closeButtonRect:Rectangle = new Rectangle(widthVal - 20, 10, 10, 10);
+				
+				//if the close button style has not yet been loaded, do so now
+				if(!closeButtonLoader)
+				{
+					closeButtonLoader = new ButtonBitmapLoader();
+					closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
+					closeButtonLoader.loadBitmaps("../assets/interface/close button up.png", "../assets/interface/close button over.png", 
+												  "../assets/interface/close button down.png", "../assets/interface/close button hit.png");
+				}
+				//otherwise if the style has begun loading, listen of completion
+				else if(closeButtonLoader.isLoading())
+				{
+					closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
+				}
+				//otherwise, use the loaded style
+				else
+				{
+					createCloseButton(closeButtonRect);
+				}
 			}
 		
 			//if the scroll bar style has not yet been loaded, do so now

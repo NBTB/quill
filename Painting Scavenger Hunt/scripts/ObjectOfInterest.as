@@ -80,7 +80,7 @@
 			caption.autoSize = TextFieldAutoSize.LEFT;
 			caption.selectable = false;
 			caption.mouseEnabled = false;
-			caption.text = objectName + "\n" + infoSnippet + "\n(double click for info)";
+			caption.text = objectName + "\n" + infoSnippet + "\n(double click for more info)";
 						
 			//create info pane
 			infoPane = new OOIInfoPane(5, 5, 320, 400);
