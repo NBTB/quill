@@ -22,6 +22,14 @@
         {
             //Pass in variables to the base menu to create background
             super(xPos, yPos, widthVal, heightVal, false);
+			
+			//change previous and next button
+			previousPageButton.text = "<";
+			previousPageButton.x = 2;
+			previousPageButton.y = (heightVal - previousPageButton.height) / 2
+			nextPageButton.text = ">";
+			nextPageButton.x = widthVal - nextPageButton.width - 2;
+			nextPageButton.y = (heightVal - nextPageButton.height) / 2
         }
          
         //add new letter piece to list
@@ -47,8 +55,8 @@
                 pieces.push(newPiece);
                  
             //add new object to list
-            newPiece.width = 399;
-            newPiece.height = 544;         
+            newPiece.width = 449;
+            newPiece.height = 664;         
         }
         
 		//unlock the reward

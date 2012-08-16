@@ -284,7 +284,7 @@
 			//switch to desired page
 			var focusPage:ContentContainer = pages[pageNumber];			
 			focusPage.mask = menuMask;
-			addChild(focusPage);
+			addChildAt(focusPage, getChildIndex(menuBackground) + 1);
 			currentPage = pageNumber;			
 			
 			//if scroll bar exists, reset scrolling
