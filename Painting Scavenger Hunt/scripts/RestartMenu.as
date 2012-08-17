@@ -23,7 +23,7 @@
 		public function RestartMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//feeds the position values for the background to the base menu
-			super(xPos, yPos, widthVal, heightVal);
+			super(xPos, yPos, widthVal, heightVal, false);
 			
 			//Sets up the question
 			startOverQuestion.text = "Are you sure you want to start over? All progress will be lost.";

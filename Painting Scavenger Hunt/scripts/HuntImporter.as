@@ -200,7 +200,7 @@
              
             for each(var ooi in objectsOfInterest)
             {
-                if(ooi.hasOwnProperty("name"), ooi.hasOwnProperty("info_snippet"), ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename"), ooi.hasOwnProperty("x"), ooi.hasOwnProperty("y"), ooi.hasOwnProperty("clue"))
+                if(ooi.hasOwnProperty("name") && ooi.hasOwnProperty("info_snippet") && ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename") && ooi.hasOwnProperty("found_image_filename") && ooi.hasOwnProperty("x") && ooi.hasOwnProperty("y") && ooi.hasOwnProperty("clue"))
                 {
 					
                     //increment the number of objects parsed
@@ -211,7 +211,7 @@
                     if(ooi.hasOwnProperty("info"))                       ooiInfoLoader = new OOIInfoImporter(ooi.info);
                      
                     //create new object of interest
-                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.info_snippet, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooiInfoLoader, canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, ooiScaleFactor, new Point(canvasRectangle.x, canvasRectangle.y), new Point(canvasRectangle.x + canvasRectangle.width, canvasRectangle.y + canvasRectangle.height));
+                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.info_snippet, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooi.found_image_filename, ooiInfoLoader, canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, ooiScaleFactor, new Point(canvasRectangle.x, canvasRectangle.y), new Point(canvasRectangle.x + canvasRectangle.width, canvasRectangle.y + canvasRectangle.height));
                      
                     //set the display position of the object of interest's info pane
                     var infoPaneX:Number = 0;

@@ -61,7 +61,7 @@
 			/*TODO this does not work in CS3, find alternative or upgrade*/
 			//gameLoader.unloadAndStop();  //This works, but does not remove event listeners
 			
-			
+			ScavengerHunt(gameLoader.content).clearEvents();
 			removeChild(gameLoader);
 			gameLoader.unload();
 			gameLoader = null;
