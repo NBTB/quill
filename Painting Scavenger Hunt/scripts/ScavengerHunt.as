@@ -26,6 +26,8 @@
 		private var needNewClue:Boolean = false;					//flag that tracks whether or not a new clue is needed
 		private var notificationTextFormat:TextFormat;				 //text format of the notification textfield
 		private var pauseEvents:Boolean = false;					//flag if certain events should be paused
+		private var loadingTimer:Timer = new Timer(1000);
+
 		private var ending:Ending;									//the menu displayed when you win
 		
 		var cluesMenu:CluesMenu = new CluesMenu(0, 0, 765, 55);
@@ -58,16 +60,27 @@
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
 																					 {																						
 																						addChild(startUpScreen);
-																						startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame();	});
+																						startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	loadingWait();	});
 																					 });
 			importer.importStartUp("start-up params.xml", startUpScreen);
 			
 			
 		}
 		
+		//Additional waiting, so that the loading screen doesn't flash for half a second and freak out the user.
+		public function loadingWait():void
+		{
+			loadingTimer.addEventListener(TimerEvent.TIMER, initGame);
+       		loadingTimer.start();
+		}
+		
 		//When splash screen ends, set up the rest of the game.
-		public function initGame():void
+		public function initGame(event:TimerEvent):void
 		{					
+			//remove the timer
+			loadingTimer.removeEventListener(TimerEvent.TIMER, initGame);
+      		loadingTimer = null;
+		
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 56, 765, 574);
 			ooiManager = new OOIManager(this, this);

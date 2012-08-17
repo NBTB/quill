@@ -17,6 +17,7 @@
 	{
 		var theBackground:Shape = new Shape();
 		var splashTitle:TextField = new TextField();
+		var loadingText:TextField = new TextField();
 		var tut:TutorialMenu;
 		
 		var startGameListener:MenuListener;
@@ -65,6 +66,7 @@
 			splashButtonAbout.setTextFormat(splashButtonFormat);
 			splashButtonCredits.setTextFormat(splashButtonFormat);
 			splashButtonTitle.setTextFormat(splashButtonFormat);
+			loadingText.setTextFormat(splashTitleFormat);
 						
 			//make the buttons so the text cursor doesn't appear over them
 			splashTitle.selectable = false;
@@ -72,6 +74,7 @@
 			splashButtonAbout.selectable = false;
 			splashButtonCredits.selectable = false;
 			splashButtonTitle.selectable = false;
+			loadingText.selectable = false;
 						
 			//Event listeners for the different buttons in the project.
 			splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, startWithTut);
@@ -106,6 +109,9 @@
 		function proceedFromTut(event:MouseEvent):void
 		{			
 			tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
+			removeChild(tut);
+			addChild(splashTitle);
+			addChild(loadingText);
 			startGameListener.triggerListener();
 		}	
 		
@@ -141,6 +147,14 @@
 			splashTitle.y = 70;
 			splashTitle.height = 168;
 			splashTitle.width = 425;
+			
+			loadingText.wordWrap = true;
+			loadingText.selectable = false;
+			loadingText.x = 410;
+			loadingText.y = 370;
+			loadingText.height = 168;
+			loadingText.width = 425;
+			loadingText.text = "Loading... Please Wait!";
 			
 			creditsText.wordWrap = true;
 			creditsText.selectable = false;
