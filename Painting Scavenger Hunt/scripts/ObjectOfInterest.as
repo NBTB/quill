@@ -17,9 +17,12 @@
 		private var clue:String = null;									//clue associated with object
 		private var hitmapFilename = null;								//filename of hitmap
 		private var highlightFilename = null;							//filename of highlight
+		private var foundImageFilename = null;							//filename of image to be used when object is found
 		private var hitmap:Bitmap = null;								//bitmap used for checking collisions and contact
 		private var highlight:Bitmap = null;							//bitmap used to highlight object
 		private var fullsizeHighlight:Bitmap = null;					//unscaled highlight bitmap
+		private var foundImage:Bitmap = null;							//bitmap used to when object is found 
+		private var fullsizeFoundImage:Bitmap = null;					//unscaled found image bitmap
 		private var scaleFactor:Number = 1;								//scale factor applied to hitmap and highlight to fit a given scene
 		private var lowerBounds:Point = null;							//low-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var upperBounds:Point = null;							//upper-end coordinates of boundary for dynamic components (null indicates no boundary)
@@ -39,7 +42,7 @@
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
-		public function ObjectOfInterest(objectName:String, infoSnippet:String, clue:String, hitmapFilename:String, highlightFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
+		public function ObjectOfInterest(objectName:String, infoSnippet:String, clue:String, hitmapFilename:String, highlightFilename:String, foundImageFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{			
 			//set name, info snippet, and clue
 			this.objectName = objectName;
@@ -50,9 +53,10 @@
 			this.id = staticID;
 			staticID++;
 			
-			//store locations of hitmap and highlight image files
+			//store locations of image files
 			this.hitmapFilename = hitmapFilename;
 			this.highlightFilename = highlightFilename;
+			this.foundImageFilename = foundImageFilename;
 			
 			//store info loader 
 			this.infoLoader = infoLoader;
@@ -159,13 +163,14 @@
 		{
 			loadHitmap();
 			loadHighlight();
+			loadFoundImage();
 			loadInfo();
 		}
 		
 		//determine if all components have been loaded
 		private function componentsLoaded():Boolean
 		{
-			return hitmap && highlight && (!infoLoader || infoLoader.isDone());
+			return hitmap && highlight && foundImage && (!infoLoader || infoLoader.isDone());
 		}
 				
 		//load the object's hitmap image
@@ -224,6 +229,8 @@
 																								
 																								//store a fullsize highlight for convenience
 																								fullsizeHighlight = new Bitmap(highlight.bitmapData);
+																								
+																								//add highlight to display list but hide it for now
 																								addChild(highlight);
 																								hideHighlight();
 																								
@@ -241,6 +248,45 @@
 			
 			//begin loading image
 			highlightLoader.load(new URLRequest(highlightFilename));
+		}
+		
+		//load the object's found image
+		private function loadFoundImage():void
+		{
+			//create new loader
+			var foundImageLoader:Loader = new Loader();
+			
+			//listen for the completion of the image loading
+			foundImageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void	
+																								 {
+																									 //store image data as found image
+																									foundImage = Bitmap(LoaderInfo(e.target).content);
+																									
+																									//scale the found image (internal data is not affected)
+																									foundImage.width *= scaleFactor;
+																									foundImage.height *= scaleFactor;
+																									
+																									//store a fullsize found image for convenience
+																									fullsizeFoundImage = new Bitmap(foundImage.bitmapData);
+																									
+																									//add found image to display list (as bottom child) but hide it for now
+																									addChildAt(foundImage, 0);
+																									hideFoundImage();
+																									
+																									//if both the hitmap and highlight are now loaded, dispatch a completion event
+																									if(componentsLoaded())
+																										dispatchEvent(new Event(Event.COMPLETE));
+																								 });
+																								 
+			//listen for a IO error
+			foundImageLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																											{	
+																												dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
+																												trace("Failed to load found image of " + objectName);
+																											});
+			
+			//begin loading image
+			foundImageLoader.load(new URLRequest(foundImageFilename));
 		}
 		
 		//load objects info to be displayed in the info pane
@@ -418,13 +464,13 @@
 			infoPane.closeMenu();
 		}
 		
-		//toggle highlight visibilty
-		public function showHighlight():void				
-		{	
-			highlight.visible = true;		
-		}
+		//control highlight visibilty
+		public function showHighlight():void	{	highlight.visible = true;	}		
+		public function hideHighlight():void	{	highlight.visible = false;		}
 		
-		public function hideHighlight():void				{	highlight.visible = false;		}
+		//control found image visibilty
+		public function showFoundImage():void	{	foundImage.visible = true;		}		
+		public function hideFoundImage():void	{	foundImage.visible = false;		}
 		
 		//object is opened
 		public function hasOpened():void					{	hasBeenOpened = true;			}
@@ -439,6 +485,8 @@
 		public function getHitmap():Bitmap								{	return hitmap;					}
 		public function getHighlight():Bitmap							{	return highlight;				}
 		public function getFullsizeHighlight():Bitmap					{	return fullsizeHighlight;		}
+		public function getFoundImage():Bitmap							{	return foundImage;				}
+		public function getFullsizeFoundImage():Bitmap					{	return fullsizeFoundImage;		}
 		public function getInfoPane():OOIInfoPane						{	return infoPane;				}
 		public function getInfoPanePosition():Point						{	return infoPanePosition;		}
 		public function getHasBeenOpened():Boolean						{	return hasBeenOpened;			}
