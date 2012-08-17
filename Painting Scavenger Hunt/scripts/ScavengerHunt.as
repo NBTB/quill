@@ -326,6 +326,7 @@
 			paintingCanvas.addPaintingToList(bitmaps, texturePoints, new Point(center.x - paintingCanvas.x, center.y - paintingCanvas.y), true);
 			
 			//add magnified object highlights
+			ooiManager.addObjectFoundImagesToList(bitmaps, texturePoints, center, true);
 			ooiManager.addObjectHighlightsToList(bitmaps, texturePoints, center, true);
 			
 			//magnify
@@ -337,9 +338,11 @@
 		{			
 			//hide the current clue
 			hideNotificationText();
-		
-			//close menus
-			mainMenu.closeMenus();
+			
+			//show the hunted object's found image
+			var foundObject = ooiManager.getCurrentOOI();
+			if(foundObject)
+				foundObject.showFoundImage();
 		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			

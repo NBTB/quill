@@ -352,6 +352,23 @@
 			texturePointList.push(objectTexturePoint);
 		}
 		
+		//add the object's found image to a list of bitmaps along with corresponding texture points based on a given sample point relative to the object's upper-left corner
+		public function addFoundImageToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
+		{
+			//if flagged to use fullsize highlight, add it to the bitmap list
+			if(useFullsize)
+				bitmapList.push(fullsizeFoundImage);
+			//otherwise, add the scaled highlight
+			else
+				bitmapList.push(foundImage);
+			
+			//add texture coordinates to the texture coordinate list
+			var objectTexturePoint:Point = new Point();
+			objectTexturePoint.x = (samplePoint.x - x) / highlight.width;
+			objectTexturePoint.y = (samplePoint.y - y) / highlight.height;
+			texturePointList.push(objectTexturePoint);
+		}
+		
 		
 		//display caption and prepare to display description after a delay
 		public function prepareInfoPane(displayDelay:Number = -1)
@@ -476,7 +493,10 @@
 		public function hasOpened():void					{	hasBeenOpened = true;			}
 		
 		//retrieve highlight visibility
-		public function isHighlightd():Boolean				{	return highlight.visible;		}
+		public function isHighlighted():Boolean				{	return highlight.visible;		}
+		
+		//retrieve found image visibility
+		public function isFound():Boolean					{	return foundImage.visible;		}
 		
 		public function getObjectName():String							{	return objectName;				}
 		public function getID():Number									{	return id;						}

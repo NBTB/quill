@@ -207,8 +207,16 @@
 		public function addObjectHighlightsToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
 		{
 			for(var i:int = 0; i < objectsOfInterest.length; i++)
-				if(objectsOfInterest[i].isHighlightd())
+				if(objectsOfInterest[i].isHighlighted())
 					objectsOfInterest[i].addHighlightToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
+		}
+		
+		//add all objects whose found images are visible to a list of bitmaps
+		public function addObjectFoundImagesToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
+		{
+			for(var i:int = 0; i < objectsOfInterest.length; i++)
+				if(objectsOfInterest[i].isFound())
+					objectsOfInterest[i].addFoundImageToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}
 		
 		//used to allow the ooiManager to update the ObjectsMenu when an object is clicked the first time.
