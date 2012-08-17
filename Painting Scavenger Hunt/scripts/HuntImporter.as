@@ -129,29 +129,33 @@
 		
 		private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
 		{
-			var splashLoader:TextLoader = new TextLoader();
-			
-			
+			var creditsLoader:TextLoader = new TextLoader();
+						
 			if(splashScreenInfo.hasOwnProperty("credits_text_file"))
 			{
-				splashLoader.importText(splashScreenInfo.credits_text_file);
-			
+				creditsLoader.importText(splashScreenInfo.credits_text_file);
 			}
+			
+			var aboutLoader:TextLoader = new TextLoader();
+			
 			if(splashScreenInfo.hasOwnProperty("about_text_file"))
 			{
-			   splashLoader.importText(splashScreenInfo.about_text_file);
+			   aboutLoader.importText(splashScreenInfo.about_text_file);
 			
 			}
+			
+			
+			
 			if(splashScreenInfo.hasOwnProperty("tutorial_text_file"))
 			{
 				   
 			}
 			
-			splashLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
+			creditsLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
 																							{
 																								/*TODO take in section number*/
 																								//parse text file
-																								var newText:String = splashLoader.parseText();
+																								var newText:String = creditsLoader.parseText();
 																								
 																								//trace (splashLoader.returnFile());
 																								//trace (newText);
@@ -163,12 +167,27 @@
 																									{
 																										startUpScreen.getCreditsText(newText);
 																									}
+																								}
+																							});
+			aboutLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
+																							{
+																								/*TODO take in section number*/
+																								//parse text file
+																								var newText:String = aboutLoader.parseText();
+																								
+																								//trace (splashLoader.returnFile());
+																								//trace (newText);
+																								
+																								//if text was found, add a textfield to the object's info pane
+																								if(newText)
+																								{
 																									if(splashScreenInfo.about_text_file)
 																									{
 																										startUpScreen.getAboutText(newText);
 																									}
 																								}
 																							});
+		
 		}
          
         //parse XML specification of painting to be applied to canvas
