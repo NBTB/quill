@@ -35,7 +35,7 @@
 		var infoTextFormat:TextFormat = new TextFormat();
 		
 		var buttonX:int = 535;
-		var buttonSeparation = 75;
+		var buttonSeparation = 110;
 		var buttonY1:int = 265;
 		var buttonY2:int = buttonY1+buttonSeparation;
 		var buttonY3:int = buttonY2+buttonSeparation;
@@ -102,6 +102,7 @@
 			removeChild(splashButtonCredits);
 			removeChild(splashButtonStart);									
 			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
+			tut.proceedButton.y = buttonY3;
 			addChild(tut);
 			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 		}	
@@ -138,13 +139,13 @@
 			infoTextFormat.align = "center";
 			infoTextFormat.color = 0xCC9933;
 			infoTextFormat.font = "Gabriola";
-			infoTextFormat.size = 18;
+			infoTextFormat.size = 22;
 			
 			//More details regarding the title
 			splashTitle.wordWrap = true;
 			splashTitle.selectable = false;
 			splashTitle.x = 410;
-			splashTitle.y = 70;
+			splashTitle.y = 50;
 			splashTitle.height = 168;
 			splashTitle.width = 425;
 			
@@ -159,16 +160,16 @@
 			creditsText.wordWrap = true;
 			creditsText.selectable = false;
 			creditsText.x = 410;
-			creditsText.y = 250;
-			creditsText.height = 180;
+			creditsText.y = 220;
+			creditsText.height = 285;
 			creditsText.width = 425;
 			
 			aboutText.wordWrap = true;
 			aboutText.selectable = false;
-			aboutText.x = 410;
-			aboutText.y = 250;
-			aboutText.height = 180;
-			aboutText.width = 425;
+			aboutText.x = 310;
+			aboutText.y = 220;
+			aboutText.height = 250;
+			aboutText.width = 585;
 			
 			//Details which apply to all of the buttons
 			splashButtonFormat.align = "center";
