@@ -117,7 +117,6 @@
 			
 			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
 															{
-																//trace("remove from stage " + objectName);
 																hitmap.bitmapData.dispose();
 																highlight.bitmapData.dispose();
 																removeEventListener(Event.ENTER_FRAME, enterFrame);

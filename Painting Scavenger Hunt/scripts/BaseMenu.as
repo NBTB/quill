@@ -184,24 +184,15 @@
 				visible = true;
 				isOpen = true;
 				
+				//reset scroller position
+				scrollBar.resetScroller();
+				
 				//announce being opened
 				var a:MenuEvent = new MenuEvent(this, MenuEvent.MENU_OPENED);
 				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_OPENED));
 			}
 			
 			return true
-		}
-		
-		//remove the close button (for letter and clue)
-		public function removeCloseButton():void
-		{
-			removeChild(closeMenuButton);
-		}
-		
-		//if needed
-		public function addMenuButton():void
-		{
-			addChild(closeMenuButton);
 		}
 		
 		//attempt to open this menu and return result
@@ -217,11 +208,11 @@
 				visible = false;
 				isOpen = false;
 				
-				//announce being closed
-				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_CLOSED));
-				
 				//reset scroller position
 				scrollBar.resetScroller();
+				
+				//announce being closed
+				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_CLOSED));
 			}
 			
 			return true;
@@ -283,7 +274,10 @@
 				
 			//leave the old page
 			if(currentPage >= 0)	
+			{
+				pages[currentPage].detachScrollBar();
 				removeChild(pages[currentPage]);
+			}
 			
 			//switch to desired page
 			var focusPage:ContentContainer = pages[pageNumber];			
@@ -291,9 +285,12 @@
 			addChildAt(focusPage, getChildIndex(menuBackground) + 1);
 			currentPage = pageNumber;			
 			
-			//if scroll bar exists, reset scrolling
+			//if scroll bar exists, attach it to the page and reset scrolling
 			if(scrollBar)
+			{
+				pages[currentPage].attachScrollBar(scrollBar);
 				scrollBar.resetScroller();
+			}
 			
 			//determine whether or not the previous page button should be shown
 			previousPageButton.visible = currentPage > 0;

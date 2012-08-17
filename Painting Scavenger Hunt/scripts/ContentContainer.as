@@ -23,22 +23,7 @@
 			//if a scroll bar has been attached, listen for the scrolling of the scroll bar
 			if(scrollBar)
 			{
-				scrollBar.addEventListener(ScrollBar.SCROLLED, function(e:Event):void
-																				{
-																					//if content is valid, compute how much content must be scrolled
-																					if(contentHead && contentTail)
-																					{
-																						var scrollFactor:Number = scrollBar.getScrolledPercentage();
-																						if(scrollFactor >= 0)
-																						{
-																							scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
-	
-																							scrollFactor += y;	
-																							
-																							scrollContent(new Point(0, scrollFactor));
-																						}
-																					}
-																				});
+				scrollBar.addEventListener(ScrollBar.SCROLLED, trackScrollBar);
 			}
 		}
 	
@@ -154,6 +139,23 @@
 		
 		override public function removeChildAt(index:int):DisplayObject	{	return removeChild(getChildAt(index));	}
 		
+		private function trackScrollBar(e:Event)
+		{
+			//if content is valid, compute how much content must be scrolled
+			if(contentHead && contentTail)
+			{
+				var scrollFactor:Number = scrollBar.getScrolledPercentage();
+				if(scrollFactor >= 0)
+				{
+					scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
+
+					scrollFactor += y;	
+					
+					scrollContent(new Point(0, scrollFactor));
+				}
+			}
+		}
+		
 		private function updateScrollBar():void
 		{			
 			//update scroller bar height
@@ -182,5 +184,11 @@
 			x -= distance.x;
 			y -= distance.y;
 		}
+		
+		//attach a scroll bar to be tracked (will replace existing scroll bar)
+		public function attachScrollBar(scrollBar:ScrollBar):void		{	this.scrollBar = scrollBar;	}
+		
+		//detach scroll bar so it is not tracked
+		public function detachScroll():void	{	this.scrollBar = null;	}
 	}
 }
