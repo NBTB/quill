@@ -63,7 +63,7 @@
 			var infoPane:OOIInfoPane = newObject.getInfoPane();
 			
 			//listen for when the cursor begins to hover over the new object
-			newObject.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void
+			newObject.addEventListener(ObjectOfInterest.OOI_MOUSE_OVER, function(e:Event):void
 																					{	
 																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
 																						targetObject.showHighlight();	
@@ -72,7 +72,7 @@
 																					});
 
 			//listen for when the cursor stops hovering over the new object
-			newObject.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void
+			newObject.addEventListener(ObjectOfInterest.OOI_MOUSE_OUT, function(e:Event):void
 																					{	
 																						newObject.hideHighlight();	
 																						newObject.hideCaption();

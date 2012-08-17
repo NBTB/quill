@@ -189,6 +189,6 @@
 		public function attachScrollBar(scrollBar:ScrollBar):void		{	this.scrollBar = scrollBar;	}
 		
 		//detach scroll bar so it is not tracked
-		public function detachScroll():void	{	this.scrollBar = null;	}
+		public function detachScrollBar():void	{	this.scrollBar = null;	}
 	}
 }

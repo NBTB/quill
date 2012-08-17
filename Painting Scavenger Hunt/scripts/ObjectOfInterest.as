@@ -41,6 +41,10 @@
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
+		//event typps
+		public static const OOI_MOUSE_OVER:String = "OOI mouse over";
+		public static const OOI_MOUSE_OUT:String = "OOI mouse out";
+		
 		//construct an object of interest with a name, clue, position, and scale factor, and store location of hitmap and highlight
 		public function ObjectOfInterest(objectName:String, infoSnippet:String, clue:String, hitmapFilename:String, highlightFilename:String, foundImageFilename:String, infoLoader:OOIInfoImporter, x:Number, y:Number, scaleFactor:Number = 1, lowerBounds:Point = null, upperBounds:Point = null)
 		{			
@@ -111,16 +115,22 @@
 			titleText.selectable = false;
 			titleText.mouseWheelEnabled = false;
 			infoPane.addContent(titleText);
+			
+			//initially disable mouse interaction
+			mouseEnabled = false;
+			mouseChildren = false;
 						
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 			
-			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
-															{
-																hitmap.bitmapData.dispose();
-																highlight.bitmapData.dispose();
-																removeEventListener(Event.ENTER_FRAME, enterFrame);
-															});
+			//listen for
+			/*addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
+																		{
+																			hitmap.bitmapData.dispose();
+																			highlight.bitmapData.dispose();
+																			removeEventListener(Event.ENTER_FRAME, enterFrame);
+																		});*/
+			
 		}
 		
 		//handle new frames
@@ -129,13 +139,13 @@
 			//ensure that the object has a display list parent before depending on it
 			if(parent)
 			{
-				//if hit testing is not suppressed the mouse cursor is hovering above the object, dispatch a MOUSE_OVER
+				//if hit testing is not suppressed the mouse cursor is hovering above the object, dispatch an OOI_MOUSE_OVER
 				if(!hitTestSuppression && hitTest(new Point(parent.mouseX, parent.mouseY)))
 				{					
 					//only dispatch the event if the object was not previously hovered over
 					if(!mousedOver && !anyMousedOver)
 					{
-						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+						dispatchEvent(new Event(OOI_MOUSE_OVER));
 						mousedOver = true;
 						anyMousedOver = true;
 					}
@@ -143,13 +153,13 @@
 					else
 						captionAtMouse();
 				}
-				//otherwise, dispatch a MOUSE_OUT event
+				//otherwise, dispatch a OOI_MOUSE_OUT event
 				else
 				{
 					//only dispatch the event if the object was previously hovered over
 					if(mousedOver)
 					{
-						dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+						dispatchEvent(new Event(OOI_MOUSE_OUT));
 						mousedOver = false;
 						anyMousedOver = false;
 					}
@@ -481,8 +491,18 @@
 		}
 		
 		//control highlight visibilty
-		public function showHighlight():void	{	highlight.visible = true;	}		
-		public function hideHighlight():void	{	highlight.visible = false;		}
+		public function showHighlight():void	
+		{	
+			highlight.visible = true;		
+			mouseEnabled = true;
+			mouseChildren = true;
+		}		
+		public function hideHighlight():void	
+		{	
+			highlight.visible = false;		
+			mouseEnabled = false;
+			mouseChildren = false;
+		}
 		
 		//control found image visibilty
 		public function showFoundImage():void	{	foundImage.visible = true;		}		
