@@ -27,7 +27,7 @@
 		private var lowerBounds:Point = null;							//low-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var upperBounds:Point = null;							//upper-end coordinates of boundary for dynamic components (null indicates no boundary)
 		private var mousedOver:Boolean = false;							//flag if the object is currently under the cursor
-		private var caption:TextField = null;							//caption that displays name of object
+		private var caption:OOICaption = null;							//caption that displays name and basic info of object
 		private var infoPane:OOIInfoPane = null;						//pane used to display object's description
 		private var infoPanePosition:Point = null;						//coordinates of info pane
 		private var infoLoader:OOIInfoImporter = null;					//loader of info pane content
@@ -82,13 +82,17 @@
 			this.upperBounds = upperBounds;
 						
 			//create caption textfield to display name
-			caption = new TextField();
+			/*caption = new TextField();
 			caption.visible = false;
 			caption.defaultTextFormat = captionFormat;
 			caption.autoSize = TextFieldAutoSize.LEFT;
 			caption.selectable = false;
 			caption.mouseEnabled = false;
-			caption.text = objectName + "\n" + infoSnippet + "\n(double click for more info)";
+			caption.text = objectName + "\n" + infoSnippet + "\n(double click for more info)";*/
+			caption = new OOICaption(objectName, infoSnippet);
+			caption.visible = false;
+			caption.mouseEnabled = false;
+			caption.mouseChildren = false;
 						
 			//create info pane
 			infoPane = new OOIInfoPane(5, 5, 320, 400);

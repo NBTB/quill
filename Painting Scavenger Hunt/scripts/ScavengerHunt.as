@@ -220,8 +220,16 @@
 			mainMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
 			
 			//listen for ending pane to open and close
-			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
-			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
+			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
+																				{	
+																					menuOpened(e.getTargetMenu());	
+																					handleEnding();
+																				});
+			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
+																				{
+																					menuClosed(e.getTargetMenu());
+																					handleEnding();
+																				});
 			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -280,25 +288,6 @@
 			//if all opened menus have been closed, allow actions that depend on all menus being closed
 			if(openedMenus.length < 1)
 				allowEventsOutsideMenu(true);
-		}
-		
-		private function allowEventsOutsideMenu(allowEvents:Boolean):void
-		{
-			//flag the pause/unpause of certain events
-			pauseEvents = !allowEvents;
-						
-			//if events are not allowed, setup special states
-			if(!allowEvents)
-			{
-				hideNotificationText();
-				toggleZoom(true, false);
-				ooiManager.setAllOOIHitTestSuppression(true);
-			}
-			//otherwise, revert to normal states
-			else
-			{
-				ooiManager.setAllOOIHitTestSuppression(false);
-			}
 		}
 		
 		//toggle use of magnifying glass
@@ -448,6 +437,43 @@
 		{
 			removeChild(ending);
 			LetterMenu(mainMenu.getMenu(endGoalMenuTitle)).openMenu();
+		}
+		
+		//enter a special state when the ending is open, leave it when closed
+		private function handleEnding()
+		{
+			//track ending's open status
+			var othersEnabled = !ending.isMenuOpen();
+			
+			//enable/disable interaction with other children
+			ooiManager.mouseEnabled = othersEnabled;
+			ooiManager.mouseChildren = othersEnabled;
+			mainMenu.mouseEnabled = othersEnabled;
+			mainMenu.mouseChildren = othersEnabled;
+			cluesMenu.mouseEnabled = othersEnabled;
+			cluesMenu.mouseChildren = othersEnabled;
+			endGoalMenu.mouseEnabled = othersEnabled;
+			endGoalMenu.mouseChildren = othersEnabled;
+			magnifyButton.mouseEnabled = othersEnabled;
+		}
+		
+		private function allowEventsOutsideMenu(allowEvents:Boolean):void
+		{
+			//flag the pause/unpause of certain events
+			pauseEvents = !allowEvents;
+						
+			//if events are not allowed, setup special states
+			if(!allowEvents)
+			{
+				hideNotificationText();
+				toggleZoom(true, false);
+				ooiManager.setAllOOIHitTestSuppression(true);
+			}
+			//otherwise, revert to normal states
+			else
+			{
+				ooiManager.setAllOOIHitTestSuppression(false);
+			}
 		}
 		
 		public function clearEvents():void 
