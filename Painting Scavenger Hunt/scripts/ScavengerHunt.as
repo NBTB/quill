@@ -2,33 +2,33 @@
 {
 	import flash.display.*;
 	import flash.events.*;
-	import flash.ui.Keyboard;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;	
+	import flash.ui.*;
+	import flash.geom.*;	
 	import flash.text.*;
 	import flash.utils.Timer;
-	import flash.ui.Mouse;
 		
 	public class ScavengerHunt extends MovieClip
 	{
-		private var importer:HuntImporter = null;					//importer used to load start-up and hunt
-		private var startGameListener:MenuListener;					//Listener to determine when the main game should begin
-		private var paintingCanvas:PaintingCanvas = null;			//The class that displays the painting 
-		private var ooiManager:OOIManager = null;					//Object which keeps track of objects in the painting
-		private var startUpScreen:SplashScreen;						//Splash screen which displays when program is first started
-		private var mainMenu:MainMenu;								//The main menu displayed beneath the painting
-		private var openedMenus:Array = null;						//list of currently open menus
-		private var zoomed:Boolean = false;							//flag tracking whether or not the magnifying glass is active
-		private var magnifyingGlass:MagnifyingGlass;				//magnifying glass used to enlarge portions of the scene
-		private var magnifyButton:SimpleButton = null;				//button that toggles magnifying glass
-		private var notificationTimer:Timer = null;					//timer used to trigger the hiding of the notification textfield
-		private var notificationText:TextField = new TextField(); 	//textfield to hold notifications
-		private var needNewClue:Boolean = false;					//flag that tracks whether or not a new clue is needed
-		private var notificationTextFormat:TextFormat;				//text format of the notification textfield
-		private var pauseEvents:Boolean = false;					//flag if certain events should be paused
-		private var loadingTimer:Timer = new Timer(1000);
-
-		private var ending:Ending;									//the menu displayed when you win
+		private var importer:HuntImporter = null;						//importer used to load start-up and hunt
+		private var startGameListener:MenuListener;						//Listener to determine when the main game should begin
+		private var paintingCanvas:PaintingCanvas = null;				//The class that displays the painting 
+		private var ooiManager:OOIManager = null;						//Object which keeps track of objects in the painting
+		private var startUpScreen:SplashScreen;							//Splash screen which displays when program is first started
+		private var mainMenu:MainMenu;									//The main menu displayed beneath the painting
+		private var openedMenus:Array = null;							//list of currently open menus
+		private var zoomed:Boolean = false;								//flag tracking whether or not the magnifying glass is active
+		private var magnifyingGlass:MagnifyingGlass;					//magnifying glass used to enlarge portions of the scene
+		private var magnifyButton:SimpleButton = null;					//button that toggles magnifying glass
+		private var notificationTimer:Timer = null;						//timer used to trigger the hiding of the notification textfield
+		private var notificationText:TextField = new TextField(); 		//textfield to hold notifications
+		private var notificationTextFormat:TextFormat;					//text format of the notification textfield
+		private var notificationTextColorNormal:ColorTransform = null;	//color of notification text in its normal state
+		private var notificationTextColorNew:ColorTransform = null;		//color transform applied to notification text immediately after it is updated
+		private var notificationTextColorFadeTime:int = 0;				//number of frames the notification text color takes to transition from new to normal
+		private var notificationTextColorFades:int = 0;					//number of frames the notification text color has been fading
+		private var pauseEvents:Boolean = false;						//flag if certain events should be paused
+		private var loadingTimer:Timer = new Timer(1000);				//timer to set minimum load time and prevent the screen from just being a flash
+		private var ending:Ending;										//the menu displayed when you win
 		
 		var cluesMenu:CluesMenu = new CluesMenu(0, 0, 765, 55);
 		var endGoalMenu:LetterMenu = new LetterMenu(765, 0, 500, 630);	
@@ -93,12 +93,24 @@
 			notificationText = new TextField();
 			magnifyButton = new SimpleButton();
 			
+			//define normal notification text color
+			var normalRed:uint = 0x40;
+			var normalGreen:uint = 0xE0;
+			var normalBlue:uint = 0xD0;
+			notificationTextColorNormal = new ColorTransform();	
+			notificationTextColorNormal.color = (normalRed * 0x010000) + (normalGreen * 0x000100) + (normalBlue);		
+			
+			//define offsets to apply when notification is new
+			notificationTextColorNew = new ColorTransform(1, 1, 1, 1, 0xFF - normalRed, 0xFF - normalGreen, 0xFF - normalBlue, 0);
+			notificationTextColorFadeTime = 20;
+			
 			//setup clue text format
-			notificationTextFormat = new TextFormat("Times New Roman", 25, 0x40E0D0);
+			notificationTextFormat = new TextFormat("Times New Roman", 25, notificationTextColorNormal.color);
 			notificationTextFormat.align = TextFormatAlign.CENTER;
 			
 			//set clue textfield location and settings
 			notificationText.defaultTextFormat = notificationTextFormat;
+			notificationText.transform.colorTransform = notificationTextColorNormal;
 			notificationText.wordWrap=true;
 			notificationText.x=150;
 			notificationText.y=90;
@@ -148,8 +160,7 @@
 		
 		//Actually begin the rest of the game
 		public function startGame():void
-		{			
-		
+		{					
 			//remove pre-game children from display list
 			removeChild(startUpScreen);
 						
@@ -193,8 +204,8 @@
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
-			//create clue timer
-			notificationTimer = new Timer(10 * 1000, 1);
+			//create notification timer
+			notificationTimer = new Timer(3 * 1000, 1);
 			
 			//listen for the completion of the clue timer
 			notificationTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
@@ -256,6 +267,18 @@
 		//handle new frame
 		public function checkEnterFrame(e:Event):void
 		{			
+			//if a notification present and new, fade it partially
+			if(notificationText.visible && notificationTextColorFades <= notificationTextColorFadeTime)
+			{
+				var fadeRatio:Number = (Number(notificationTextColorFades) / notificationTextColorFadeTime);
+				var invFadeRatio:Number = 1 - fadeRatio;
+				notificationText.textColor = notificationTextColorNormal.color;
+				notificationText.transform.colorTransform = new ColorTransform(1, 1, 1, 1,	notificationTextColorNormal.redOffset * fadeRatio + notificationTextColorNew.redOffset * invFadeRatio,
+																							notificationTextColorNormal.greenOffset * fadeRatio + notificationTextColorNew.greenOffset * invFadeRatio, 
+																							notificationTextColorNormal.blueOffset * fadeRatio + notificationTextColorNew.blueOffset * invFadeRatio, 0);
+				notificationTextColorFades++;
+			}
+						
 			//if the magnifying glass is being used, draw through its lens
             if(zoomed)
 			{
@@ -402,6 +425,9 @@
 			//display notification
 			notificationText.visible = true;
 			notificationText.text = textToPost;
+			
+			//start fading
+			notificationTextColorFades = 0;
 			
 			//restart the clue hiding timer
 			notificationTimer.reset();
