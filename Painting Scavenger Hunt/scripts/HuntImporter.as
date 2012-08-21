@@ -104,7 +104,7 @@
 																						if(menuParamsLoaded && aboutLoaded)
 																							dispatchEvent(new Event(START_UP_LOADED));
 																				    });
-            aboutXMLLoader.load(new URLRequest(menuImportFile));
+            aboutXMLLoader.load(new URLRequest(aboutImportFile));
 		}
 		
 		
@@ -271,25 +271,56 @@
         //parse XML specification of painting to be applied to canvas
         private function parsePainting(painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)
         {
-            //load painting
-            var bitmapLoader:Loader = new Loader();
-            bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void
-                                                                                             {                 
-                                                                                                //display painting on canvas
-                                                                                                paintingCanvas.displayPainting(Bitmap(LoaderInfo(e.target).content));
+			//track the load status of interactive and non-interactive paintings
+			var interactiveLoaded:Boolean = false;
+			var nonInteractiveLoaded:Boolean = false;
+			
+            //load interactive painting
+            var ibitmapLoader:Loader = new Loader();
+            ibitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void
+                                                                                              {                 
+																							  	//attach painting to canvas
+																								paintingCanvas.attachPainting(Bitmap(LoaderInfo(e.target).content));
+																							  
+                                                                                               	//display painting on canvas
+                                                                                                paintingCanvas.displayPainting();
                                                                                                  
-                                                                                                //dispatch event for painting importation completion
-                                                                                                dispatchEvent(new Event(PAINTING_LOADED));
-                                                                                             });
-			bitmapLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
-																										   {	
-																										   	//dispatch and IO error message
-																										   	dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
+                                                                                                //if both versions of the painting are loaded, dispatch event for painting importation completion
+																								interactiveLoaded = true
+																								if(interactiveLoaded && nonInteractiveLoaded)
+                                                                                                	dispatchEvent(new Event(PAINTING_LOADED));
+                                                                                              });
+			ibitmapLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																										    {	
+																										   		//dispatch and IO error message
+																										   		dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
 																											
-																											//display error in debug trace
-																											trace("Failed to load painting");
-																										   });
-            bitmapLoader.load(new URLRequest(painting.interactive_filename));
+																												//display error in debug trace
+																												trace("Failed to load painting (interactive)");
+																										    });
+            ibitmapLoader.load(new URLRequest(painting.interactive_filename));
+			
+			//load non-interactive painting
+            var nbitmapLoader:Loader = new Loader();
+            nbitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void
+                                                                                              {     
+																							  	//attach non-interacive painting to canvas
+																								paintingCanvas.attachNonInteractivePainting(Bitmap(LoaderInfo(e.target).content));
+																							  
+                                                                                                //if both versions of the painting are loaded, dispatch event for painting importation completion
+																								nonInteractiveLoaded = true
+																								if(interactiveLoaded && nonInteractiveLoaded)
+                                                                                                	dispatchEvent(new Event(PAINTING_LOADED));
+                                                                                              });
+			nbitmapLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																										    {	
+																										   		//dispatch and IO error message
+																										   		dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
+																											
+																												//display error in debug trace
+																												trace("Failed to load painting (non-interactive)");
+																										    });
+            nbitmapLoader.load(new URLRequest(painting.non_interactive_filename));
         }
 		
 		//prepare to parse objects of interest and end goal pieces
@@ -302,7 +333,6 @@
 			//listen for all of the objects to be fully loaded
 			addEventListener(OBJECTS_LOADED, function(e:Event):void
 														  {
-																trace("objects");
 																objectsLoaded = true;
 																if(objectsLoaded && endGoalLoaded)
 																dispatchEvent(new Event(Event.COMPLETE));
@@ -328,7 +358,6 @@
 			//listen for all of the end goal pieces to be fully loaded
 			addEventListener(END_GOAL_LOADED, function(e:Event):void
 														  {
-															trace("endGoal");
 															endGoalLoaded = true;
 															if(objectsLoaded && endGoalLoaded)
 																dispatchEvent(new Event(Event.COMPLETE));

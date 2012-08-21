@@ -228,11 +228,13 @@
 			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
 																				{	
 																					menuOpened(e.getTargetMenu());	
+																					paintingCanvas.updatePaintingMode(PaintingCanvas.NON_INTERACTIVE);
 																					handleEnding();
 																				});
 			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
 																				{
 																					menuClosed(e.getTargetMenu());
+																					paintingCanvas.updatePaintingMode(PaintingCanvas.INTERACTIVE);
 																					handleEnding();
 																				});
 			
