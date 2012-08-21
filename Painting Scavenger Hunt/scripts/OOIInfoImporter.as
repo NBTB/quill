@@ -28,40 +28,39 @@
 			
 			//create text loader and listen for when it finishes importing a file (or fails to do so)
 			var textLoader:TextLoader = new TextLoader();
-			textLoader.addEventListener(TextLoader.TEXT_FILE_IMPORTED, function(e:Event):void
-																						{
-																							/*TODO take in section number*/
-																							//parse text file
-																							var newText:String = textLoader.parseText();
-																							
-																							//if text was found, add a textfield to the object's info pane
-																							if(newText)
-																							{
-																								var newTextField:TextField = new TextField();
-																								newTextField.defaultTextFormat = BaseMenu.getBodyFormat();
-																								newTextField.text = newText;	
-																								newTextField.width = 280;
-																								newTextField.x = 5;
-																								newTextField.wordWrap = true;
-																								newTextField.autoSize = TextFieldAutoSize.LEFT;
-																								newTextField.selectable = false;
-																								newTextField.mouseWheelEnabled = false;
-																								targetOOI.addInfoToPaneTail(newTextField);
-																							}
-																							
-																							//access next child
-																							childNum++;
-																							accessChild(children, childNum, childCount, textLoader);
-																						});
-			textLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
-																					   {
-																							//display error in debug trace
-																							trace("Failed to load a piece of info about " + targetOOI.getObjectName());
-																							
-																							//access next child
-																							childNum++;
-																							accessChild(children, childNum, childCount, textLoader);
-																					   });
+			textLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
+																							 {
+																								//parse text file
+																								var newText:String = textLoader.parseText();
+																																													
+																								//if text was found, add a textfield to the object's info pane
+																								if(newText)
+																								{
+																									var newTextField:TextField = new TextField();
+																									newTextField.defaultTextFormat = BaseMenu.getBodyFormat();
+																									newTextField.text = newText;	
+																									newTextField.width = 280;
+																									newTextField.x = 5;
+																									newTextField.wordWrap = true;
+																									newTextField.autoSize = TextFieldAutoSize.LEFT;
+																									newTextField.selectable = false;
+																									newTextField.mouseWheelEnabled = false;
+																									targetOOI.addInfoToPaneTail(newTextField);
+																								}
+																								
+																								//access next child
+																								childNum++;
+																								accessChild(children, childNum, childCount, textLoader);
+																							 });
+			textLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORT_FAILED, function(e:IOErrorEvent):void
+																										 {
+																											//display error in debug trace
+																											trace("Failed to load a piece of info about " + targetOOI.getObjectName());
+																											
+																											//access next child
+																											childNum++;
+																											accessChild(children, childNum, childCount, textLoader);
+																										 });
 																						
 			
 			//access first child of info list
@@ -83,7 +82,7 @@
 			var child:XML = children[childNum];
 			
 			//if the child is a text file, load the text
-			if(child.name() == "text_file")
+			if(child.name() == "info_text_file")
 			{
 				//import text file
 				textLoader.importText(child);

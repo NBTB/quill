@@ -1,0 +1,8 @@
+<Start-Up>
+	<menu_color>0x010417</menu_color>	
+	<Splash_Screen>
+		<credits_text_file>assets/game info/credits.txt</credits_text_file>
+		<about_text_file>assets/game info/about.txt</about_text_file>
+		<tutorial_text_file>assets/game info/tutorial.txt</tutorial_text_file>
+	</Splash_Screen>
+</Start-Up>

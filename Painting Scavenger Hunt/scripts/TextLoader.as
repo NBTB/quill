@@ -13,10 +13,6 @@
 		private var whichFile:String = null;
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
-		//event types
-		public static const TEXT_FILE_IMPORTED:String = "Text file imported";
-		public static const TEXT_FILE_IMPORT_FAILED:String = "Text file import failed";
-		
 		public function TextLoader()
 		{
 			textFiles = new Array();
@@ -53,18 +49,21 @@
 																				sectionTrackers.push(0);
 																				
 																				//dispatch completion event
-																				dispatchEvent(new Event(TEXT_FILE_IMPORTED));
+																				dispatchEvent(new TextLoaderEvent(filename, TextLoaderEvent.TEXT_FILE_IMPORTED));
 																			 });
 				textLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
-																			 {																				
-																				//dispatch errorevent
-																				dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
+																			 {				
+																			 	//post alert in debug trace
+																				trace("Text file " + filename + " failed to load");
+																				
+																				//dispatch error event
+																				dispatchEvent(new TextLoaderEvent(filename, TextLoaderEvent.TEXT_FILE_IMPORT_FAILED));
 																			 });
 				textLoader.load(new URLRequest(filename));
 			}
 			//otherwise, skip the reimport and dispatch a completion event
 			else
-				dispatchEvent(new Event(TEXT_FILE_IMPORTED));
+				dispatchEvent(new Event(TextLoaderEvent.TEXT_FILE_IMPORTED));
 		}
 		
 		public function parseText(filename:String = null, section:int = -1, headerString:String = "##"):String
@@ -111,7 +110,7 @@
 				//find section header
 				substringStart = findSectionHeader(importedText, section, headerString);
 				
-				//if the starting index could not be found or the string ends with the header, returb a failure
+				//if the starting index could not be found or the string ends with the header, return a failure
 				if(substringStart < 0)
 					return null;
 				

@@ -67,7 +67,7 @@
 
 		function loadImages() {
 
-			var url:URLRequest=new URLRequest("../assets/interface/magGlassPoint.png");
+			var url:URLRequest=new URLRequest("assets/interface/magGlassPoint.png");
 
 			magLoader.load(url);
 			magLoader.scaleX=.6;
@@ -75,7 +75,7 @@
 			magLoader.x=510;
 			magLoader.y=300;
 
-			var url2:URLRequest=new URLRequest("../assets/interface/clueBar.png");
+			var url2:URLRequest=new URLRequest("assets/interface/clueBar.png");
 
 			clueLoader.load(url2);
 			clueLoader.scaleX=.6;
@@ -83,7 +83,7 @@
 			clueLoader.x=390;
 			clueLoader.y=200;
 
-			var url3:URLRequest=new URLRequest("../assets/interface/mouseLeftClick.swf");
+			var url3:URLRequest=new URLRequest("assets/interface/mouseLeftClick.swf");
 
 			mouseLoader.load(url3);
 			mouseLoader.scaleX=.6;
@@ -91,7 +91,7 @@
 			mouseLoader.x=300;
 			mouseLoader.y=250;
 
-			var url4:URLRequest=new URLRequest("../assets/interface/mouseOver.swf");
+			var url4:URLRequest=new URLRequest("assets/interface/mouseOver.swf");
 
 			mouseOverLoader.load(url4);
 			mouseOverLoader.scaleX=.8;

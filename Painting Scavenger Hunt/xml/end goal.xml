@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<End_Goal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<End_Goal_Piece>
+		<name>Unfinished</name>
+		<filename>assets/end goal images/unfinishedLetter.png</filename>
+		<y>-30</y>		
+	</End_Goal_Piece>
+	<End_Goal_Piece>
+		<name>Piece2</name>
+		<filename>assets/end goal images/letterPiece2.png</filename>	
+		<y>-195.5</y>	
+	</End_Goal_Piece>
+	<End_Goal_Piece>
+		<name>Piece3</name>
+		<filename>assets/end goal images/letterPiece3.png</filename>	
+		<y>-124.75</y>	
+	</End_Goal_Piece>	
+	<End_Goal_Piece>
+		<name>Piece4</name>
+		<filename>assets/end goal images/letterPiece4.png</filename>	
+		<y>-57.5</y>	
+	</End_Goal_Piece>	
+	<End_Goal_Piece>
+		<name>Piece5</name>
+		<filename>assets/end goal images/letterPiece5.png</filename>	
+		<y>.58</y>	
+	</End_Goal_Piece>	
+	<End_Goal_Piece>
+		<name>Piece6</name>
+		<filename>assets/end goal images/letterPiece6.png</filename>	
+		<y>53.5</y>	
+	</End_Goal_Piece>	
+	<End_Goal_Piece>
+		<name>Piece7</name>
+		<filename>assets/end goal images/letterPiece7.png</filename>	
+		<y>-35.5</y>	
+	</End_Goal_Piece>
+	<End_Goal_Piece>
+		<name>HiddenLetter</name>
+		<filename>assets/end goal images/hiddenLetter.png</filename>	
+		<y>-30</y>	
+	</End_Goal_Piece>
+</End_Goal>	

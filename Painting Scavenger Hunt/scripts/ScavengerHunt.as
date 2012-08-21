@@ -24,7 +24,7 @@
 		private var notificationTimer:Timer = null;					//timer used to trigger the hiding of the notification textfield
 		private var notificationText:TextField = new TextField(); 	//textfield to hold notifications
 		private var needNewClue:Boolean = false;					//flag that tracks whether or not a new clue is needed
-		private var notificationTextFormat:TextFormat;				 //text format of the notification textfield
+		private var notificationTextFormat:TextFormat;				//text format of the notification textfield
 		private var pauseEvents:Boolean = false;					//flag if certain events should be paused
 		private var loadingTimer:Timer = new Timer(1000);
 
@@ -45,8 +45,13 @@
 		//construct scavanger hunt
 		public function ScavengerHunt():void
 		{
-			//initiator = theInitiator;		
-			startMenu();			
+			//find specification files before preparing game
+			importer = new HuntImporter();
+			importer.addEventListener(HuntImporter.SPEC_FILES_FOUND, function(e:Event):void
+																					  {
+																							startMenu();
+																					  });
+			importer.findSpecFiles("xml/importer.xml");
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
@@ -56,13 +61,12 @@
 			startUpScreen = new SplashScreen(startGameListener);
 			
 			//load start-up information and listen for completion
-			importer = new HuntImporter();
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
-																					 {																						
+																					 {				
 																						addChild(startUpScreen);
 																						startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	loadingWait();	});
 																					 });
-			importer.importStartUp("start-up params.xml", startUpScreen);
+			importer.importStartUp(startUpScreen);
 			
 			
 		}
@@ -117,8 +121,8 @@
 																							magnifyButton.height /= 5;
 																							magnifyButton.visible = true;
 																					   });
-			magnifyButtonLoader.loadBitmaps("../assets/interface/magnify button up.png", "../assets/interface/magnify button over.png", 
-											"../assets/interface/magnify button down.png", "../assets/interface/magnify button hittest.png");
+			magnifyButtonLoader.loadBitmaps("assets/interface/magnify button up.png", "assets/interface/magnify button over.png", 
+											"assets/interface/magnify button down.png", "assets/interface/magnify button hittest.png");
 			
 			
 			/*TODO menu creation and addition to main menu should be put in functions*/
@@ -129,7 +133,7 @@
 			
 			//load hunt information and listen for completion
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
+			importer.importHunt(paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
 			
 			//add menus to main menu
 			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
@@ -145,6 +149,7 @@
 		//Actually begin the rest of the game
 		public function startGame():void
 		{			
+		
 			//remove pre-game children from display list
 			removeChild(startUpScreen);
 						

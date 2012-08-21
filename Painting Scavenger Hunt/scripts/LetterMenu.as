@@ -56,7 +56,7 @@
                  
             //add new object to list
             newPiece.width = 449;
-            newPiece.height = 664;         
+            newPiece.height = 664;  
         }
         
 		//unlock the reward

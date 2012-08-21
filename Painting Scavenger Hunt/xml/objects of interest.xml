@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OOIs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Object_Of_Interest>
+		<name>Quill &amp; Parchment</name>
+		<info_snippet>Commonly used in writing</info_snippet>
+		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
+		<info>
+			<info_text_file>assets/ooi info/quill info.txt</info_text_file>
+		</info>
+		<x>0.7844827</x>
+		<y>0.70186368636</y>
+		<info_pane_x>0.35</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/quill hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/quill highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/quill saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Moon</name>
+		<info_snippet>Symbolic of night</info_snippet>
+		<clue>My appearance is always different, but I always have the same face...</clue>
+		<info>
+			<info_text_file>assets/ooi info/moon info.txt</info_text_file>
+		</info>
+		<x>0.138931</x>
+		<y>0.0392288</y>
+		<info_pane_x>0.18</info_pane_x>
+		<info_pane_y>0.02</info_pane_y>
+		<hitmap_filename>assets/ooi images/moon hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/moon highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/moon saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Flag</name>
+		<info_snippet>Emblamatic of Union loyalty</info_snippet>
+		<clue>I have no arms or hands, but I am always willing to give a friendly wave...</clue>
+		<info>
+			<info_text_file>assets/ooi info/flag info.txt</info_text_file>
+		</info>
+		<x>0.5396551</x>
+		<y>0.685572</y>
+		<info_pane_x>0.12</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/flag hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/flag highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/flag saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Skeleton</name>
+		<info_snippet>Suggestive of grave misfortune</info_snippet>
+		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
+		<info>
+			<info_text_file>assets/ooi info/skeleton info.txt</info_text_file>
+		</info>
+		<x>0.4555827</x>
+		<y>0.3307687</y>
+		<info_pane_x>0.05</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>assets/ooi images/skeleton hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/skeleton highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/skeleton saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Musket</name>
+		<info_snippet>Standard issue military firearm</info_snippet>
+		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
+		<info>
+			<info_text_file>assets/ooi info/musket info.txt</info_text_file>
+		</info>
+		<x>0.6232068</x>
+		<y>0.6401487</y>
+		<info_pane_x>0.2</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/musket hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/musket highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/musket saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Silhouette</name>
+		<info_snippet>Visage of a man on watch</info_snippet>
+		<clue>You have stripped me of my color, but I still look like you...</clue>
+		<info>
+			<info_text_file>assets/ooi info/silhouette info.txt</info_text_file>
+		</info>
+		<x>0.8701379</x>
+		<y>0.1251726</y>
+		<info_pane_x>0.45</info_pane_x>
+		<info_pane_y>0.02</info_pane_y>
+		<hitmap_filename>assets/ooi images/silhouette hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/silhouette highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/silhouette saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Fire</name>
+		<info_snippet>Source of warmth and light</info_snippet>
+		<clue>You can look, but don't touch. I'm just too hot to handle...</clue>
+		<info>
+			<info_text_file>assets/ooi info/fire info.txt</info_text_file>
+		</info>
+		<x>0.1772068</x>
+		<y>0.7695784</y>
+		<info_pane_x>0.24</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/fire hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/fire highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/fire saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Cannonball</name>
+		<info_snippet>Artillery ammunition</info_snippet>
+		<clue>I've been known to be quite the gate crasher...</clue>
+		<info>
+			<info_text_file>assets/ooi info/cannonball info.txt</info_text_file>
+		</info>
+		<x>0.0606896</x>
+		<y>0.9174942</y>
+		<info_pane_x>0.4</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/cannonball hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/cannonball highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/cannonball saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sword</name>
+		<info_snippet>Close range weapon and rank indicator</info_snippet>
+		<clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
+		<info>
+			<info_text_file>assets/ooi info/sword info.txt</info_text_file>
+		</info>
+		<x>0.8485517</x>
+		<y>0.7722242</y>
+		<info_pane_x>0.41</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/sword hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/sword highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/sword saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Playing Cards</name>
+		<info_snippet>Popular form of entertainment</info_snippet>
+		<clue>We are always dressed our best in many different suits...</clue>
+		<info>
+			<info_text_file>assets/ooi info/cards info.txt</info_text_file>
+		</info>
+		<x>0.3913793</x>
+		<y>0.912397</y>
+		<info_pane_x>0.47</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/cards hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/cards highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/cards saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Parrott Rifle</name>
+		<info_snippet>Heavy artillery</info_snippet>
+		<clue>Better run for cover because when I sneeze it'll bring the whole building down...</clue>
+		<info>
+			<info_text_file>assets/ooi info/parrott rifle info.txt</info_text_file>
+		</info>
+		<x>0.2560307</x>
+		<y>0.3380287</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>assets/ooi images/parrott rifle hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/parrott rifle highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/parrott rifle saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sergeant</name>
+		<info_snippet>Commanding officer</info_snippet>
+		<clue>I literally call of the shots...</clue>
+		<info>
+			<info_text_file>assets/ooi info/sergeant info.txt</info_text_file>
+		</info>
+		<x>0.48</x>
+		<y>0.692</y>
+		<info_pane_x>0.1</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>assets/ooi images/sergeant hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/sergeant highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/sergeant saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Gabions</name>
+		<info_snippet>Fortification structure</info_snippet>
+		<clue>The bigger we are, the harder it is for you to fall...</clue>
+		<info>
+			<info_text_file>assets/ooi info/gabions info.txt</info_text_file>
+		</info>
+		<x>0.005</x>
+		<y>0.2600287</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>assets/ooi images/gabions hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/gabions highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/gabions saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Signature</name>
+		<info_snippet>Mark of credit and endorsement</info_snippet>
+		<clue>Without me, what shame, oh, to not even know the artist's name...</clue>
+		<info>
+			<info_text_file>assets/ooi info/signature info.txt</info_text_file>
+		</info>
+		<x>0.0060307</x>
+		<y>0.9580287</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.15</info_pane_y>
+		<hitmap_filename>assets/ooi images/signature hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/signature highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/signature saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Uniform</name>
+		<info_snippet>Required military garb</info_snippet>
+		<clue>For most, selecting me should be part of your daily routine...</clue>
+		<info>
+			<info_text_file>assets/ooi info/uniform info.txt</info_text_file>
+		</info>
+		<x>0.2960307</x>
+		<y>0.6780287</y>
+		<info_pane_x>0.42</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>assets/ooi images/uniform hitmap.png</hitmap_filename>
+		<highlight_filename>assets/ooi images/uniform highlight.png</highlight_filename>
+		<found_image_filename>assets/ooi images/uniform saturated.png</found_image_filename>
+	</Object_Of_Interest>
+</OOIs>

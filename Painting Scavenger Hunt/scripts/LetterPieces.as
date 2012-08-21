@@ -65,9 +65,7 @@
                                                                                                 letter.height *= scaleFactor;
                                                                                                   
                                                                                                 //store a fullsize lette for convenience
-                                                                                                //fullsizeOutline = new Bitmap(letter.bitmapData);
                                                                                                 addChild(letter);
-                                                                                                //hideOutline();
                                                                                                   
                                                                                                 //if both the hitmap and outline are now loaded, dispatch a completion event
                                                                                                 if(letter)

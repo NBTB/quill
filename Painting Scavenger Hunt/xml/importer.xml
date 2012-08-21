@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Importer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<start_up>xml/start-up.xml</start_up>
+	<hunt>xml/hunt and painting.xml</hunt>	
+	<objects_of_interest>xml/objects of interest.xml</objects_of_interest>
+	<end_goal>xml/end goal.xml</end_goal>
+	<Asset_Directories>
+		<interface>assets/interface/</interface>
+		<game_info>assets/game_info/</game_info>
+		<object_of_interest_images>assets/ooi images/</object_of_interest_images>
+		<object_of_interest_info>assets/ooi info/</object_of_interest_info>
+		<end_goal_images>assets/end goal images/</end_goal_images>
+	</Asset_Directories>
+</Importer>
