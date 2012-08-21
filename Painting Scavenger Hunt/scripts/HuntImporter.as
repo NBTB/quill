@@ -8,9 +8,11 @@
     import flash.geom.*;
      
     public class HuntImporter extends EventDispatcher
-    {              	
-		private var startUpImportFile:String = null
+    {     
+		private var menuImportFile:String = null	
+		private var aboutImportFile:String = null
 		private var huntImportFile:String = null
+		private var paintingImportFile:String = null
 		private var ooiImportFile:String = null
 		private var endGoalImportFile:String = null
 	
@@ -20,6 +22,7 @@
         //event types
 		public static const SPEC_FILES_FOUND:String = "Specification files found";
 		public static const START_UP_LOADED:String = "Start-up loaded";
+		public static const HUNT_LOADED:String = "Hunt loaded";
         public static const PAINTING_LOADED:String = "Painting loaded";
         public static const OBJECTS_LOADED:String = "Objects loaded";
         public static const END_GOAL_LOADED:String = "End goal loaded";
@@ -36,15 +39,19 @@
 																			var specList = new XML(e.target.data);
 																			
 																			//attempt to find spec files
-																			if(specList.hasOwnProperty("start_up"))
-																				startUpImportFile = specList.start_up;
+																			if(specList.hasOwnProperty("menu"))
+																				menuImportFile = specList.menu;
+																			if(specList.hasOwnProperty("about"))
+																				aboutImportFile = specList.about;
 																			if(specList.hasOwnProperty("hunt"))
 																				huntImportFile = specList.hunt;
+																			if(specList.hasOwnProperty("painting"))
+																				paintingImportFile = specList.painting;
 																			if(specList.hasOwnProperty("objects_of_interest"))
 																				ooiImportFile = specList.objects_of_interest;
 																			if(specList.hasOwnProperty("end_goal"))
 																				endGoalImportFile = specList.end_goal;
-																				
+																																							
 																			//dispatch success
 																			dispatchEvent(new Event(SPEC_FILES_FOUND));
 																		});
@@ -59,49 +66,117 @@
 		//load XML start up specification
 		public function importStartUp(startUpScreen:SplashScreen)
 		{
-			var xmlLoader:URLLoader = new URLLoader();
-            xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
-                                                                        {
-																			parseStartUp(new XML(e.target.data), startUpScreen);
-                                                                        });
-			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
-																			   {
-																				   trace("Failed to load start-up parameters.");
-																			   });
-            xmlLoader.load(new URLRequest(startUpImportFile));
+			//track load status of menu parameters and info about game
+			var menuParamsLoaded:Boolean = false;
+			var aboutLoaded:Boolean = false;
+			
+			//load menu parameters
+			var menuXMLLoader:URLLoader = new URLLoader();
+            menuXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																			{
+																				parseMenu(new XML(e.target.data));																				
+																				menuParamsLoaded = true;
+																				if(menuParamsLoaded && aboutLoaded)
+																					dispatchEvent(new Event(START_UP_LOADED));
+																			});
+			menuXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																				   {
+																					   trace("Failed to load menu parameters.");
+																					   menuParamsLoaded = true;
+																						if(menuParamsLoaded && aboutLoaded)
+																							dispatchEvent(new Event(START_UP_LOADED));
+																				   });
+            menuXMLLoader.load(new URLRequest(menuImportFile));
+			
+			//load info about game
+			var aboutXMLLoader:URLLoader = new URLLoader();
+            aboutXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																			 {
+																				parseAbout(new XML(e.target.data), startUpScreen);
+																				aboutLoaded = true;
+																				if(menuParamsLoaded && aboutLoaded)
+																					dispatchEvent(new Event(START_UP_LOADED));
+																			 });
+			aboutXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																				    {
+																					  	trace("Failed to load info about game.");
+																					  	aboutLoaded = true;
+																						if(menuParamsLoaded && aboutLoaded)
+																							dispatchEvent(new Event(START_UP_LOADED));
+																				    });
+            aboutXMLLoader.load(new URLRequest(menuImportFile));
 		}
 		
 		
         //load XML scavenger hunt specification
-        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
+        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, endGoalMenu:LetterMenu, objectsMenu:ObjectsMenu):void
         {
-            var xmlLoader:URLLoader = new URLLoader();
 			objectMenu = objectsMenu;
-            xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
-                                                                        {
-                                                                        	parseHunt(new XML(e.target.data), paintingCanvas, ooiManager, magnifyingGlass, letterMenu, objectsMenu);
-                                                                        });
-			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
-																			   {
-																				   trace("Failed to load hunt parameters.");
-																			   });
-            xmlLoader.load(new URLRequest(huntImportFile));
-        }
-         
-		 //parse XML specification of start-up
-		 private function parseStartUp(startUp:XML, startUpScreen:SplashScreen)
-		 {
-			 if(startUp.hasOwnProperty("menu_color"))
-				BaseMenu.menuColor = startUp.menu_color;
 			
-			if(startUp.hasOwnProperty("Splash_Screen"))
-				parseSplashScreen(startUp.Splash_Screen[0], startUpScreen);
-				
-			dispatchEvent(new Event(START_UP_LOADED));
+			//track load status of hunt parameters and painting
+			var huntLoaded:Boolean = false;
+			var paintingLoaded:Boolean = false;
+			
+			//load hunt
+            var huntXMLLoader:URLLoader = new URLLoader();			
+            huntXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																			{																				
+																				addEventListener(HUNT_LOADED, function(e:Event):void
+																															   {
+																																	huntLoaded = true;
+																																	if(huntLoaded && paintingLoaded)
+																																		prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
+																															   });
+																				parseHunt(new XML(e.target.data), ooiManager, magnifyingGlass);
+																																	
+																			});
+			huntXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																				   {
+																					   	trace("Failed to load hunt parameters.");
+																					  	huntLoaded = true;
+																						if(huntLoaded && paintingLoaded)
+																							prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
+																				   });
+			huntXMLLoader.load(new URLRequest(huntImportFile));
+			
+			//load painting
+            var paintingXMLLoader:URLLoader = new URLLoader();			
+            paintingXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																				{	
+																					addEventListener(PAINTING_LOADED, function(e:Event):void
+																																	   {
+																																		   	paintingLoaded = true;
+																																			if(huntLoaded && paintingLoaded)
+																																				prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
+																																	   });
+																					parsePainting(new XML(e.target.data), paintingCanvas, magnifyingGlass);  
+																				});
+			paintingXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																					   {
+																						  	trace("Failed to load painting.");
+																							paintingLoaded = true;
+																							if(huntLoaded && paintingLoaded)
+																								prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
+																					   });
+			paintingXMLLoader.load(new URLRequest(paintingImportFile));
+        }
+		
+		//parse XML specification of menu parameters
+		private function parseMenu(menuParams:XML)
+		{
+			if(menuParams.hasOwnProperty("menu_color"))
+				BaseMenu.menuColor = menuParams.menu_color;
+		}
+         
+		//parse XML specification of info about game
+		private function parseAbout(about:XML, startUpScreen:SplashScreen)
+		{			
+			if(about.hasOwnProperty("Splash_Screen"))
+				parseSplashScreen(about.Splash_Screen[0], startUpScreen);
 		 }
 		 
-        //parse XML specification of scavenger hunt and modify standard objects, such as painting canvas and magnifying glass
-        private function parseHunt(hunt:XML, paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, letterMenu:LetterMenu, objectsMenu:ObjectsMenu):void
+        //parse XML specification of scavenger hunt parameters
+        private function parseHunt(hunt:XML, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
         {              
             //parse hunt attributes
             var mgZoom:Number = 1;
@@ -117,81 +192,19 @@
                 if(attrib.name() == "hunt_count")
                     huntCount = int(Number(attrib));
             }
-             
+			
             //set magnifying glass defaults
             magnifyingGlass.setDefaultZoom(mgZoom);
             magnifyingGlass.setDefaultRadius(mgRadius);
              
             //set number of number of usable objects of interest
-            ooiManager.setUsableOOICount(huntCount);
-             
-            //if the hunt is missing necessary information, return
-            if(!hunt.hasOwnProperty("Painting"))
-                return;
-				
-            //listen for the painting to be fully loaded
-            addEventListener(PAINTING_LOADED, function(e:Event):void
-                                                               {
-                                                                    //flags of completion
-                                                                    var objectsLoaded:Boolean = false;
-                                                                    var endGoalLoaded:Boolean = false;
-                                                                     
-                                                                    //listen for all of the objects to be fully loaded
-                                                                    addEventListener(OBJECTS_LOADED, function(e:Event):void
-                                                                                                                      {
-                                                                                                                        objectsLoaded = true;
-                                                                                                                        if(objectsLoaded && endGoalLoaded)
-                                                                                                                            dispatchEvent(new Event(Event.COMPLETE));
-                                                                                                                      });
-                                                                     
-                                                                    //load and parse objects of interest to be used in hunt
-																	var ooiXMLLoader:URLLoader = new URLLoader();
-																	ooiXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
-																																   {
-																																		var ooiXML:XML = new XML(e.target.data);
-																																		if(ooiXML.hasOwnProperty("Object_Of_Interest"))
-																																	 		parseObjectsOfInterest(ooiXML.children(), ooiManager, paintingCanvas.getPaintingScale(), new Rectangle(paintingCanvas.x, paintingCanvas.y, paintingCanvas.getPaintingWidth(), paintingCanvas.getPaintingHeight())); 
-																																		else
-																																			dispatchEvent(new Event(OBJECTS_LOADED));
-																																   });
-																	ooiXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
-																																		  {
-																																			  trace("Failed to load objects of interest specification file.");
-																																		  });
-																	ooiXMLLoader.load(new URLRequest(ooiImportFile));
-                                                                   
-                                                                    
-                                                                    //listen for all of the end goal pieces to be fully loaded
-                                                                    addEventListener(END_GOAL_LOADED, function(e:Event):void
-                                                                                                                      {
-                                                                                                                        endGoalLoaded = true;
-                                                                                                                        if(objectsLoaded && endGoalLoaded)
-                                                                                                                            dispatchEvent(new Event(Event.COMPLETE));
-                                                                                                                      });
-                                                                     
-                                                                     //load and end goal pieces to be used in hunt
-																	var endGoalXMLLoader:URLLoader = new URLLoader();
-																	endGoalXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
-																																	   {
-																																		 	var endGoalXML:XML = new XML(e.target.data);
-																																			if(endGoalXML.hasOwnProperty("End_Goal_Piece"))
-																																	 			parseLetterPieces(endGoalXML.children(), letterMenu);  
-																																			else
-																																				dispatchEvent(new Event(END_GOAL_LOADED));
-																																			
-																																	   });
-																	endGoalXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
-																																			  {
-																																				  trace("Failed to load end goal specification file.");
-																																			  });
-																	endGoalXMLLoader.load(new URLRequest(endGoalImportFile));
-                                                               });
-             
-            //find the first painting specified and parse it
-            var painting:XML = hunt.Painting[0];   
-            parsePainting(hunt, painting, paintingCanvas, magnifyingGlass);        			
+            ooiManager.setUsableOOICount(huntCount);      			
+			
+			//dispatch hunt loaded event
+			dispatchEvent(new Event(HUNT_LOADED));
         }
 		
+		//parse XML specification of splash screen
 		private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
 		{
 			var creditsLoader:TextLoader = new TextLoader();
@@ -256,7 +269,7 @@
 		}
          
         //parse XML specification of painting to be applied to canvas
-        private function parsePainting(hunt:XML, painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)
+        private function parsePainting(painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)
         {
             //load painting
             var bitmapLoader:Loader = new Loader();
@@ -278,6 +291,66 @@
 																										   });
             bitmapLoader.load(new URLRequest(painting.interactive_filename));
         }
+		
+		//prepare to parse objects of interest and end goal pieces
+		private function prepareToParseAssets(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, endGoalMenu:LetterMenu)
+		{
+			//flags of completion
+			var objectsLoaded:Boolean = false;
+			var endGoalLoaded:Boolean = false;
+			
+			//listen for all of the objects to be fully loaded
+			addEventListener(OBJECTS_LOADED, function(e:Event):void
+														  {
+																trace("objects");
+																objectsLoaded = true;
+																if(objectsLoaded && endGoalLoaded)
+																dispatchEvent(new Event(Event.COMPLETE));
+														  });
+			
+			//load and parse objects of interest to be used in hunt
+			var ooiXMLLoader:URLLoader = new URLLoader();
+			ooiXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																	   {
+																			var ooiXML:XML = new XML(e.target.data);
+																			if(ooiXML.hasOwnProperty("Object_Of_Interest"))
+																				parseObjectsOfInterest(ooiXML.children(), ooiManager, paintingCanvas.getPaintingScale(), new Rectangle(paintingCanvas.x, paintingCanvas.y, paintingCanvas.getPaintingWidth(), paintingCanvas.getPaintingHeight())); 
+																			else
+																				dispatchEvent(new Event(OBJECTS_LOADED));
+																	   });
+			ooiXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																			  {
+																				  trace("Failed to load objects of interest specification file.");
+																			  });
+			ooiXMLLoader.load(new URLRequest(ooiImportFile));
+			
+			
+			//listen for all of the end goal pieces to be fully loaded
+			addEventListener(END_GOAL_LOADED, function(e:Event):void
+														  {
+															trace("endGoal");
+															endGoalLoaded = true;
+															if(objectsLoaded && endGoalLoaded)
+																dispatchEvent(new Event(Event.COMPLETE));
+														  });
+			
+			//load and end goal pieces to be used in hunt
+			var endGoalXMLLoader:URLLoader = new URLLoader();
+			endGoalXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
+																		   {
+																				var endGoalXML:XML = new XML(e.target.data);
+																				if(endGoalXML.hasOwnProperty("End_Goal_Piece"))
+																					parseLetterPieces(endGoalXML.children(), endGoalMenu);  
+																				else
+																					dispatchEvent(new Event(END_GOAL_LOADED));
+																				
+																		   });
+			endGoalXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
+																				  {
+																					  trace("Failed to load end goal specification file.");
+																				  });
+			endGoalXMLLoader.load(new URLRequest(endGoalImportFile));
+		}
                  
         //parse XML specification of obejcts of interest
         private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number, canvasRectangle:Rectangle)
@@ -292,8 +365,7 @@
             for each(var ooi in objectsOfInterest)
             {
                 if(ooi.hasOwnProperty("name") && ooi.hasOwnProperty("info_snippet") && ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename") && ooi.hasOwnProperty("found_image_filename") && ooi.hasOwnProperty("x") && ooi.hasOwnProperty("y") && ooi.hasOwnProperty("clue"))
-                {
-					
+                {					
                     //increment the number of objects parsed
                     objectsParsed++;
                      
@@ -353,7 +425,7 @@
         }
          
         //parse XML specification of pieces of the end goal
-        private function parseLetterPieces(pieces:XMLList, letterMenu:LetterMenu)
+        private function parseLetterPieces(pieces:XMLList, endGoalMenu:LetterMenu)
         {
             //object of interest loading counters
             var piecesParsed:Number = 0;
@@ -380,7 +452,7 @@
                                                                                     piecesLoaded++;
 																					
                                                                                     //add the object to the painting canvas
-                                                                                    letterMenu.addPiece(LetterPieces(e.target));   
+                                                                                    endGoalMenu.addPiece(LetterPieces(e.target));   
 																					
 																					//if this was the last end goal piece to load, dispatch event
                                                                                     if(allPiecesParsed && piecesLoaded + piecesFailed >= piecesParsed)

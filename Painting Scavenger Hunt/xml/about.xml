@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <About xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<menu_color>0x010417</menu_color>	
 	<Splash_Screen>
 		<credits_text_file>assets/game info/credits.txt</credits_text_file>
 		<about_text_file>assets/game info/about.txt</about_text_file>

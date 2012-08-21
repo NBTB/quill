@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Importer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<start_up>xml/start-up.xml</start_up>
-	<hunt>xml/hunt and painting.xml</hunt>	
+	<menu>xml/menu.xml</menu>
+	<about>xml/about.xml</about>	
+	<hunt>xml/hunt.xml</hunt>	
+	<painting>xml/painting.xml</painting>
 	<objects_of_interest>xml/objects of interest.xml</objects_of_interest>
 	<end_goal>xml/end goal.xml</end_goal>
 	<Asset_Directories>
