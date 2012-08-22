@@ -45,7 +45,7 @@
 			var reqHeight:Number = nameText.height + infoSnippetText.height + moreInfoHintText.height;
 			
 			//call superclass's constructor
-			super(0, 0, reqWidth + 10, reqHeight + 10, false, false);
+			super(0, 0, reqWidth + 10, reqHeight + 10, false, false, false);
 			
 			//add text fields to pane
 			addContent(nameText, BaseMenu.LAST_PAGE, new Point(5, 5));

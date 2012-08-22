@@ -21,7 +21,7 @@
         public function LetterMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //Pass in variables to the base menu to create background
-            super(xPos, yPos, widthVal, heightVal, false, false);
+            super(xPos, yPos, widthVal, heightVal, false, false, false);
 			
 			//change previous and next button
 			previousPageButton.text = "<";

@@ -118,14 +118,7 @@
 																				 {	
 																				 	scroller.stopDrag();	
 																					scrollerDragged = false;
-																				 });
-			
-			//listen for scroller is no longer hovered over
-			scroller.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void		
-																				 {	
-																				 	scroller.stopDrag();	
-																					scrollerDragged = false;
-																				 });
+																				 });			
 		}
 		
 		private function addedToStage(e:Event)
@@ -147,6 +140,16 @@
 																				stopScroller();																													
 																		   }
 																	   });
+			//listen for mouse movement on stage
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, function(e:MouseEvent):void	
+																				{
+																					//if the primary mouse button is not down, stop dragging scroll bar
+																					if(scrollerDragged && !e.buttonDown)
+																					{
+																						scroller.stopDrag();	
+																						scrollerDragged = false;
+																					}
+																				});
 		}
 		
 		private function enterFrame(e:Event)
