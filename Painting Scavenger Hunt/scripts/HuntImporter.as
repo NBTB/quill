@@ -125,7 +125,7 @@
 		
 		
         //load XML scavenger hunt specification
-        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, endGoalMenu:LetterMenu):void
+        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, endGoalMenu:EndGoalMenu):void
         {			
 			//track load status of hunt parameters and painting
 			var huntLoaded:Boolean = false;
@@ -338,7 +338,7 @@
         }
 		
 		//prepare to parse objects of interest and end goal pieces
-		private function prepareToParseAssets(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, endGoalMenu:LetterMenu)
+		private function prepareToParseAssets(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, endGoalMenu:EndGoalMenu)
 		{
 			//flags of completion
 			var objectsLoaded:Boolean = false;
@@ -383,7 +383,7 @@
 																		   {
 																				var endGoalXML:XML = new XML(e.target.data);
 																				if(endGoalXML.hasOwnProperty("End_Goal_Piece"))
-																					parseLetterPieces(endGoalXML.children(), endGoalMenu);  
+																					parseEndGoalPieces(endGoalXML.children(), endGoalMenu);  
 																				else
 																					dispatchEvent(new Event(END_GOAL_LOADED));
 																				
@@ -480,7 +480,7 @@
         }
          
         //parse XML specification of pieces of the end goal
-        private function parseLetterPieces(pieces:XMLList, endGoalMenu:LetterMenu)
+        private function parseEndGoalPieces(pieces:XMLList, endGoalMenu:EndGoalMenu)
         {
             //object of interest loading counters
             var piecesParsed:Number = 0;
@@ -492,13 +492,13 @@
              
             for each(var piece in pieces)
             {
-                if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename") ,piece.hasOwnProperty("y"))
+                if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename"), piece.hasOwnProperty("x"), piece.hasOwnProperty("y"))
                 {
                     //increment the number of objects parsed
                     piecesParsed++;
   
                     //create new object of interest
-                    var newPiece:LetterPieces = new LetterPieces(piece.name, FileFinder.completePath(FileFinder.END_GOAL_IMAGES, piece.filename), Number(piece.y));
+                    var newPiece:EndGoalPiece = new EndGoalPiece(piece.name, FileFinder.completePath(FileFinder.END_GOAL_IMAGES, piece.filename), Number(piece.x), Number(piece.y));
                        
                     //listen for the completion of the new object
                     newPiece.addEventListener(Event.COMPLETE, function(e:Event):void
@@ -507,7 +507,7 @@
                                                                                     piecesLoaded++;
 																					
                                                                                     //add the object to the painting canvas
-                                                                                    endGoalMenu.addPiece(LetterPieces(e.target));   
+                                                                                    endGoalMenu.addPiece(EndGoalPiece(e.target));   
 																					
 																					//if this was the last end goal piece to load, dispatch event
                                                                                     if(allPiecesParsed && piecesLoaded + piecesFailed >= piecesParsed)

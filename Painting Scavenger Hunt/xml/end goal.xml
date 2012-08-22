@@ -3,41 +3,49 @@
 	<End_Goal_Piece>
 		<name>Unfinished</name>
 		<filename>unfinishedLetter.png</filename>
-		<y>-30</y>		
+		<x>25</x>
+		<y>-10</y>		
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece2</name>
 		<filename>letterPiece2.png</filename>	
-		<y>-195.5</y>	
+		<x>25</x>
+		<y>-175.5</y>	
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece3</name>
 		<filename>letterPiece3.png</filename>	
-		<y>-124.75</y>	
+		<x>25</x>
+		<y>-104.75</y>	
 	</End_Goal_Piece>	
 	<End_Goal_Piece>
 		<name>Piece4</name>
 		<filename>letterPiece4.png</filename>	
-		<y>-57.5</y>	
+		<x>25</x>
+		<y>-37.5</y>	
 	</End_Goal_Piece>	
 	<End_Goal_Piece>
 		<name>Piece5</name>
-		<filename>letterPiece5.png</filename>	
-		<y>.58</y>	
+		<filename>letterPiece5.png</filename>
+		<x>25</x>		
+		<y>20.58</y>	
 	</End_Goal_Piece>	
 	<End_Goal_Piece>
 		<name>Piece6</name>
 		<filename>letterPiece6.png</filename>	
-		<y>53.5</y>	
+		<x>25</x>
+		<y>73.5</y>	
 	</End_Goal_Piece>	
 	<End_Goal_Piece>
 		<name>Piece7</name>
 		<filename>letterPiece7.png</filename>	
-		<y>-35.5</y>	
+		<x>25</x>
+		<y>-15.5</y>	
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>HiddenLetter</name>
-		<filename>hiddenLetter.png</filename>	
-		<y>-30</y>	
+		<filename>hiddenLetter.png</filename>
+		<x>25</x>		
+		<y>-10</y>	
 	</End_Goal_Piece>
 </End_Goal>	

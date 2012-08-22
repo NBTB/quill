@@ -31,7 +31,7 @@
 		private var menusDismissibleTimer:Timer = null;					//timer used to give buffer between opening a menu and being able to dismiss by clicking elsewhere
 		private var menusDismissible:Boolean = false;					//flag when menus can be dismissed by clicking outside of them (close button is not affected)
 		private var cluesMenu:CluesMenu = null;							//panel that contains clue
-		private var endGoalMenu:LetterMenu = null;						//panel that contains end goal pieces
+		private var endGoalMenu:EndGoalMenu = null;						//panel that contains end goal pieces
 		private var ending:Ending = null;								//the menu displayed when you win
 		
 		//main menu titles
@@ -96,7 +96,7 @@
 			notificationText = new TextField();
 			magnifyButton = new SimpleButton();
 			cluesMenu = new CluesMenu(0, 0, 765, 55);
-			endGoalMenu = new LetterMenu(765, 0, 500, 630);	
+			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);	
 			 
 			
 			//define normal notification text color
@@ -397,7 +397,7 @@
 			{				
 				//add the piece of the end goal
 				var completionRequirement:int = ooiManager.getUsableOOICount();
-				endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD);
+				endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
 			
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
@@ -485,7 +485,7 @@
 		function viewLetter(event:MouseEvent):void
 		{
 			removeChild(ending);
-			LetterMenu(mainMenu.getMenu(endGoalMenuTitle)).openMenu();
+			EndGoalMenu(mainMenu.getMenu(endGoalMenuTitle)).openMenu();
 		}
 		
 		//enter a special state when the ending is open, leave it when closed
