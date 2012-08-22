@@ -21,10 +21,7 @@
         public function EndGoalMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //Pass in variables to the base menu to create background
-            super(xPos, yPos, widthVal, heightVal, false, false, false);
-			
-			//tempoarary (figure out a better place
-			menuBackground.alpha = 1;
+            super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
 			
 			//change previous and next button
 			previousPageButton.text = "<";

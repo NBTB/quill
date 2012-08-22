@@ -38,7 +38,7 @@
 		var splashTitleFormat:TextFormat = new TextFormat();
 
 		public function LoadingMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
-			super(xPos, yPos, widthVal, heightVal);
+			super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
 			
 			initText();
 			init();

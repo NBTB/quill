@@ -23,18 +23,23 @@
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
-		public static var menuColor:uint = 0x010417;				//color of menu backgroun /*TODO should be read-in through XML*/
+		public static var menuColor:uint = 0x010417;				//default color of menu background 		/*TODO should be read-in through XML*/
+		public static var menuBorderColor:uint = 0x836A35;			//default color of menu border 			/*TODO should be read-in through XML*/
+		public static var menuOpacity:Number = 0.9;				//default opacity of menu background 	/*TODO should be read-in through XML*/
 		protected static var titleFormat:TextFormat = new TextFormat("Arial", 30, 0xffffffff);
 		protected static var bodyFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff);
 		protected static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0xffffffff, null, true);
 		protected static var closeButtonLoader:ButtonBitmapLoader = null;
 		protected static var scrollBarStyle = null;		
 		
+		private static const DEFAULT_OPACITY:Number = -1;
+		
 		public static const FIRST_PAGE = 0;		//enumeration to conveniently reference the first page
 		public static const LAST_PAGE = -1;		//enumeration to conveniently reference the last page
+		
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true, opacity:Number = DEFAULT_OPACITY):void
 		{			
 			//create previous button
 			previousPageButton = new TextField();
@@ -71,7 +76,6 @@
 				dragCap.graphics.beginFill(menuColor);
 				dragCap.graphics.drawRect(0, 0, widthVal, 20);
 				dragCap.graphics.endFill();
-				dragCap.alpha = 0.25;
 				addChild(dragCap);
 				
 				//listen for drag cap being grabbed and released
@@ -168,6 +172,7 @@
 			
 			//flag the menu as closed
 			isOpen = false;
+			visible = false;
 			
 			//start new array of openers
 			openers = new Array();
@@ -180,7 +185,7 @@
 			paneDimensions = new Point(widthVal, heightVal);
 			
 			//draw background
-			menuBackground = new Shape();
+			createBackground(widthVal, heightVal, opacity);
 			addChildAt(menuBackground, 0);
 			
 			//draw mask
@@ -192,13 +197,7 @@
 			else
 				menuMask.graphics.drawRect(0, dragCap.height, paneDimensions.x, paneDimensions.y - dragCap.height);
 			menuMask.graphics.endFill();
-			addChild(menuMask);
-			
-			//If the variables read in are not 0, create the background.  Otherwise, let the subclass handle it.
-			if (xPos != 0 || yPos != 0 || widthVal != 0 || heightVal != 0)
-			{
-				createBackground(xPos, yPos, widthVal, heightVal);
-			}
+			addChild(menuMask);				
 						
 			//if the menu is scrollable, create scroll bar
 			if(scrollable)
@@ -265,25 +264,31 @@
 		}
 		
 		//Set the background graphics
-		public function createBackground(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		public function createBackground(widthVal:int, heightVal:int, opacity:Number = DEFAULT_OPACITY):void
 		{
-			menuBackground.graphics.lineStyle(1, 0x836A35);
+			menuBackground = new Shape();
+			menuBackground.graphics.lineStyle(1, menuBorderColor);
 			menuBackground.graphics.beginFill(menuColor);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
-			menuBackground.alpha = 0.65;
+			if(opacity < 0)
+				menuBackground.alpha = menuOpacity;
+			else
+				menuBackground.alpha = opacity;
 		}
 		
-		public function changeBackground(xPos:int, yPos:int, widthVal:int, heightVal:int, newColor:uint = 0x010417):void
+		public function changeBackgroundColor(newColor:uint, opacity:Number = DEFAULT_OPACITY):void
 		{
-			menuBackground = null;
-			this.x = xPos;
-			this.y = yPos;
-			menuBackground = new Shape();
-			menuBackground.graphics.lineStyle(1, 0x836A35);
+			// = 0x010417
+			menuBackground.graphics.clear();
+			menuBackground.graphics.lineStyle(1, menuBorderColor);
 			menuBackground.graphics.beginFill(newColor);
-			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
+			menuBackground.graphics.drawRect(0, 0, menuBackground.width, menuBackground.height);
 			menuBackground.graphics.endFill();
+			if(opacity < 0)
+				menuBackground.alpha = menuOpacity;
+			else
+				menuBackground.alpha = opacity;
 		}
 		
 		//Create the button used to close the menu

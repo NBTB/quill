@@ -63,9 +63,10 @@
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
 																					 {				
 																						loadingMenu = new LoadingMenu(0, 0, 1265, 630);
-																						introMenu = new IntroMenu(150, 75, 965, 480);
+																						introMenu = new IntroMenu(30, 75, 700, 480);
 																						loadingTimer = new Timer(1000);
 																						addChild(loadingMenu);
+																						loadingMenu.openMenu();
 																						
 																						loadingWait();
 																						startGameListener = new MenuListener();
@@ -173,9 +174,7 @@
 		{					
 			//remove pre-game children from display list
 			removeChild(loadingMenu);
-			addChild(introMenu);
-			introMenu.getScavengerHunt(this);
-						
+									
 			//add in-game children to display list,
 			//ensuring that they are tightly packed on the bottom layers
 			var childIndex:int = 0;
@@ -194,6 +193,10 @@
 			addDismissibleOverlayCloser(mainMenu);
 			addDismissibleOverlayCloser(magnifyingGlass);
 			addDismissibleOverlayCloser(magnifyButton);
+			
+			//open clues and end goal menus
+			cluesMenu.openMenu();
+			endGoalMenu.openMenu();
 			
 			//make menus inside main menu displayable
 			mainMenu.makeChildMenusDisplayable();	
@@ -271,6 +274,13 @@
 																						toggleZoom();
 																					});
 			
+			//listen for intro menu being opened and close						
+			introMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
+			introMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
+			
+			//open intro menu
+			addChild(introMenu);	
+			introMenu.openMenu();			
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
