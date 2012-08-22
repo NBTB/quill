@@ -23,6 +23,9 @@
             //Pass in variables to the base menu to create background
             super(xPos, yPos, widthVal, heightVal, false, false, false);
 			
+			//tempoarary (figure out a better place
+			menuBackground.alpha = 1;
+			
 			//change previous and next button
 			previousPageButton.text = "<";
 			previousPageButton.x = 2;

@@ -71,6 +71,7 @@
 				dragCap.graphics.beginFill(menuColor);
 				dragCap.graphics.drawRect(0, 0, widthVal, 20);
 				dragCap.graphics.endFill();
+				dragCap.alpha = 0.25;
 				addChild(dragCap);
 				
 				//listen for drag cap being grabbed and released
@@ -186,7 +187,10 @@
 			menuMask = new Shape();
 			menuMask.graphics.lineStyle(0);
 			menuMask.graphics.beginFill(0x000000);
-			menuMask.graphics.drawRect(0, 0, paneDimensions.x, paneDimensions.y);
+			if(!draggable)
+				menuMask.graphics.drawRect(0, 0, paneDimensions.x, paneDimensions.y);
+			else
+				menuMask.graphics.drawRect(0, dragCap.height, paneDimensions.x, paneDimensions.y - dragCap.height);
 			menuMask.graphics.endFill();
 			addChild(menuMask);
 			
@@ -267,6 +271,7 @@
 			menuBackground.graphics.beginFill(menuColor);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
+			menuBackground.alpha = 0.65;
 		}
 		
 		//Create the button used to close the menu

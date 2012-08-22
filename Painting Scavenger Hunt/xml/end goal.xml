@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <End_Goal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<End_Goal_Piece>
-		<name>Unfinished</name>
-		<filename>unfinishedLetter.png</filename>
+		<name>Piece1</name>
+		<filename>letterPiece1.png</filename>
 		<x>25</x>
 		<y>-10</y>		
 	</End_Goal_Piece>
