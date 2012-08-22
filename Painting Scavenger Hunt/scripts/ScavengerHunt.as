@@ -27,7 +27,9 @@
 		private var notificationTextColorFadeTime:int = 0;				//number of frames the notification text color takes to transition from new to normal
 		private var notificationTextColorFades:int = 0;					//number of frames the notification text color has been fading
 		private var pauseEvents:Boolean = false;						//flag if certain events should be paused
-		private var loadingTimer:Timer = new Timer(1000);				//timer to set minimum load time and prevent the screen from just being a flash
+		private var loadingTimer:Timer = null;							//timer to set minimum load time and prevent the screen from just being a flash
+		private var menusDismissibleTimer:Timer = null;					//timer used to give buffer between opening a menu and being able to dismiss by clicking elsewhere
+		private var menusDismissible:Boolean = false;					//flag when menus can be dismissed by clicking outside of them (close button is not affected)
 		private var ending:Ending;										//the menu displayed when you win
 		
 		var cluesMenu:CluesMenu = new CluesMenu(0, 0, 765, 55);
@@ -59,6 +61,7 @@
 		{						
 			startGameListener = new MenuListener();
 			startUpScreen = new SplashScreen(startGameListener);
+			loadingTimer = new Timer(1000);
 			
 			//load start-up information and listen for completion
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
@@ -145,7 +148,7 @@
 			
 			//load hunt information and listen for completion
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt(paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
+			importer.importHunt(paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu);
 			
 			//add menus to main menu
 			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
@@ -188,7 +191,7 @@
 			
 			//give OOIManager reference to objects menu
 			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
-			objectsMenu.getObjectManager(ooiManager);	
+			objectsMenu.setObjectManager(ooiManager);	
 			
 			//listen for a request to open objects menu after object of interest info pane closure
 			objectsMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
@@ -207,14 +210,18 @@
 			//create notification timer
 			notificationTimer = new Timer(5000, 1);
 			
-			//listen for the completion of the clue timer
-			notificationTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
-																		  {
-																			hideNotificationText();
-																		  });			
+			//listen for the completion of the notification timer
+			notificationTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void	{	hideNotificationText();	});			
+			
 			//post directions to first clue
 			postNotification("Clues will appear above the painting.");
 			
+			//create menu dismissible timer
+			menusDismissibleTimer = new Timer(500);
+			menusDismissible = true;
+			
+			//listen for the completion of the menu dismissible timer
+			menusDismissibleTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void	{	menusDismissible = true;	});						
 			
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
@@ -303,8 +310,12 @@
 			//disallow actions that depend on all menus being closed
 			allowEventsOutsideMenu(false);
 			
-			//
+			//track menu as opened
 			openedMenus.push(targetMenu);
+			
+			//do not allow menus to be dismissed for a short duration
+			menusDismissible = false;
+			menusDismissibleTimer.start();
 		}
 		
 		//handle the closing of a menu
@@ -452,11 +463,14 @@
 		//close overlays that are to be dismissed by a click anywhere else on screen
 		private function closeDismissibleOverlays(caller:Object):void
 		{					
-			//close all menus
-			mainMenu.closeMenus(caller);
-			
-			//close captions and descriptions of all objects of interest
-			ooiManager.hideAllOOIInfoPanes(caller);
+			if(menusDismissible)
+			{
+				//close all menus attached to main menu
+				mainMenu.closeMenus(caller);
+				
+				//close captions and descriptions of all objects of interest
+				ooiManager.hideAllOOIInfoPanes(caller);
+			}
 		}
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 

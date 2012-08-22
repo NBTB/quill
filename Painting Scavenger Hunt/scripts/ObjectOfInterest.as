@@ -172,7 +172,7 @@
 				}
 			}
 			
-			//keep the objects highlight visible as long as its info pane is open
+			//keep the object's highlight visible as long as its info pane is open
 			if(infoPane.isMenuOpen())
 				highlight.visible = true;
 		}

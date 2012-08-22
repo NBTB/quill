@@ -28,16 +28,12 @@
 			super(xPos, yPos, widthVal, heightVal);			//As the objects menu makes it's own background based on the number of objects, send 0's to indicate the background doesn't need making.
 		}
 		
-		//get the Object Manager, set up the initial size of the background for the object menu, then populate the menu with links to each object
-		public function getObjectManager(ooiManager:OOIManager):void
+		//set the Object Manager, set up the initial size of the background for the object menu, then populate the menu with links to each object
+		public function setObjectManager(ooiManager:OOIManager):void
 		{
 			//Determine how many objects are in the manager, and send manager a copy of this
 			numObjects = ooiManager.objectsOfInterest.length;
-			ooiManager.getObjectMenu(this);
-			
-			//Determine location of menu, then create background
-			//thisY = 515-(numObjects*42);
-			//createBackground(thisX, thisY, thisWidth, numObjects * 42);
+			ooiManager.setObjectMenu(this);
 			
 			//Set up initial link formatting
 			linkFormat.align = "center";

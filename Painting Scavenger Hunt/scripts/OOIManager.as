@@ -234,16 +234,14 @@
 			for(var i:int = 0; i < objectsOfInterest.length; i++)
 				if(objectsOfInterest[i].isFound())
 					objectsOfInterest[i].addFoundImageToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
-		}
-		
-		//used to allow the ooiManager to update the ObjectsMenu when an object is clicked the first time.
-		public function getObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
+		}		
 		
 		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
 		public function getCurrentClue():String					{	return currentOOI.getClue();		}
 		public function getUsableOOICount():int					{	return usableOOICount;				}
 		
 		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}
+		public function setObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 

@@ -27,8 +27,6 @@
         public static const OBJECTS_LOADED:String = "Objects loaded";
         public static const END_GOAL_LOADED:String = "End goal loaded";
 		
-		private var objectMenu:ObjectsMenu;
-		
 		//find specification files for importation with the XML of the given file
 		public function findSpecFiles(specListFilename:String)
 		{
@@ -109,10 +107,8 @@
 		
 		
         //load XML scavenger hunt specification
-        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, endGoalMenu:LetterMenu, objectsMenu:ObjectsMenu):void
-        {
-			objectMenu = objectsMenu;
-			
+        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, endGoalMenu:LetterMenu):void
+        {			
 			//track load status of hunt parameters and painting
 			var huntLoaded:Boolean = false;
 			var paintingLoaded:Boolean = false;
