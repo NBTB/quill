@@ -12,6 +12,8 @@
 		protected var focalRectangle:Rectangle = null;				//rectangle in which content is expected to appear
 		protected var scrollBar:ScrollBar = null;					//attached scroll bar
 		protected var hideUnecessaryScrollBar:Boolean = false;		//flag if scroll bar should be hidden when not needed
+		protected var scrolledDistance:Point = null;				//distance content has been scrolled
+		
 		
 		public function ContentContainer(autoContentPadding:Number = 0, focalRectangle:Rectangle = null, scrollBar:ScrollBar = null, hideUnecessaryScrollBar:Boolean = true)
 		{
@@ -19,6 +21,7 @@
 			this.focalRectangle = focalRectangle;
 			this.scrollBar = scrollBar;
 			this.hideUnecessaryScrollBar = hideUnecessaryScrollBar;
+			this.scrolledDistance = new Point(0, 0);		
 			
 			//if a scroll bar has been attached, listen for the scrolling of the scroll bar
 			if(scrollBar)
@@ -149,7 +152,7 @@
 				{
 					scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
 
-					scrollFactor += y;	
+					scrollFactor -= scrolledDistance.y;	
 					
 					scrollContent(new Point(0, scrollFactor));
 				}
@@ -162,7 +165,7 @@
 			scrollBar.setContentHeight(contentTail.y);
 			
 			//determine if scroll bar should be visible
-			if((contentHead.y < focalRectangle.y) || (contentTail.y > focalRectangle.y + focalRectangle.height))
+			if((contentHead.y + y < focalRectangle.y) || (contentTail.y + y > focalRectangle.y + focalRectangle.height))
 				scrollBar.visible = true;	
 			else if(hideUnecessaryScrollBar)
 				scrollBar.visible = false;
@@ -181,14 +184,24 @@
 		//translate content for scrolling (note that content moves opposite scroll)
 		private function scrollContent(distance:Point):void
 		{			
-			x -= distance.x;
-			y -= distance.y;
+			//translate children in the opposite direction of scrolling
+			var childCount:int = numChildren;
+			for(var i:int = 0; i < childCount; i++)
+			{
+				var child:DisplayObject = getChildAt(i);
+				child.x -= distance.x;
+				child.y -= distance.y;
+			}
+			
+			//track scrolling
+			scrolledDistance.x += distance.x;
+			scrolledDistance.y += distance.y;
 		}
 		
 		//attach a scroll bar to be tracked (will replace existing scroll bar)
 		public function attachScrollBar(scrollBar:ScrollBar):void		{	this.scrollBar = scrollBar;	}
 		
 		//detach scroll bar so it is not tracked
-		public function detachScrollBar():void	{	this.scrollBar = null;	}
+		public function detachScrollBar():void							{	this.scrollBar = null;	}
 	}
 }

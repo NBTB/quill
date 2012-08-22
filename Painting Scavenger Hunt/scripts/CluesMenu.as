@@ -14,13 +14,15 @@
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //call base constructor
-            super(xPos, yPos, widthVal, heightVal, false, false);  
+            super(xPos, yPos, widthVal, heightVal, false, false, false);  
 			
-			//not closeable 
-			//removeCloseButton();
+			//tempoarary (figure out a better place
+			menuBackground.alpha = 1;
 			
 			//create array to store old clues
-            oldClues = new Array();             
+            oldClues = new Array();     
+			
+			
         }
          
         //add a new clue and update the list of old clues

@@ -17,7 +17,9 @@
 		protected var scrollBar:ScrollBar = null;					//scroll bar used to scroll through pane content
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
-		protected var isOpen:Boolean;								//flag if menu is open		
+		protected var isOpen:Boolean = false;						//flag if menu is open		
+		protected var dragCap:Sprite = null;						//bar along the top of the menu that can be used for dragging
+		protected var dragged:Boolean = false;						//flag when menu is being dragged
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -32,7 +34,7 @@
 		public static const LAST_PAGE = -1;		//enumeration to conveniently reference the last page
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable = true, scrollable:Boolean = true):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true):void
 		{			
 			//create previous button
 			previousPageButton = new TextField();
@@ -60,19 +62,59 @@
 			nextPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			nextPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);		
 			
+			//if draggable add a drag cap
+			if(draggable)
+			{
+				//create drag cap
+				dragCap = new Sprite();
+				dragCap.graphics.lineStyle(1, 0x836A35);
+				dragCap.graphics.beginFill(menuColor);
+				dragCap.graphics.drawRect(0, 0, widthVal, 20);
+				dragCap.graphics.endFill();
+				dragCap.alpha = 0.25;
+				addChild(dragCap);
+				
+				//listen for drag cap being grabbed and released
+				dragCap.addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void	
+																				 {	
+																				 	startDrag();
+																					dragged = true;
+																				 });
+				dragCap.addEventListener(MouseEvent.MOUSE_UP, function(e:Event):void	
+																			   {	
+																			  		stopDrag(); 
+																					dragged = false;
+																			   });
+				
+				//listen for drag cap being added to stage
+				dragCap.addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
+																				{
+																					//listen for mouse movement on stage
+																					stage.addEventListener(MouseEvent.MOUSE_MOVE, function(e:MouseEvent):void	
+																																						{
+																																							//if the primary mouse button is not down, stop dragging
+																																							if(dragged && !e.buttonDown)
+																																							{
+																																								stopDrag();	
+																																								dragged = false;
+																																							}
+																																						});
+																				});
+			}
+			
 			//if closeable, create close button
 			if(closeable)
 			{
 				//create rectangle for close button
-				var closeButtonRect:Rectangle = new Rectangle(widthVal - 20, 10, 10, 10);
+				var closeButtonRect:Rectangle = new Rectangle(widthVal - 15, 5, 10, 10);
 				
 				//if the close button style has not yet been loaded, do so now
 				if(!closeButtonLoader)
 				{
 					closeButtonLoader = new ButtonBitmapLoader();
 					closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	createCloseButton(closeButtonRect);	});
-					closeButtonLoader.loadBitmaps("../assets/interface/close button up.png", "../assets/interface/close button over.png", 
-												  "../assets/interface/close button down.png", "../assets/interface/close button hit.png");
+					closeButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "close button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button over.png"), 
+												  FileFinder.completePath(FileFinder.INTERFACE, "close button down.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button hit.png"));
 				}
 				//otherwise if the style has begun loading, listen of completion
 				else if(closeButtonLoader.isLoading())
@@ -105,8 +147,8 @@
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());								
 																					 });
-				upDownBitmapLoader.loadBitmaps("../assets/interface/scroll bar up-down button up.png", "../assets/interface/scroll bar up-down button over.png", 
-											   "../assets/interface/scroll bar up-down button down.png", "../assets/interface/scroll bar up-down button hit.png");
+				upDownBitmapLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button over.png"), 
+											   FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button down.png"), FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button hit.png"));
 				
 				//load bitmaps to be used by scroller
 				var scrollBitmapLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
@@ -121,7 +163,7 @@
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());	
 																					 });
-				scrollBitmapLoader.loadBitmaps("../assets/interface/scroll bar scroller up.png");															
+				scrollBitmapLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "scroll bar scroller up.png"));															
 			}
 			
 			//flag the menu as closed
@@ -145,7 +187,10 @@
 			menuMask = new Shape();
 			menuMask.graphics.lineStyle(0);
 			menuMask.graphics.beginFill(0x000000);
-			menuMask.graphics.drawRect(0, 0, paneDimensions.x, paneDimensions.y);
+			if(!draggable)
+				menuMask.graphics.drawRect(0, 0, paneDimensions.x, paneDimensions.y);
+			else
+				menuMask.graphics.drawRect(0, dragCap.height, paneDimensions.x, paneDimensions.y - dragCap.height);
 			menuMask.graphics.endFill();
 			addChild(menuMask);
 			
@@ -184,11 +229,11 @@
 				visible = true;
 				isOpen = true;
 				
-				//reset scroller position
-				scrollBar.resetScroller();
+				//if scroll bar exists, reset scroller position
+				if(scrollBar)
+					scrollBar.resetScroller();
 				
 				//announce being opened
-				var a:MenuEvent = new MenuEvent(this, MenuEvent.MENU_OPENED);
 				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_OPENED));
 			}
 			
@@ -208,8 +253,9 @@
 				visible = false;
 				isOpen = false;
 				
-				//reset scroller position
-				scrollBar.resetScroller();
+				//if scroll bar exists, reset scroller position
+				if(scrollBar)
+					scrollBar.resetScroller();
 				
 				//announce being closed
 				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_CLOSED));
@@ -225,6 +271,7 @@
 			menuBackground.graphics.beginFill(menuColor);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
+			menuBackground.alpha = 0.65;
 		}
 		
 		public function changeBackground(xPos:int, yPos:int, widthVal:int, heightVal:int, newColor:uint = 0x010417):void
@@ -264,8 +311,14 @@
 		
 		public function addPage(pageNumber:int = LAST_PAGE)
 		{
+			//if the menu has a drag cap, less of the menu should be available for content
+			var dragCapOffset:Number = 0;
+			if(dragCap)
+				dragCapOffset = dragCap.height;
+			
 			//create new content container to use a page
-			var newPage:ContentContainer = new ContentContainer(10, new Rectangle(0, 0, paneDimensions.x, paneDimensions.y), scrollBar, true);
+			var newPage:ContentContainer = new ContentContainer(10, new Rectangle(0, dragCapOffset, paneDimensions.x, paneDimensions.y - dragCapOffset), scrollBar, true);
+			newPage.y += dragCapOffset;
 			
 			//if the page number is not array valid, add a new page to the end
 			if(pageNumber < 0 || pageNumber > pages.length)

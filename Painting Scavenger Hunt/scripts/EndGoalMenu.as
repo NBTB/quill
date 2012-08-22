@@ -7,7 +7,7 @@
     import flash.geom.ColorTransform;
     import flash.events.*;
   
-    public class LetterMenu extends BaseMenu
+    public class EndGoalMenu extends BaseMenu
     {
   
         var pieces:Array=new Array();                       //stores all of the letterPieces
@@ -17,11 +17,14 @@
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
-        //Creates the letter menu
-        public function LetterMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+        //Creates the end goal menu
+        public function EndGoalMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //Pass in variables to the base menu to create background
-            super(xPos, yPos, widthVal, heightVal, false, false);
+            super(xPos, yPos, widthVal, heightVal, false, false, false);
+			
+			//tempoarary (figure out a better place
+			menuBackground.alpha = 1;
 			
 			//change previous and next button
 			previousPageButton.text = "<";
@@ -33,7 +36,7 @@
         }
          
         //add new letter piece to list
-        public function addPiece(newPiece:LetterPieces)
+        public function addPiece(newPiece:EndGoalPiece)
         {
             var newID:int = newPiece.getID();
             var indexFound:Boolean = false;
@@ -56,7 +59,7 @@
                  
             //add new object to list
             newPiece.width = 449;
-            newPiece.height = 664;         
+            newPiece.height = 664;  
         }
         
 		//unlock the reward

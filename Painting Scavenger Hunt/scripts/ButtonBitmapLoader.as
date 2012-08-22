@@ -39,7 +39,7 @@
 				upLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void	
 																		   {	
 																				upNeeded = false;
-																				errorBitmap(0, upNeeded, overNeeded, downNeeded, hittestNeeded)	
+																				errorBitmap(upFilename, 0, upNeeded, overNeeded, downNeeded, hittestNeeded)	
 																		   });
 				upLoader.load(new URLRequest(upFilename));
 			}
@@ -56,7 +56,7 @@
 				overLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void	
 																		   {	
 																				overNeeded = false;
-																				errorBitmap(1, upNeeded, overNeeded, downNeeded, hittestNeeded)	
+																				errorBitmap(overFilename, 1, upNeeded, overNeeded, downNeeded, hittestNeeded)	
 																		   });
 				overLoader.load(new URLRequest(overFilename));
 			}
@@ -73,7 +73,7 @@
 				downLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void	
 																		   {	
 																				downNeeded = false;
-																				errorBitmap(2, upNeeded, overNeeded, downNeeded, hittestNeeded)	
+																				errorBitmap(downFilename, 2, upNeeded, overNeeded, downNeeded, hittestNeeded)	
 																		   });
 				downLoader.load(new URLRequest(downFilename));
 			}
@@ -90,7 +90,7 @@
 				hittestLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void	
 																		   {	
 																				hittestNeeded = false;
-																				errorBitmap(3, upNeeded, overNeeded, downNeeded, hittestNeeded)	
+																				errorBitmap(hittestFilename, 3, upNeeded, overNeeded, downNeeded, hittestNeeded)	
 																		   });
 				hittestLoader.load(new URLRequest(hittestFilename));
 			}
@@ -127,7 +127,7 @@
 			}
 		}
 		
-		private function errorBitmap(stateIndex:int, upNeeded:Boolean, overNeeded:Boolean, downNeeded:Boolean, hittestNeeded:Boolean):void
+		private function errorBitmap(stateFilename:String, stateIndex:int, upNeeded:Boolean, overNeeded:Boolean, downNeeded:Boolean, hittestNeeded:Boolean):void
 		{
 			//trace out which image failed to load
 			var erroredState:String = null;
@@ -146,7 +146,7 @@
 					erroredState = "Hittest-State";
 					break;
 			}
-			trace(erroredState + " image could not be loaded properly. Other images may still be accessible");
+			trace(erroredState + " image at " + stateFilename + " could not be loaded properly. Other images may still be accessible");
 			
 			//dispatch an error event
 			dispatchEvent(new Event(IMAGE_LOAD_ERROR));

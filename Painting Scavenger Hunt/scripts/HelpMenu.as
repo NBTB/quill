@@ -10,11 +10,11 @@
     class HelpMenu extends BaseMenu
     {
          
-        var objectiveOption:TextField = new TextField();        //Button to display the objectives        
-        var controlsOption:TextField = new TextField();         //Button to display the controls
-		var letterOption:TextField = new TextField();         //Button to display the controls
-		var objectsOption:TextField = new TextField();         //Button to display the controls
-		var cluesOption:TextField = new TextField();         //Button to display the controls
+        var objectiveOption:TextField = new TextField();	//Button to display the objectives        
+        var controlsOption:TextField = new TextField();		//Button to display the controls
+		var letterOption:TextField = new TextField();		//Button to display the controls
+		var objectsOption:TextField = new TextField();		//Button to display the controls
+		var cluesOption:TextField = new TextField();		//Button to display the controls
 		
 		var tut:TutorialMenu;
          

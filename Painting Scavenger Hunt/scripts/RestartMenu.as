@@ -23,7 +23,7 @@
 		public function RestartMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//feeds the position values for the background to the base menu
-			super(xPos, yPos, widthVal, heightVal, false);
+			super(xPos, yPos, widthVal, heightVal, false, false, false);
 			
 			//Sets up the question
 			startOverQuestion.text = "Are you sure you want to start over? All progress will be lost.";
@@ -80,25 +80,6 @@
 		{
 			//dispatch restart event
 			this.dispatchEvent(new RestartEvent(RestartEvent.RESTART_GAME, true));
-		}
-		
-		//changes the color of buttons
-		/*public function colorChange(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;
-			myColor.color=0xFFC000;
-			sender.transform.colorTransform=myColor;
-		}
-		
-		//reverts the buttons back to their original colors
-		public function revertColor(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;	
-			myColor.color=0xFFFFFF;		
-			sender.transform.colorTransform=myColor;
-		}*/
-		
+		}		
 	}
 }

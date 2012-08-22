@@ -7,26 +7,25 @@
     import flash.geom.Matrix;	
 	import flash.net.URLRequest;
 	
-	public class LetterPieces extends MovieClip
+	public class EndGoalPiece extends MovieClip
 	{
-		var pieceName:String;
-		private var id:Number = 0;								//identification number of piece
-		var fileName:String;
-		var yPos:Number;
+		private var pieceName:String;
+		private var id:Number = 0;
+		private var fileName:String;
 		private var letter:Bitmap = null;
 		private var scaleFactor:Number = 1; 
 	
-		private static var staticID:Number = 0;					//counter of pieces used to determine each objects ID
+		private static var staticID:Number = 0;
 		
-		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
+		var myArrayListeners:Array=[];
 		
-		function LetterPieces(pieceName:String, fileName:String, yPos:Number)
+		function EndGoalPiece(pieceName:String, fileName:String, xPos:Number, yPos:Number)
 		{
 			this.pieceName = pieceName;
 			this.fileName = fileName;
-			this.yPos = yPos;
-			y = yPos+20;
-			x = 25;
+			x = xPos;
+			y = yPos;
+			
 			
 			//set ID and increment static counter
 			this.id = staticID;
@@ -36,16 +35,6 @@
             if(scaleFactor  <= 0)
                 scaleFactor = 1;
             this.scaleFactor = scaleFactor;
-        }
-         
-        public function displayLetter(letter:Bitmap)
-        {
-            //create bitmap from file and make a copy that will not be scaled
-            this.letter = letter;
-             
-             
-            //add bitmap to container
-            addChild(letter);      
         }
         
         //load the object's outline image
@@ -65,9 +54,7 @@
                                                                                                 letter.height *= scaleFactor;
                                                                                                   
                                                                                                 //store a fullsize lette for convenience
-                                                                                                //fullsizeOutline = new Bitmap(letter.bitmapData);
                                                                                                 addChild(letter);
-                                                                                                //hideOutline();
                                                                                                   
                                                                                                 //if both the hitmap and outline are now loaded, dispatch a completion event
                                                                                                 if(letter)

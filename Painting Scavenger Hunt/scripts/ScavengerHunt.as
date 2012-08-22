@@ -2,39 +2,39 @@
 {
 	import flash.display.*;
 	import flash.events.*;
-	import flash.ui.Keyboard;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;	
+	import flash.ui.*;
+	import flash.geom.*;	
 	import flash.text.*;
 	import flash.utils.Timer;
-	import flash.ui.Mouse;
 		
 	public class ScavengerHunt extends MovieClip
 	{
-		private var importer:HuntImporter = null;					//importer used to load start-up and hunt
-		private var startGameListener:MenuListener;					//Listener to determine when the main game should begin
-		private var paintingCanvas:PaintingCanvas = null;			//The class that displays the painting 
-		private var ooiManager:OOIManager = null;					//Object which keeps track of objects in the painting
-		//private var startUpScreen:SplashScreen;						//Splash screen which displays when program is first started
-		private var mainMenu:MainMenu;								//The main menu displayed beneath the painting
-		private var openedMenus:Array = null;						//list of currently open menus
-		private var zoomed:Boolean = false;							//flag tracking whether or not the magnifying glass is active
-		private var magnifyingGlass:MagnifyingGlass;				//magnifying glass used to enlarge portions of the scene
-		private var magnifyButton:SimpleButton = null;				//button that toggles magnifying glass
-		private var notificationTimer:Timer = null;					//timer used to trigger the hiding of the notification textfield
-		private var notificationText:TextField = new TextField(); 	//textfield to hold notifications
-		private var needNewClue:Boolean = false;					//flag that tracks whether or not a new clue is needed
-		private var notificationTextFormat:TextFormat;				 //text format of the notification textfield
-		private var pauseEvents:Boolean = false;					//flag if certain events should be paused
-		private var loadingTimer:Timer = new Timer(1000);
-		private var childIndex:int = 0;
-
-		private var ending:Ending;									//the menu displayed when you win
+		private var importer:HuntImporter = null;						//importer used to load start-up and hunt
+		private var startGameListener:MenuListener;						//Listener to determine when the main game should begin
+		private var paintingCanvas:PaintingCanvas = null;				//The class that displays the painting 
+		private var ooiManager:OOIManager = null;						//Object which keeps track of objects in the painting
+		private var mainMenu:MainMenu;									//The main menu displayed beneath the painting
+		private var openedMenus:Array = null;							//list of currently open menus
+		private var zoomed:Boolean = false;								//flag tracking whether or not the magnifying glass is active
+		private var magnifyingGlass:MagnifyingGlass;					//magnifying glass used to enlarge portions of the scene
+		private var magnifyButton:SimpleButton = null;					//button that toggles magnifying glass
+		private var notificationTimer:Timer = null;						//timer used to trigger the hiding of the notification textfield
+		private var notificationText:TextField = new TextField(); 		//textfield to hold notifications
+		private var notificationTextFormat:TextFormat;					//text format of the notification textfield
+		private var notificationTextColorNormal:ColorTransform = null;	//color of notification text in its normal state
+		private var notificationTextColorNew:ColorTransform = null;		//color transform applied to notification text immediately after it is updated
+		private var notificationTextColorFadeTime:int = 0;				//number of frames the notification text color takes to transition from new to normal
+		private var notificationTextColorFades:int = 0;					//number of frames the notification text color has been fading
+		private var pauseEvents:Boolean = false;						//flag if certain events should be paused
+		private var loadingTimer:Timer = null;							//timer to set minimum load time and prevent the screen from just being a flash
+		private var menusDismissibleTimer:Timer = null;					//timer used to give buffer between opening a menu and being able to dismiss by clicking elsewhere
+		private var menusDismissible:Boolean = false;					//flag when menus can be dismissed by clicking outside of them (close button is not affected)
+		private var cluesMenu:CluesMenu = null;							//panel that contains clue
+		private var endGoalMenu:EndGoalMenu = null;						//panel that contains end goal pieces
+		private var ending:Ending = null;								//the menu displayed when you win
 		
-		var cluesMenu:CluesMenu = new CluesMenu(0, 0, 765, 55);
-		var endGoalMenu:LetterMenu = new LetterMenu(765, 0, 500, 630);	
-		var loadingMenu:LoadingMenu = new LoadingMenu(0, 0, 1265, 630);
-		var introMenu:IntroMenu = new IntroMenu(150, 75, 965, 480);
+		var loadingMenu:LoadingMenu = null;
+		var introMenu:IntroMenu = null;
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -48,33 +48,34 @@
 		//construct scavanger hunt
 		public function ScavengerHunt():void
 		{
-			//initiator = theInitiator;		
-			//startMenu();			
-			addChild(loadingMenu);
+			//find specification files before preparing game
+			importer = new HuntImporter();
+			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void	{	startMenu()	});
+			importer.findSpecFilesAndAssetDirectories("xml/importer.xml");
+																										
 			
-			loadingWait();
-			startGameListener = new MenuListener();
-			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
-			loadingMenu.getStartListener(startGameListener);
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
-		/*public function startMenu():void
-		{						
-			
-			startUpScreen = new SplashScreen(startGameListener);
-			
+		public function startMenu():void
+		{								
 			//load start-up information and listen for completion
-			
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
-																					 {																						
-																						addChild(startUpScreen);
+																					 {				
+																						loadingMenu = new LoadingMenu(0, 0, 1265, 630);
+																						introMenu = new IntroMenu(150, 75, 965, 480);
+																						loadingTimer = new Timer(1000);
+																						addChild(loadingMenu);
 																						
+																						loadingWait();
+																						startGameListener = new MenuListener();
+																						startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
+																						loadingMenu.getStartListener(startGameListener);																						
 																					 });
-			importer.importStartUp("start-up params.xml", startUpScreen);
+			importer.importStartUp();
 			
 			
-		}*/
+		}
 		
 		//Additional waiting, so that the loading screen doesn't flash for half a second and freak out the user.
 		public function loadingWait():void
@@ -86,7 +87,6 @@
 		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
 		{					
-			trace("Success!");
 			startGameListener.removeEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
 			//remove the timer
 			loadingTimer.removeEventListener(TimerEvent.TIMER, loadingMenu.endLoad);
@@ -101,13 +101,28 @@
 			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
 			notificationText = new TextField();
 			magnifyButton = new SimpleButton();
+			cluesMenu = new CluesMenu(0, 0, 765, 55);
+			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			 
+			
+			//define normal notification text color
+			var normalRed:uint = 0x40;
+			var normalGreen:uint = 0xE0;
+			var normalBlue:uint = 0xD0;
+			var normalAlpha:uint = 0xFF
+			notificationTextColorNormal = new ColorTransform();	
+			notificationTextColorNormal.color = (normalRed * 0x010000) + (normalGreen * 0x000100) + (normalBlue);
+			
+			//define offsets to apply when notification is new
+			notificationTextColorNew = new ColorTransform(1, 1, 1, 1, 0x90 - normalRed, 0x90 - normalGreen, 0x90 - normalBlue);
+			notificationTextColorFadeTime = 10;
 			
 			//setup clue text format
-			notificationTextFormat = new TextFormat("Times New Roman", 25, 0x40E0D0);
+			notificationTextFormat = new TextFormat("Times New Roman", 25, notificationTextColorNormal.color);
 			notificationTextFormat.align = TextFormatAlign.CENTER;
 			
 			//set clue textfield location and settings
 			notificationText.defaultTextFormat = notificationTextFormat;
+			notificationText.transform.colorTransform = notificationTextColorNormal;
 			notificationText.wordWrap=true;
 			notificationText.x=150;
 			notificationText.y=90;
@@ -130,23 +145,17 @@
 																							magnifyButton.height /= 5;
 																							magnifyButton.visible = true;
 																					   });
-			magnifyButtonLoader.loadBitmaps("../assets/interface/magnify button up.png", "../assets/interface/magnify button over.png", 
-											"../assets/interface/magnify button down.png", "../assets/interface/magnify button hittest.png");
+			magnifyButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "magnify button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "magnify button over.png"), 
+											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
 			
-			
-			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 240, 120, 330);
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
-
-			importer = new HuntImporter();
 			
 			//load hunt information and listen for completion
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
-			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
-			
-			
+			importer.importHunt(paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu);			
 			
 			//add menus to main menu
 			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
@@ -161,7 +170,7 @@
 		
 		//Actually begin the rest of the game
 		public function startGame():void
-		{			
+		{					
 			//remove pre-game children from display list
 			removeChild(loadingMenu);
 			addChild(introMenu);
@@ -169,6 +178,7 @@
 						
 			//add in-game children to display list,
 			//ensuring that they are tightly packed on the bottom layers
+			var childIndex:int = 0;
 			addChildAt(paintingCanvas, childIndex++);
 			addChildAt(ooiManager, childIndex++);
 			addChildAt(mainMenu, childIndex++);
@@ -190,7 +200,7 @@
 			
 			//give OOIManager reference to objects menu
 			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
-			objectsMenu.getObjectManager(ooiManager);	
+			objectsMenu.setObjectManager(ooiManager);	
 			
 			//listen for a request to open objects menu after object of interest info pane closure
 			objectsMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
@@ -206,17 +216,21 @@
 			//mask the magnifying glass so that it is not drawn beyond the painting
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
-			//create clue timer
-			notificationTimer = new Timer(10 * 1000, 1);
+			//create notification timer
+			notificationTimer = new Timer(5000, 1);
 			
-			//listen for the completion of the clue timer
-			notificationTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
-																		  {
-																			hideNotificationText();
-																		  });			
+			//listen for the completion of the notification timer
+			notificationTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void	{	hideNotificationText();	});			
+			
 			//post directions to first clue
 			postNotification("Clues will appear above the painting.");
 			
+			//create menu dismissible timer
+			menusDismissibleTimer = new Timer(500);
+			menusDismissible = true;
+			
+			//listen for the completion of the menu dismissible timer
+			menusDismissibleTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void	{	menusDismissible = true;	});						
 			
 			//prepare new list of unused objects of interest and pick the first object
 			ooiManager.resetUnusedOOIList();
@@ -238,8 +252,18 @@
 			mainMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
 			
 			//listen for ending pane to open and close
-			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
-			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
+			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
+																				{	
+																					menuOpened(e.getTargetMenu());	
+																					paintingCanvas.updatePaintingMode(PaintingCanvas.NON_INTERACTIVE);
+																					handleEnding();
+																				});
+			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
+																				{
+																					menuClosed(e.getTargetMenu());
+																					paintingCanvas.updatePaintingMode(PaintingCanvas.INTERACTIVE);
+																					handleEnding();
+																				});
 			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
@@ -259,6 +283,18 @@
 		//handle new frame
 		public function checkEnterFrame(e:Event):void
 		{			
+			//if a notification present and new, fade it partially
+			if(notificationText.visible && notificationTextColorFades <= notificationTextColorFadeTime)
+			{
+				var fadeRatio:Number = (Number(notificationTextColorFades) / notificationTextColorFadeTime);
+				var invFadeRatio:Number = 1 - fadeRatio;
+				notificationText.textColor = notificationTextColorNormal.color;
+				notificationText.transform.colorTransform = new ColorTransform(1, 1, 1, 1,	notificationTextColorNormal.redOffset * fadeRatio + notificationTextColorNew.redOffset * invFadeRatio,
+																							notificationTextColorNormal.greenOffset * fadeRatio + notificationTextColorNew.greenOffset * invFadeRatio, 
+																							notificationTextColorNormal.blueOffset * fadeRatio + notificationTextColorNew.blueOffset * invFadeRatio, 0);
+				notificationTextColorFades++;
+			}
+						
 			//if the magnifying glass is being used, draw through its lens
             if(zoomed)
 			{
@@ -283,8 +319,12 @@
 			//disallow actions that depend on all menus being closed
 			allowEventsOutsideMenu(false);
 			
-			//
+			//track menu as opened
 			openedMenus.push(targetMenu);
+			
+			//do not allow menus to be dismissed for a short duration
+			menusDismissible = false;
+			menusDismissibleTimer.start();
 		}
 		
 		//handle the closing of a menu
@@ -298,25 +338,6 @@
 			//if all opened menus have been closed, allow actions that depend on all menus being closed
 			if(openedMenus.length < 1)
 				allowEventsOutsideMenu(true);
-		}
-		
-		private function allowEventsOutsideMenu(allowEvents:Boolean):void
-		{
-			//flag the pause/unpause of certain events
-			pauseEvents = !allowEvents;
-						
-			//if events are not allowed, setup special states
-			if(!allowEvents)
-			{
-				hideNotificationText();
-				toggleZoom(true, false);
-				ooiManager.setAllOOIHitTestSuppression(true);
-			}
-			//otherwise, revert to normal states
-			else
-			{
-				ooiManager.setAllOOIHitTestSuppression(false);
-			}
 		}
 		
 		//toggle use of magnifying glass
@@ -383,7 +404,7 @@
 			{				
 				//add the piece of the end goal
 				var completionRequirement:int = ooiManager.getUsableOOICount();
-				endGoalMenu.unlockReward(completionRequirement, LetterMenu.NEXT_REWARD);
+				endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
 			
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
@@ -425,6 +446,9 @@
 			notificationText.visible = true;
 			notificationText.text = textToPost;
 			
+			//start fading
+			notificationTextColorFades = 0;
+			
 			//restart the clue hiding timer
 			notificationTimer.reset();
 			notificationTimer.start();
@@ -448,11 +472,14 @@
 		//close overlays that are to be dismissed by a click anywhere else on screen
 		private function closeDismissibleOverlays(caller:Object):void
 		{					
-			//close all menus
-			mainMenu.closeMenus(caller);
-			
-			//close captions and descriptions of all objects of interest
-			ooiManager.hideAllOOIInfoPanes(caller);
+			if(menusDismissible)
+			{
+				//close all menus attached to main menu
+				mainMenu.closeMenus(caller);
+				
+				//close captions and descriptions of all objects of interest
+				ooiManager.hideAllOOIInfoPanes(caller);
+			}
 		}
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
@@ -465,7 +492,44 @@
 		function viewLetter(event:MouseEvent):void
 		{
 			removeChild(ending);
-			LetterMenu(mainMenu.getMenu(endGoalMenuTitle)).openMenu();
+			EndGoalMenu(mainMenu.getMenu(endGoalMenuTitle)).openMenu();
+		}
+		
+		//enter a special state when the ending is open, leave it when closed
+		private function handleEnding()
+		{
+			//track ending's open status
+			var othersEnabled = !ending.isMenuOpen();
+			
+			//enable/disable interaction with other children
+			ooiManager.mouseEnabled = othersEnabled;
+			ooiManager.mouseChildren = othersEnabled;
+			mainMenu.mouseEnabled = othersEnabled;
+			mainMenu.mouseChildren = othersEnabled;
+			cluesMenu.mouseEnabled = othersEnabled;
+			cluesMenu.mouseChildren = othersEnabled;
+			endGoalMenu.mouseEnabled = othersEnabled;
+			endGoalMenu.mouseChildren = othersEnabled;
+			magnifyButton.mouseEnabled = othersEnabled;
+		}
+		
+		private function allowEventsOutsideMenu(allowEvents:Boolean):void
+		{
+			//flag the pause/unpause of certain events
+			pauseEvents = !allowEvents;
+						
+			//if events are not allowed, setup special states
+			if(!allowEvents)
+			{
+				hideNotificationText();
+				toggleZoom(true, false);
+				ooiManager.setAllOOIHitTestSuppression(true);
+			}
+			//otherwise, revert to normal states
+			else
+			{
+				ooiManager.setAllOOIHitTestSuppression(false);
+			}
 		}
 		
 		public function clearEvents():void 

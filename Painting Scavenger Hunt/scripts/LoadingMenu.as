@@ -92,7 +92,6 @@
 			loadingText.height = 168;
 			loadingText.width = 425;
 			loadingText.text = "Loading... Please Wait!";
-			trace(loadingText.text);
 		}
 		
 		override public function createCloseButton(placementRect):void {

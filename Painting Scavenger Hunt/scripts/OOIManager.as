@@ -3,6 +3,7 @@
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
+	import flash.utils.Timer;
 	
 	public class OOIManager extends MovieClip
 	{
@@ -14,6 +15,7 @@
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
 		private var ooiCaptionContainer = null;					//container for object of interest captions
 		private var ooiInfoPaneContainer = null;				//container for object of interest info panes
+		private var incorrectAnswerTimer = null;				//time that allows for double clicking without causing a incorrect answer
 		
 		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 				//message that appears in the clue textfield when the wrong clue is guessed
 		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 	//message that appears in the clue textfield when the wrong clue is guessed
@@ -37,6 +39,9 @@
 			if(!ooiInfoPaneContainer)
 				ooiInfoPaneContainer = this;
 			this.ooiInfoPaneContainer = ooiInfoPaneContainer;
+			
+			//create timer to start upon an incorrect click
+			incorrectAnswerTimer = new Timer(500);
 			
 			//listen for being added to the display list
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
@@ -86,7 +91,15 @@
 																							if(ObjectOfInterest(e.target).getID() == currentOOI.getID())
 																								dispatchEvent(new Event(CORRECT));
 																							else
-																								dispatchEvent(new Event(INCORRECT));
+																							{
+																								//start a timer to ensure that the object is not being double clicked before dispatching incorrect answer event
+																								incorrectAnswerTimer.addEventListener(TimerEvent.TIMER, function(e:Event):void
+																																										 {
+																																											dispatchEvent(new Event(INCORRECT));
+																																											incorrectAnswerTimer.reset();
+																																										 });
+																								incorrectAnswerTimer.start();
+																							}
 																						}
 																						if (ObjectOfInterest(e.target).getHasBeenOpened() == false)
 																						{
@@ -99,6 +112,10 @@
 			newObject.doubleClickEnabled = true;
 			newObject.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:MouseEvent):void
 																					{
+																						//stop incorrect answer event from being triggering
+																						incorrectAnswerTimer.reset();
+																						
+																						//open the object of interest's info pane
 																						ObjectOfInterest(e.target).showInfoPane();
 																					});
 			
@@ -217,16 +234,14 @@
 			for(var i:int = 0; i < objectsOfInterest.length; i++)
 				if(objectsOfInterest[i].isFound())
 					objectsOfInterest[i].addFoundImageToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
-		}
-		
-		//used to allow the ooiManager to update the ObjectsMenu when an object is clicked the first time.
-		public function getObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
+		}		
 		
 		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
 		public function getCurrentClue():String					{	return currentOOI.getClue();		}
 		public function getUsableOOICount():int					{	return usableOOICount;				}
 		
 		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}
+		public function setObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 

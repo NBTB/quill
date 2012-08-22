@@ -20,11 +20,13 @@
         var canvasHeight:Number;                            //height of canvas
         private var painting:Bitmap = null;                 //painting displayed on canvas
         private var fullsizePainting:Bitmap = null;         //unscaled painting
-        private var paintingScale:Number = 1;               //scale factor of painting to fit a given scene
-         
+        private var paintingScale:Number = 1;               //scale factor of painting to fit a given scene         
         private var paintingMask:Shape;                     //mask around painting used to cover display objects that should not be seen beyond such bounds
+		private var nonInteractivePainting:Bitmap = null;	//painting to be used when interaction is not allowed
          
-         
+        public static const INTERACTIVE:int = 0;
+		public static const NON_INTERACTIVE:int = 1;
+		 
         //construct a painting canvas with a position and dimensions
         public function PaintingCanvas(x:Number, y:Number, canvasWidth:Number, canvasHeight:Number):void
         {                      
@@ -35,18 +37,9 @@
             this.canvasHeight = canvasHeight;
         }
          
-        //display painting and setup clue display
-        public function displayPainting(painting:Bitmap)
-        {          
-            //create bitmap from file and make a copy that will not be scaled
-            this.painting = painting;
-            fullsizePainting = new Bitmap(painting.bitmapData);
-             
-            //adjust painting to fit the width of the container
-            paintingScale = canvasWidth / painting.width;
-            painting.width *= paintingScale;
-            painting.height *= paintingScale;
-             
+        //display painting on canvas
+        public function displayPainting()
+        {                     
             //add bitmap to display list
             addChild(painting);
              
@@ -56,8 +49,29 @@
             paintingMask.graphics.drawRect(painting.x, painting.y, painting.width, painting.height);
             paintingMask.graphics.endFill();
             addChildAt(paintingMask, getChildIndex(painting));                 
-        }
-         
+        }         
+		
+		//switch between interactive and non-interactive paintings
+		public function updatePaintingMode(paintingMode:int)
+		{
+			switch(paintingMode)
+			{
+				case INTERACTIVE:
+					if(nonInteractivePainting.parent == this)
+					{
+						addChildAt(painting, getChildIndex(nonInteractivePainting));
+						removeChild(nonInteractivePainting);
+					}
+					break;
+				case NON_INTERACTIVE:
+					if(painting.parent == this)
+					{
+						addChildAt(nonInteractivePainting, getChildIndex(painting));
+						removeChild(painting);
+					}
+					break;
+			}
+		}
          
         //add the painting to a list of bitmaps along with corresponding texture points based on a given sample point relative to the painting's upper-left corner
         public function addPaintingToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
@@ -83,5 +97,30 @@
         public function getPaintingHeight():Number  {   return painting.height; }      
         public function getPaintingMask():Shape     {   return paintingMask;    }
         public function getPaintingScale():Number   {   return paintingScale;   }
+		
+		//attach a painting and fit it to the canvas
+		public function attachPainting(bitmap:Bitmap):void
+		{
+			//create bitmap from data and make a copy that will not be scaled
+            painting = bitmap;
+            fullsizePainting = new Bitmap(painting.bitmapData);
+             
+            //adjust painting to fit the width of the container
+            paintingScale = canvasWidth / painting.width;
+            painting.width *= paintingScale;
+            painting.height *= paintingScale;
+		}
+		
+		//attach a non-interactive painting and fit it to the canvas
+		public function attachNonInteractivePainting(bitmap:Bitmap):void
+		{
+			//store bitmap as non-interactive painting
+           	nonInteractivePainting = bitmap;
+             
+            //adjust non-interactive painting to fit the width of the container
+            var nonInteractivePaintingScale:Number = canvasWidth / nonInteractivePainting.width;
+            nonInteractivePainting.width *= nonInteractivePaintingScale;
+            nonInteractivePainting.height *= nonInteractivePaintingScale;
+		}
     }
 }
