@@ -135,6 +135,8 @@
 																			removeEventListener(Event.ENTER_FRAME, enterFrame);
 																		});*/
 			
+			//listen for closing of info pane
+			infoPane.addEventListener(MenuEvent.MENU_CLOSED, function(e:Event):void	{	hideHighlight();	});
 		}
 		
 		//handle new frames
@@ -169,6 +171,10 @@
 					}
 				}
 			}
+			
+			//keep the objects highlight visible as long as its info pane is open
+			if(infoPane.isMenuOpen())
+				highlight.visible = true;
 		}
 		
 		//load object's components
