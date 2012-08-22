@@ -18,6 +18,7 @@
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
 		protected var openers:Array = null;							//list of objects that would cause the menu to open
 		protected var isOpen:Boolean;								//flag if menu is open		
+		protected var dragCap:Sprite;								//bar along the top of the menu that can be used for dragging
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -166,6 +167,9 @@
 			//create list of pages and add first page
 			pages = new Array();
 			addPage();
+			
+			//temporary
+			pages[0].y = 50;
 		}
 		
 		//attempt to open this menu and return result

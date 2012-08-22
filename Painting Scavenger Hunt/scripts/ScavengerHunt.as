@@ -97,12 +97,13 @@
 			var normalRed:uint = 0x40;
 			var normalGreen:uint = 0xE0;
 			var normalBlue:uint = 0xD0;
+			var normalAlpha:uint = 0xFF
 			notificationTextColorNormal = new ColorTransform();	
-			notificationTextColorNormal.color = (normalRed * 0x010000) + (normalGreen * 0x000100) + (normalBlue);		
+			notificationTextColorNormal.color = (normalRed * 0x010000) + (normalGreen * 0x000100) + (normalBlue);
 			
 			//define offsets to apply when notification is new
-			notificationTextColorNew = new ColorTransform(1, 1, 1, 1, 0xFF - normalRed, 0xFF - normalGreen, 0xFF - normalBlue, 0);
-			notificationTextColorFadeTime = 20;
+			notificationTextColorNew = new ColorTransform(1, 1, 1, 1, 0x90 - normalRed, 0x90 - normalGreen, 0x90 - normalBlue);
+			notificationTextColorFadeTime = 10;
 			
 			//setup clue text format
 			notificationTextFormat = new TextFormat("Times New Roman", 25, notificationTextColorNormal.color);
@@ -137,7 +138,6 @@
 											"assets/interface/magnify button down.png", "assets/interface/magnify button hittest.png");
 			
 			
-			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 240, 120, 330);
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(210, 105, 170, 465);					
@@ -205,7 +205,7 @@
 			magnifyingGlass.mask = paintingCanvas.getPaintingMask();
 			
 			//create notification timer
-			notificationTimer = new Timer(3 * 1000, 1);
+			notificationTimer = new Timer(5000, 1);
 			
 			//listen for the completion of the clue timer
 			notificationTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void

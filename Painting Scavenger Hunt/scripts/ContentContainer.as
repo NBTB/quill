@@ -13,6 +13,9 @@
 		protected var scrollBar:ScrollBar = null;					//attached scroll bar
 		protected var hideUnecessaryScrollBar:Boolean = false;		//flag if scroll bar should be hidden when not needed
 		
+		var scrolledX:Number = 0;
+		var scrolledY:Number = 0;
+		
 		public function ContentContainer(autoContentPadding:Number = 0, focalRectangle:Rectangle = null, scrollBar:ScrollBar = null, hideUnecessaryScrollBar:Boolean = true)
 		{
 			this.autoContentPadding = autoContentPadding;
@@ -149,7 +152,7 @@
 				{
 					scrollFactor *= (contentTail.y - contentHead.y) - focalRectangle.height + autoContentPadding;
 
-					scrollFactor += y;	
+					scrollFactor += scrolledY;	
 					
 					scrollContent(new Point(0, scrollFactor));
 				}
@@ -181,8 +184,15 @@
 		//translate content for scrolling (note that content moves opposite scroll)
 		private function scrollContent(distance:Point):void
 		{			
-			x -= distance.x;
-			y -= distance.y;
+			var childCount:int = numChildren;
+			for(var i:int = 0; i < childCount; i++)
+			{
+				var child:DisplayObject = getChildAt(i);
+				child.x -= distance.x;
+				child.y -= distance.y;
+			}
+			scrolledX -= distance.x;
+			scrolledY -= distance.y;
 		}
 		
 		//attach a scroll bar to be tracked (will replace existing scroll bar)
