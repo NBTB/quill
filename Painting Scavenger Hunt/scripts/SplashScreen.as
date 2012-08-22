@@ -16,8 +16,7 @@
 	public class SplashScreen extends MovieClip
 	{
 		var theBackground:Shape = new Shape();
-		var splashTitle:TextField = new TextField();
-		var loadingText:TextField = new TextField();
+		
 		var tut:TutorialMenu;
 		
 		var startGameListener:MenuListener;
@@ -30,7 +29,10 @@
 		var splashButtonCredits:TextField = new TextField();
 		var splashButtonTitle:TextField = new TextField();
 				
+		var splashTitle:TextField = new TextField();
+		var loadingText:TextField = new TextField();
 		var splashTitleFormat:TextFormat = new TextFormat();
+		
 		var splashButtonFormat:TextFormat = new TextFormat();
 		var infoTextFormat:TextFormat = new TextFormat();
 		

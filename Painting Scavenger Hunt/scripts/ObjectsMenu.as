@@ -23,7 +23,7 @@
 		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//thisX = xPos;					
-			//thisWidth = widthVal;
+			thisWidth = widthVal;
 			linksArray = new Array();
 			super(xPos, yPos, widthVal, heightVal);			//As the objects menu makes it's own background based on the number of objects, send 0's to indicate the background doesn't need making.
 		}
@@ -40,7 +40,6 @@
 			//createBackground(thisX, thisY, thisWidth, numObjects * 42);
 			
 			//Set up initial link formatting
-			linkFormat.align = "center";
 			linkFormat.color = 0xFE5E5A;
 			linkFormat.font = "Gabriola";
 			linkFormat.size = 20;
@@ -49,19 +48,21 @@
 			
 			var objCount:int = 0;
 			
+			
+			
 			//Loop through as many objects as there are, creating non-functional links for each.
 			while(objCount < numObjects)
 			{
-				objCount ++;
 				tempLink = new TextField;
 				tempLink.x = 20;
 				tempLink.height = 35;
 				tempLink.width = thisWidth - 40;
-				tempLink.text = "???";
+				tempLink.text = ooiManager.objectsOfInterest[objCount].getObjectName();
 				tempLink.selectable = false;
 				tempLink.setTextFormat(linkFormat);
 				linksArray.push(tempLink);
 				addContentToTail(tempLink);
+				objCount++;
 			}		
 		}
 		
@@ -69,9 +70,22 @@
 		public function objectClicked(ooi:ObjectOfInterest):void
 		{
 			linkFormat.color = 0xE5E5E5;
-			linkFormat.align = "left";
+			var tempObjName:String = linksArray[curLink].text;
 			linksArray[curLink].text = ooi.getObjectName();
 			linksArray[curLink].setTextFormat(linkFormat);
+			
+			if (tempObjName != ooi.getObjectName())
+			{
+				for (var i:int = curLink + 1; i < linksArray.length; i++)
+				{
+					if (linksArray[i].text == ooi.getObjectName())
+					{
+						linksArray[i].text = tempObjName;
+						linkFormat.color = 0xFE5E5A;
+						linksArray[i].setTextFormat(linkFormat);
+					}
+				}
+			}
 			
 			//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
 			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});

@@ -15,7 +15,7 @@
 		private var startGameListener:MenuListener;					//Listener to determine when the main game should begin
 		private var paintingCanvas:PaintingCanvas = null;			//The class that displays the painting 
 		private var ooiManager:OOIManager = null;					//Object which keeps track of objects in the painting
-		private var startUpScreen:SplashScreen;						//Splash screen which displays when program is first started
+		//private var startUpScreen:SplashScreen;						//Splash screen which displays when program is first started
 		private var mainMenu:MainMenu;								//The main menu displayed beneath the painting
 		private var openedMenus:Array = null;						//list of currently open menus
 		private var zoomed:Boolean = false;							//flag tracking whether or not the magnifying glass is active
@@ -27,11 +27,14 @@
 		private var notificationTextFormat:TextFormat;				 //text format of the notification textfield
 		private var pauseEvents:Boolean = false;					//flag if certain events should be paused
 		private var loadingTimer:Timer = new Timer(1000);
+		private var childIndex:int = 0;
 
 		private var ending:Ending;									//the menu displayed when you win
 		
 		var cluesMenu:CluesMenu = new CluesMenu(0, 0, 765, 55);
 		var endGoalMenu:LetterMenu = new LetterMenu(765, 0, 500, 630);	
+		var loadingMenu:LoadingMenu = new LoadingMenu(0, 0, 1265, 630);
+		var introMenu:IntroMenu = new IntroMenu(150, 75, 965, 480);
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -46,40 +49,50 @@
 		public function ScavengerHunt():void
 		{
 			//initiator = theInitiator;		
-			startMenu();			
+			//startMenu();			
+			addChild(loadingMenu);
+			
+			loadingWait();
+			startGameListener = new MenuListener();
+			startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
+			loadingMenu.getStartListener(startGameListener);
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
-		public function startMenu():void
+		/*public function startMenu():void
 		{						
-			startGameListener = new MenuListener();
+			
 			startUpScreen = new SplashScreen(startGameListener);
 			
 			//load start-up information and listen for completion
-			importer = new HuntImporter();
+			
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
 																					 {																						
 																						addChild(startUpScreen);
-																						startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	loadingWait();	});
+																						
 																					 });
 			importer.importStartUp("start-up params.xml", startUpScreen);
 			
 			
-		}
+		}*/
 		
 		//Additional waiting, so that the loading screen doesn't flash for half a second and freak out the user.
 		public function loadingWait():void
 		{
-			loadingTimer.addEventListener(TimerEvent.TIMER, initGame);
+			loadingTimer.addEventListener(TimerEvent.TIMER, loadingMenu.endLoad);
        		loadingTimer.start();
 		}
 		
 		//When splash screen ends, set up the rest of the game.
-		public function initGame(event:TimerEvent):void
+		public function initGame():void
 		{					
+			trace("Success!");
+			startGameListener.removeEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
 			//remove the timer
-			loadingTimer.removeEventListener(TimerEvent.TIMER, initGame);
+			loadingTimer.removeEventListener(TimerEvent.TIMER, loadingMenu.endLoad);
       		loadingTimer = null;
+			
+			
 		
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 56, 765, 574);
@@ -124,12 +137,16 @@
 			/*TODO menu creation and addition to main menu should be put in functions*/
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 240, 120, 330);
-			var objectsMenu:ObjectsMenu = new ObjectsMenu(210, 105, 170, 465);					
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
+
+			importer = new HuntImporter();
 			
 			//load hunt information and listen for completion
 			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
 			importer.importHunt("scavenger hunt params.xml", paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, objectsMenu);
+			
+			
 			
 			//add menus to main menu
 			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
@@ -146,11 +163,12 @@
 		public function startGame():void
 		{			
 			//remove pre-game children from display list
-			removeChild(startUpScreen);
+			removeChild(loadingMenu);
+			addChild(introMenu);
+			introMenu.getScavengerHunt(this);
 						
 			//add in-game children to display list,
 			//ensuring that they are tightly packed on the bottom layers
-			var childIndex:int = 0;
 			addChildAt(paintingCanvas, childIndex++);
 			addChildAt(ooiManager, childIndex++);
 			addChildAt(mainMenu, childIndex++);
@@ -453,7 +471,7 @@
 		public function clearEvents():void 
 		{
 			ooiManager.clearEvents();
-			startUpScreen.clearEvents();
+			loadingMenu.clearEvents();
 			mainMenu.clearEvents();
 			magnifyingGlass.clearEvents();
 			for (var i:Number=0; i < myArrayListeners.length; i++) 

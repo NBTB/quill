@@ -227,6 +227,18 @@
 			menuBackground.graphics.endFill();
 		}
 		
+		public function changeBackground(xPos:int, yPos:int, widthVal:int, heightVal:int, newColor:uint = 0x010417):void
+		{
+			menuBackground = null;
+			this.x = xPos;
+			this.y = yPos;
+			menuBackground = new Shape();
+			menuBackground.graphics.lineStyle(1, 0x836A35);
+			menuBackground.graphics.beginFill(newColor);
+			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
+			menuBackground.graphics.endFill();
+		}
+		
 		//Create the button used to close the menu
 		public function createCloseButton(placementRect):void
 		{

@@ -88,6 +88,11 @@
 																							else
 																								dispatchEvent(new Event(INCORRECT));
 																						}
+																						if (ObjectOfInterest(e.target).getHasBeenOpened() == false)
+																						{
+																							ObjectOfInterest(e.target).hasOpened();
+																							objectsMenu.objectClicked(ObjectOfInterest(e.target));
+																						}
 																					});
 			
 			//listen for when the object of interest is double-clicked
@@ -95,11 +100,6 @@
 			newObject.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:MouseEvent):void
 																					{
 																						ObjectOfInterest(e.target).showInfoPane();
-																						if (ObjectOfInterest(e.target).getHasBeenOpened() == false)
-																						{
-																							ObjectOfInterest(e.target).hasOpened();
-																							objectsMenu.objectClicked(ObjectOfInterest(e.target));
-																						}
 																					});
 			
 			//listen for when an object's info pane is being opened
