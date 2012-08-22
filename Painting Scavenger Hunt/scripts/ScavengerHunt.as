@@ -30,10 +30,9 @@
 		private var loadingTimer:Timer = null;							//timer to set minimum load time and prevent the screen from just being a flash
 		private var menusDismissibleTimer:Timer = null;					//timer used to give buffer between opening a menu and being able to dismiss by clicking elsewhere
 		private var menusDismissible:Boolean = false;					//flag when menus can be dismissed by clicking outside of them (close button is not affected)
-		private var ending:Ending;										//the menu displayed when you win
-		
-		var cluesMenu:CluesMenu = new CluesMenu(0, 0, 765, 55);
-		var endGoalMenu:LetterMenu = new LetterMenu(765, 0, 500, 630);	
+		private var cluesMenu:CluesMenu = null;							//panel that contains clue
+		private var endGoalMenu:LetterMenu = null;						//panel that contains end goal pieces
+		private var ending:Ending = null;								//the menu displayed when you win
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -49,11 +48,12 @@
 		{
 			//find specification files before preparing game
 			importer = new HuntImporter();
-			importer.addEventListener(HuntImporter.SPEC_FILES_FOUND, function(e:Event):void
-																					  {
-																							startMenu();
-																					  });
-			importer.findSpecFiles("xml/importer.xml");
+			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void
+																								 {
+																									 startMenu();
+																								 });
+																										
+			importer.findSpecFilesAndAssetDirectories("xml/importer.xml");
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
@@ -95,6 +95,9 @@
 			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
 			notificationText = new TextField();
 			magnifyButton = new SimpleButton();
+			cluesMenu = new CluesMenu(0, 0, 765, 55);
+			endGoalMenu = new LetterMenu(765, 0, 500, 630);	
+			 
 			
 			//define normal notification text color
 			var normalRed:uint = 0x40;
@@ -137,9 +140,8 @@
 																							magnifyButton.height /= 5;
 																							magnifyButton.visible = true;
 																					   });
-			magnifyButtonLoader.loadBitmaps("assets/interface/magnify button up.png", "assets/interface/magnify button over.png", 
-											"assets/interface/magnify button down.png", "assets/interface/magnify button hittest.png");
-			
+			magnifyButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "magnify button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "magnify button over.png"), 
+											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
 			
 			//create menus to appear in main menu
 			var helpMenu:HelpMenu = new HelpMenu(5, 240, 120, 330);

@@ -85,7 +85,7 @@
 			if(child.name() == "info_text_file")
 			{
 				//import text file
-				textLoader.importText(child);
+				textLoader.importText(FileFinder.completePath(FileFinder.OOI_INFO, child));
 			}
 		}
 		

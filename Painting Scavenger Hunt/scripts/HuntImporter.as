@@ -20,7 +20,7 @@
 		var myArrayListeners:Array=[];					//Array of Event Listeners in BaseMenu
 	
         //event types
-		public static const SPEC_FILES_FOUND:String = "Specification files found";
+		public static const SPECS_AND_DIRECTORIES_FOUND:String = "Specification files found";
 		public static const START_UP_LOADED:String = "Start-up loaded";
 		public static const HUNT_LOADED:String = "Hunt loaded";
         public static const PAINTING_LOADED:String = "Painting loaded";
@@ -28,7 +28,7 @@
         public static const END_GOAL_LOADED:String = "End goal loaded";
 		
 		//find specification files for importation with the XML of the given file
-		public function findSpecFiles(specListFilename:String)
+		public function findSpecFilesAndAssetDirectories(specListFilename:String)
 		{
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
@@ -49,9 +49,27 @@
 																				ooiImportFile = specList.objects_of_interest;
 																			if(specList.hasOwnProperty("end_goal"))
 																				endGoalImportFile = specList.end_goal;
+																				
+																			//attempt to find asset directories
+																			FileFinder.init();
+																			if(specList.hasOwnProperty("Asset_Directories"))
+																			{
+																				var directoryList:XMLList = specList.Asset_Directories;
+																				if(directoryList.hasOwnProperty("game_interface"))
+																					FileFinder.setDirectory(FileFinder.INTERFACE, directoryList.game_interface);
+																				if(directoryList.hasOwnProperty("game_info"))
+																					FileFinder.setDirectory(FileFinder.GAME_INFO, directoryList.game_info);
+																				if(directoryList.hasOwnProperty("object_of_interest_images"))
+																					FileFinder.setDirectory(FileFinder.OOI_IMAGES, directoryList.object_of_interest_images);
+																				if(directoryList.hasOwnProperty("object_of_interest_info"))
+																					FileFinder.setDirectory(FileFinder.OOI_INFO, directoryList.object_of_interest_info);
+																				if(directoryList.hasOwnProperty("end_goal_images"))
+																					FileFinder.setDirectory(FileFinder.END_GOAL_IMAGES, directoryList.end_goal_images);		
+																			}
+																														   
 																																							
 																			//dispatch success
-																			dispatchEvent(new Event(SPEC_FILES_FOUND));
+																			dispatchEvent(new Event(SPECS_AND_DIRECTORIES_FOUND));
 																		});
 			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																			   {
@@ -207,14 +225,14 @@
 						
 			if(splashScreenInfo.hasOwnProperty("credits_text_file"))
 			{
-				creditsLoader.importText(splashScreenInfo.credits_text_file);
+				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, splashScreenInfo.credits_text_file));
 			}
 			
 			var aboutLoader:TextLoader = new TextLoader();
 			
 			if(splashScreenInfo.hasOwnProperty("about_text_file"))
 			{
-			   aboutLoader.importText(splashScreenInfo.about_text_file);
+			   aboutLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, splashScreenInfo.about_text_file));
 			
 			}
 			
@@ -294,7 +312,7 @@
 																												//display error in debug trace
 																												trace("Failed to load painting (interactive)");
 																										    });
-            ibitmapLoader.load(new URLRequest(painting.interactive_filename));
+            ibitmapLoader.load(new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, painting.interactive_filename)));
 			
 			//load non-interactive painting
             var nbitmapLoader:Loader = new Loader();
@@ -316,7 +334,7 @@
 																												//display error in debug trace
 																												trace("Failed to load painting (non-interactive)");
 																										    });
-            nbitmapLoader.load(new URLRequest(painting.non_interactive_filename));
+            nbitmapLoader.load(new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, painting.non_interactive_filename)));
         }
 		
 		//prepare to parse objects of interest and end goal pieces
@@ -396,10 +414,22 @@
                      
                     //if information for the object's info pane has been provided, create a loader
                     var ooiInfoLoader:OOIInfoImporter = null;
-                    if(ooi.hasOwnProperty("info"))                       ooiInfoLoader = new OOIInfoImporter(ooi.info);
+                    if(ooi.hasOwnProperty("info"))                       
+						ooiInfoLoader = new OOIInfoImporter(ooi.info);
                      
                     //create new object of interest
-                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, ooi.info_snippet, ooi.clue, ooi.hitmap_filename, ooi.highlight_filename, ooi.found_image_filename, ooiInfoLoader, canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, ooiScaleFactor, new Point(canvasRectangle.x, canvasRectangle.y), new Point(canvasRectangle.x + canvasRectangle.width, canvasRectangle.y + canvasRectangle.height));
+                    var newObject:ObjectOfInterest = new ObjectOfInterest(ooi.name, 
+																		  ooi.info_snippet, 
+																		  ooi.clue, 
+																		  FileFinder.completePath(FileFinder.OOI_IMAGES, ooi.hitmap_filename), 
+																		  FileFinder.completePath(FileFinder.OOI_IMAGES, ooi.highlight_filename), 
+																		  FileFinder.completePath(FileFinder.OOI_IMAGES, ooi.found_image_filename), 
+																		  ooiInfoLoader, 
+																		  canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, 
+																		  canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, 
+																		  ooiScaleFactor, 
+																		  new Point(canvasRectangle.x, canvasRectangle.y), 
+																		  new Point(canvasRectangle.x + canvasRectangle.width, canvasRectangle.y + canvasRectangle.height));
                      
                     //set the display position of the object of interest's info pane
                     var infoPaneX:Number = 0;
@@ -468,7 +498,7 @@
                     piecesParsed++;
   
                     //create new object of interest
-                    var newPiece:LetterPieces = new LetterPieces(piece.name, piece.filename, Number(piece.y));
+                    var newPiece:LetterPieces = new LetterPieces(piece.name, FileFinder.completePath(FileFinder.END_GOAL_IMAGES, piece.filename), Number(piece.y));
                        
                     //listen for the completion of the new object
                     newPiece.addEventListener(Event.COMPLETE, function(e:Event):void

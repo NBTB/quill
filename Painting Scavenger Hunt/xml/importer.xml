@@ -7,8 +7,8 @@
 	<objects_of_interest>xml/objects of interest.xml</objects_of_interest>
 	<end_goal>xml/end goal.xml</end_goal>
 	<Asset_Directories>
-		<interface>assets/interface/</interface>
-		<game_info>assets/game_info/</game_info>
+		<game_interface>assets/interface/</game_interface>
+		<game_info>assets/game info/</game_info>
 		<object_of_interest_images>assets/ooi images/</object_of_interest_images>
 		<object_of_interest_info>assets/ooi info/</object_of_interest_info>
 		<end_goal_images>assets/end goal images/</end_goal_images>
