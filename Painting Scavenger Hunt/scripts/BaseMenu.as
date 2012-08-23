@@ -20,6 +20,8 @@
 		protected var isOpen:Boolean = false;						//flag if menu is open		
 		protected var dragCap:Sprite = null;						//bar along the top of the menu that can be used for dragging
 		protected var dragged:Boolean = false;						//flag when menu is being dragged
+		protected var baseX:int;									//menu original x position
+		protected var baseY:int;									//menu original y position
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -41,6 +43,10 @@
 		//Sets up variables used by all the menus
 		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true, opacity:Number = DEFAULT_OPACITY):void
 		{			
+			//set original menu position
+			baseX = xPos;
+			baseY = yPos;
+		
 			//create previous button
 			previousPageButton = new TextField();
 			previousPageButton.defaultTextFormat = titleFormat;
@@ -70,6 +76,7 @@
 			//if draggable add a drag cap
 			if(draggable)
 			{
+				
 				//create drag cap
 				dragCap = new Sprite();
 				dragCap.graphics.lineStyle(1, 0x836A35);
@@ -212,6 +219,13 @@
 			addPage();
 		}
 		
+		//change the origin location for 
+		public function changeOrigin(xPos:int, yPos:int)
+		{
+			baseX = xPos;
+			baseY = yPos;
+		}
+		
 		//attempt to open this menu and return result
 		public function openMenu():Boolean
 		{
@@ -255,6 +269,12 @@
 				//if scroll bar exists, reset scroller position
 				if(scrollBar)
 					scrollBar.resetScroller();
+				
+				//set menu back to original position
+				if(this.x != baseX)
+					this.x = baseX;
+				if(this.y != baseY)
+					this.y = baseY;
 				
 				//announce being closed
 				dispatchEvent(new MenuEvent(this, MenuEvent.MENU_CLOSED));

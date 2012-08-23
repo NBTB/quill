@@ -569,6 +569,7 @@
 		}
 		public function setInfoPanePosition(coordinates:Point, childIndex:int = -1):void						
 		{	
+			this.infoPane.changeOrigin(coordinates.x, coordinates.y);
 			this.infoPane.x = coordinates.x;	
 			this.infoPane.y = coordinates.y;	
 		}
