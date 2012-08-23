@@ -33,7 +33,7 @@
 		public static var fromHelp:Boolean=false;
 
 		public function TutorialMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
-			super(xPos, yPos, widthVal, heightVal, false, false, false);
+			super(xPos, yPos, widthVal, heightVal, true/*false*/, false, false);
 
 			initText();
 			loadImages();

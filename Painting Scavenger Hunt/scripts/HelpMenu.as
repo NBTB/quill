@@ -115,6 +115,7 @@
         {			
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 2;
+			tut.updateText();
 			tut.openMenu();
         }
 		
@@ -123,6 +124,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 3;
+			tut.updateText();
 			tut.openMenu();
         }
 		
@@ -131,6 +133,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 4;
+			tut.updateText();
 			tut.openMenu();
         }
 		
@@ -139,6 +142,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 5;
+			tut.updateText();
 			tut.openMenu();
         }
          
