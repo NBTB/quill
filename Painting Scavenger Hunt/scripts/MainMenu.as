@@ -12,7 +12,8 @@
 		private var menus:Array = null;								//list of child menus
 		private var menuOpeners:Array = null;						//list of child menu opening textfield-buttons
 		private var menuTitles:Array = null;						//list of menu names
-		private var menuCapacity:Number = 0;						//number of menus to fit across bounds
+		private var menuCapacity:int = 0;							//number of menus to fit across bounds
+		private var menuCount:int = 0;								//total number of child menus
 		private var menuOpenerSize:Point = null;					//dimensions of child menu openers
 		private var menuContainer:DisplayObjectContainer = null;	//container of menu panes
 		
@@ -113,6 +114,7 @@
 			//listen for menu closing
 			menu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_CLOSED));	});
 			
+			menuCount++;
 			return true;
 		}
 		
@@ -156,6 +158,19 @@
 			else
 				return BaseMenu(menus[menuIndex]);
 		}
+		
+		//retrieve a child menu based at a given index
+		public function getMenuAtIndex(index:int):BaseMenu
+		{
+			//if the index is invalid match, return a failure
+			if(index < 0 || index >= menuCount)
+				return null;
+			//otherwise, return the corresponding menu
+			else
+				return BaseMenu(menus[index]);
+		}
+		
+		public function getMenuCount():int	{	return menuCount;	};
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 

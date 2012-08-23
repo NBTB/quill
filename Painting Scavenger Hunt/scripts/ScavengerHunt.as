@@ -187,12 +187,28 @@
 			addChildAt(endGoalMenu, childIndex++);	
 			addChildAt(cluesMenu, childIndex++);		
 			
-			//add listeners for when in-game children are clicked
+			//add click listeners to in-game children to dismiss other menus
 			addDismissibleOverlayCloser(paintingCanvas);
 			addDismissibleOverlayCloser(ooiManager);
 			addDismissibleOverlayCloser(mainMenu);
 			addDismissibleOverlayCloser(magnifyingGlass);
 			addDismissibleOverlayCloser(magnifyButton);
+			addDismissibleOverlayCloser(cluesMenu);
+			addDismissibleOverlayCloser(endGoalMenu);
+			
+			//add menu open listeners to pop-up menus that direct children to dismiss other menus
+			addDismissibleOverlayCloser(introMenu, MenuEvent.MENU_OPENED);
+			addDismissibleOverlayCloser(ending, MenuEvent.MENU_OPENED);
+			
+			//add menu open listeners to menus in main menu to dismiss other menus
+			var menuCount = mainMenu.getMenuCount();
+			for(var m:int = 0; m < menuCount; m++)
+				addDismissibleOverlayCloser(mainMenu.getMenuAtIndex(m), MenuEvent.MENU_OPENED);
+				
+			//add menu open listeners to object of interest info panes to dismiss other menus
+			var ooiCount = ooiManager.getTotalOOICount();
+			for(var o:int = 0; o < ooiCount; o++)
+				addDismissibleOverlayCloser(ooiManager.getOOIAtIndex(o).getInfoPane(), MenuEvent.MENU_OPENED);
 			
 			//open clues and end goal menus
 			cluesMenu.openMenu();
@@ -239,12 +255,12 @@
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
 			//listen for an object of interest's info pane to open and close
-			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
-			ooiManager.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
+			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu());	});
+			ooiManager.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu());	});
 			
 			//listen for a menu to open and close
-			mainMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
-			mainMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
+			mainMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu());	});
+			mainMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu());	});
 			
 			//listen for ending pane to open and close
 			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
@@ -329,10 +345,6 @@
 			var indexOfMenu = openedMenus.indexOf(targetMenu)
 			if(indexOfMenu >= 0)
 				openedMenus.push(targetMenu);			
-			
-			//do not allow menus to be dismissed for a short duration
-			menusDismissible = false;
-			menusDismissibleTimer.start();
 		}
 		
 		//handle the closing of a menu
@@ -487,6 +499,10 @@
 				
 				//close captions and descriptions of all objects of interest
 				ooiManager.hideAllOOIInfoPanes(caller);
+				
+				//do not allow menus to be dismissed for a short duration
+				menusDismissible = false;
+				menusDismissibleTimer.start();
 			}
 		}
 		
@@ -536,6 +552,10 @@
 			//enable target menu
 			targetMenu.mouseEnabled = true;
 			targetMenu.mouseChildren = true;
+			
+			//enable/disable dismissibility of menus
+			menusDismissibleTimer.reset();
+			menusDismissible = othersEnabled;
 		}
 		
 		private function allowEventsOutsideMenu(allowEvents:Boolean):void
