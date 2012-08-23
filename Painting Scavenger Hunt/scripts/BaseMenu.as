@@ -20,6 +20,8 @@
 		protected var isOpen:Boolean = false;						//flag if menu is open		
 		protected var dragCap:Sprite = null;						//bar along the top of the menu that can be used for dragging
 		protected var dragged:Boolean = false;						//flag when menu is being dragged
+		protected var baseX:int;									//menu original x position
+		protected var baseY:int;									//menu original y position
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -52,6 +54,10 @@
 			//position menu
 			this.x = xPos;
 			this.y = yPos;
+			
+			//set original menu position
+			baseX = xPos;
+			baseY = yPos;
 			
 			//store pane dimensions
 			paneDimensions = new Point(widthVal, heightVal);
@@ -89,7 +95,6 @@
 			if(!closeButtonLoader)
 			{
 				closeButtonLoader = new ButtonBitmapLoader();
-				//closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	trace("done");});//createCloseButton(closeButtonRect);	});
 				closeButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "close button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button over.png"), 
 											  FileFinder.completePath(FileFinder.INTERFACE, "close button down.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button hit.png"));
 			}
@@ -211,6 +216,13 @@
 			//create list of pages and add first page
 			pages = new Array();
 			addPage();
+		}
+		
+		//change the origin location for 
+		public function changeOrigin(xPos:int, yPos:int)
+		{
+			baseX = xPos;
+			baseY = yPos;
 		}
 		
 		//attempt to open this menu and return result
