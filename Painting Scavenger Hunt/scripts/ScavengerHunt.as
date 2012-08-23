@@ -225,20 +225,12 @@
 			//listen for the completion of the notification timer
 			notificationTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void	{	hideNotificationText();	});			
 			
-			//post directions to first clue
-			postNotification("Clues will appear above the painting.");
-			
 			//create menu dismissible timer
 			menusDismissibleTimer = new Timer(500);
 			menusDismissible = true;
 			
 			//listen for the completion of the menu dismissible timer
 			menusDismissibleTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void	{	menusDismissible = true;	});						
-			
-			//prepare new list of unused objects of interest and pick the first object
-			ooiManager.resetUnusedOOIList();
-			var firstClue:String = ooiManager.pickNextOOI();
-			cluesMenu.addClue(firstClue);
 			
 			//listen for correct answers to clues
 			ooiManager.addEventListener(OOIManager.CORRECT, handleCorrectAnswer);
@@ -255,28 +247,32 @@
 			mainMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
 			
 			//listen for ending pane to open and close
-			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
-																				{	
-																					menuOpened(e.getTargetMenu());	
-																					paintingCanvas.updatePaintingMode(PaintingCanvas.NON_INTERACTIVE);
-																					handleEnding();
-																				});
-			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
-																				{
-																					menuClosed(e.getTargetMenu());
-																					paintingCanvas.updatePaintingMode(PaintingCanvas.INTERACTIVE);
-																					handleEnding();
-																				});
+			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
+			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
+			
+			//listen for restart menu to open and close
+			var restartMenu:RestartMenu = RestartMenu(mainMenu.getMenu(restartMenuTitle));
+			restartMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
+			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			
 			//listen for the magnify button being clicked
-			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
-																					{	
-																						toggleZoom();
-																					});
+			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	toggleZoom();	});
 			
 			//listen for intro menu being opened and close						
-			introMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu())	});
-			introMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu())	});
+			introMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
+			introMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
+																				   {	
+																				   		//allow interaction beyond menu as it closes
+																				   		forceInteractionWithMenu(e.getTargetMenu());	
+																						
+																						//post directions to first clue
+																						//postNotification("Clues will appear above the painting.");
+																						
+																						//prepare new list of unused objects of interest and pick the first object
+																						ooiManager.resetUnusedOOIList();
+																						var firstClue:String = ooiManager.pickNextOOI();
+																						cluesMenu.addClue(firstClue);
+																				   });
 			
 			//open intro menu
 			addChild(introMenu);	
@@ -329,8 +325,10 @@
 			//disallow actions that depend on all menus being closed
 			allowEventsOutsideMenu(false);
 			
-			//track menu as opened
-			openedMenus.push(targetMenu);
+			//if the given menu is being not already being tracked as open, track it
+			var indexOfMenu = openedMenus.indexOf(targetMenu)
+			if(indexOfMenu >= 0)
+				openedMenus.push(targetMenu);			
 			
 			//do not allow menus to be dismissed for a short duration
 			menusDismissible = false;
@@ -340,7 +338,7 @@
 		//handle the closing of a menu
 		private function menuClosed(targetMenu:BaseMenu)
 		{
-			//if the given menu is being tracking as open, remove it from the list
+			//if the given menu is being tracked as open, remove it from the list
 			var indexOfMenu = openedMenus.indexOf(targetMenu)
 			if(indexOfMenu >= 0)
 				openedMenus.splice(indexOfMenu, 1);
@@ -505,11 +503,24 @@
 			EndGoalMenu(mainMenu.getMenu(endGoalMenuTitle)).openMenu();
 		}
 		
-		//enter a special state when the ending is open, leave it when closed
-		private function handleEnding()
+		//based on the given menu being open or closed, enter or exit restricted state where only that menu should be interactive
+		private function forceInteractionWithMenu(targetMenu)
 		{
 			//track ending's open status
-			var othersEnabled = !ending.isMenuOpen();
+			var othersEnabled = !targetMenu.isMenuOpen();
+			
+			//if menu is opened remove painting interactivity
+			if(!othersEnabled)
+			{
+				menuOpened(targetMenu);	
+				paintingCanvas.updatePaintingMode(PaintingCanvas.NON_INTERACTIVE);
+			}
+			//otherwise, restore painting interactivity
+			else
+			{
+				menuClosed(targetMenu);	
+				paintingCanvas.updatePaintingMode(PaintingCanvas.INTERACTIVE);
+			}
 			
 			//enable/disable interaction with other children
 			ooiManager.mouseEnabled = othersEnabled;
@@ -521,6 +532,10 @@
 			endGoalMenu.mouseEnabled = othersEnabled;
 			endGoalMenu.mouseChildren = othersEnabled;
 			magnifyButton.mouseEnabled = othersEnabled;
+			
+			//enable target menu
+			targetMenu.mouseEnabled = true;
+			targetMenu.mouseChildren = true;
 		}
 		
 		private function allowEventsOutsideMenu(allowEvents:Boolean):void

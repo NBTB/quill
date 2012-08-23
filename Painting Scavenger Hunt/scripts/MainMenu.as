@@ -124,23 +124,6 @@
 				menuContainer.addChild(BaseMenu(menus[i]));
 				BaseMenu(menus[i]).visible = false;
 			}
-			/*
-			//if the search is over, you find the hidden letter!
-			//the other pieces become invisible 
-			if(rewardCounter == 8 && letterMenu.pieces[7].visible == true)
-			{
-			
-				letterMenu.nextButton.visible = true;
-                letterMenu.pieces[0].visible = false; 
-				letterMenu.pieces[1].visible = false; 
-				letterMenu.pieces[2].visible = false; 
-				letterMenu.pieces[3].visible = false; 
-				letterMenu.pieces[4].visible = false; 
-				letterMenu.pieces[5].visible = false; 
-				letterMenu.pieces[6].visible = false; 			 
-				
-            
-			}*/
 		}
 		
 		//close all open menus (except those connected to the optional closeCaller), so there's no overlap when a new one is opened
