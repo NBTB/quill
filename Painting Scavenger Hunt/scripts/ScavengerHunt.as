@@ -522,6 +522,7 @@
 		//based on the given menu being open or closed, enter or exit restricted state where only that menu should be interactive
 		private function forceInteractionWithMenu(targetMenu)
 		{
+			trace("hi");
 			//track ending's open status
 			var othersEnabled = !targetMenu.isMenuOpen();
 			
