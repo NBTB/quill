@@ -523,6 +523,7 @@
 		private function forceInteractionWithMenu(targetMenu)
 		{
 			trace("hi");
+			trace("hola");
 			//track ending's open status
 			var othersEnabled = !targetMenu.isMenuOpen();
 			
