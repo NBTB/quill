@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
 	public class FileFinder
 	{

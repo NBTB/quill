@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts scripts
 {
 	import flash.display.MovieClip;
 	import flash.utils.Dictionary;
