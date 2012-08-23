@@ -150,7 +150,8 @@
         public function showControls(event:MouseEvent):void
         {
 			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 3;
+			TutorialMenu.curSlide = 6;
+			tut.updateText();
 			tut.openMenu();			
         }
 		

@@ -7,7 +7,7 @@
     import flash.events.MouseEvent;
     import flash.geom.ColorTransform;
   
-    class Ending extends BaseMenu
+    class Ending extends RestartMenu
     {
 		
 		var continueButton:TextField = new TextField();
@@ -21,16 +21,20 @@
         public function Ending(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //sends variables to create background to the base menu
-            super(xPos, yPos, widthVal, heightVal, false, false, false);
+            super(xPos, yPos, widthVal, heightVal);
 			
-			ending.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Would you like play again and discover new clues, or continue learning about the objects here?";
-			//startOverYes.text = "New Game"
-			continueButton.text = "Continue"
-			ending.setTextFormat(BaseMenu.bodyFormat);
-			//startOverYes.setTextFormat(textFormat);
-			//continueButton.setTextFormat(textFormat);
+			startOverQuestion.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Would you like play again and discover new clues, or continue learning about the objects here?";
+			startOverYes.text = "New Game"
+			startOverNo.text = "Continue"
+			startOverQuestion.setTextFormat(BaseMenu.bodyFormat);
+			startOverYes.setTextFormat(BaseMenu.textButtonFormat);
+			startOverNo.setTextFormat(BaseMenu.textButtonFormat);
 			
-			ending.autoSize = TextFieldAutoSize.LEFT;
+			/*TODO make this not a restart menu*/
+			
+			/*ending.autoSize = TextFieldAutoSize.LEFT;
+			ending.wordWrap = true;
+			ending widht = 
 			//startOverYes.autoSize = TextFieldAutoSize.LEFT;
 			continueButton.autoSize = TextFieldAutoSize.LEFT;
 			
@@ -40,7 +44,7 @@
 			
 			//add text and buttons
 			addContent(ending);
-			addContent(continueButton);
+			addContent(continueButton);*/
 		}
 		
 	}
