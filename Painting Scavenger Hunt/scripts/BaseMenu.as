@@ -95,7 +95,6 @@
 			if(!closeButtonLoader)
 			{
 				closeButtonLoader = new ButtonBitmapLoader();
-				//closeButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void	{	trace("done");});//createCloseButton(closeButtonRect);	});
 				closeButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "close button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button over.png"), 
 											  FileFinder.completePath(FileFinder.INTERFACE, "close button down.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button hit.png"));
 			}

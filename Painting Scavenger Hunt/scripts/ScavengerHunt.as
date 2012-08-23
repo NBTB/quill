@@ -150,7 +150,7 @@
 											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
 			
 			//create menus to appear in main menu
-			var helpMenu:HelpMenu = new HelpMenu(5, 240, 120, 330);
+			var helpMenu:HelpMenu = new HelpMenu(40, 240, 120, 330);
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
@@ -522,8 +522,6 @@
 		//based on the given menu being open or closed, enter or exit restricted state where only that menu should be interactive
 		private function forceInteractionWithMenu(targetMenu)
 		{
-			trace("hi");
-			trace("hola");
 			//track ending's open status
 			var othersEnabled = !targetMenu.isMenuOpen();
 			
