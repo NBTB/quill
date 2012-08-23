@@ -1,20 +1,18 @@
-﻿package
+﻿package scripts
 {
-    import flash.display.MovieClip;
-    import flash.text.TextField;
-    import flash.display.Shape;
-    import flash.text.TextFormat;
-    import flash.events.MouseEvent;
+    import flash.display.*;	
+    import flash.events.*;
+    import flash.text.*;
     import flash.geom.ColorTransform;
   
     class HelpMenu extends BaseMenu
     {
          
-        var objectiveOption:TextField = new TextField();	//Button to display the objectives        
-        var controlsOption:TextField = new TextField();		//Button to display the controls
-		var letterOption:TextField = new TextField();		//Button to display the controls
-		var objectsOption:TextField = new TextField();		//Button to display the controls
-		var cluesOption:TextField = new TextField();		//Button to display the controls
+        var objectiveOption:TextField = new TextField();	      
+        var controlsOption:TextField = new TextField();		
+		var endGoalOption:TextField = new TextField();		
+		var objectsOption:TextField = new TextField();	
+		var cluesOption:TextField = new TextField();
 		
 		var tut:TutorialMenu;
          
@@ -54,11 +52,11 @@
             addContentToTail(cluesOption);
 			
 			//set up letter button
-            letterOption.text = "Letter";
-            letterOption.x = startX;
-            letterOption.height = elementHeight;
-            letterOption.selectable = false;
-            addContentToTail(letterOption);
+            endGoalOption.text = "Letter";
+            endGoalOption.x = startX;
+            endGoalOption.height = elementHeight;
+            endGoalOption.selectable = false;
+            addContentToTail(endGoalOption);
 			
 			//set up options button
             objectsOption.text = "Objects";
@@ -74,15 +72,25 @@
             objectiveOption.setTextFormat(textFormat);
             objectsOption.setTextFormat(textFormat);
             controlsOption.setTextFormat(textFormat);
-			letterOption.setTextFormat(textFormat);
+			endGoalOption.setTextFormat(textFormat);
 			cluesOption.setTextFormat(textFormat);
+			
+			//listen for being added
+			addEventListener(Event.ADDED, function(e:Event):void
+														   {
+																tut = new TutorialMenu(0, 0, stage.stageWidth, stage.stageHeight);	
+																tut.removeChild(tut.proceedButton);
+																tut.updateText();
+																parent.addChild(tut);
+																tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+														   });
              
             //add event listeners to the buttons
             objectiveOption.addEventListener(MouseEvent.MOUSE_DOWN, showObjective);            
             controlsOption.addEventListener(MouseEvent.MOUSE_DOWN, showControls);
 			cluesOption.addEventListener(MouseEvent.MOUSE_DOWN, showClues);
 			objectsOption.addEventListener(MouseEvent.MOUSE_DOWN, showObjects);
-			letterOption.addEventListener(MouseEvent.MOUSE_DOWN, showLetter);
+			endGoalOption.addEventListener(MouseEvent.MOUSE_DOWN, showLetter);
              
             objectiveOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
             objectiveOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);
@@ -96,22 +104,18 @@
 			objectsOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
             objectsOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);	
 			
-			letterOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            letterOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);	
+			endGoalOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+            endGoalOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);	
 			
         }         
       
          
         //function called if the button to show the objective is pressed
         public function showObjective(event:MouseEvent):void
-        {
+        {			
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 2;
-			tut = new TutorialMenu(-5,-240, stage.stageWidth, stage.stageHeight);	
-			tut.removeChild(tut.proceedButton);
-			tut.updateText();
-			addChild(tut);
-			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+			tut.openMenu();
         }
 		
 		 //function called if the button to show the info regarding clues is pressed
@@ -119,11 +123,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 3;
-			tut = new TutorialMenu(-5,-240, stage.stageWidth, stage.stageHeight);	
-			tut.removeChild(tut.proceedButton);
-			tut.updateText();
-			addChild(tut);
-			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+			tut.openMenu();
         }
 		
 		 //function called if the button to show the info regarding objects is pressed
@@ -131,11 +131,7 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 4;
-			tut = new TutorialMenu(-5,-240, stage.stageWidth, stage.stageHeight);	
-			tut.removeChild(tut.proceedButton);
-			tut.updateText();
-			addChild(tut);
-			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+			tut.openMenu();
         }
 		
 		 //function called if the button to show the info regarding the letter is pressed
@@ -143,30 +139,22 @@
         {
 			TutorialMenu.fromHelp = true;
 			TutorialMenu.curSlide = 5;
-			tut = new TutorialMenu(-5,-240, stage.stageWidth, stage.stageHeight);	
-			tut.removeChild(tut.proceedButton);
-			tut.updateText();
-			addChild(tut);
-			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+			tut.openMenu();
         }
          
         //function called if the button to show the controls is pressed
         public function showControls(event:MouseEvent):void
         {
 			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 6;
-			tut = new TutorialMenu(-5,-240, stage.stageWidth, stage.stageHeight);
-			tut.removeChild(tut.proceedButton);			
-			tut.updateText();
-			addChild(tut);
-			tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
-			
+			TutorialMenu.curSlide = 3;
+			tut.openMenu();			
         }
 		
 		function closeTutFromHelp(event:MouseEvent):void
 		{
 			TutorialMenu.fromHelp = false;
-			removeChild(tut);
+			//removeChild(tut);
+			tut.closeMenu();
 		}
 	}
 }

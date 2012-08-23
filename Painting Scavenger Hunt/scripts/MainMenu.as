@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
 	import flash.display.*;
 	import flash.events.*;
@@ -20,9 +20,9 @@
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//text format of menu opening buttons
-		private static var menuOpenerTextFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5, 
+		/*private static var menuOpenerTextFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5, 
 																			null, null, null, null, null, 
-																			TextFormatAlign.CENTER);
+																			TextFormatAlign.CENTER);*/
 		
 		//event types 
 		public static const OPEN_MENU = "A menu has opened"			//dispatched when a child menu opens
@@ -81,7 +81,7 @@
 			
 			//create menu opener button using the menu's title
 			var menuOpener:TextField = new TextField();
-			menuOpener.defaultTextFormat = menuOpenerTextFormat;
+			menuOpener.defaultTextFormat = BaseMenu.textButtonFormat;
 			menuOpener.text = menuTitle;
 			menuOpener.selectable = false;
 			menuOpeners.push(menuOpener);			
@@ -91,6 +91,7 @@
 			menuOpener.y = 0;
 			menuOpener.width = menuOpenerSize.x;
 			menuOpener.height = menuOpenerSize.y;
+			menuOpener.autoSize = TextFieldAutoSize.CENTER;			
 			
 			//add menu opener to display list
 			addChild(menuOpener);			

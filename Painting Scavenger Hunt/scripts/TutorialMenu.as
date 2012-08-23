@@ -1,4 +1,4 @@
-﻿﻿package
+﻿﻿package scripts
 {
 	import flash.text.TextField;
 	import flash.net.URLLoader;
@@ -195,9 +195,5 @@
 			//reset the text format
 			controls.setTextFormat(tutText);
 		}		
-		
-		override public function createCloseButton(placementRect):void {
-			return;
-		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
 	import flash.display.MovieClip;
 	import flash.display.GradientType;

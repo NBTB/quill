@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
     import flash.net.URLLoader;
     import flash.net.URLRequest;
