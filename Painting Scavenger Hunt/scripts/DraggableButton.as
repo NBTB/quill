@@ -18,7 +18,7 @@
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 		}
 		
-		public function startDrag(lockCenter:Boolean = false, bounds:Rectangle = null):void
+		public function startDrag():void
 		{
 			drag = true;
 			fromMouse.x = x - parent.mouseX;

@@ -15,12 +15,11 @@
 	
 
 
-	public class TutorialMenu extends BaseMenu {
+	public class InstructionsMenu extends BaseMenu {
 
-		public var proceedButton:TextField = new TextField();		
 		var resumeButton:TextField = new TextField();
 		var controls:TextField = new TextField();
-		public static var curSlide:Number;
+		var curSlide:Number;
 		var theBackground:Shape = new Shape();
 		var tutText:TextFormat = new TextFormat();
 		var titleText:TextFormat = new TextFormat();
@@ -30,10 +29,9 @@
 		var clueLoader:Loader = new Loader();
 		var mouseLoader:Loader = new Loader();
 		var mouseOverLoader:Loader = new Loader();
-		public static var fromHelp:Boolean=false;
 
-		public function TutorialMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
-			super(xPos, yPos, widthVal, heightVal, true/*false*/, false, false);
+		public function InstructionsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
+			super(xPos, yPos, widthVal, heightVal, false, false, false);
 
 			initText();
 			loadImages();
@@ -48,22 +46,13 @@
 			
 			titleField.selectable=false;
 			addChild(controls);
-			addChild(proceedButton);
-						
-			if (! fromHelp) {
-				curSlide=1;
-				proceedButton.setTextFormat(buttonFormat);
-				proceedButton.selectable=false;
-				proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-				proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-				
-			} else {
-				resumeButton.setTextFormat(buttonFormat);
-				resumeButton.selectable=false;
-				addChild(resumeButton);
-				resumeButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-				resumeButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);				
-			}
+			addChild(resumeButton);
+			
+			curSlide=1;
+			resumeButton.setTextFormat(buttonFormat);
+			resumeButton.selectable=false;
+			resumeButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			resumeButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 
 		function loadImages() {
@@ -121,13 +110,7 @@
 			titleField.width=300;
 			titleField.text="Controls";
 
-			proceedButton.x=580;
-			proceedButton.y=550;
-			proceedButton.height=50;
-			proceedButton.width=275;
-			proceedButton.text="Proceed";
-			
-			resumeButton.x=570;
+			resumeButton.x=580;
 			resumeButton.y=550;
 			resumeButton.height=50;
 			resumeButton.width=275;

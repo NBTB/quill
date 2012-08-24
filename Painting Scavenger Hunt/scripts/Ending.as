@@ -1,50 +1,49 @@
 ﻿package scripts
 {
-    import flash.display.MovieClip;
-    import flash.text.TextField;
-    import flash.display.Shape;
+    import flash.display.*;
+	import flash.events.*;
     import flash.text.*;
-    import flash.events.MouseEvent;
-    import flash.geom.ColorTransform;
   
-    class Ending extends RestartMenu
+    class Ending extends BaseMenu
     {
 		
 		var continueButton:TextField = new TextField();
-		//var newGameButton:TextField = new TextField();
 		var ending:TextField = new TextField();		
-		
-		//var endText:TextFormat = new TextFormat();
-		//var buttonText:TextFormat = new TextFormat();
 		
 		 //Creates the ending menu
         public function Ending(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //sends variables to create background to the base menu
-            super(xPos, yPos, widthVal, heightVal);
+            super(xPos, yPos, widthVal, heightVal);			
 			
-			startOverQuestion.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Would you like play again and discover new clues, or continue learning about the objects here?";
-			startOverYes.text = "New Game"
-			startOverNo.text = "Continue"
-			startOverQuestion.setTextFormat(BaseMenu.bodyFormat);
-			startOverYes.setTextFormat(BaseMenu.textButtonFormat);
-			startOverNo.setTextFormat(BaseMenu.textButtonFormat);
-			
-			/*TODO make this not a restart menu*/
-			
-			/*ending.autoSize = TextFieldAutoSize.LEFT;
+			//create ending text
+			ending = new TextField();		
+			ending.defaultTextFormat = BaseMenu.bodyFormat;
+			ending.selectable = false;
+			ending.autoSize = TextFieldAutoSize.LEFT;
 			ending.wordWrap = true;
-			ending widht = 
-			//startOverYes.autoSize = TextFieldAutoSize.LEFT;
-			continueButton.autoSize = TextFieldAutoSize.LEFT;
-			
-			//startOverYes.y = startOverQuestion.y + startOverQuestion.height + 5;
-			continueButton.y = width / 2;
-			continueButton.y = ending.y + ending.height + 5;
-			
-			//add text and buttons
+			ending.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Although no clues remain, there is still plenty to discover and learn.";
+			ending.x = 10;
+			ending.y = ending.x;
+			ending.width = width - (ending.x * 2);			
 			addContent(ending);
-			addContent(continueButton);*/
+			
+			//create continue button
+			continueButton = new TextField();
+			continueButton.defaultTextFormat = BaseMenu.textButtonFormat;
+			continueButton.selectable = false;			
+			continueButton.autoSize = TextFieldAutoSize.LEFT;					
+			continueButton.text = "Continue";
+			continueButton.x = (width / 2) - (continueButton.width / 2);
+			continueButton.y = ending.y + ending.height + 5;			
+			addContent(continueButton);
+			
+			//listen for rolling over and off continue button
+			continueButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			continueButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			
+			//listen for the continue button to be clicked
+			continueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	closeMenu();	});				
 		}
 		
 	}

@@ -14,7 +14,7 @@
 		var objectsOption:TextField = new TextField();	
 		var cluesOption:TextField = new TextField();
 		
-		var tut:TutorialMenu;
+		var instructions:InstructionsMenu;
          
         var textFormat:TextFormat = new TextFormat();           //Formatting
          
@@ -78,11 +78,10 @@
 			//listen for being added
 			addEventListener(Event.ADDED, function(e:Event):void
 														   {
-																tut = new TutorialMenu(0, 0, stage.stageWidth, stage.stageHeight);	
-																tut.removeChild(tut.proceedButton);
-																tut.updateText();
-																parent.addChild(tut);
-																tut.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+																instructions = new InstructionsMenu(0, 0, stage.stageWidth, stage.stageHeight);	
+																instructions.updateText();
+																parent.addChild(instructions);
+																instructions.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
 														   });
              
             //add event listeners to the buttons
@@ -113,53 +112,47 @@
         //function called if the button to show the objective is pressed
         public function showObjective(event:MouseEvent):void
         {			
-			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 2;
-			tut.updateText();
-			tut.openMenu();
+			instructions.curSlide = 2;
+			instructions.updateText();
+			instructions.openMenu();
         }
 		
 		 //function called if the button to show the info regarding clues is pressed
         public function showClues(event:MouseEvent):void
         {
-			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 3;
-			tut.updateText();
-			tut.openMenu();
+			instructions.curSlide = 3;
+			instructions.updateText();
+			instructions.openMenu();
         }
 		
 		 //function called if the button to show the info regarding objects is pressed
         public function showObjects(event:MouseEvent):void
         {
-			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 4;
-			tut.updateText();
-			tut.openMenu();
+			instructions.curSlide = 4;
+			instructions.updateText();
+			instructions.openMenu();
         }
 		
 		 //function called if the button to show the info regarding the letter is pressed
         public function showLetter(event:MouseEvent):void
         {
-			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 5;
-			tut.updateText();
-			tut.openMenu();
+			instructions.curSlide = 5;
+			instructions.updateText();
+			instructions.openMenu();
         }
          
         //function called if the button to show the controls is pressed
         public function showControls(event:MouseEvent):void
         {
-			TutorialMenu.fromHelp = true;
-			TutorialMenu.curSlide = 6;
-			tut.updateText();
-			tut.openMenu();			
+			instructions.curSlide = 6;
+			instructions.updateText();
+			instructions.openMenu();			
         }
 		
 		function closeTutFromHelp(event:MouseEvent):void
 		{
-			TutorialMenu.fromHelp = false;
-			//removeChild(tut);
-			tut.closeMenu();
+			//removeChild(instructions);
+			instructions.closeMenu();
 		}
 	}
 }

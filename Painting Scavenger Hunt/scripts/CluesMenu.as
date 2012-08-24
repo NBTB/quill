@@ -18,8 +18,6 @@
 			
 			//create array to store old clues
             oldClues = new Array();     
-			
-			
         }
          
         //add a new clue and update the list of old clues
@@ -65,9 +63,9 @@
 			newClueTextField.selectable = false;
 			newClueTextField.wordWrap = true;
 			newClueTextField.x = 10;
-			newClueTextField.y = 10;
-			newClueTextField.width = width - 20;
+			newClueTextField.y = 10;			
 			newClueTextField.autoSize = TextFieldAutoSize.LEFT;
+			newClueTextField.width = width - 20;
 			
 			return newClueTextField;
 		}

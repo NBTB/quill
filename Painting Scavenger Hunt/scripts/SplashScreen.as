@@ -17,7 +17,7 @@
 	{
 		var theBackground:Shape = new Shape();
 		
-		var tut:TutorialMenu;
+		var tut:InstructionsMenu;
 		
 		var startGameListener:MenuListener;
 		var useTut:Boolean;
@@ -79,7 +79,7 @@
 			loadingText.selectable = false;
 						
 			//Event listeners for the different buttons in the project.
-			splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, startWithTut);
+			//splashButtonStart.addEventListener(MouseEvent.MOUSE_DOWN, startWithTut);
 			splashButtonAbout.addEventListener(MouseEvent.MOUSE_DOWN, aboutInfo);
 			splashButtonCredits.addEventListener(MouseEvent.MOUSE_DOWN, creditsInfo);
 			splashButtonTitle.addEventListener(MouseEvent.MOUSE_DOWN, mainSplash);
@@ -94,7 +94,7 @@
 			splashButtonTitle.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 		}
 		
-		function startWithTut(event:MouseEvent):void
+		/*function startWithTut(event:MouseEvent):void
 		{
 			//Function chosen if the user chooses to view the tutorial
 			useTut = true;
@@ -103,15 +103,15 @@
 			removeChild(splashButtonAbout);
 			removeChild(splashButtonCredits);
 			removeChild(splashButtonStart);									
-			tut = new TutorialMenu(0,0, stage.stageWidth, stage.stageHeight);
-			tut.proceedButton.y = buttonY3;
+			tut = new InstructionsMenu(0,0, stage.stageWidth, stage.stageHeight);
+			tut.resumeButton.y = buttonY;
 			addChild(tut);
 			tut.proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
-		}	
+		}	*/
 		
 		function proceedFromTut(event:MouseEvent):void
 		{			
-			tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
+			//tut.proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			removeChild(tut);
 			addChild(splashTitle);
 			addChild(loadingText);

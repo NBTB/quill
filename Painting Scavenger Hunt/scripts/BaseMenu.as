@@ -27,8 +27,8 @@
 		
 		public static var menuColor:uint = 0x010417;				//default color of menu background 		/*TODO should be read-in through XML*/
 		public static var menuBorderColor:uint = 0x836A35;			//default color of menu border 			/*TODO should be read-in through XML*/
-		public static var menuOpacity:Number = 0.9;				//default opacity of menu background 	/*TODO should be read-in through XML*/
-		public static var titleFormat:TextFormat = new TextFormat("Gabriola", 30, 0xCC9933);
+		public static var menuOpacity:Number = 0.85;				//default opacity of menu background 	/*TODO should be read-in through XML*/
+		public static var titleFormat:TextFormat = new TextFormat("Gabriola", 30, 0xEEBB55, true);
 		public static var bodyFormat:TextFormat = new TextFormat("Gabriola", 26, 0xCC9933);
 		public static var captionFormat:TextFormat = new TextFormat("Gabriola", 20, 0xCC9933, null, true);
 		public static var textButtonFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5);

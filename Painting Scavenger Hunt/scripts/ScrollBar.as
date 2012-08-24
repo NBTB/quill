@@ -109,7 +109,7 @@
 			//listen for scroller being pressed
 			scroller.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	
 																				   {	
-																				  	 scroller.startDrag(false, scrollerBounds);	
+																				  	 scroller.startDrag();	
 																					 scrollerDragged = true;
 																				   });
 			
