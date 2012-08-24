@@ -90,8 +90,12 @@
 																					{	
 																						if(currentOOI)
 																						{
-																							if(ObjectOfInterest(e.target).getID() == currentOOI.getID())
+																							var solvedOOI:ObjectOfInterest = ObjectOfInterest(e.target);
+																							if(solvedOOI.getID() == currentOOI.getID())
+																							{
+																								objectsMenu.objectSolved(solvedOOI);
 																								dispatchEvent(new Event(CORRECT));
+																							}
 																							else
 																							{
 																								//start a timer to ensure that the object is not being double clicked before dispatching incorrect answer event

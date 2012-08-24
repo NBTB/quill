@@ -26,8 +26,8 @@
              
             //set up start position and size of link textfields
             var startX = 20;
-            var startY = 20;
-            var elementHeight = 40;
+            var startY = 10;
+            var elementHeight = 35;
              
             //set up objective button
             objectiveOption.text = "Objective";
@@ -69,11 +69,11 @@
             textFormat.color = 0xE5E5E5;
             textFormat.font = "Gabriola";
             textFormat.size = 26;
-            objectiveOption.setTextFormat(textFormat);
-            objectsOption.setTextFormat(textFormat);
-            controlsOption.setTextFormat(textFormat);
-			endGoalOption.setTextFormat(textFormat);
-			cluesOption.setTextFormat(textFormat);
+            objectiveOption.setTextFormat(BaseMenu.linkUsableFormat);
+            objectsOption.setTextFormat(BaseMenu.linkUsableFormat);
+            controlsOption.setTextFormat(BaseMenu.linkUsableFormat);
+			endGoalOption.setTextFormat(BaseMenu.linkUsableFormat);
+			cluesOption.setTextFormat(BaseMenu.linkUsableFormat);
 			
 			//listen for being added
 			addEventListener(Event.ADDED, function(e:Event):void

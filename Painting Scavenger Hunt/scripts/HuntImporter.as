@@ -183,10 +183,10 @@
 		}
          
 		//parse XML specification of info about game
-		private function parseAbout(about:XML, startUpScreen:SplashScreen)
+		private function parseAbout(about:XML)
 		{			
-			if(about.hasOwnProperty("Splash_Screen"))
-				parseSplashScreen(about.Splash_Screen[0], startUpScreen);
+			//if(about.hasOwnProperty("Splash_Screen"))
+			//	parseSplashScreen(about.Splash_Screen[0], startUpScreen);
 		 }
 		 
         //parse XML specification of scavenger hunt parameters
@@ -219,7 +219,7 @@
         }
 		
 		//parse XML specification of splash screen
-		private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
+		/*private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
 		{
 			var creditsLoader:TextLoader = new TextLoader();
 						
@@ -245,7 +245,6 @@
 			
 			creditsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
 																							   {
-																									/*TODO take in section number*/
 																									//parse text file
 																									var newText:String = creditsLoader.parseText();
 																									
@@ -262,8 +261,7 @@
 																									}
 																							   });
 			aboutLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
-																							  {																								  
-																								/*TODO take in section number*/
+																							  {																								
 																								//parse text file
 																								var newText:String = aboutLoader.parseText();
 																								
@@ -280,7 +278,7 @@
 																								}
 																							  });
 		
-		}
+		}*/
          
         //parse XML specification of painting to be applied to canvas
         private function parsePainting(painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)

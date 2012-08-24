@@ -32,6 +32,9 @@
 		public static var bodyFormat:TextFormat = new TextFormat("Gabriola", 26, 0xCC9933);
 		public static var captionFormat:TextFormat = new TextFormat("Gabriola", 20, 0xCC9933, null, true);
 		public static var textButtonFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5);
+		public static var linkUsableFormat:TextFormat = new TextFormat("Gabriola", 20, 0xE5E5E5);
+		public static var linkUnusableFormat:TextFormat = new TextFormat("Gabriola", 20, 0xFE5E5A);
+		public static var linkAccentuatedFormat:TextFormat = new TextFormat("Gabriola", 20, 0xE5E5E5, true);
 		protected static var closeButtonLoader:ButtonBitmapLoader = null;
 		protected static var scrollBarStyle = null;		
 		

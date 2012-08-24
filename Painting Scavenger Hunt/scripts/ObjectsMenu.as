@@ -50,12 +50,13 @@
 			while(objCount < numObjects)
 			{
 				tempLink = new TextField;
+				tempLink.defaultTextFormat = BaseMenu.linkUnusableFormat;
 				tempLink.x = 20;
 				tempLink.height = 35;
 				tempLink.width = thisWidth - 40;
 				tempLink.text = ooiManager.objectsOfInterest[objCount].getObjectName();
 				tempLink.selectable = false;
-				tempLink.setTextFormat(linkFormat);
+				
 				linksArray.push(tempLink);
 				addContentToTail(tempLink);
 				objCount++;
@@ -65,39 +66,59 @@
 		//An object was clicked for the first time, update the next link to display the object's info.
 		public function objectClicked(ooi:ObjectOfInterest):void
 		{
-			linkFormat.color = 0xE5E5E5;
-			var tempObjName:String = linksArray[curLink].text;
-			linksArray[curLink].text = ooi.getObjectName();
-			linksArray[curLink].setTextFormat(linkFormat);
-			
-			if (tempObjName != ooi.getObjectName())
+			//if there are any more unusable links in the list, find the object's name in the list
+			if(curLink < linksArray.length)
 			{
-				for (var i:int = curLink + 1; i < linksArray.length; i++)
+				//store name of uppermost, not usable link
+				var tempObjName:String = linksArray[curLink].text;			
+				
+				//search list
+				var ooiName:String = ooi.getObjectName();
+				for (var i:int = curLink; i < linksArray.length; i++)
 				{
-					if (linksArray[i].text == ooi.getObjectName())
+					//if the object name is found, swap the link texts and make the object's new link appear usable
+					if (linksArray[i].text == ooiName)
 					{
+						
+						linksArray[curLink].text = ooiName;
 						linksArray[i].text = tempObjName;
-						linkFormat.color = 0xFE5E5A;
-						linksArray[i].setTextFormat(linkFormat);
+						linksArray[curLink].setTextFormat(BaseMenu.linkUsableFormat);
+						
+						//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
+						linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});
+						linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void	{	closeMenu();	});
+						linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void
+																										 {
+																											 colorChange(e);
+																											 ooi.showHighlight();
+																										 });
+						linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void
+																										 {
+																											 revertColor(e);
+																											 ooi.hideHighlight();
+																										 });
+						
+						curLink++;
 					}
 				}
 			}
+		}
+		
+		//find object of interest in list and make the name stand out in the list
+		public function objectSolved(ooi:ObjectOfInterest)
+		{
+			//ensure that the object has been moved to the top of the list
+			objectClicked(ooi);
 			
-			//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
-			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});
-			linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void	{	closeMenu();	});
-			linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void
-																							 {
-																								 colorChange(e);
-																								 ooi.showHighlight();
-																							 });
-			linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void
-																							 {
-																								 revertColor(e);
-																								 ooi.hideHighlight();
-																							 });
-			
-			curLink++;
+			//accentuate the object's link in the list
+			var ooiName:String = ooi.getObjectName();
+			for(var i:int = 0; i < curLink; i++)
+			{
+				if(linksArray[i].text == ooiName)
+				{
+					linksArray[i].setTextFormat(BaseMenu.linkAccentuatedFormat);
+				}
+			}
 		}
 		
 		//handle the event of a object of interest link being clicked
