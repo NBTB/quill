@@ -44,8 +44,6 @@
 			
 			//listen for the continue button to be clicked
 			continueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	closeMenu();	});				
-		}
-		
+		}		
 	}
-	
 }

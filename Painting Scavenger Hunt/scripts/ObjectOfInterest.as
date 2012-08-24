@@ -562,8 +562,9 @@
 		}
 		public function setInfoPanePosition(coordinates:Point, childIndex:int = -1):void						
 		{	
-			this.infoPane.x = coordinates.x;	
-			this.infoPane.y = coordinates.y;	
+			infoPane.x = coordinates.x;	
+			infoPane.y = coordinates.y;	
+			infoPane.changeOrigin(coordinates.x, coordinates.y)
 		}
 		
 		public function setHitTestSuppression(suppression:Boolean):void	{	this.hitTestSuppression = suppression	}

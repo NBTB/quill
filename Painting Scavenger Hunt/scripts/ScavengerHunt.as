@@ -148,7 +148,7 @@
 											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
 			
 			//create menus to appear in main menu
-			var helpMenu:HelpMenu = new HelpMenu(40, 310, 120, 260);
+			var helpMenu:HelpMenu = new HelpMenu(40, 230, 120, 340);
 			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);					
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
@@ -223,7 +223,7 @@
 			objectsMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
 																							 {
 																								//if events that depend on all other menus being closed are allowed, open
-																								if(!pauseEvents)
+																								if(!pauseEvents && !zoomed)
 																									objectsMenu.openMenu();																								
 																							 });
 			

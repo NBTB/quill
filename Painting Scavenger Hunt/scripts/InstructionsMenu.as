@@ -22,6 +22,8 @@
 		var clueLoader:Loader = new Loader();
 		var mouseLoader:Loader = new Loader();
 		var mouseOverLoader:Loader = new Loader();
+		public static var about:String = null;
+		public static var credits:String = null;
 
 		public function InstructionsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
@@ -112,7 +114,6 @@
 			instructions.width=width - (instructions.x * 2);
 			instructions.autoSize = TextFieldAutoSize.LEFT;
 			instructions.wordWrap=true;
-			
 		}
 
 
@@ -168,8 +169,17 @@
 				instructions.text="Single Left Click: Select\nDouble Left Click (painting only): Open Object Info Panel\nSpace: Toggle Magnifying glass";
 			}
 			
-			//keep title centered
-			//titleField.align = TextFieldAutoSize.CENTER;
+			//help menu:about
+			if (curSlide==7) {
+				titleField.text="About the Night Before the Battle Puzzle";
+				instructions.text = about;
+			}
+			
+			//help menu:credits
+			if (curSlide==8) {
+				titleField.text="Credits";
+				instructions.text = credits;
+			}
 		}		
 	}
 }
