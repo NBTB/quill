@@ -14,7 +14,7 @@
         public function Ending(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //sends variables to create background to the base menu
-            super(xPos, yPos, widthVal, heightVal);			
+            super(xPos, yPos, widthVal, heightVal, false, false, false);			
 			
 			//create ending text
 			ending = new TextField();		
