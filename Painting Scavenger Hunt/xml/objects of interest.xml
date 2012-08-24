@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OOIs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Object_Of_Interest>
-		<name>Quill &amp; Parchment</name>
+		<name>Quill &amp; Paper</name>
 		<info_snippet>Commonly used in writing</info_snippet>
 		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 		<info>
@@ -76,7 +76,7 @@
 		<found_image_filename>musket saturated.png</found_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
-		<name>Silhouette</name>
+		<name>Sentry</name>
 		<info_snippet>Visage of a man on watch</info_snippet>
 		<clue>You have stripped me of my color, but I still look like you...</clue>
 		<info>

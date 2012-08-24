@@ -121,7 +121,7 @@
 			}
 		}
 		
-		//handle the event of a object of interest link being clicked
+		//handle the event of an object of interest link being clicked
 		private function objectLinkClicked(ooi:ObjectOfInterest):void
 		{
 			ooi.getInfoPane().addEventListener(MenuEvent.MENU_CLOSED, paneFromLinkClosed);
@@ -129,6 +129,7 @@
 			ooi.showHighlight();
 		}
 		
+		//handle event of object of interest info pane being closed 
 		private function paneFromLinkClosed(e:Event):void
 		{
 			e.target.removeEventListener(MenuEvent.MENU_CLOSED, paneFromLinkClosed);

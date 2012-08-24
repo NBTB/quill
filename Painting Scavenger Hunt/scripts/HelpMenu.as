@@ -78,10 +78,11 @@
 			//listen for being added
 			addEventListener(Event.ADDED, function(e:Event):void
 														   {
-																instructions = new InstructionsMenu(0, 0, stage.stageWidth, stage.stageHeight);	
+																instructions = new InstructionsMenu(30, 75, 700, 480);//0, 0, stage.stageWidth, stage.stageHeight);	
 																instructions.updateText();
 																parent.addChild(instructions);
 																instructions.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+																instructions.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	helpLinkClicked();	});   
 														   });
              
             //add event listeners to the buttons
@@ -153,6 +154,21 @@
 		{
 			//removeChild(instructions);
 			instructions.closeMenu();
+		}
+		
+			//handle the event of a help link being clicked
+		private function helpLinkClicked():void
+		{
+			closeMenu();
+			instructions.addEventListener(MenuEvent.MENU_CLOSED, paneFromLinkClosed);
+		}
+		
+		//handle event of instructions menu being closed
+		private function paneFromLinkClosed(e:Event):void
+		{
+			e.target.removeEventListener(MenuEvent.MENU_CLOSED, paneFromLinkClosed);
+			
+			dispatchEvent(new MenuEvent(this, MenuEvent.SPECIAL_OPEN_REQUEST));
 		}
 	}
 }

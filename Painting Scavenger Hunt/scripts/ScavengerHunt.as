@@ -92,9 +92,7 @@
 			//remove the timer
 			loadingTimer.removeEventListener(TimerEvent.TIMER, loadingMenu.endLoad);
       		loadingTimer = null;
-			
-			
-		
+					
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 56, 765, 574);
 			ooiManager = new OOIManager(this, this);
@@ -227,6 +225,15 @@
 																								//if events that depend on all other menus being closed are allowed, open
 																								if(!pauseEvents)
 																									objectsMenu.openMenu();																								
+																							 });
+			
+			//listen for a request to open help menu after instructions closure
+			var helpMenu:HelpMenu = HelpMenu(mainMenu.getMenu(helpMenuTitle));
+			helpMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
+																							 {
+																								//if events that depend on all other menus being closed are allowed, open
+																								if(!pauseEvents)
+																									helpMenu.openMenu();																								
 																							 });
 
 			//create list of opened menus
