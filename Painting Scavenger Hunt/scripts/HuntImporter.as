@@ -108,7 +108,7 @@
 			var aboutXMLLoader:URLLoader = new URLLoader();
             aboutXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																			 {
-																				//parseAbout(new XML(e.target.data), startUpScreen);
+																				parseAbout(new XML(e.target.data));
 																				aboutLoaded = true;
 																				if(menuParamsLoaded && aboutLoaded)
 																					dispatchEvent(new Event(START_UP_LOADED));
@@ -185,9 +185,9 @@
 		//parse XML specification of info about game
 		private function parseAbout(about:XML)
 		{			
-			//if(about.hasOwnProperty("Splash_Screen"))
-			//	parseSplashScreen(about.Splash_Screen[0], startUpScreen);
-		 }
+			if(about.hasOwnProperty("Splash_Screen"))
+				parseSplashScreen(about.Splash_Screen[0]);
+		}
 		 
         //parse XML specification of scavenger hunt parameters
         private function parseHunt(hunt:XML, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
@@ -219,12 +219,15 @@
         }
 		
 		//parse XML specification of splash screen
-		/*private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
+
+		private function parseSplashScreen(splashScreenInfo:XML)
 		{
+			
 			var creditsLoader:TextLoader = new TextLoader();
 						
 			if(splashScreenInfo.hasOwnProperty("credits_text_file"))
 			{
+				
 				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, splashScreenInfo.credits_text_file));
 			}
 			
@@ -248,15 +251,12 @@
 																									//parse text file
 																									var newText:String = creditsLoader.parseText();
 																									
-																									//trace (splashLoader.returnFile());
-																									//trace (newText);
-																									
 																									//if text was found, add a textfield to the object's info pane
 																									if(newText)
 																									{
 																										if(splashScreenInfo.credits_text_file)
 																										{
-																											startUpScreen.getCreditsText(newText);
+																											InstructionsMenu.credits = newText;
 																										}
 																									}
 																							   });
@@ -265,20 +265,17 @@
 																								//parse text file
 																								var newText:String = aboutLoader.parseText();
 																								
-																								//trace (splashLoader.returnFile());
-																								//trace (newText);
-																								
 																								//if text was found, add a textfield to the object's info pane
 																								if(newText)
 																								{
 																									if(splashScreenInfo.about_text_file)
 																									{
-																										startUpScreen.getAboutText(newText);
+																										InstructionsMenu.about = newText;
 																									}
 																								}
 																							  });
 		
-		}*/
+		}
          
         //parse XML specification of painting to be applied to canvas
         private function parsePainting(painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)

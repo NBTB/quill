@@ -22,6 +22,8 @@
 		var clueLoader:Loader = new Loader();
 		var mouseLoader:Loader = new Loader();
 		var mouseOverLoader:Loader = new Loader();
+		public static var about:String = null;
+		public static var credits:String = null;
 
 		public function InstructionsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
@@ -113,6 +115,19 @@
 			instructions.autoSize = TextFieldAutoSize.LEFT;
 			instructions.wordWrap=true;
 			
+			/*aboutTextCredits.x = 0;
+			aboutTextCredits.y = 0;
+			aboutTextCredits.width = 525;
+			aboutTextCredits.height = 800;
+			aboutTextCredits.wordWrap = true;
+			aboutTextCredits.setTextFormat(BaseMenu.bodyFormat);
+			
+			aboutTextBackground.x = 10;
+			aboutTextBackground.y = 50;
+			aboutTextBackground.width = 600;
+			aboutTextBackground.height = 800;
+			aboutTextBackground.wordWrap = true;
+			aboutTextBackground.setTextFormat(BaseMenu.bodyFormat);*/
 		}
 
 
@@ -168,8 +183,17 @@
 				instructions.text="Single Left Click: Select\nDouble Left Click (painting only): Open Object Info Panel\nSpace: Toggle Magnifying glass";
 			}
 			
-			//keep title centered
-			//titleField.align = TextFieldAutoSize.CENTER;
+			//help menu:about
+			if (curSlide==7) {
+				titleField.text="About the Night Before the Battle Puzzle";
+				instructions.text = about;
+			}
+			
+			//help menu:credits
+			if (curSlide==8) {
+				titleField.text="Credits";
+				instructions.text = credits;
+			}
 		}		
 	}
 }
