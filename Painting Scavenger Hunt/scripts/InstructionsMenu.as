@@ -139,44 +139,44 @@
 				instructions.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt!  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas.  Hit 'Space' or the little icon in the bottom corner of your screen to toggle the magnifying glass to help you see things more clearly";
 			}
 			//help menu:Objective
-			if (curSlide==2) {
+			else if (curSlide==2) {
 				titleField.text = "Objective";
 				instructions.text="The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use the spacebar or the little icon in the right corner of the menu bar to toggle the magnifying glass and see things more clearly.";
 				//addChild(magLoader);
 			}
 			//help menu:Clues
-			if (curSlide==3) {
+			else if (curSlide==3) {
 				titleField.text = "Clues";
 				instructions.text="At the top of the screen is your clue bar.  This riddle points to a certain object on the screen.  Correctly solving the riddle will unlock the next clue to be displayed here.";
 				addChild(clueLoader);
 			}	
 			//help menu:Objects
-			if(curSlide==4) {
+			else if(curSlide==4) {
 				titleField.text = "Objects";
 				instructions.text = "Many objects important to the painting are scattered acrossed the canvas.  You will know when you've found one because the object will become highlighted. Double Clicking on an object will open a description panel about the object, providing some background on the objects history and its relevance in the painting. It will then be sent to the objects menu where you can review this and other objects you have discovered";
 				addChild(mouseLoader);
 				addChild(mouseOverLoader);
 			}
 			//help menu:Letter
-			if (curSlide==5) {
+			else if (curSlide==5) {
 				titleField.text = "Letter";
 				instructions.text="As you progress, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  The panel to the right of the main screen shows you your progress. As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole.";
 				
 			}
 			//help menu:Controls
-			if (curSlide==6) {
+			else if (curSlide==6) {
 				titleField.text = "Controls";
 				instructions.text="Single Left Click: Select\nDouble Left Click (painting only): Open Object Info Panel\nSpace: Toggle Magnifying glass";
 			}
 			
 			//help menu:about
-			if (curSlide==7) {
+			else if (curSlide==7) {
 				titleField.text="About the Night Before the Battle Puzzle";
 				instructions.text = about;
 			}
 			
 			//help menu:credits
-			if (curSlide==8) {
+			else if (curSlide==8) {
 				titleField.text="Credits";
 				instructions.text = credits;
 			}
