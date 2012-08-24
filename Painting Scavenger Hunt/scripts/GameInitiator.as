@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
 	import flash.display.MovieClip;
 	import flash.utils.Dictionary;
@@ -21,7 +21,7 @@
 		//Function to load the game
 		public function GameInitiator():void
 		{			
-			trace("Initial Load");
+			//trace("Initial Load");
 			
 			//set the domain, so they can refer to each other
 			context.applicationDomain = ApplicationDomain.currentDomain;

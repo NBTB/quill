@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
 	import flash.display.*;
 	import flash.events.*;
@@ -10,6 +10,7 @@
 		public var objectsOfInterest:Array = null;				//array of objects of interest
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
 		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted				
+		private var totalOOICount:int = 0;						//total number of objects of interest stored
 		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
@@ -58,6 +59,7 @@
 			var childIndex = objectsOfInterest.length - 1;
 			
 			//add new object as a display list child
+			totalOOICount++;
 			addChildAt(newObject, childIndex);
 			
 			//instruct the new object to display its caption and info pane in the specified containers
@@ -124,7 +126,6 @@
 			
 			//listen for when an object's info pane is being closed
 			infoPane.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_CLOSED));	});
-			
 		}
 
 		private function addedToStage(e:Event)
@@ -236,8 +237,18 @@
 					objectsOfInterest[i].addFoundImageToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}		
 		
+		public function getOOIAtIndex(index:int):ObjectOfInterest
+		{
+			//if the index is invalid match, return a failure
+			if(index < 0 || index >= totalOOICount)
+				return null;
+			//otherwise, return the corresponding menu
+			else
+				return ObjectOfInterest(objectsOfInterest[index]);
+		}
 		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
-		public function getCurrentClue():String					{	return currentOOI.getClue();		}
+		public function getCurrentClue():String					{	return currentOOI.getClue();		}		
+		public function getTotalOOICount():int					{	return totalOOICount;				}
 		public function getUsableOOICount():int					{	return usableOOICount;				}
 		
 		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}

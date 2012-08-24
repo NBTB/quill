@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
 	import flash.display.*;
 	import flash.events.*;
@@ -12,16 +12,17 @@
 		private var menus:Array = null;								//list of child menus
 		private var menuOpeners:Array = null;						//list of child menu opening textfield-buttons
 		private var menuTitles:Array = null;						//list of menu names
-		private var menuCapacity:Number = 0;						//number of menus to fit across bounds
+		private var menuCapacity:int = 0;							//number of menus to fit across bounds
+		private var menuCount:int = 0;								//total number of child menus
 		private var menuOpenerSize:Point = null;					//dimensions of child menu openers
 		private var menuContainer:DisplayObjectContainer = null;	//container of menu panes
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
 		//text format of menu opening buttons
-		private static var menuOpenerTextFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5, 
+		/*private static var menuOpenerTextFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5, 
 																			null, null, null, null, null, 
-																			TextFormatAlign.CENTER);
+																			TextFormatAlign.CENTER);*/
 		
 		//event types 
 		public static const OPEN_MENU = "A menu has opened"			//dispatched when a child menu opens
@@ -80,7 +81,7 @@
 			
 			//create menu opener button using the menu's title
 			var menuOpener:TextField = new TextField();
-			menuOpener.defaultTextFormat = menuOpenerTextFormat;
+			menuOpener.defaultTextFormat = BaseMenu.textButtonFormat;
 			menuOpener.text = menuTitle;
 			menuOpener.selectable = false;
 			menuOpeners.push(menuOpener);			
@@ -90,6 +91,7 @@
 			menuOpener.y = 0;
 			menuOpener.width = menuOpenerSize.x;
 			menuOpener.height = menuOpenerSize.y;
+			menuOpener.autoSize = TextFieldAutoSize.CENTER;			
 			
 			//add menu opener to display list
 			addChild(menuOpener);			
@@ -113,6 +115,7 @@
 			//listen for menu closing
 			menu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_CLOSED));	});
 			
+			menuCount++;
 			return true;
 		}
 		
@@ -124,23 +127,6 @@
 				menuContainer.addChild(BaseMenu(menus[i]));
 				BaseMenu(menus[i]).visible = false;
 			}
-			/*
-			//if the search is over, you find the hidden letter!
-			//the other pieces become invisible 
-			if(rewardCounter == 8 && letterMenu.pieces[7].visible == true)
-			{
-			
-				letterMenu.nextButton.visible = true;
-                letterMenu.pieces[0].visible = false; 
-				letterMenu.pieces[1].visible = false; 
-				letterMenu.pieces[2].visible = false; 
-				letterMenu.pieces[3].visible = false; 
-				letterMenu.pieces[4].visible = false; 
-				letterMenu.pieces[5].visible = false; 
-				letterMenu.pieces[6].visible = false; 			 
-				
-            
-			}*/
 		}
 		
 		//close all open menus (except those connected to the optional closeCaller), so there's no overlap when a new one is opened
@@ -173,6 +159,19 @@
 			else
 				return BaseMenu(menus[menuIndex]);
 		}
+		
+		//retrieve a child menu based at a given index
+		public function getMenuAtIndex(index:int):BaseMenu
+		{
+			//if the index is invalid match, return a failure
+			if(index < 0 || index >= menuCount)
+				return null;
+			//otherwise, return the corresponding menu
+			else
+				return BaseMenu(menus[index]);
+		}
+		
+		public function getMenuCount():int	{	return menuCount;	};
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 

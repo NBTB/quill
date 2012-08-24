@@ -1,23 +1,16 @@
-﻿package
+﻿package scripts
 {
-	import flash.display.MovieClip;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
-	import flash.display.Shape;
-	import flash.events.MouseEvent;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.text.*;
 	import flash.geom.ColorTransform;
-	import flash.display.Loader;
 	import flash.net.URLRequest;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	
 	class RestartMenu extends BaseMenu
 	{		
 		var startOverQuestion:TextField = new TextField();		//Question asking if the user wants to start over
 		var startOverYes:TextField = new TextField();			//yes button
 		var startOverNo:TextField = new TextField();			//no button
-		
-		var textFormat:TextFormat = new TextFormat();			//Formatting
 		
 		//Creates the restart menu
 		public function RestartMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -33,31 +26,29 @@
 			startOverQuestion.width = widthVal-30;
 			startOverQuestion.selectable = false;
 			
-			textFormat.color = 0xCC9933;
+			/*textFormat.color = 0xCC9933;
 			textFormat.font = "Gabriola";
-			textFormat.size = 26;
-			startOverQuestion.setTextFormat(textFormat);
+			textFormat.size = 26;*/
+			startOverQuestion.setTextFormat(BaseMenu.bodyFormat);
 			
 			//Sets up the yes and no buttons
 			startOverYes.text = "Restart";
 			startOverYes.x = 80;
 			startOverYes.y = 130;
-			startOverYes.width = 60;
-			startOverYes.height = 50;
+			startOverYes.autoSize = TextFieldAutoSize.LEFT;
 			startOverYes.selectable = false;
 			
 			startOverNo.text = "Cancel";
 			startOverNo.x = 240;
 			startOverNo.y = 130;
-			startOverNo.width = 60;
-			startOverNo.height = 50;
+			startOverYes.autoSize = TextFieldAutoSize.LEFT;
 			startOverNo.selectable = false;
 			
-			textFormat.color = 0xE5E5E5;
+			/*textFormat.color = 0xE5E5E5;
 			textFormat.font = "Gabriola";
-			textFormat.size = 26;
-			startOverYes.setTextFormat(textFormat);
-			startOverNo.setTextFormat(textFormat);
+			textFormat.size = 26;*/
+			startOverYes.setTextFormat(BaseMenu.textButtonFormat);
+			startOverNo.setTextFormat(BaseMenu.textButtonFormat);
 			
 			//Adds all three
 			addChild(startOverQuestion);

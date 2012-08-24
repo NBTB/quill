@@ -1,4 +1,4 @@
-﻿﻿package
+﻿﻿package scripts
 {
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -46,21 +46,12 @@
 			//titleField.selectable=false;
 			addChild(controls);
 			addChild(proceedButton);
-						
-			if (! fromHelp) {
-				curSlide=1;
-				proceedButton.setTextFormat(buttonFormat);
-				proceedButton.selectable=false;
-				proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-				proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-				
-			} else {
-				resumeButton.setTextFormat(buttonFormat);
-				resumeButton.selectable=false;
-				addChild(resumeButton);
-				resumeButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-				resumeButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);				
-			}
+			
+			curSlide=1;
+			proceedButton.setTextFormat(buttonFormat);
+			proceedButton.selectable=false;
+			proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
+			proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			
 			proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 		}

@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
     import flash.net.URLLoader;
     import flash.net.URLRequest;
@@ -108,7 +108,7 @@
 			var aboutXMLLoader:URLLoader = new URLLoader();
             aboutXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																			 {
-																				//parseAbout(new XML(e.target.data), startUpScreen);
+																				parseAbout(new XML(e.target.data));
 																				aboutLoaded = true;
 																				if(menuParamsLoaded && aboutLoaded)
 																					dispatchEvent(new Event(START_UP_LOADED));
@@ -183,10 +183,10 @@
 		}
          
 		//parse XML specification of info about game
-		private function parseAbout(about:XML, startUpScreen:SplashScreen)
+		private function parseAbout(about:XML)
 		{			
 			if(about.hasOwnProperty("Splash_Screen"))
-				parseSplashScreen(about.Splash_Screen[0], startUpScreen);
+				parseSplashScreen(about.Splash_Screen[0]);
 		 }
 		 
         //parse XML specification of scavenger hunt parameters
@@ -219,12 +219,14 @@
         }
 		
 		//parse XML specification of splash screen
-		private function parseSplashScreen(splashScreenInfo:XML, startUpScreen:SplashScreen)
+		private function parseSplashScreen(splashScreenInfo:XML)
 		{
+			
 			var creditsLoader:TextLoader = new TextLoader();
 						
 			if(splashScreenInfo.hasOwnProperty("credits_text_file"))
 			{
+				
 				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, splashScreenInfo.credits_text_file));
 			}
 			
@@ -257,7 +259,7 @@
 																									{
 																										if(splashScreenInfo.credits_text_file)
 																										{
-																											startUpScreen.getCreditsText(newText);
+																											TutorialMenu.getAbout(newText, 1);
 																										}
 																									}
 																							   });
@@ -275,7 +277,7 @@
 																								{
 																									if(splashScreenInfo.about_text_file)
 																									{
-																										startUpScreen.getAboutText(newText);
+																										TutorialMenu.getAbout(newText, 2);
 																									}
 																								}
 																							  });

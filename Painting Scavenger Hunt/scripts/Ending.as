@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
     import flash.display.MovieClip;
     import flash.text.TextField;
@@ -7,94 +7,41 @@
     import flash.events.MouseEvent;
     import flash.geom.ColorTransform;
   
-    class Ending extends RestartMenu
+    class Ending extends BaseMenu
     {
 		
-		/*var returnButton:TextField = new TextField();
-		var newGameButton:TextField = new TextField();
+		var continueButton:TextField = new TextField();
+		//var newGameButton:TextField = new TextField();
 		var ending:TextField = new TextField();		
 		
-		var endText:TextFormat = new TextFormat();
-		var buttonText:TextFormat = new TextFormat();*/
+		//var endText:TextFormat = new TextFormat();
+		//var buttonText:TextFormat = new TextFormat();
 		
 		 //Creates the ending menu
         public function Ending(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //sends variables to create background to the base menu
-            super(xPos, yPos, widthVal, heightVal);
+            super(xPos, yPos, widthVal, heightVal, false, false, false);
 			
-			startOverQuestion.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Would you like play again and discover new clues, or continue learning about the objects here?";
-			startOverYes.text = "New Game"
-			startOverNo.text = "Continue"
-			startOverQuestion.setTextFormat(textFormat);
-			startOverYes.setTextFormat(textFormat);
-			startOverNo.setTextFormat(textFormat);
+			ending.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Would you like play again and discover new clues, or continue learning about the objects here?";
+			//startOverYes.text = "New Game"
+			continueButton.text = "Continue"
+			ending.setTextFormat(BaseMenu.bodyFormat);
+			//startOverYes.setTextFormat(textFormat);
+			//continueButton.setTextFormat(textFormat);
 			
-			startOverQuestion.autoSize = TextFieldAutoSize.LEFT;
-			startOverYes.autoSize = TextFieldAutoSize.LEFT;
-			startOverNo.autoSize = TextFieldAutoSize.LEFT;
+			ending.autoSize = TextFieldAutoSize.LEFT;
+			//startOverYes.autoSize = TextFieldAutoSize.LEFT;
+			continueButton.autoSize = TextFieldAutoSize.LEFT;
 			
-			startOverYes.y = startOverQuestion.y + startOverQuestion.height + 5;
-			startOverNo.y = startOverQuestion.y + startOverQuestion.height + 5;
-			//initText();
-			//init();
+			//startOverYes.y = startOverQuestion.y + startOverQuestion.height + 5;
+			continueButton.y = width / 2;
+			continueButton.y = ending.y + ending.height + 5;
+			
+			//add text and buttons
+			addContent(ending);
+			addContent(continueButton);
 		}
-		
-		function init()
-		{
-			/*returnButton.setTextFormat(buttonText);			
-			newGameButton.setTextFormat(buttonText);
-			ending.setTextFormat(endText);
-			addChild(ending);
-			addChild(newGameButton);
-			addChild(returnButton);
-			ending.selectable = false;
-			newGameButton.selectable = false;
-			returnButton.selectable = false;
-			returnButton.addEventListener(MouseEvent.ROLL_OVER,colorChange);
-			returnButton.addEventListener(MouseEvent.ROLL_OUT,revertColor);
-			newGameButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			newGameButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			newGameButton.addEventListener(MouseEvent.MOUSE_DOWN, newGame);*/
-		}
-		
-		function initText()
-		{
-			/*buttonText.color=0xE5E5E5;
-			buttonText.font="Gabriola";
-			buttonText.size=36;
-			
-			endText.color=0xCC9933;
-			endText.font="Gabriola";
-			endText.size=32;
-			endText.align="center";
-			
-			
-			newGameButton.x=1110;
-			newGameButton.y=550;
-			newGameButton.height=60;
-			newGameButton.width=275;
-			newGameButton.text="New Game";
-			
-			returnButton.x=20;
-			returnButton.y=550;
-			returnButton.height=60;
-			returnButton.width=275;
-			returnButton.text="Return to Painting";
-			
-			ending.x=100;
-			ending.width=1050;
-			ending.height=800;
-			ending.wordWrap=true;
-			ending.text="Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Click the link on the bottom left to return to the painting and read it, or click the link on the bottom right to start a new hunt!";
-			*/
-		}
-		
-		
-		
-		/*function newGame(event:MouseEvent):void{
-			this.dispatchEvent(new RestartEvent(RestartEvent.RESTART_GAME, true));
-		}*/		
 		
 	}
 	

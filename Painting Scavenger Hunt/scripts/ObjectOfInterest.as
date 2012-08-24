@@ -1,4 +1,4 @@
-﻿package
+﻿package scripts
 {
 	import flash.display.*;
 	import flash.events.*;
@@ -81,14 +81,7 @@
 			this.lowerBounds = lowerBounds;
 			this.upperBounds = upperBounds;
 						
-			//create caption textfield to display name
-			/*caption = new TextField();
-			caption.visible = false;
-			caption.defaultTextFormat = captionFormat;
-			caption.autoSize = TextFieldAutoSize.LEFT;
-			caption.selectable = false;
-			caption.mouseEnabled = false;
-			caption.text = objectName + "\n" + infoSnippet + "\n(double click for more info)";*/
+			//create caption
 			caption = new OOICaption(objectName, infoSnippet);
 			caption.visible = false;
 			caption.mouseEnabled = false;
@@ -569,7 +562,6 @@
 		}
 		public function setInfoPanePosition(coordinates:Point, childIndex:int = -1):void						
 		{	
-			this.infoPane.changeOrigin(coordinates.x, coordinates.y);
 			this.infoPane.x = coordinates.x;	
 			this.infoPane.y = coordinates.y;	
 		}
