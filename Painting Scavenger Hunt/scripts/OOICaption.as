@@ -15,22 +15,22 @@
 			//populate textfields
 			nameText = new TextField();
 			nameText.defaultTextFormat = BaseMenu.titleFormat;
-			nameText.autoSize = TextFieldAutoSize.LEFT;
 			nameText.selectable = false;
 			nameText.mouseEnabled = false;
 			nameText.text = objectName;
+			nameText.autoSize = TextFieldAutoSize.LEFT;
 			infoSnippetText = new TextField();
-			infoSnippetText.defaultTextFormat = BaseMenu.bodyFormat;
-			infoSnippetText.autoSize = TextFieldAutoSize.LEFT;
+			infoSnippetText.defaultTextFormat = BaseMenu.bodyFormat;			
 			infoSnippetText.selectable = false;
 			infoSnippetText.mouseEnabled = false;
 			infoSnippetText.text = infoSnippet;
+			infoSnippetText.autoSize = TextFieldAutoSize.LEFT;
 			moreInfoHintText = new TextField();
-			moreInfoHintText.defaultTextFormat = BaseMenu.captionFormat;
-			moreInfoHintText.autoSize = TextFieldAutoSize.LEFT;
+			moreInfoHintText.defaultTextFormat = BaseMenu.captionFormat;			
 			moreInfoHintText.selectable = false;
 			moreInfoHintText.mouseEnabled = false;
 			moreInfoHintText.text = "Double-click for more info";
+			moreInfoHintText.autoSize = TextFieldAutoSize.LEFT;
 			
 			//determine required width of pane
 			var reqWidth:Number = 0;

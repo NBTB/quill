@@ -78,7 +78,7 @@
 			//listen for being added
 			addEventListener(Event.ADDED, function(e:Event):void
 														   {
-																instructions = new InstructionsMenu(0, 0, stage.stageWidth, stage.stageHeight);	
+																instructions = new InstructionsMenu(30, 75, 700, 480);//0, 0, stage.stageWidth, stage.stageHeight);	
 																instructions.updateText();
 																parent.addChild(instructions);
 																instructions.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
