@@ -62,6 +62,7 @@
 		//unlock the reward
 		public function unlockReward(completionRequirement:int, rewardNumber:int = NEXT_REWARD):Boolean
 		{
+			
 			/*TODO make unlocking depend on reward number given*/
 			if(rewardCounter < completionRequirement)
 			{

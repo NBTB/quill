@@ -15,6 +15,7 @@
 		private var ooiManager:OOIManager = null;						//Object which keeps track of objects in the painting
 		private var mainMenu:MainMenu;									//The main menu displayed beneath the painting
 		private var openedMenus:Array = null;							//list of currently open menus
+		private var prepareZoom:Boolean = false;						//flag preperation for use of magnifying glass
 		private var zoomed:Boolean = false;								//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass;					//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;					//button that toggles magnifying glass
@@ -215,6 +216,9 @@
 			//make menus inside main menu displayable
 			mainMenu.makeChildMenusDisplayable();	
 			
+			//show the first pieces of the end goal
+			endGoalMenu.unlockReward(ooiManager.getUsableOOICount() + 1, EndGoalMenu.NEXT_REWARD);
+			
 			//give OOIManager reference to objects menu
 			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
 			objectsMenu.setObjectManager(ooiManager);	
@@ -223,7 +227,7 @@
 			objectsMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
 																							 {
 																								//if events that depend on all other menus being closed are allowed, open
-																								if(!pauseEvents && !zoomed)
+																								if(!pauseEvents && !prepareZoom)
 																									objectsMenu.openMenu();																								
 																							 });
 			
@@ -232,7 +236,7 @@
 			helpMenu.addEventListener(MenuEvent.SPECIAL_OPEN_REQUEST, function(e:MenuEvent):void
 																							 {
 																								//if events that depend on all other menus being closed are allowed, open
-																								if(!pauseEvents)
+																								if(!pauseEvents && !prepareZoom)
 																									helpMenu.openMenu();																								
 																							 });
 
@@ -387,6 +391,7 @@
 			else
 			{
 				magnifyingGlass.visible = false;
+				prepareZoom = false;
 			}
 		}	
 		
@@ -430,7 +435,7 @@
 			if(nextClue)
 			{				
 				//add the piece of the end goal
-				var completionRequirement:int = ooiManager.getUsableOOICount();
+				var completionRequirement:int = ooiManager.getUsableOOICount() + 1;
 				endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
 			
 				//make the current clue old
@@ -501,11 +506,15 @@
 		{					
 			if(menusDismissible)
 			{
+				//if the magnify button is calling for the dismissal, give magnfying glass priority
+				if(caller == magnifyButton)
+					prepareZoom = true;
+				
 				//close all menus attached to main menu
 				mainMenu.closeMenus(caller);
 				
 				//close captions and descriptions of all objects of interest
-				ooiManager.hideAllOOIInfoPanes(caller);
+				ooiManager.hideAllOOIInfoPanes(caller);				
 				
 				//do not allow menus to be dismissed for a short duration
 				menusDismissible = false;
