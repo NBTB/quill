@@ -14,7 +14,7 @@
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //call base constructor
-            super(xPos, yPos, widthVal, heightVal, false, false, false, 1);  
+            super(xPos, yPos, widthVal, heightVal, false, false, false, 1, 0x251111);  
 			
 			//create array to store old clues
             oldClues = new Array();     
@@ -62,8 +62,8 @@
 			newClueTextField.defaultTextFormat = BaseMenu.bodyFormat;
 			newClueTextField.selectable = false;
 			newClueTextField.wordWrap = true;
-			newClueTextField.x = 10;
-			newClueTextField.y = 10;			
+			newClueTextField.x = 15;
+			newClueTextField.y = 3;			
 			newClueTextField.autoSize = TextFieldAutoSize.LEFT;
 			newClueTextField.width = width - 20;
 			

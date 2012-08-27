@@ -74,7 +74,7 @@
 			clueLoader.load(url2);
 			clueLoader.scaleX=.6;
 			clueLoader.scaleY=.6;
-			clueLoader.x=120;
+			clueLoader.x=95;
 			clueLoader.y=150;
 
 			var url3:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "mouseLeftClick.swf"));
@@ -82,18 +82,16 @@
 			mouseLoader.load(url3);
 			mouseLoader.scaleX=.6;
 			mouseLoader.scaleY=.6;
-			mouseLoader.x=100;
-			mouseLoader.y=250;
+			mouseLoader.x=130;
+			mouseLoader.y=251;
 
 			var url4:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "mouseOver.swf"));
 
 			mouseOverLoader.load(url4);
 			mouseOverLoader.scaleX=.8;
 			mouseOverLoader.scaleY=.8;
-			mouseOverLoader.x=170;
+			mouseOverLoader.x=180;
 			mouseOverLoader.y=250;
-
-
 		}
 
 		function initText() {
@@ -110,7 +108,7 @@
 			resumeButton.y=height-resumeButton.height - 10;			
 
 			instructions.x=10
-			instructions.y=titleField.y + titleField.height + 30 ;
+			instructions.y=titleField.y + titleField.height + 50 ;
 			instructions.width=width - (instructions.x * 2);
 			instructions.autoSize = TextFieldAutoSize.LEFT;
 			instructions.wordWrap=true;

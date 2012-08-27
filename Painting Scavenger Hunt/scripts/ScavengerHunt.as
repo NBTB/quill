@@ -1,4 +1,5 @@
-﻿package scripts
+﻿
+package scripts
 {
 	import flash.display.*;
 	import flash.events.*;
@@ -6,6 +7,8 @@
 	import flash.geom.*;	
 	import flash.text.*;
 	import flash.utils.Timer;
+		
+	import scripts.MouseWheel;
 		
 	public class ScavengerHunt extends MovieClip
 	{
@@ -93,6 +96,9 @@
 			//remove the timer
 			loadingTimer.removeEventListener(TimerEvent.TIMER, loadingMenu.endLoad);
       		loadingTimer = null;
+						
+			//Prevent the mouse from scrolling the webpage while the program is selected
+			MouseWheel.capture();
 					
 			//create in-game children that will handle specific interaction
 			paintingCanvas = new PaintingCanvas(0, 56, 765, 574);

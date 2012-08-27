@@ -29,7 +29,7 @@
 		public static var menuBorderColor:uint = 0x836A35;			//default color of menu border 			/*TODO should be read-in through XML*/
 		public static var menuOpacity:Number = 0.3;					//default opacity of menu background 	/*TODO should be read-in through XML*/
 		public static var titleFormat:TextFormat = new TextFormat("Gabriola", 30, 0xEEBB55, true);
-		public static var bodyFormat:TextFormat = new TextFormat("Gabriola", 26, 0xCC9933);
+		public static var bodyFormat:TextFormat = new TextFormat("Gabriola", 26, 0xCC9933, null, null, null, null, null, "justify");
 		public static var captionFormat:TextFormat = new TextFormat("Gabriola", 20, 0xCC9933, null, true);
 		public static var textButtonFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5);
 		public static var linkUsableFormat:TextFormat = new TextFormat("Gabriola", 20, 0xE5E5E5);
@@ -45,7 +45,7 @@
 		
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true, opacity:Number = DEFAULT_OPACITY):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true, opacity:Number = DEFAULT_OPACITY, backColor:uint = 0x010417):void
 		{			
 			//flag the menu as closed
 			isOpen = false;
@@ -64,6 +64,12 @@
 			
 			//store pane dimensions
 			paneDimensions = new Point(widthVal, heightVal);
+			
+			//see if the background has a custom color
+			if (backColor != menuColor)
+			{
+				menuColor = backColor;
+			}
 			
 			//draw background
 			createBackground(widthVal, heightVal, opacity);

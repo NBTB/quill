@@ -68,7 +68,7 @@
 			buttonFormat.color=0xE5E5E5;
 			buttonFormat.font="Gabriola";
 			buttonFormat.size=36;
-
+			
 			titleText.color=0xE5E5E5;
 			titleText.font="Gabriola";
 			titleText.size=46;
@@ -77,7 +77,7 @@
 			tutText.font="Gabriola";
 			tutText.size=28;
 			tutText.align="center";
-
+			
 			titleField.x=570;
 			titleField.width=300;
 			titleField.text="Controls";
@@ -95,7 +95,7 @@
 			resumeButton.text="Resume Game";
 
 			controls.x = 25;
-			controls.y = 25;
+			controls.y = 15;
 			controls.width= width - 50;
 			controls.height=800;
 			controls.wordWrap=true;
