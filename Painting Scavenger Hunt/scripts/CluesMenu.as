@@ -14,7 +14,7 @@
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
         {
             //call base constructor
-            super(xPos, yPos, widthVal, heightVal, false, false, false, 1, 0x251111);  
+            super(xPos, yPos, widthVal, heightVal, false, false, false, 1, 0x250000);  
 			
 			//create array to store old clues
             oldClues = new Array();     

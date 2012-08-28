@@ -1,4 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<menu_color>0x010417</menu_color>
+	<menu_border>0x836A35</menu_border>
+	<menu_opacity>0.3</menu_opacity>
+	<text_format name = "title">
+		<font>Vijaya</font>
+		<size>30</size>
+		<color>0xEEBB55</color>
+		<bold/>	
+	</text_format>
+	<text_format name = "body">
+		<font>Vijaya</font>
+		<size>26</size>
+		<color>0xEEBB55</color>
+		<align>justify</align>
+	</text_format>
+	<text_format name = "caption">
+		<font>Vijaya</font>
+		<size>20</size>
+		<color>0xCC9933</color>
+		<italic/>	
+	</text_format>
+	<text_format name = "text_button">
+		<font>Vijaya</font>
+		<size>30</size>
+		<color>0xE5E5E5</color>
+	</text_format>
+	<text_format name = "link_usable">
+		<font>Vijaya</font>
+		<size>20</size>
+		<color>0xE5E5E5</color>
+	</text_format>
+	<text_format name = "link_unusable">
+		<font>Vijaya</font>
+		<size>20</size>
+		<color>0xFE5E5A</color>
+	</text_format>
+	<text_format name = "link_accentuated">
+		<font>Vijaya</font>
+		<size>20</size>
+		<color>0xE5E5E5</color>
+		<bold/>
+	</text_format>
 </Menu>
+
+<!-- Try vijaya-->
