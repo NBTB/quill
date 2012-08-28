@@ -36,6 +36,8 @@ package scripts
 		private var cluesMenu:CluesMenu = null;							//panel that contains clue
 		private var endGoalMenu:EndGoalMenu = null;						//panel that contains end goal pieces
 		private var ending:Ending = null;								//the menu displayed when you win
+		var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);	
+		var completionRequirement:int;
 		
 		var loadingMenu:LoadingMenu = null;
 		var introMenu:IntroMenu = null;
@@ -155,8 +157,7 @@ package scripts
 											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
 			
 			//create menus to appear in main menu
-			var helpMenu:HelpMenu = new HelpMenu(40, 230, 120, 340);
-			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);					
+			var helpMenu:HelpMenu = new HelpMenu(40, 230, 120, 340);							
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
 			//load hunt information and listen for completion
@@ -339,6 +340,15 @@ package scripts
 			{
                 placeMagnifyingGlass(new Point(mouseX, mouseY));
 			}
+			
+			if(objectsMenu.curLink >= objectsMenu.linksArray.length && cluesMenu.oldClues.length >= 7)
+			{				
+				//add a new page to the end goal menu and show final reward		
+				endGoalMenu.addPage();
+				endGoalMenu.unlockFinalReward();				
+			}
+			
+				
 		}		
 		
 		//handles the release of keys
@@ -441,7 +451,7 @@ package scripts
 			if(nextClue)
 			{				
 				//add the piece of the end goal
-				var completionRequirement:int = ooiManager.getUsableOOICount() + 1;
+				completionRequirement = ooiManager.getUsableOOICount() + 1;
 				endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
 			
 				//make the current clue old
@@ -455,10 +465,8 @@ package scripts
 			}
 			//otherwise, end the game
 			else
-			{				
-				//add a new page to the end goal menu and show final reward
-				endGoalMenu.addPage();
-				endGoalMenu.unlockFinalReward();				
+			{							
+				//endGoalMenu.addPage();
 				
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
@@ -469,6 +477,8 @@ package scripts
 				//show ending
 				ending.openMenu();
 			}
+			
+			
 		}
 		
 		//handle a incorrect answer to a clue

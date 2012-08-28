@@ -11,9 +11,10 @@
     {
   
         var pieces:Array=new Array();                       //stores all of the letterPieces
-        public var nextButton:TextField;                    //button to go to the next part of the letter, currently redundant?
         var buttonFormat:TextFormat = new TextFormat();     //formatting		
 		public var rewardCounter:Number = 0;				//counter of rewards given
+		var heading:TextField;								//labels the letter
+		
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
@@ -30,6 +31,8 @@
 			nextPageButton.text = ">";
 			nextPageButton.x = widthVal - nextPageButton.width - 2;
 			nextPageButton.y = (heightVal - nextPageButton.height) / 2
+			addEventListener(MouseEvent.MOUSE_OVER, displayHeading);
+			addEventListener(MouseEvent.MOUSE_OUT, removeHeading);
         }
          
         //add new letter piece to list
@@ -74,15 +77,44 @@
 			return false;
 		}    
 		
+		function displayHeading(event:MouseEvent):void
+		{
+			heading = new TextField();
+			heading.defaultTextFormat = BaseMenu.captionFormat;
+			heading.border = true;
+			heading.borderColor = 0x836A35;
+			heading.background = true;
+			heading.autoSize = "center";
+			heading.backgroundColor = 0x010417;			
+			heading.y = 20;
+			heading.width = 439;	
+			if(rewardCheck == true)
+			{
+				heading.text = "Letter To Poule's sister From Colonel MacAlister";
+			}
+			else
+			{
+				heading.text = "Letter home from Sergeant Poule";
+			}
+			addChild(heading);
+			
+		}
+		
+		function removeHeading(event:MouseEvent):void
+		{
+			removeChild(heading);
+		}
+		
 		//unlock the final reward
 		public function unlockFinalReward():Boolean
 		{
 			addContent(pieces[pieces.length - 1]); 
 			pieces[pieces.length - 1].visible = true;
+			rewardCheck = true;
 			return true;
 		} 
-         
-        //next piece is shown
+        
+       /* //next piece is shown
         function clickNext(event:MouseEvent):void
         {
             for(var i:Number = 0; i < pieces.length - 1; i++)
@@ -90,6 +122,7 @@
                 pieces[i].visible = !pieces[i].visible;
             }
             pieces[7].visible = !pieces[i].visible;
-        }
+			rewardCheck = false;
+        }*/
     }
 }
