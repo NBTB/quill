@@ -22,7 +22,7 @@
 			ending.selectable = false;
 			ending.autoSize = TextFieldAutoSize.LEFT;
 			ending.wordWrap = true;
-			ending.text = "Congratulations! You have solved all of the riddles! Plus, you have unlocked a hidden letter! Although no clues remain, there is still plenty to discover and learn.";
+			ending.text = "Congratulations! You have solved all of the riddles! Although no clues remain, there is still plenty to discover and learn. Perhaps a secret awaits.";
 			ending.x = 10;
 			ending.y = ending.x;
 			ending.width = width - (ending.x * 2);			

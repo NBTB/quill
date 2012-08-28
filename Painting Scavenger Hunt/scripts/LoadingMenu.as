@@ -81,7 +81,7 @@
 			loadingText.y = 370;
 			loadingText.height = 168;
 			loadingText.width = 425;
-			loadingText.text = "Loading... Please Wait!";
+			loadingText.text = "Loading... Please Wait.";
 		}
 	}
 }

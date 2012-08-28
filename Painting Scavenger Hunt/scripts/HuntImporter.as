@@ -277,7 +277,7 @@
             magnifyingGlass.setDefaultRadius(mgRadius);
              
             //set number of number of usable objects of interest
-            ooiManager.setUsableOOICount(huntCount);      			
+            ooiManager.setSolvableOOICount(huntCount);      			
 			
 			//dispatch hunt loaded event
 			dispatchEvent(new Event(HUNT_LOADED));

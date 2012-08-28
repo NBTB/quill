@@ -20,6 +20,7 @@
 		protected var isOpen:Boolean = false;						//flag if menu is open		
 		protected var dragCap:Sprite = null;						//bar along the top of the menu that can be used for dragging
 		protected var dragged:Boolean = false;						//flag when menu is being dragged
+		var rewardCheck:Boolean = false;							//checks to see if the final reward has been one
 		protected var baseX:int;									//menu original x position
 		protected var baseY:int;									//menu original y position
 		
@@ -77,7 +78,7 @@
 			previousPageButton.y = heightVal - 5 - previousPageButton.height;
 			previousPageButton.selectable = false;
 			addChild(previousPageButton);
-			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage > 0){	changePage(currentPage - 1);	}	});
+			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage > 0){	changePage(currentPage - 1);	}	rewardCheck = !rewardCheck});
 			previousPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			previousPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);						
 			
@@ -90,7 +91,7 @@
 			nextPageButton.y = heightVal - 5 - nextPageButton.height;
 			nextPageButton.selectable = false;
 			addChild(nextPageButton);
-			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage < pages.length - 1){	changePage(currentPage + 1);	}	});
+			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage < pages.length - 1){	changePage(currentPage + 1);	}	rewardCheck = !rewardCheck});
 			nextPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			nextPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);		
 			
@@ -375,8 +376,8 @@
 			var focusPage:ContentContainer = pages[pageNumber];			
 			focusPage.mask = menuMask;
 			addChildAt(focusPage, getChildIndex(menuBackground) + 1);
-			currentPage = pageNumber;			
-			
+			currentPage = pageNumber;	
+						
 			//if scroll bar exists, attach it to the page and reset scrolling
 			if(scrollBar)
 			{

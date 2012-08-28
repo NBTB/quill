@@ -15,9 +15,9 @@
 		private var thisY:int;										//Y position of this menu
 		private var thisWidth:int;									//Width of this menu
 		private var numObjects:int;									//Number of objects in the painting
-		private var curLink:int = 0;								//Which link is next to be updated
+		public var curLink:int = 0;								//Which link is next to be updated
 		private var linkFormat:TextFormat = new TextFormat();		//Formatting for the links
-		private var linksArray:Array = null;						//Array which holds all of the links
+		public var linksArray:Array = null;						//Array which holds all of the links
 		
 		//Construct the objects menu, using the base x, y, width, height, and main menu as arguments.  Also sets up the linksArray.
 		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void

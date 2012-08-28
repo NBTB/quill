@@ -8,7 +8,7 @@
     {
         private var currentClueText:TextField = null;           //The displayed current clue
         private var currentClue:String = null;                  //The text of the current clue
-        private var oldClues:Array = null;                      //Keeps track of all previous clues
+        public var oldClues:Array = null;                      //Keeps track of all previous clues
          
         //Creates the clues menu
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void

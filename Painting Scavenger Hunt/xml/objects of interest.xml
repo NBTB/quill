@@ -78,7 +78,7 @@
 	<Object_Of_Interest>
 		<name>Sentry</name>
 		<info_snippet>Visage of a man on watch</info_snippet>
-		<clue>You have stripped me of my color, but I still look like you...</clue>
+		<clue>Over yonder, one can see. Someone watches over thee...</clue>
 		<info>
 			<info_text_file>silhouette info.txt</info_text_file>
 		</info>
