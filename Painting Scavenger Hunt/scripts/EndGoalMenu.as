@@ -13,7 +13,7 @@
         var pieces:Array=new Array();                       //stores all of the letterPieces
         var buttonFormat:TextFormat = new TextFormat();     //formatting		
 		public var rewardCounter:Number = 0;				//counter of rewards given
-		var heading:TextField;								//labels the letter
+		var heading:TextField = new TextField();			//labels the letter
 		
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
@@ -27,10 +27,11 @@
 			//change previous and next button
 			previousPageButton.text = "<";
 			previousPageButton.x = 2;
-			previousPageButton.y = (heightVal - previousPageButton.height) / 2
+			previousPageButton.y = (heightVal - previousPageButton.height) / 2;
 			nextPageButton.text = ">";
 			nextPageButton.x = widthVal - nextPageButton.width - 2;
-			nextPageButton.y = (heightVal - nextPageButton.height) / 2
+			nextPageButton.y = (heightVal - nextPageButton.height) / 2;
+			initHeading();
 			addEventListener(MouseEvent.MOUSE_OVER, displayHeading);
 			addEventListener(MouseEvent.MOUSE_OUT, removeHeading);
         }
@@ -77,17 +78,25 @@
 			return false;
 		}    
 		
-		function displayHeading(event:MouseEvent):void
-		{
-			heading = new TextField();
-			heading.defaultTextFormat = BaseMenu.captionFormat;
-			heading.border = true;
+		function initHeading()
+		{			
+			heading.defaultTextFormat = BaseMenu.linkUnusableFormat;
 			heading.borderColor = 0x836A35;
-			heading.background = true;
 			heading.autoSize = "center";
 			heading.backgroundColor = 0x010417;			
 			heading.y = 20;
-			heading.width = 439;	
+			heading.width = 439;
+			heading.alpha = 0.0;
+			heading.text = "Letter home from Sergeant Poule";
+			addChild(heading);
+			
+		}
+		
+		function displayHeading(event:MouseEvent):void
+		{			
+			heading.border = true;			
+			heading.background = true;
+			
 			if(rewardCheck == true)
 			{
 				heading.text = "Letter To Poule's sister From Colonel MacAlister";
@@ -96,13 +105,14 @@
 			{
 				heading.text = "Letter home from Sergeant Poule";
 			}
-			addChild(heading);
+			
 			
 		}
 		
 		function removeHeading(event:MouseEvent):void
 		{
-			removeChild(heading);
+			heading.border = false;
+			heading.background = false;				
 		}
 		
 		//unlock the final reward
@@ -113,16 +123,17 @@
 			rewardCheck = true;
 			return true;
 		} 
-        
-       /* //next piece is shown
-        function clickNext(event:MouseEvent):void
-        {
-            for(var i:Number = 0; i < pieces.length - 1; i++)
-            {
-                pieces[i].visible = !pieces[i].visible;
-            }
-            pieces[7].visible = !pieces[i].visible;
-			rewardCheck = false;
-        }*/
+		
+		public function hideRewards()
+		{
+			for(var i:int; i < pages.length; i++)
+				pages[i].visible = false;
+		}
+         
+		public function showRewards()
+		{
+			for(var i:int; i < pages.length; i++)
+				pages[i].visible = true;
+		}
     }
 }

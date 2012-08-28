@@ -81,11 +81,6 @@
             creditsOption.height = elementHeight;
             creditsOption.selectable = false;
             addContentToTail(creditsOption);
-             
-            //format buttons
-            textFormat.color = 0xE5E5E5;
-            textFormat.font = "Gabriola";
-            textFormat.size = 26;
 			
             objectiveOption.setTextFormat(BaseMenu.linkUsableFormat);
             objectsOption.setTextFormat(BaseMenu.linkUsableFormat);
@@ -96,19 +91,19 @@
 			creditsOption.setTextFormat(BaseMenu.linkUsableFormat);
 			
 			//listen for being added
-			addEventListener(Event.ADDED, function(e:Event):void
-														   {
-																instructions = new InstructionsMenu(30, 75, 700, 480);	
-																instructions.updateText();
-																parent.addChild(instructions);
-																instructions.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
-																instructions.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
-																																		  {	
-																																		  	instructionsOpening = true;
-																																		  	helpLinkClicked();	
-																																			dispatchEvent(new MenuEvent(e.getTargetMenu(), e.type));
-																																		  });  
-														   });
+			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
+																    {
+																		instructions = new InstructionsMenu(30, 75, 700, 480);	
+																		instructions.updateText();
+																		parent.addChild(instructions);
+																		instructions.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
+																		instructions.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
+																																				  {	
+																																					instructionsOpening = true;
+																																					helpLinkClicked();	
+																																					dispatchEvent(new MenuEvent(e.getTargetMenu(), e.type));
+																																				  });  
+																    });
              
             //add event listeners to the buttons
             objectiveOption.addEventListener(MouseEvent.MOUSE_DOWN, showObjective);            

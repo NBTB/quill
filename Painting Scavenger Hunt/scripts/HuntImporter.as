@@ -1,11 +1,12 @@
 ﻿package scripts
 {
+	import flash.display.*;
+	import flash.events.*;
+	import flash.text.*;	
+    import flash.xml.*;
+	import flash.geom.*;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
-    import flash.events.*;
-    import flash.xml.*;
-    import flash.display.*
-    import flash.geom.*;
      
     public class HuntImporter extends EventDispatcher
     {     
@@ -64,7 +65,7 @@
 																				if(directoryList.hasOwnProperty("object_of_interest_info"))
 																					FileFinder.setDirectory(FileFinder.OOI_INFO, directoryList.object_of_interest_info);
 																				if(directoryList.hasOwnProperty("end_goal_images"))
-																					FileFinder.setDirectory(FileFinder.END_GOAL_IMAGES, directoryList.end_goal_images);		
+																					FileFinder.setDirectory(FileFinder.END_GOAL_IMAGES, directoryList.end_goal_images);	
 																			}
 																														   
 																																							
@@ -178,8 +179,72 @@
 		//parse XML specification of menu parameters
 		private function parseMenu(menuParams:XML)
 		{
+			//attempt to retrieve standard menu parameters
 			if(menuParams.hasOwnProperty("menu_color"))
-				BaseMenu.menuColor = menuParams.menu_color;
+				BaseMenu.menuColor = Number(menuParams.menu_color);
+			if(menuParams.hasOwnProperty("menu_border"))
+				BaseMenu.menuBorderColor = Number(menuParams.menu_border);
+			if(menuParams.hasOwnProperty("menu_opacity"))
+				BaseMenu.menuOpacity = Number(menuParams.menu_opacity);
+			
+			//attempt to create text formats
+			if(menuParams.hasOwnProperty("text_format"))
+			{
+				var formats:XMLList = menuParams.text_format;
+				for each(var formatParams in formats)
+				{
+					var attribs = formatParams.attributes();
+					for each(var attrib in attribs)
+					{
+						if(attrib.name() == "name")
+						{
+							//parse format
+							var formatName = attrib;
+							var textFormats:XMLList = menuParams.text_format;
+							var newFormat:TextFormat = new TextFormat();
+							if(formatParams.hasOwnProperty("font"))
+								newFormat.font = formatParams.font;
+							if(formatParams.hasOwnProperty("size"))
+								newFormat.size = Number(formatParams.size);
+							if(formatParams.hasOwnProperty("color"))
+								newFormat.color = Number(formatParams.color);
+							if(formatParams.hasOwnProperty("align"))
+							{
+								if(formatParams.align == "left")
+									newFormat.align = TextFormatAlign.LEFT;
+								else if(formatParams.align == "right")
+									newFormat.align = TextFormatAlign.RIGHT;
+								else if(formatParams.align == "center")
+									newFormat.align = TextFormatAlign.CENTER;
+								else if(formatParams.align == "justify")
+									newFormat.align = TextFormatAlign.JUSTIFY;
+							}
+							if(formatParams.hasOwnProperty("bold"))
+								newFormat.bold = true;
+							if(formatParams.hasOwnProperty("italic"))
+								newFormat.italic = true;
+							if(formatParams.hasOwnProperty("underline"))
+								newFormat.underline = true;
+							
+							//store format
+							if(formatName == "title")
+								BaseMenu.titleFormat = newFormat;
+							else if(formatName == "body")
+								BaseMenu.bodyFormat = newFormat;
+							else if(formatName == "caption")
+								BaseMenu.captionFormat = newFormat;
+							else if(formatName == "text_button")
+								BaseMenu.textButtonFormat = newFormat;
+							else if(formatName == "link_usable")
+								BaseMenu.linkUsableFormat = newFormat;
+							else if(formatName == "link_unusable")
+								BaseMenu.linkUnusableFormat = newFormat;
+							else if(formatName == "link_accentuated")
+								BaseMenu.linkAccentuatedFormat = newFormat;
+						}
+					}
+				}
+			}
 		}
          
 		//parse XML specification of info about game
@@ -212,7 +277,7 @@
             magnifyingGlass.setDefaultRadius(mgRadius);
              
             //set number of number of usable objects of interest
-            ooiManager.setUsableOOICount(huntCount);      			
+            ooiManager.setSolvableOOICount(huntCount);      			
 			
 			//dispatch hunt loaded event
 			dispatchEvent(new Event(HUNT_LOADED));

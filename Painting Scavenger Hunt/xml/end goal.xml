@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <End_Goal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<End_Goal_Piece>
-		<name>Blurred Letter</name>
-		<filename>blurred letter.png</filename>
+		<name>Blank Letter</name>
+		<filename>blank letter.png</filename>
 		<x>25</x>
 		<y>0</y>		
 	</End_Goal_Piece>

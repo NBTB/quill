@@ -13,7 +13,6 @@ package scripts
 	public class ScavengerHunt extends MovieClip
 	{
 		private var importer:HuntImporter = null;						//importer used to load start-up and hunt
-		private var startGameListener:MenuListener;						//Listener to determine when the main game should begin
 		private var paintingCanvas:PaintingCanvas = null;				//The class that displays the painting 
 		private var ooiManager:OOIManager = null;						//Object which keeps track of objects in the painting
 		private var mainMenu:MainMenu;									//The main menu displayed beneath the painting
@@ -30,17 +29,15 @@ package scripts
 		private var notificationTextColorFadeTime:int = 0;				//number of frames the notification text color takes to transition from new to normal
 		private var notificationTextColorFades:int = 0;					//number of frames the notification text color has been fading
 		private var pauseEvents:Boolean = false;						//flag if certain events should be paused
-		private var loadingTimer:Timer = null;							//timer to set minimum load time and prevent the screen from just being a flash
 		private var menusDismissibleTimer:Timer = null;					//timer used to give buffer between opening a menu and being able to dismiss by clicking elsewhere
 		private var menusDismissible:Boolean = false;					//flag when menus can be dismissed by clicking outside of them (close button is not affected)
 		private var cluesMenu:CluesMenu = null;							//panel that contains clue
 		private var endGoalMenu:EndGoalMenu = null;						//panel that contains end goal pieces
-		private var ending:Ending = null;								//the menu displayed when you win
-		var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);	
-		var completionRequirement:int;
-		
-		var loadingMenu:LoadingMenu = null;
-		var introMenu:IntroMenu = null;
+		private var ending:Ending = null;								//menu displayed when you win
+		private var loadingMenu:LoadingMenu = null;						//pane displayed while loading
+		private var introMenu:IntroMenu = null;							//overlay that introduces the game
+		private var allSolved = false;									//flag if all clues have been solved
+		private var allFound = false;									//flag if all objects of interest have been found
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -57,9 +54,7 @@ package scripts
 			//find specification files before preparing game
 			importer = new HuntImporter();
 			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void	{	startMenu()	});
-			importer.findSpecFilesAndAssetDirectories("xml/importer.xml");
-																										
-			
+			importer.findSpecFilesAndAssetDirectories("xml/importer.xml");			
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
@@ -69,36 +64,17 @@ package scripts
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
 																					 {				
 																						loadingMenu = new LoadingMenu(0, 0, 1265, 630);
-																						introMenu = new IntroMenu(30, 75, 700, 480);
-																						loadingTimer = new Timer(1000);
 																						addChild(loadingMenu);
 																						loadingMenu.openMenu();
-																						
-																						loadingWait();
-																						startGameListener = new MenuListener();
-																						startGameListener.addEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
-																						loadingMenu.getStartListener(startGameListener);																						
+																						//loadingMenu.addChild(loadingMenu.loadLoader);
+																						initGame();																		
 																					 });
-			importer.importStartUp();
-			
-			
-		}
-		
-		//Additional waiting, so that the loading screen doesn't flash for half a second and freak out the user.
-		public function loadingWait():void
-		{
-			loadingTimer.addEventListener(TimerEvent.TIMER, loadingMenu.endLoad);
-       		loadingTimer.start();
+			importer.importStartUp();			
 		}
 		
 		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
-		{					
-			startGameListener.removeEventListener(MenuListener.GAME_START, function(e:Event):void	{	initGame()	});
-			//remove the timer
-			loadingTimer.removeEventListener(TimerEvent.TIMER, loadingMenu.endLoad);
-      		loadingTimer = null;
-						
+		{														
 			//Prevent the mouse from scrolling the webpage while the program is selected
 			MouseWheel.capture();
 					
@@ -110,7 +86,8 @@ package scripts
 			notificationText = new TextField();
 			magnifyButton = new SimpleButton();
 			cluesMenu = new CluesMenu(0, 0, 765, 55);
-			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			 
+			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			
+			introMenu = new IntroMenu(30, 75, 700, 480);
 			
 			//define normal notification text color
 			var normalRed:uint = 0x40;
@@ -157,11 +134,29 @@ package scripts
 											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
 			
 			//create menus to appear in main menu
-			var helpMenu:HelpMenu = new HelpMenu(40, 230, 120, 340);							
+			var helpMenu:HelpMenu = new HelpMenu(40, 230, 120, 340);					
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);	
 			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
 			
-			//load hunt information and listen for completion
-			importer.addEventListener(Event.COMPLETE, function(e:Event):void{	startGame();	});
+			//load hunt information and listen for completion (set a minimum load time to avoid a quick flash)
+			var timerReady:Boolean = false;
+			var loadReady:Boolean = false;
+			var loadingTimer:Timer = new Timer(1000);
+			loadingTimer.addEventListener(TimerEvent.TIMER, function(e:Event):void	
+																		{
+																			timerReady = true
+																			if(timerReady && loadReady)
+																				startGame();
+																			loadingTimer.stop();
+																			loadingTimer = null;
+																		});
+			loadingTimer.start();
+			importer.addEventListener(Event.COMPLETE, function(e:Event):void
+																	   {
+																		  	loadReady = true
+																			if(timerReady && loadReady)
+																				startGame();
+																	   });
 			importer.importHunt(paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu);			
 			
 			//add menus to main menu
@@ -179,7 +174,7 @@ package scripts
 		public function startGame():void
 		{					
 			//remove pre-game children from display list
-			removeChild(loadingMenu);
+			loadingMenu.closeMenu();
 									
 			//add in-game children to display list,
 			//ensuring that they are tightly packed on the bottom layers
@@ -222,9 +217,6 @@ package scripts
 			
 			//make menus inside main menu displayable
 			mainMenu.makeChildMenusDisplayable();	
-			
-			//show the first pieces of the end goal
-			endGoalMenu.unlockReward(ooiManager.getUsableOOICount() + 1, EndGoalMenu.NEXT_REWARD);
 			
 			//give OOIManager reference to objects menu
 			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
@@ -272,6 +264,9 @@ package scripts
 			//listen for incorrect answers to clues
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
+			//listen for all objects being found
+			ooiManager.addEventListener(OOIManager.ALL_OBJECTS_FOUND, handleAllObjectsFound);
+			
 			//listen for an object of interest's info pane to open and close
 			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu());	});
 			ooiManager.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu());	});
@@ -282,7 +277,13 @@ package scripts
 			
 			//listen for ending pane to open and close
 			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
-			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
+			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
+																				{	
+																					forceInteractionWithMenu(e.getTargetMenu());	
+																					allSolved = true
+																					if(allFound && allSolved)
+																						unlockHiddenPiece();
+																				});
 			
 			//listen for restart menu to open and close
 			var restartMenu:RestartMenu = RestartMenu(mainMenu.getMenu(restartMenuTitle));
@@ -292,25 +293,29 @@ package scripts
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	toggleZoom();	});
 			
-			//listen for intro menu being opened and close						
+			//listen for intro menu being opened and close		
 			introMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			introMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
 																				   {	
 																				   		//allow interaction beyond menu as it closes
 																				   		forceInteractionWithMenu(e.getTargetMenu());	
 																						
-																						//post directions to first clue
-																						//postNotification("Clues will appear above the painting.");
-																						
 																						//prepare new list of unused objects of interest and pick the first object
 																						ooiManager.resetUnusedOOIList();
 																						var firstClue:String = ooiManager.pickNextOOI();
 																						cluesMenu.addClue(firstClue);
+																						
+																						//show unlocked content
+																						endGoalMenu.showRewards();
 																				   });
 			
-			//open intro menu
+			//open intro menu			
 			addChild(introMenu);	
 			introMenu.openMenu();			
+			
+			//unlock the first pieces of the end goal (remain hidden for now)
+			endGoalMenu.hideRewards();
+			endGoalMenu.unlockReward(ooiManager.getSolvableOOICount() + 1, EndGoalMenu.NEXT_REWARD);
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
@@ -339,16 +344,7 @@ package scripts
             if(zoomed)
 			{
                 placeMagnifyingGlass(new Point(mouseX, mouseY));
-			}
-			
-			if(objectsMenu.curLink >= objectsMenu.linksArray.length && cluesMenu.oldClues.length >= 7)
-			{				
-				//add a new page to the end goal menu and show final reward		
-				endGoalMenu.addPage();
-				endGoalMenu.unlockFinalReward();				
-			}
-			
-				
+			}				
 		}		
 		
 		//handles the release of keys
@@ -444,16 +440,16 @@ package scripts
 			if(foundObject)
 				foundObject.showFoundImage();
 		
+			//add the piece of the end goal
+			var completionRequirement:Number = ooiManager.getSolvableOOICount() + 1;
+			endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
+		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			
 			
 			//if a new clue was picked, display it and pass it to the clues menu
 			if(nextClue)
-			{				
-				//add the piece of the end goal
-				completionRequirement = ooiManager.getUsableOOICount() + 1;
-				endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
-			
+			{							
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
 				
@@ -465,14 +461,9 @@ package scripts
 			}
 			//otherwise, end the game
 			else
-			{							
-				//endGoalMenu.addPage();
-				
+			{											
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
-				
-				//post no clues remaining notification
-				postNotification(OOIManager.NO_CLUES_NOTIFY);
 				
 				//show ending
 				ending.openMenu();
@@ -485,6 +476,24 @@ package scripts
 		private function handleIncorrectAnswer(e:Event)
 		{	
 			postNotification("Try Again");
+		}
+		
+		//handle all objects being found
+		private function handleAllObjectsFound(e:Event)
+		{	
+			allFound = true
+			if(allFound && allSolved)
+				unlockHiddenPiece();
+			
+		}
+		
+		//unlock the hidden piece of the end goal
+		private function unlockHiddenPiece()
+		{
+			//add a new page to the end goal menu and show final reward		
+			endGoalMenu.addPage();
+			endGoalMenu.unlockFinalReward();			
+			postNotification("You found a hidden letter!");
 		}
 		
 		//display notification in textfield on screen

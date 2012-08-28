@@ -11,19 +11,18 @@
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
 		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted				
 		private var totalOOICount:int = 0;						//total number of objects of interest stored
-		private var usableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
+		private var solvableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
+		private var totalFound = 0;								//number of objects found in painting
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
 		private var ooiCaptionContainer = null;					//container for object of interest captions
 		private var ooiInfoPaneContainer = null;				//container for object of interest info panes
-		private var incorrectAnswerTimer = null;				//time that allows for double clicking without causing a incorrect answer
-		
-		public static const WRONG_ANSWER_NOTIFY:String = "That is not the answer to the riddle"; 				//message that appears in the clue textfield when the wrong clue is guessed
-		public static const NO_CLUES_NOTIFY:String = "Wow! You've found a hidden letter!!! No clues remain"; 	//message that appears in the clue textfield when the wrong clue is guessed
+		private var incorrectAnswerTimer = null;				//time that allows for double clicking without causing a incorrect answer	
 
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
 		public static const INCORRECT:String = "An incorrect answer was given";				//dispatched when an incorrect answer is given
+		public static const ALL_OBJECTS_FOUND = "All objects have been found";				//dispatched when all object (not just those with clues) have been found
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
@@ -40,6 +39,9 @@
 			if(!ooiInfoPaneContainer)
 				ooiInfoPaneContainer = this;
 			this.ooiInfoPaneContainer = ooiInfoPaneContainer;
+			
+			//objects of interest will start of suppressed
+			ooiHitTestSuppression = true;
 			
 			//create timer to start upon an incorrect click
 			incorrectAnswerTimer = new Timer(500);
@@ -68,6 +70,9 @@
 			
 			//get the new object's info pane
 			var infoPane:OOIInfoPane = newObject.getInfoPane();
+			
+			//suppress the new object's hit tesing
+			newObject.setHitTestSuppression(true);
 			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(ObjectOfInterest.OOI_MOUSE_OVER, function(e:Event):void
@@ -109,9 +114,15 @@
 																						}
 																						if (ObjectOfInterest(e.target).getHasBeenOpened() == false)
 																						{
+																							//link to object in objects menu and add to total found
 																							ObjectOfInterest(e.target).hasOpened();
 																							objectsMenu.objectClicked(ObjectOfInterest(e.target));
+																							totalFound++;
+																							if(totalFound >= totalOOICount)
+																								dispatchEvent(new Event(ALL_OBJECTS_FOUND));
 																						}
+																						
+																						
 																					});
 			
 			//listen for when the object of interest is double-clicked
@@ -152,10 +163,10 @@
 		public function pickNextOOI():String
 		{
 			//if the maximum number of usable objects of interet is positive or zero, ensure that it does not get exceeded
-			if(usableOOICount >= 0)
+			if(solvableOOICount >= 0)
 			{
 				//if the maxium number of usable objects of interest has been reached, return a failure
-				if(ooiUnused.length < objectsOfInterest.length - usableOOICount)
+				if(ooiUnused.length <= objectsOfInterest.length - solvableOOICount)
 				{
 					currentOOI = null;
 					return null;
@@ -253,9 +264,9 @@
 		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
 		public function getCurrentClue():String					{	return currentOOI.getClue();		}		
 		public function getTotalOOICount():int					{	return totalOOICount;				}
-		public function getUsableOOICount():int					{	return usableOOICount;				}
+		public function getSolvableOOICount():int					{	return solvableOOICount;				}
 		
-		public function setUsableOOICount(count:int):void		{	usableOOICount = count;				}
+		public function setSolvableOOICount(count:int):void		{	solvableOOICount = count;				}
 		public function setObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
