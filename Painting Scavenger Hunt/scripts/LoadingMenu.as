@@ -1,16 +1,10 @@
 ﻿﻿package scripts
 {
-	import flash.text.TextField;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.text.*;
 	import flash.net.URLLoader;
-	import flash.net.URLRequest;
-	import flash.display.Shape;
-	import flash.display.DisplayObject;
-	import flash.text.TextFormat;
-	import flash.events.MouseEvent;
-	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.display.Loader;
+	import flash.net.URLRequest;	
 	import flash.geom.ColorTransform;
 
 
@@ -29,7 +23,6 @@
 		var clueLoader:Loader = new Loader();
 		var mouseLoader:Loader = new Loader();
 		var mouseOverLoader:Loader = new Loader();
-		public static var fromHelp:Boolean=false;
 		
 		var startGameListener:MenuListener;
 		
@@ -45,16 +38,10 @@
 			
 		}
 
-		function init() {
-
-			
-			splashTitle.setTextFormat(splashTitleFormat);
-			loadingText.setTextFormat(splashTitleFormat);
-			
-			
+		function init() 
+		{
 			addChild(splashTitle);
 			addChild(loadingText);
-						
 		}
 		
 		
@@ -70,13 +57,14 @@
 		
 		function initText()
 		{
-			//Details regarding the title
-			splashTitleFormat.align = "center";
-			splashTitleFormat.color = 0xCC9933;
-			splashTitleFormat.font = "Gabriola";
-			splashTitleFormat.size = 44;
+			//create variation of menu title format
+			splashTitleFormat.align = TextFormatAlign.CENTER;
+			splashTitleFormat.color = BaseMenu.titleFormat.color;
+			splashTitleFormat.font = BaseMenu.titleFormat.font;
+			splashTitleFormat.size = Number(BaseMenu.titleFormat.size) * 1.5;	
 						
-			//More details regarding the title
+			//create title
+			splashTitle.defaultTextFormat = splashTitleFormat;
 			splashTitle.wordWrap = true;
 			splashTitle.selectable = false;
 			splashTitle.x = 410;
@@ -85,6 +73,8 @@
 			splashTitle.width = 425;
 			splashTitle.text = "The Night Before the Battle Scavenger Hunt";
 			
+			//create loading text field
+			loadingText.defaultTextFormat = splashTitleFormat;
 			loadingText.wordWrap = true;
 			loadingText.selectable = false;
 			loadingText.x = 410;
@@ -92,10 +82,6 @@
 			loadingText.height = 168;
 			loadingText.width = 425;
 			loadingText.text = "Loading... Please Wait!";
-		}
-		
-		override public function createCloseButton(placementRect):void {
-			return;
 		}
 	}
 }

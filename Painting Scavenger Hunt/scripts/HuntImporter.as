@@ -186,7 +186,7 @@
 				BaseMenu.menuBorderColor = Number(menuParams.menu_border);
 			if(menuParams.hasOwnProperty("menu_opacity"))
 				BaseMenu.menuOpacity = Number(menuParams.menu_opacity);
-				
+			
 			//attempt to create text formats
 			if(menuParams.hasOwnProperty("text_format"))
 			{

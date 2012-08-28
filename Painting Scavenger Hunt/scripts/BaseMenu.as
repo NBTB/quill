@@ -25,18 +25,18 @@
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 		
-		public static var menuColor:uint = 0x010417;				//default color of menu background 	
-		public static var menuBorderColor:uint = 0x836A35;			//default color of menu border 	
-		public static var menuOpacity:Number = 0.3;					//default opacity of menu background 
-		public static var titleFormat:TextFormat = new TextFormat("Gabriola", 30, 0xEEBB55, true);
-		public static var bodyFormat:TextFormat = new TextFormat("Gabriola", 26, 0xCC9933, null, null, null, null, null, TextFormatAlign.JUSTIFY);
-		public static var captionFormat:TextFormat = new TextFormat("Gabriola", 20, 0xCC9933, null, true);
-		public static var textButtonFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5);
-		public static var linkUsableFormat:TextFormat = new TextFormat("Gabriola", 20, 0xE5E5E5);
-		public static var linkUnusableFormat:TextFormat = new TextFormat("Gabriola", 20, 0xFE5E5A);
-		public static var linkAccentuatedFormat:TextFormat = new TextFormat("Gabriola", 20, 0xE5E5E5, true);
-		protected static var closeButtonLoader:ButtonBitmapLoader = null;
-		protected static var scrollBarStyle = null;		
+		public static var menuColor:uint = 0;								//default color of menu background 	
+		public static var menuBorderColor:uint = 0;							//default color of menu border 	
+		public static var menuOpacity:Number = 1;							//default opacity of menu background 
+		public static var titleFormat:TextFormat = null;					//text format for titles
+		public static var bodyFormat:TextFormat = null;						//text format for body text
+		public static var captionFormat:TextFormat = null;					//text format for captions
+		public static var textButtonFormat:TextFormat = null;				//text format for text in buttons
+		public static var linkUsableFormat:TextFormat = null;				//text format for usable links
+		public static var linkUnusableFormat:TextFormat = null;				//text format for unusable links
+		public static var linkAccentuatedFormat:TextFormat = null;			//text format for links that are special
+		protected static var closeButtonLoader:ButtonBitmapLoader = null;	//loader of close button images
+		protected static var scrollBarStyle = null;							//style that holds images for scroll bars
 		
 		private static const DEFAULT_OPACITY:Number = -1;
 		
@@ -45,7 +45,7 @@
 		
 
 		//Sets up variables used by all the menus
-		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true, opacity:Number = DEFAULT_OPACITY, backColor:uint = 0x010417):void
+		public function BaseMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, closeable:Boolean = true, scrollable:Boolean = true, draggable:Boolean = true, opacity:Number = DEFAULT_OPACITY):void
 		{			
 			//flag the menu as closed
 			isOpen = false;
@@ -64,12 +64,6 @@
 			
 			//store pane dimensions
 			paneDimensions = new Point(widthVal, heightVal);
-			
-			//see if the background has a custom color
-			if (backColor != menuColor)
-			{
-				menuColor = backColor;
-			}
 			
 			//draw background
 			createBackground(widthVal, heightVal, opacity);
@@ -306,11 +300,12 @@
 		
 		public function changeBackgroundColor(newColor:uint, opacity:Number = DEFAULT_OPACITY):void
 		{
-			// = 0x010417
+			var widthVal = menuBackground.width;
+			var heightVal = menuBackground.height;
 			menuBackground.graphics.clear();
 			menuBackground.graphics.lineStyle(1, menuBorderColor);
 			menuBackground.graphics.beginFill(newColor);
-			menuBackground.graphics.drawRect(0, 0, menuBackground.width, menuBackground.height);
+			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
 			if(opacity < 0)
 				menuBackground.alpha = menuOpacity;

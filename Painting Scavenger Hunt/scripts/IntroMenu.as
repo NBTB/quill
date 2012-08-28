@@ -15,8 +15,8 @@
 		var controls:TextField = new TextField();
 		public static var curSlide:Number;
 		var theBackground:Shape = new Shape();
-		var tutText:TextFormat = new TextFormat();
-		var titleText:TextFormat = new TextFormat();
+		var tutFormat:TextFormat = new TextFormat();
+		var titleFormat:TextFormat = new TextFormat();
 		var buttonFormat:TextFormat = new TextFormat();
 		var titleField:TextField = new TextField();
 		var magLoader:Loader = new Loader();
@@ -36,20 +36,14 @@
 			
 		}
 
-		function init() {
-
-			//titleField.setTextFormat(titleText);
-			controls.setTextFormat(tutText);
-			controls.selectable=false;			
-			
-			
-			//titleField.selectable=false;
+		function init() 
+		{
+			addChild(titleField);
 			addChild(controls);
 			addChild(proceedButton);
 			
 			curSlide=1;
-			proceedButton.setTextFormat(buttonFormat);
-			proceedButton.selectable=false;
+			
 			proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
 			proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			
@@ -63,43 +57,39 @@
 		}	
 		
 		function initText() 
-		{
-
-			buttonFormat.color=0xE5E5E5;
-			buttonFormat.font="Gabriola";
-			buttonFormat.size=36;
+		{			
+			titleFormat.color=BaseMenu.titleFormat.color;
+			titleFormat.font=BaseMenu.titleFormat.font;
+			titleFormat.size=Number(BaseMenu.titleFormat.size) * 1,5;
+			titleFormat.align = TextFormatAlign.CENTER
+			titleFormat.bold = BaseMenu.titleFormat.bold;
+			titleFormat.underline = BaseMenu.titleFormat.italic;
+			titleFormat.italic = BaseMenu.titleFormat.underline;
 			
-			titleText.color=0xE5E5E5;
-			titleText.font="Gabriola";
-			titleText.size=46;
-
-			tutText.color=0xCC9933;
-			tutText.font="Gabriola";
-			tutText.size=28;
-			tutText.align="center";
+			titleField.selectable = false;
+			titleField.defaultTextFormat = titleFormat;
+			titleField.autoSize = TextFieldAutoSize.CENTER;
+			titleField.x=0;
+			titleField.width=width - (titleField.x * 2);
+			titleField.text="Welcome to The Night Before The Battle\nScavenger Hunt!";
 			
-			titleField.x=570;
-			titleField.width=300;
-			titleField.text="Controls";
-
-			proceedButton.x=width/2 - 50;
-			proceedButton.y=415;
-			proceedButton.height=50;
-			proceedButton.width=275;
+			proceedButton.selectable=false;
+			proceedButton.defaultTextFormat = BaseMenu.textButtonFormat;
+			proceedButton.autoSize = TextFieldAutoSize.CENTER;
+			proceedButton.x=10;			
+			proceedButton.width=width - (proceedButton.x * 2);
 			proceedButton.text="Proceed";
-			
-			resumeButton.x=570;
-			resumeButton.y=550;
-			resumeButton.height=50;
-			resumeButton.width=275;
-			resumeButton.text="Resume Game";
+			proceedButton.y=height - proceedButton.height - 10;
 
-			controls.x = 25;
-			controls.y = 15;
-			controls.width= width - 50;
-			controls.height=800;
+			controls.selectable=false;			
+			controls.defaultTextFormat = BaseMenu.bodyFormat;
+			controls.x = 10;
+			controls.y = titleField.y + titleField.height + 10;
+			controls.width=width - (controls.x * 2);
+			controls.height=proceedButton.y - controls.y - 10;
 			controls.wordWrap=true;
-			controls.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt!\n  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas.  Hit 'Space' or the little icon in the bottom corner of your screen to toggle the magnifying glass to help you see things more clearly.  Follow the clues to progress through the scavenger hunt. Good Luck!";
+			controls.autoSize = TextFieldAutoSize.CENTER;
+			controls.text="The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas. Tap the Spacebar or click the icon in the right corner of the main menu to toggle the magnifying glass and help you see the painting more clearly.  Follow the clues to progress through the scavenger hunt.\nGood Luck!";
 		}
 	}
 }
