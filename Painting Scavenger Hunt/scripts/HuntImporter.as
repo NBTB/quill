@@ -65,7 +65,7 @@
 																				if(directoryList.hasOwnProperty("object_of_interest_info"))
 																					FileFinder.setDirectory(FileFinder.OOI_INFO, directoryList.object_of_interest_info);
 																				if(directoryList.hasOwnProperty("end_goal_images"))
-																					FileFinder.setDirectory(FileFinder.END_GOAL_IMAGES, directoryList.end_goal_images);		
+																					FileFinder.setDirectory(FileFinder.END_GOAL_IMAGES, directoryList.end_goal_images);	
 																			}
 																														   
 																																							

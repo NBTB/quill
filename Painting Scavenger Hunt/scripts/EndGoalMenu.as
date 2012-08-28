@@ -81,7 +81,19 @@
 			pieces[pieces.length - 1].visible = true;
 			return true;
 		} 
+		
+		public function hideRewards()
+		{
+			for(var i:int; i < pages.length; i++)
+				pages[i].visible = false;
+		}
          
+		public function showRewards()
+		{
+			for(var i:int; i < pages.length; i++)
+				pages[i].visible = true;
+		}
+		 
         //next piece is shown
         function clickNext(event:MouseEvent):void
         {

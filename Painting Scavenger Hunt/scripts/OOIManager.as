@@ -41,6 +41,9 @@
 				ooiInfoPaneContainer = this;
 			this.ooiInfoPaneContainer = ooiInfoPaneContainer;
 			
+			//objects of interest will start of suppressed
+			ooiHitTestSuppression = true;
+			
 			//create timer to start upon an incorrect click
 			incorrectAnswerTimer = new Timer(500);
 			
@@ -68,6 +71,9 @@
 			
 			//get the new object's info pane
 			var infoPane:OOIInfoPane = newObject.getInfoPane();
+			
+			//suppress the new object's hit tesing
+			newObject.setHitTestSuppression(true);
 			
 			//listen for when the cursor begins to hover over the new object
 			newObject.addEventListener(ObjectOfInterest.OOI_MOUSE_OVER, function(e:Event):void

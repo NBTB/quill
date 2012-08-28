@@ -25,8 +25,6 @@
 		var mouseOverLoader:Loader = new Loader();
 		public static var fromHelp:Boolean=false;
 		
-		var startGameListener:MenuListener;
-		
 		public function IntroMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
 			
@@ -52,7 +50,7 @@
 		
 		function proceedFromTut(event:MouseEvent):void
 		{			
-			proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
+			//proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			closeMenu();
 		}	
 		
