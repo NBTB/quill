@@ -139,7 +139,7 @@
 			//help menu:Objective
 			else if (curSlide==2) {
 				titleField.text = "Objective";
-				instructions.text="The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use the spacebar or the little icon in the right corner of the menu bar to toggle the magnifying glass and see things more clearly.";
+				instructions.text="The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas. When you find an interesting object, left click upon it to interact with it.  Use the spacebar or the little icon in the right corner of the menu bar to toggle the magnifying glass and see things more clearly.";
 				//addChild(magLoader);
 			}
 			//help menu:Clues

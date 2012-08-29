@@ -66,6 +66,7 @@ package scripts
 																						loadingMenu = new LoadingMenu(0, 0, 1265, 630);
 																						addChild(loadingMenu);
 																						loadingMenu.openMenu();
+																						loadingMenu.addChild(loadingMenu.loadLoader);
 																						initGame();																		
 																					 });
 			importer.importStartUp();			
@@ -185,16 +186,7 @@ package scripts
 			addChildAt(notificationText, childIndex++);	
 			addChildAt(magnifyButton, childIndex++);
 			addChildAt(endGoalMenu, childIndex++);	
-			addChildAt(cluesMenu, childIndex++);		
-			
-			
-			//temporary
-			var test:TextButton = new TextButton("hi", null, BaseMenu.textButtonUpFormat, BaseMenu.textButtonOverFormat, BaseMenu.textButtonDownFormat);
-			test.x = 100;
-			test.y = 150;
-			addChild(test);
-			
-			
+			addChildAt(cluesMenu, childIndex++);			
 			
 			//add click listeners to in-game children to dismiss other menus
 			addDismissibleOverlayCloser(paintingCanvas);

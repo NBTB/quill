@@ -8,22 +8,9 @@
 	import flash.geom.ColorTransform;
 
 
-	public class LoadingMenu extends BaseMenu {
-
-		public var proceedButton:TextField = new TextField();		
-		var resumeButton:TextField = new TextField();
-		var controls:TextField = new TextField();
-		public static var curSlide:Number;
-		var theBackground:Shape = new Shape();
-		var tutText:TextFormat = new TextFormat();
-		var titleText:TextFormat = new TextFormat();
-		var buttonFormat:TextFormat = new TextFormat();
-		var titleField:TextField = new TextField();
-		var magLoader:Loader = new Loader();
-		var clueLoader:Loader = new Loader();
-		var mouseLoader:Loader = new Loader();
-		var mouseOverLoader:Loader = new Loader();
+	public class LoadingMenu extends BaseMenu {	
 		
+		var loadLoader:Loader = new Loader();
 		var startGameListener:MenuListener;
 		
 		var splashTitle:TextField = new TextField();
@@ -42,6 +29,7 @@
 		{
 			addChild(splashTitle);
 			addChild(loadingText);
+			addChild(loadLoader);
 		}
 		
 		
@@ -57,6 +45,14 @@
 		
 		function initText()
 		{
+			var url3:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "loadingWheel.swf"));
+
+			loadLoader.load(url3);
+			loadLoader.scaleX=.6;
+			loadLoader.scaleY=.6;
+			loadLoader.x=450;
+			loadLoader.y=170;
+			
 			//create variation of menu title format
 			splashTitleFormat.align = TextFormatAlign.CENTER;
 			splashTitleFormat.color = BaseMenu.titleFormat.color;
