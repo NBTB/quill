@@ -257,7 +257,6 @@
 			var creditsLoader:TextLoader = new TextLoader();						
 			if(menuContent.hasOwnProperty("credits_text_file"))
 			{
-				
 				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.credits_text_file));
 			}
 			
@@ -265,7 +264,6 @@
 			if(menuContent.hasOwnProperty("about_text_file"))
 			{
 			   aboutLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.about_text_file));
-			
 			}		
 			
 			

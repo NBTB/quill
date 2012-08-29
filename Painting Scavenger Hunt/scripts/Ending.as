@@ -35,7 +35,7 @@
 			continueButton.autoSize = TextFieldAutoSize.LEFT;					
 			continueButton.text = "Continue";
 			continueButton.x = (width / 2) - (continueButton.width / 2);
-			continueButton.y = ending.y + ending.height + 5;			
+			continueButton.y = ending.y + ending.height + 10;			
 			addContent(continueButton);
 			
 			//listen for rolling over and off continue button
