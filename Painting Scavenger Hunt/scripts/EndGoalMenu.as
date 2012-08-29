@@ -8,10 +8,11 @@
     public class EndGoalMenu extends BaseMenu
     {
   
-        var pieces:Array=new Array();                      			//stores all of the letterPieces
-        var buttonFormat:TextFormat = new TextFormat();   			//formatting		
-		public var rewardCounter:Number = 0;						//counter of rewards given
-		var heading:TextField = new TextField();					//labels the letter
+        private var pieces:Array=new Array();                      			//stores all of the letterPieces
+        private var buttonFormat:TextFormat = new TextFormat();   			//formatting		
+		private var rewardCounter:Number = 0;								//counter of rewards given
+		private var heading:TextField = new TextField();					//labels the letter
+		private var endGoalOverlayFormat:TextFormat = null;					//format of text overlaid above end goal
 		
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
@@ -80,12 +81,17 @@
 		
 		function initHeading()
 		{			
-			heading.defaultTextFormat = BaseMenu.titleFormat;
+			endGoalOverlayFormat = new TextFormat(bodyFormat.font, bodyFormat.size, bodyFormat.color, bodyFormat.bold, bodyFormat.italic, bodyFormat.underline, null, null, bodyFormat.align);
+			endGoalOverlayFormat.color = 0;
+			endGoalOverlayFormat.align = TextFormatAlign.CENTER;
+		
+			heading.defaultTextFormat = endGoalOverlayFormat;
 			//heading.borderColor = over;
 			heading.autoSize = TextFieldAutoSize.CENTER;
-			heading.textColor = 0;			
+			heading.textColor = 0;	
+			heading.x = 0;
 			heading.y = 20;
-			heading.width = 439;
+			heading.width = width;
 			heading.alpha = 0.2;
 			heading.text = "Letter home from Sergeant Poule";
 			heading.blendMode = BlendMode.LAYER;
@@ -101,7 +107,7 @@
 			
 			if(rewardCheck == true)
 			{
-				heading.text = "Letter To Poule's sister From Colonel MacAlister";
+				heading.text = "Letter To Poule's sister from Colonel MacAlister";
 			}
 			else
 			{

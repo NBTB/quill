@@ -32,12 +32,13 @@
 		public static var titleFormat:TextFormat = null;					//text format for titles
 		public static var bodyFormat:TextFormat = null;						//text format for body text
 		public static var captionFormat:TextFormat = null;					//text format for captions
-		public static var textButtonUpFormat:TextFormat = null;				//text format for up state text in buttons
-		public static var textButtonOverFormat:TextFormat = null;			//text format for over state text in buttons
-		public static var textButtonDownFormat:TextFormat = null;			//text format for down state text in buttons
+		public static var textButtonFormat:TextFormat = null;				//text format for text in buttons
 		public static var linkUsableFormat:TextFormat = null;				//text format for usable links
 		public static var linkUnusableFormat:TextFormat = null;				//text format for unusable links
-		public static var linkAccentuatedFormat:TextFormat = null;			//text format for links that are special
+		public static var linkAccentuatedFormat:TextFormat = null;			//text format for links that are special		
+		public static var textUpColor:uint = 0;								//color of clickable text in up state
+		public static var textOverColor:uint = 0;							//color of clickable text in over state
+		public static var textDownColor:uint = 0;							//color of clickable text in down state
 		protected static var closeButtonLoader:ButtonBitmapLoader = null;	//loader of close button images
 		protected static var scrollBarStyle = null;							//style that holds images for scroll bars
 		
@@ -72,7 +73,7 @@
 			createBackground(widthVal, heightVal, opacity);
 		
 			//create previous button
-			previousPageButton = new TextButton("Preivous", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			previousPageButton = new TextButton("Preivous", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			previousPageButton.x = 5;
 			previousPageButton.y = heightVal - 5 - previousPageButton.height;
 			addChild(previousPageButton);
@@ -84,7 +85,7 @@
 																						});
 			
 			//create next button
-			nextPageButton = new TextButton("Next", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			nextPageButton = new TextButton("Next", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			nextPageButton.x = widthVal - 5 - nextPageButton.width;
 			nextPageButton.y = heightVal - 5 - nextPageButton.height;
 			addChild(nextPageButton);

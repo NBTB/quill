@@ -1,12 +1,10 @@
 ﻿package scripts
 {
-	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.text.TextField;
-	import flash.display.Shape;
-	import flash.events.MouseEvent;
-	import flash.text.TextFormat;
-	import flash.geom.ColorTransform;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.*;
+	import flash.text.*;
+	
 
 	class ObjectsMenu extends BaseMenu
 	{
@@ -15,9 +13,9 @@
 		private var thisY:int;										//Y position of this menu
 		private var thisWidth:int;									//Width of this menu
 		private var numObjects:int;									//Number of objects in the painting
-		public var curLink:int = 0;								//Which link is next to be updated
+		public var curLink:int = 0;									//Which link is next to be updated
 		private var linkFormat:TextFormat = new TextFormat();		//Formatting for the links
-		public var linksArray:Array = null;						//Array which holds all of the links
+		public var linksArray:Array = null;							//Array which holds all of the links
 		
 		//Construct the objects menu, using the base x, y, width, height, and main menu as arguments.  Also sets up the linksArray.
 		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -49,12 +47,9 @@
 			//Loop through as many objects as there are, creating non-functional links for each.
 			while(objCount < numObjects)
 			{
-				tempLink = new TextButton(ooiManager.objectsOfInterest[objCount].getObjectName(), linkUnusableFormat, linkUnusableFormat, linkUnusableFormat);
-				//tempLink.defaultTextFormat = BaseMenu.linkUnusableFormat;
-				tempLink.x = 20;
-				//tempLink.setHitbox();
-				//tempLink.height = 35;
-				//tempLink.width = thisWidth - 40;
+				tempLink = new TextButton(ooiManager.objectsOfInterest[objCount].getObjectName(), linkUnusableFormat, Number(linkUnusableFormat.color), Number(linkUnusableFormat.color), Number(linkUnusableFormat.color));
+				tempLink.x = 10;
+				tempLink.setHitbox(new Rectangle(-tempLink.x, 0, width - 30, tempLink.height));
 				
 				linksArray.push(tempLink);
 				addContentToTail(tempLink);
@@ -81,20 +76,21 @@
 						var foundLink:TextButton = linksArray[curLink];
 						foundLink.setText(ooiName);
 						linksArray[i].setText(tempObjName);
-						//foundLink.setTextFormats(linkUsableFormat, linkUsableFormat, linkUsableFormat);
+						foundLink.setFormat(BaseMenu.linkUsableFormat);
+						foundLink.setColor(TextButton.UP_STATE, textUpColor);
+						foundLink.setColor(TextButton.OVER_STATE, textOverColor);
+						foundLink.setColor(TextButton.DOWN_STATE, textDownColor);
 						
 						//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
-						foundLink.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});
-						foundLink.addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void		{	closeMenu();	});
-						foundLink.addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void
-																										 {
-																											 ooi.showHighlight();
-																										 });
-						foundLink.addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void
-																										 {
-																											 ooi.hideHighlight();
-																										 });
+						foundLink.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																						   {	
+																								closeMenu();	
+																								objectLinkClicked(ooi);	
+																						   });
+						foundLink.addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void	{	ooi.showHighlight();	});
+						foundLink.addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void		{	ooi.hideHighlight();	});
 						
+						//move tracker  to next link in list
 						curLink++;
 					}
 				}
@@ -113,7 +109,7 @@
 			{
 				if(linksArray[i].getText() == ooiName)
 				{
-					//linksArray[i].setTextFormat(BaseMenu.linkAccentuatedFormat);
+					linksArray[i].setFormat(BaseMenu.linkAccentuatedFormat);
 				}
 			}
 		}

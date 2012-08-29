@@ -21,25 +21,13 @@
 		<color>0xCC9933</color>
 		<italic/>	
 	</text_format>
-	<text_format name = "text_button_up">
+	<text_format name = "text_button">
 		<font>Vijaya</font>
 		<size>30</size>
-		<color>0xE5E5E5</color>
-	</text_format>
-	<text_format name = "text_button_over">
-		<font>Vijaya</font>
-		<size>30</size>
-		<color>0xCC9933</color>
-	</text_format>
-	<text_format name = "text_button_down">
-		<font>Vijaya</font>
-		<size>30</size>
-		<color>0xCC9933</color>
 	</text_format>
 	<text_format name = "link_usable">
 		<font>Vijaya</font>
 		<size>20</size>
-		<color>0xE5E5E5</color>
 	</text_format>
 	<text_format name = "link_unusable">
 		<font>Vijaya</font>
@@ -49,7 +37,9 @@
 	<text_format name = "link_accentuated">
 		<font>Vijaya</font>
 		<size>20</size>
-		<color>0xE5E5E5</color>
 		<bold/>
 	</text_format>
+	<up_color>0xE5E5E5</up_color>
+	<over_color>0xCC9933</over_color>
+	<down_color>0xCC9933</down_color>
 </Menu>

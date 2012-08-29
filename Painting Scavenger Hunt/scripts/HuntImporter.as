@@ -233,12 +233,8 @@
 								BaseMenu.bodyFormat = newFormat;
 							else if(formatName == "caption")
 								BaseMenu.captionFormat = newFormat;
-							else if(formatName == "text_button_up")
-								BaseMenu.textButtonUpFormat = newFormat;
-							else if(formatName == "text_button_over")
-								BaseMenu.textButtonOverFormat = newFormat;
-							else if(formatName == "text_button_down")
-								BaseMenu.textButtonDownFormat = newFormat;
+							else if(formatName == "text_button")
+								BaseMenu.textButtonFormat = newFormat;
 							else if(formatName == "link_usable")
 								BaseMenu.linkUsableFormat = newFormat;
 							else if(formatName == "link_unusable")
@@ -249,6 +245,14 @@
 					}
 				}
 			}
+			
+			//attempt to define up, over, and down state colors for clickable text
+			if(menuParams.hasOwnProperty("up_color"))
+				BaseMenu.textUpColor = Number(menuParams.up_color);
+			if(menuParams.hasOwnProperty("over_color"))
+				BaseMenu.textOverColor = Number(menuParams.over_color);
+			if(menuParams.hasOwnProperty("down_color"))
+				BaseMenu.textDownColor = Number(menuParams.down_color);													
 		}
          
 		//parse XML specification of menu content

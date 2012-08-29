@@ -29,7 +29,7 @@
 			addContent(ending);
 			
 			//create continue button
-			continueButton = new TextButton("Continue", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			continueButton = new TextButton("Continue", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			continueButton.x = (width / 2) - (continueButton.width / 2);
 			continueButton.y = ending.y + ending.height + 10;			
 			addContent(continueButton);

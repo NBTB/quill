@@ -51,7 +51,7 @@
 			instructions.setTextFormat(tutText);
 			
 			curSlide=1;
-			resumeButton = new TextButton("Resume Game", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			resumeButton = new TextButton("Resume Game", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			//resumeButton.setTextFormat(buttonFormat);
 			
 			addContent(titleField);

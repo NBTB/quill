@@ -29,11 +29,11 @@
 			startOverQuestion.setTextFormat(BaseMenu.bodyFormat);
 			
 			//Sets up the yes and no buttons
-			startOverYes = new TextButton("Restart", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			startOverYes = new TextButton("Restart", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			startOverYes.x = 80;
 			startOverYes.y = 130;
 			
-			startOverNo = new TextButton("Cancel", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			startOverNo = new TextButton("Cancel", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			startOverNo.x = 240;
 			startOverNo.y = 130;
 			

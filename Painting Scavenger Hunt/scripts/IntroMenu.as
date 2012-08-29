@@ -67,7 +67,7 @@
 			titleField.width=width - (titleField.x * 2);
 			titleField.text="Welcome to The Night Before The Battle\nScavenger Hunt!";
 			
-			proceedButton=new TextButton("Proceed", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			proceedButton=new TextButton("Proceed", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			proceedButton.x=(width / 2) - (proceedButton.width / 2);			
 			proceedButton.y=height - proceedButton.height - 10;
 

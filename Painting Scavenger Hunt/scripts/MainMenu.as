@@ -80,7 +80,7 @@
 			menuTitles.push(menuTitle);
 			
 			//create menu opener button using the menu's title
-			var menuOpener:TextButton = new TextButton(menuTitle, BaseMenu.textButtonUpFormat, BaseMenu.textButtonOverFormat, BaseMenu.textButtonDownFormat);
+			var menuOpener:TextButton = new TextButton(menuTitle, BaseMenu.textButtonFormat, BaseMenu.textUpColor, BaseMenu.textOverColor, BaseMenu.textDownColor);
 			menuOpeners.push(menuOpener);			
 			
 			//position menu opener
