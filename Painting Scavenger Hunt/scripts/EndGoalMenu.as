@@ -8,10 +8,10 @@
     public class EndGoalMenu extends BaseMenu
     {
   
-        var pieces:Array=new Array();                       //stores all of the letterPieces
-        var buttonFormat:TextFormat = new TextFormat();     //formatting		
-		public var rewardCounter:Number = 0;				//counter of rewards given
-		var heading:TextField = new TextField();			//labels the letter
+        var pieces:Array=new Array();                      			//stores all of the letterPieces
+        var buttonFormat:TextFormat = new TextFormat();   			//formatting		
+		public var rewardCounter:Number = 0;						//counter of rewards given
+		var heading:TextField = new TextField();					//labels the letter
 		
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
@@ -78,21 +78,24 @@
 		
 		function initHeading()
 		{			
-			heading.defaultTextFormat = BaseMenu.linkUnusableFormat;
-			heading.borderColor = BaseMenu.menuBorderColor;
+			heading.defaultTextFormat = BaseMenu.titleFormat;
+			//heading.borderColor = over;
 			heading.autoSize = TextFieldAutoSize.CENTER;
-			heading.backgroundColor = BaseMenu.menuColor;			
+			heading.textColor = 0;			
 			heading.y = 20;
 			heading.width = 439;
+			heading.alpha = 0.2;
 			heading.text = "Letter home from Sergeant Poule";
+			heading.blendMode = BlendMode.LAYER;
 			addChild(heading);
 			
 		}
 		
 		function displayHeading(event:MouseEvent):void
 		{			
-			heading.border = true;			
-			heading.background = true;
+			//heading.border = true;			
+			//heading.background = true;
+			heading.alpha = 0.7;
 			
 			if(rewardCheck == true)
 			{
@@ -108,8 +111,9 @@
 		
 		function removeHeading(event:MouseEvent):void
 		{
-			heading.border = false;
-			heading.background = false;				
+			//heading.border = false;
+			//heading.background = false;	
+			heading.alpha = 0.2;
 		}
 		
 		//unlock the final reward
