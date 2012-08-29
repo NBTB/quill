@@ -109,7 +109,7 @@
 			var aboutXMLLoader:URLLoader = new URLLoader();
             aboutXMLLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																			 {
-																				parseAbout(new XML(e.target.data));
+																				parseMenuContent(new XML(e.target.data));
 																				aboutLoaded = true;
 																				if(menuParamsLoaded && aboutLoaded)
 																					dispatchEvent(new Event(START_UP_LOADED));
@@ -190,6 +190,9 @@
 			//attempt to create text formats
 			if(menuParams.hasOwnProperty("text_format"))
 			{
+				// Create a new instance of the Font1 symbol from the document's library.
+				var myFont:Font = new Font1();
+				
 				var formats:XMLList = menuParams.text_format;
 				for each(var formatParams in formats)
 				{
@@ -202,8 +205,9 @@
 							var formatName = attrib;
 							var textFormats:XMLList = menuParams.text_format;
 							var newFormat:TextFormat = new TextFormat();
-							if(formatParams.hasOwnProperty("font"))
-								newFormat.font = formatParams.font;
+							newFormat.font = myFont.fontName;
+							//if(formatParams.hasOwnProperty("font"))
+								//newFormat.font = formatParams.font;
 							if(formatParams.hasOwnProperty("size"))
 								newFormat.size = Number(formatParams.size);
 							if(formatParams.hasOwnProperty("color"))
@@ -233,8 +237,12 @@
 								BaseMenu.bodyFormat = newFormat;
 							else if(formatName == "caption")
 								BaseMenu.captionFormat = newFormat;
-							else if(formatName == "text_button")
-								BaseMenu.textButtonFormat = newFormat;
+							else if(formatName == "text_button_up")
+								BaseMenu.textButtonUpFormat = newFormat;
+							else if(formatName == "text_button_over")
+								BaseMenu.textButtonOverFormat = newFormat;
+							else if(formatName == "text_button_down")
+								BaseMenu.textButtonDownFormat = newFormat;
 							else if(formatName == "link_usable")
 								BaseMenu.linkUsableFormat = newFormat;
 							else if(formatName == "link_unusable")
@@ -247,11 +255,49 @@
 			}
 		}
          
-		//parse XML specification of info about game
-		private function parseAbout(about:XML)
-		{			
-			if(about.hasOwnProperty("Splash_Screen"))
-				parseSplashScreen(about.Splash_Screen[0]);
+		//parse XML specification of menu content
+		private function parseMenuContent(menuContent:XML)
+		{					
+			var creditsLoader:TextLoader = new TextLoader();						
+			if(menuContent.hasOwnProperty("credits_text_file"))
+			{
+				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.credits_text_file));
+			}
+			
+			var aboutLoader:TextLoader = new TextLoader();			
+			if(menuContent.hasOwnProperty("about_text_file"))
+			{
+			   aboutLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.about_text_file));
+			}		
+			
+			
+			if(menuContent.hasOwnProperty("tutorial_text_file"))
+			{
+				   
+			}
+			
+			creditsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
+																							   {
+																									//parse text file
+																									var newText:String = creditsLoader.parseText();
+																									
+																									//if text was found, add a textfield to the object's info pane
+																									if(newText)
+																									{
+																											InstructionsMenu.credits = newText;
+																									}
+																							   });
+			aboutLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
+																							  {																								
+																								//parse text file
+																								var newText:String = aboutLoader.parseText();
+																								
+																								//if text was found, add a textfield to the object's info pane
+																								if(newText)
+																								{
+																									InstructionsMenu.about = newText;
+																								}
+																							  });
 		}
 		 
         //parse XML specification of scavenger hunt parameters
@@ -282,65 +328,6 @@
 			//dispatch hunt loaded event
 			dispatchEvent(new Event(HUNT_LOADED));
         }
-		
-		//parse XML specification of splash screen
-
-		private function parseSplashScreen(splashScreenInfo:XML)
-		{
-			
-			var creditsLoader:TextLoader = new TextLoader();
-						
-			if(splashScreenInfo.hasOwnProperty("credits_text_file"))
-			{
-				
-				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, splashScreenInfo.credits_text_file));
-			}
-			
-			var aboutLoader:TextLoader = new TextLoader();
-			
-			if(splashScreenInfo.hasOwnProperty("about_text_file"))
-			{
-			   aboutLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, splashScreenInfo.about_text_file));
-			
-			}
-			
-			
-			
-			if(splashScreenInfo.hasOwnProperty("tutorial_text_file"))
-			{
-				   
-			}
-			
-			creditsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
-																							   {
-																									//parse text file
-																									var newText:String = creditsLoader.parseText();
-																									
-																									//if text was found, add a textfield to the object's info pane
-																									if(newText)
-																									{
-																										if(splashScreenInfo.credits_text_file)
-																										{
-																											InstructionsMenu.credits = newText;
-																										}
-																									}
-																							   });
-			aboutLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
-																							  {																								
-																								//parse text file
-																								var newText:String = aboutLoader.parseText();
-																								
-																								//if text was found, add a textfield to the object's info pane
-																								if(newText)
-																								{
-																									if(splashScreenInfo.about_text_file)
-																									{
-																										InstructionsMenu.about = newText;
-																									}
-																								}
-																							  });
-		
-		}
          
         //parse XML specification of painting to be applied to canvas
         private function parsePainting(painting:XML, paintingCanvas:PaintingCanvas, magnifyingGlass:MagnifyingGlass)

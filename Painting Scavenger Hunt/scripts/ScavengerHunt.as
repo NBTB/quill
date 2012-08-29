@@ -66,7 +66,7 @@ package scripts
 																						loadingMenu = new LoadingMenu(0, 0, 1265, 630);
 																						addChild(loadingMenu);
 																						loadingMenu.openMenu();
-																						//loadingMenu.addChild(loadingMenu.loadLoader);
+																						loadingMenu.addChild(loadingMenu.loadLoader);
 																						initGame();																		
 																					 });
 			importer.importStartUp();			
@@ -75,7 +75,7 @@ package scripts
 		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
 		{														
-			//Prevent the mouse from scrolling the webpage while the program is selected
+			//prevent the mouse from scrolling the webpage while the program is selected
 			MouseWheel.capture();
 					
 			//create in-game children that will handle specific interaction
@@ -84,10 +84,12 @@ package scripts
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
 			notificationText = new TextField();
+			notificationText.embedFonts = true;
 			magnifyButton = new SimpleButton();
 			cluesMenu = new CluesMenu(0, 0, 765, 55);
 			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			
 			introMenu = new IntroMenu(30, 75, 700, 480);
+			ending = new Ending(150, 150, 450, 200);
 			
 			//define normal notification text color
 			var normalRed:uint = 0x40;
@@ -164,10 +166,7 @@ package scripts
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);
 			
-			//create ending
-			ending = new Ending(200, 150, 450, 300);
-			ending.visible = false;
-			addChild(ending);
+			
 		}
 		
 		//Actually begin the rest of the game
@@ -186,7 +185,7 @@ package scripts
 			addChildAt(notificationText, childIndex++);	
 			addChildAt(magnifyButton, childIndex++);
 			addChildAt(endGoalMenu, childIndex++);	
-			addChildAt(cluesMenu, childIndex++);		
+			addChildAt(cluesMenu, childIndex++);			
 			
 			//add click listeners to in-game children to dismiss other menus
 			addDismissibleOverlayCloser(paintingCanvas);
@@ -309,9 +308,13 @@ package scripts
 																						endGoalMenu.showRewards();
 																				   });
 			
-			//open intro menu			
+			//open intro menu						
 			addChild(introMenu);	
-			introMenu.openMenu();			
+			introMenu.openMenu();		
+							
+			//add ending
+			ending.closeMenu();
+			addChild(ending);			
 			
 			//unlock the first pieces of the end goal (remain hidden for now)
 			endGoalMenu.hideRewards();

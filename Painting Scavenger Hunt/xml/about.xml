@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <About xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Splash_Screen>
-		<credits_text_file>credits.txt</credits_text_file>
-		<about_text_file>about.txt</about_text_file>
-		<tutorial_text_file>tutorial.txt</tutorial_text_file>
-	</Splash_Screen>
+	<credits_text_file>credits.txt</credits_text_file>
+	<about_text_file>about.txt</about_text_file>
+	<tutorial_text_file>tutorial.txt</tutorial_text_file>
 </About>

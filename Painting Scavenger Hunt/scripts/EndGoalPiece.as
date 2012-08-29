@@ -12,7 +12,7 @@
 		private var pieceName:String;
 		private var id:Number = 0;
 		private var fileName:String;
-		private var letter:Bitmap = null;
+		private var piece:Bitmap = null;
 		private var scaleFactor:Number = 1; 
 	
 		private static var staticID:Number = 0;
@@ -47,17 +47,17 @@
             loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void
                                                                                               {
                                                                                                 //store image data as outline
-                                                                                                letter = Bitmap(LoaderInfo(e.target).content);
+                                                                                                piece = Bitmap(LoaderInfo(e.target).content);
                                                                                                   
                                                                                                 //scale the outline image (internal data is not affected)
-                                                                                                letter.width *= scaleFactor;
-                                                                                                letter.height *= scaleFactor;
+                                                                                                piece.width *= scaleFactor;
+                                                                                                piece.height *= scaleFactor;
                                                                                                   
                                                                                                 //store a fullsize lette for convenience
-                                                                                                addChild(letter);
+                                                                                                addChild(piece);
                                                                                                   
                                                                                                 //if both the hitmap and outline are now loaded, dispatch a completion event
-                                                                                                if(letter)
+                                                                                                if(piece)
                                                                                                     dispatchEvent(new Event(Event.COMPLETE));
                                                                                               });
               

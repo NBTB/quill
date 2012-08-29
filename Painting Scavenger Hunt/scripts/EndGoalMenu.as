@@ -1,19 +1,17 @@
 ﻿package scripts
 {
-    import flash.display.MovieClip;
-    import flash.text.TextField;
-    import flash.display.Shape;
-    import flash.text.TextFormat;
+    import flash.display.*;
+    import flash.text.*;
     import flash.geom.ColorTransform;
     import flash.events.*;
   
     public class EndGoalMenu extends BaseMenu
     {
   
-        var pieces:Array=new Array();                       //stores all of the letterPieces
-        var buttonFormat:TextFormat = new TextFormat();     //formatting		
-		public var rewardCounter:Number = 0;				//counter of rewards given
-		var heading:TextField = new TextField();			//labels the letter
+        var pieces:Array=new Array();                      			//stores all of the letterPieces
+        var buttonFormat:TextFormat = new TextFormat();   			//formatting		
+		public var rewardCounter:Number = 0;						//counter of rewards given
+		var heading:TextField = new TextField();					//labels the letter
 		
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
@@ -25,10 +23,12 @@
             super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
 			
 			//change previous and next button
-			previousPageButton.text = "<";
+			previousPageButton.setText("<");
+			previousPageButton.fitHitboxToText();
 			previousPageButton.x = 2;
 			previousPageButton.y = (heightVal - previousPageButton.height) / 2;
-			nextPageButton.text = ">";
+			nextPageButton.setText(">");
+			nextPageButton.fitHitboxToText();
 			nextPageButton.x = widthVal - nextPageButton.width - 2;
 			nextPageButton.y = (heightVal - nextPageButton.height) / 2;
 			initHeading();
@@ -59,7 +59,7 @@
                 pieces.push(newPiece);
                  
             //add new object to list
-            newPiece.width = 449;
+            newPiece.width = 431;
             newPiece.height = 664;  
         }
         
@@ -80,22 +80,24 @@
 		
 		function initHeading()
 		{			
-			heading.defaultTextFormat = BaseMenu.linkUnusableFormat;
-			heading.borderColor = 0x836A35;
-			heading.autoSize = "center";
-			heading.backgroundColor = 0x010417;			
+			heading.defaultTextFormat = BaseMenu.titleFormat;
+			heading.embedFonts = true;
+			heading.autoSize = TextFieldAutoSize.CENTER;
+			heading.textColor = 0;			
 			heading.y = 20;
 			heading.width = 439;
-			heading.alpha = 0.0;
+			heading.alpha = 0.2;
 			heading.text = "Letter home from Sergeant Poule";
+			heading.blendMode = BlendMode.LAYER;
 			addChild(heading);
 			
 		}
 		
 		function displayHeading(event:MouseEvent):void
 		{			
-			heading.border = true;			
-			heading.background = true;
+			//heading.border = true;			
+			//heading.background = true;
+			heading.alpha = 0.7;
 			
 			if(rewardCheck == true)
 			{
@@ -111,8 +113,9 @@
 		
 		function removeHeading(event:MouseEvent):void
 		{
-			heading.border = false;
-			heading.background = false;				
+			//heading.border = false;
+			//heading.background = false;	
+			heading.alpha = 0.2;
 		}
 		
 		//unlock the final reward

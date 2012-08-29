@@ -7,7 +7,7 @@
     class Ending extends BaseMenu
     {
 		
-		var continueButton:TextField = new TextField();
+		var continueButton:TextButton = null;
 		var ending:TextField = new TextField();		
 		
 		 //Creates the ending menu
@@ -20,6 +20,7 @@
 			ending = new TextField();		
 			ending.defaultTextFormat = BaseMenu.bodyFormat;
 			ending.selectable = false;
+			ending.embedFonts = true;
 			ending.autoSize = TextFieldAutoSize.LEFT;
 			ending.wordWrap = true;
 			ending.text = "Congratulations! You have solved all of the riddles! Although no clues remain, there is still plenty to discover and learn. Perhaps a secret awaits.";
@@ -29,18 +30,10 @@
 			addContent(ending);
 			
 			//create continue button
-			continueButton = new TextField();
-			continueButton.defaultTextFormat = BaseMenu.textButtonFormat;
-			continueButton.selectable = false;			
-			continueButton.autoSize = TextFieldAutoSize.LEFT;					
-			continueButton.text = "Continue";
+			continueButton = new TextButton("Continue", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
 			continueButton.x = (width / 2) - (continueButton.width / 2);
-			continueButton.y = ending.y + ending.height + 5;			
+			continueButton.y = ending.y + ending.height + 10;			
 			addContent(continueButton);
-			
-			//listen for rolling over and off continue button
-			continueButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			continueButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
 			
 			//listen for the continue button to be clicked
 			continueButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	closeMenu();	});				

@@ -40,7 +40,7 @@
 			linkFormat.font = "Gabriola";
 			linkFormat.size = 20;
 			
-			var tempLink:TextField;			
+			var tempLink:TextButton;			
 			
 			var objCount:int = 0;
 			
@@ -49,13 +49,12 @@
 			//Loop through as many objects as there are, creating non-functional links for each.
 			while(objCount < numObjects)
 			{
-				tempLink = new TextField;
-				tempLink.defaultTextFormat = BaseMenu.linkUnusableFormat;
+				tempLink = new TextButton(ooiManager.objectsOfInterest[objCount].getObjectName(), linkUnusableFormat, linkUnusableFormat, linkUnusableFormat);
+				//tempLink.defaultTextFormat = BaseMenu.linkUnusableFormat;
 				tempLink.x = 20;
-				tempLink.height = 35;
-				tempLink.width = thisWidth - 40;
-				tempLink.text = ooiManager.objectsOfInterest[objCount].getObjectName();
-				tempLink.selectable = false;
+				//tempLink.setHitbox();
+				//tempLink.height = 35;
+				//tempLink.width = thisWidth - 40;
 				
 				linksArray.push(tempLink);
 				addContentToTail(tempLink);
@@ -70,31 +69,29 @@
 			if(curLink < linksArray.length)
 			{
 				//store name of uppermost, not usable link
-				var tempObjName:String = linksArray[curLink].text;			
+				var tempObjName:String = linksArray[curLink].getText();			
 				
 				//search list
 				var ooiName:String = ooi.getObjectName();
 				for (var i:int = curLink; i < linksArray.length; i++)
 				{
 					//if the object name is found, swap the link texts and make the object's new link appear usable
-					if (linksArray[i].text == ooiName)
+					if (linksArray[i].getText() == ooiName)
 					{
-						
-						linksArray[curLink].text = ooiName;
-						linksArray[i].text = tempObjName;
-						linksArray[curLink].setTextFormat(BaseMenu.linkUsableFormat);
+						var foundLink:TextButton = linksArray[curLink];
+						foundLink.setText(ooiName);
+						linksArray[i].setText(tempObjName);
+						//foundLink.setTextFormats(linkUsableFormat, linkUsableFormat, linkUsableFormat);
 						
 						//Add event listeners to connect the link to the object's pane, close the window, and make the link appear purdy.
-						linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});
-						linksArray[curLink].addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void	{	closeMenu();	});
-						linksArray[curLink].addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void
+						foundLink.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	objectLinkClicked(ooi);	});
+						foundLink.addEventListener(MouseEvent.MOUSE_DOWN, function(e:Event):void		{	closeMenu();	});
+						foundLink.addEventListener(MouseEvent.ROLL_OVER, function(e:MouseEvent):void
 																										 {
-																											 colorChange(e);
 																											 ooi.showHighlight();
 																										 });
-						linksArray[curLink].addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void
+						foundLink.addEventListener(MouseEvent.ROLL_OUT, function(e:MouseEvent):void
 																										 {
-																											 revertColor(e);
 																											 ooi.hideHighlight();
 																										 });
 						
@@ -114,9 +111,9 @@
 			var ooiName:String = ooi.getObjectName();
 			for(var i:int = 0; i < curLink; i++)
 			{
-				if(linksArray[i].text == ooiName)
+				if(linksArray[i].getText() == ooiName)
 				{
-					linksArray[i].setTextFormat(BaseMenu.linkAccentuatedFormat);
+					//linksArray[i].setTextFormat(BaseMenu.linkAccentuatedFormat);
 				}
 			}
 		}

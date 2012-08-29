@@ -80,18 +80,12 @@
 			menuTitles.push(menuTitle);
 			
 			//create menu opener button using the menu's title
-			var menuOpener:TextField = new TextField();
-			menuOpener.defaultTextFormat = BaseMenu.textButtonFormat;
-			menuOpener.text = menuTitle;
-			menuOpener.selectable = false;
+			var menuOpener:TextButton = new TextButton(menuTitle, BaseMenu.textButtonUpFormat, BaseMenu.textButtonOverFormat, BaseMenu.textButtonDownFormat);
 			menuOpeners.push(menuOpener);			
 			
 			//position menu opener
-			menuOpener.x = menuOpenerSize.x * (menuOpeners.length - 1);
-			menuOpener.y = 0;
-			menuOpener.width = menuOpenerSize.x;
-			menuOpener.height = menuOpenerSize.y;
-			menuOpener.autoSize = TextFieldAutoSize.CENTER;			
+			menuOpener.x = menuOpenerSize.x * ((menuOpeners.length - 1) + 0.5) - menuOpener.width/2;
+			menuOpener.y = 0;		
 			
 			//add menu opener to display list
 			addChild(menuOpener);			
@@ -101,10 +95,6 @@
 			
 			//listen for the opener being clicked
 			menuOpener.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	menu.openMenu()	});
-			
-			//listen for the mouse hovering over the opener and hovering out of the openers bounds
-			menuOpener.addEventListener(MouseEvent.ROLL_OVER, menu.colorChange);
-			menuOpener.addEventListener(MouseEvent.ROLL_OUT, menu.revertColor);			
 			
 			//listen for request to close child menus
 			menu.addEventListener(MenuEvent.CLOSE_MENUS_REQUEST, function(e:MenuEvent):void	{	closeMenus();	});

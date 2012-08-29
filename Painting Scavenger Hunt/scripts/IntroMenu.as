@@ -10,8 +10,7 @@
 
 	public class IntroMenu extends BaseMenu {
 
-		public var proceedButton:TextField = new TextField();		
-		var resumeButton:TextField = new TextField();
+		public var proceedButton:TextButton = null;		
 		var controls:TextField = new TextField();
 		public static var curSlide:Number;
 		var theBackground:Shape = new Shape();
@@ -42,9 +41,6 @@
 			
 			curSlide=1;
 			
-			proceedButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			proceedButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-			
 			proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
 		}
 		
@@ -66,17 +62,14 @@
 			
 			titleField.selectable = false;
 			titleField.defaultTextFormat = titleFormat;
+			titleField.embedFonts = true;
 			titleField.autoSize = TextFieldAutoSize.CENTER;
 			titleField.x=0;
 			titleField.width=width - (titleField.x * 2);
 			titleField.text="Welcome to The Night Before The Battle\nScavenger Hunt!";
 			
-			proceedButton.selectable=false;
-			proceedButton.defaultTextFormat = BaseMenu.textButtonFormat;
-			proceedButton.autoSize = TextFieldAutoSize.CENTER;
-			proceedButton.x=10;			
-			proceedButton.width=width - (proceedButton.x * 2);
-			proceedButton.text="Proceed";
+			proceedButton=new TextButton("Proceed", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			proceedButton.x=(width / 2) - (proceedButton.width / 2);			
 			proceedButton.y=height - proceedButton.height - 10;
 
 			controls.selectable=false;			
