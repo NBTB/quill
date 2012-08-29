@@ -10,7 +10,7 @@
 
 	public class InstructionsMenu extends BaseMenu {
 
-		var resumeButton:TextField = new TextField();
+		var resumeButton:TextButton = null;
 		var instructions:TextField = new TextField();
 		var curSlide:Number;
 		var theBackground:Shape = new Shape();
@@ -41,22 +41,22 @@
 			instructions.selectable=false;			
 			
 			titleField.selectable=false;
-			addContent(titleField);
-			addContent(instructions);
-			addContent(resumeButton);
+			
 			
 			titleField.defaultTextFormat = BaseMenu.titleFormat;
 			instructions.defaultTextFormat = BaseMenu.bodyFormat;
-			resumeButton.defaultTextFormat = BaseMenu.textButtonUpFormat;
+			//resumeButton.defaultTextFormat = BaseMenu.textButtonUpFormat;
 			
 			
 			instructions.setTextFormat(tutText);
 			
 			curSlide=1;
-			resumeButton.setTextFormat(buttonFormat);
-			resumeButton.selectable=false;
-			resumeButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			resumeButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);
+			resumeButton = new TextButton("Resume Game", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
+			//resumeButton.setTextFormat(buttonFormat);
+			
+			addContent(titleField);
+			addContent(instructions);
+			addContent(resumeButton);
 		}
 
 		function loadImages() {
@@ -102,8 +102,8 @@
 			titleField.autoSize = TextFieldAutoSize.CENTER;
 			
 
-			resumeButton.text="Resume Game";
-			resumeButton.autoSize = TextFieldAutoSize.CENTER;
+			//resumeButton.text="Resume Game";
+			//resumeButton.autoSize = TextFieldAutoSize.CENTER;
 			resumeButton.x=(width / 2) - (resumeButton.width / 2);
 			resumeButton.y=height-resumeButton.height - 10;			
 

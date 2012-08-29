@@ -8,13 +8,13 @@
     class HelpMenu extends BaseMenu
     {
          
-        var objectiveOption:TextField = new TextField();	      
-        var controlsOption:TextField = new TextField();		
-		var endGoalOption:TextField = new TextField();		
-		var objectsOption:TextField = new TextField();	
-		var cluesOption:TextField = new TextField();
-		var aboutOption:TextField = new TextField();
-		var creditsOption:TextField = new TextField();
+        var objectiveOption:TextButton = null;	      
+        var controlsOption:TextButton = null;		
+		var endGoalOption:TextButton = null;		
+		var objectsOption:TextButton = null;	
+		var cluesOption:TextButton = null;
+		var aboutOption:TextButton = null;
+		var creditsOption:TextButton = null;
 		
 		var instructions:InstructionsMenu;
 		var instructionsOpening:Boolean = false;
@@ -33,62 +33,47 @@
             var elementHeight = 35;
              
             //set up objective button
-            objectiveOption.text = "Objective";
+            objectiveOption = new TextButton("Objective", linkUsableFormat, linkUsableFormat, linkUsableFormat);
             objectiveOption.x = startX;
             objectiveOption.y = startY;
-            objectiveOption.height = elementHeight;
-            objectiveOption.selectable = false;
+            //objectiveOption.height = elementHeight;
             addContent(objectiveOption);
           	
             //set up controls button
-            controlsOption.text = "Controls";
+            controlsOption = new TextButton("Controls", linkUsableFormat, linkUsableFormat, linkUsableFormat);
 			controlsOption.x = startX;
-            controlsOption.height = elementHeight;
-            controlsOption.selectable = false;
+            //controlsOption.height = elementHeight;
             addContentToTail(controlsOption);
              
             //set up clues button
-            cluesOption.text = "Clues";
+            cluesOption = new TextButton("Clues", linkUsableFormat, linkUsableFormat, linkUsableFormat);
             cluesOption.x = startX;
-            cluesOption.height = elementHeight;
-            cluesOption.selectable = false;
+            //cluesOption.height = elementHeight;
             addContentToTail(cluesOption);
 			
 			//set up letter button
-            endGoalOption.text = "Letter";
+            endGoalOption = new TextButton("Letter", linkUsableFormat, linkUsableFormat, linkUsableFormat);
             endGoalOption.x = startX;
-            endGoalOption.height = elementHeight;
-            endGoalOption.selectable = false;
+           // endGoalOption.height = elementHeight;
             addContentToTail(endGoalOption);
 			
-			//set up options button
-            objectsOption.text = "Objects";
+			//set up objects button
+            objectsOption = new TextButton("Objects", linkUsableFormat, linkUsableFormat, linkUsableFormat);
             objectsOption.x = startX;
-            objectsOption.height = elementHeight;
-            objectsOption.selectable = false;
+            //objectsOption.height = elementHeight;
             addContentToTail(objectsOption);
 			
 			//set up about button
-            aboutOption.text = "About";
+            aboutOption = new TextButton("About", linkUsableFormat, linkUsableFormat, linkUsableFormat);
             aboutOption.x = startX;
-            aboutOption.height = elementHeight;
-            aboutOption.selectable = false;
+            //aboutOption.height = elementHeight;
             addContentToTail(aboutOption);
 			
 			//set up credits button
-            creditsOption.text = "Credits";
+            creditsOption = new TextButton("Credits", linkUsableFormat, linkUsableFormat, linkUsableFormat);
             creditsOption.x = startX;
-            creditsOption.height = elementHeight;
-            creditsOption.selectable = false;
+            //creditsOption.height = elementHeight;
             addContentToTail(creditsOption);
-			
-            objectiveOption.setTextFormat(BaseMenu.linkUsableFormat);
-            objectsOption.setTextFormat(BaseMenu.linkUsableFormat);
-            controlsOption.setTextFormat(BaseMenu.linkUsableFormat);
-			endGoalOption.setTextFormat(BaseMenu.linkUsableFormat);
-			cluesOption.setTextFormat(BaseMenu.linkUsableFormat);
-			aboutOption.setTextFormat(BaseMenu.linkUsableFormat);
-			creditsOption.setTextFormat(BaseMenu.linkUsableFormat);
 			
 			//listen for being added
 			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
@@ -112,28 +97,7 @@
 			objectsOption.addEventListener(MouseEvent.MOUSE_DOWN, showObjects);
 			endGoalOption.addEventListener(MouseEvent.MOUSE_DOWN, showLetter);
 			aboutOption.addEventListener(MouseEvent.MOUSE_DOWN, showAbout);
-			creditsOption.addEventListener(MouseEvent.MOUSE_DOWN, showCredits);
-             
-            objectiveOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            objectiveOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);
-             
-            controlsOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            controlsOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);	
-			
-			cluesOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            cluesOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);	
-			
-			objectsOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            objectsOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);	
-			
-			endGoalOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            endGoalOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);	
-			
-			aboutOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            aboutOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);				
-			
-			creditsOption.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-            creditsOption.addEventListener(MouseEvent.ROLL_OUT, revertColor);				
+			creditsOption.addEventListener(MouseEvent.MOUSE_DOWN, showCredits);	
         }         
       
          

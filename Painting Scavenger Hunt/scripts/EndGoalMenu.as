@@ -23,10 +23,12 @@
             super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
 			
 			//change previous and next button
-			previousPageButton.text = "<";
+			previousPageButton.setText("<");
+			previousPageButton.fitHitboxToText();
 			previousPageButton.x = 2;
 			previousPageButton.y = (heightVal - previousPageButton.height) / 2;
-			nextPageButton.text = ">";
+			nextPageButton.setText(">");
+			nextPageButton.fitHitboxToText();
 			nextPageButton.x = widthVal - nextPageButton.width - 2;
 			nextPageButton.y = (heightVal - nextPageButton.height) / 2;
 			initHeading();
@@ -57,7 +59,7 @@
                 pieces.push(newPiece);
                  
             //add new object to list
-            newPiece.width = 449;
+            newPiece.width = 431;
             newPiece.height = 664;  
         }
         

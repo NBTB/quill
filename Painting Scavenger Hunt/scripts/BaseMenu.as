@@ -11,8 +11,8 @@
 		protected var menuMask:Shape = null;						//mask of menu to determine what is seen
 		protected var pages:Array = null;							//list of content containers that mimic seperate pages of content
 		protected var currentPage:int = -1;							//page to be displayed in menu
-		protected var previousPageButton:TextField = null;			//button to move to the previous page of the menu
-		protected var nextPageButton:TextField = null;				//button to move to the next page of the menu
+		protected var previousPageButton:TextButton = null;			//button to move to the previous page of the menu
+		protected var nextPageButton:TextButton = null;				//button to move to the next page of the menu
 		protected var closeMenuButton:SimpleButton = null;			//button to close window
 		protected var scrollBar:ScrollBar = null;					//scroll bar used to scroll through pane content
 		protected var paneDimensions:Point = null;					//visible dimensions of pane
@@ -72,30 +72,28 @@
 			createBackground(widthVal, heightVal, opacity);
 		
 			//create previous button
-			previousPageButton = new TextField();
-			previousPageButton.defaultTextFormat = titleFormat;
-			previousPageButton.autoSize = TextFieldAutoSize.CENTER;
-			previousPageButton.text = "Previous";
+			previousPageButton = new TextButton("Preivous", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
 			previousPageButton.x = 5;
 			previousPageButton.y = heightVal - 5 - previousPageButton.height;
-			previousPageButton.selectable = false;
 			addChild(previousPageButton);
-			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage > 0){	changePage(currentPage - 1);	}	rewardCheck = !rewardCheck});
-			previousPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			previousPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);						
+			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																						{	
+																							if(currentPage > 0)
+																								changePage(currentPage - 1);	
+																							rewardCheck = !rewardCheck
+																						});
 			
 			//create next button
-			nextPageButton = new TextField();
-			nextPageButton.defaultTextFormat = titleFormat;
-			nextPageButton.autoSize = TextFieldAutoSize.CENTER;
-			nextPageButton.text = "Next";
+			nextPageButton = new TextButton("Next", textButtonUpFormat, textButtonOverFormat, textButtonDownFormat);
 			nextPageButton.x = widthVal - 5 - nextPageButton.width;
 			nextPageButton.y = heightVal - 5 - nextPageButton.height;
-			nextPageButton.selectable = false;
 			addChild(nextPageButton);
-			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	if(currentPage < pages.length - 1){	changePage(currentPage + 1);	}	rewardCheck = !rewardCheck});
-			nextPageButton.addEventListener(MouseEvent.ROLL_OVER, colorChange);
-			nextPageButton.addEventListener(MouseEvent.ROLL_OUT, revertColor);		
+			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																					{	
+																						if(currentPage < pages.length - 1)
+																							changePage(currentPage + 1);
+																						rewardCheck = !rewardCheck
+																					});
 			
 			//if the close button has not yet been loaded, do so now
 			if(!closeButtonLoader)
@@ -486,7 +484,7 @@
 		}
 		
 		//changes the text color of the menu buttons to identify which one you're moused over
-		public function colorChange(event:MouseEvent):void 
+		/*public function colorChange(event:MouseEvent):void 
 		{
 			var sender:TextField=event.target as TextField;
 			var myColor:ColorTransform=sender.transform.colorTransform;
@@ -501,7 +499,7 @@
 			var myColor:ColorTransform=sender.transform.colorTransform;	
 			myColor.color=0xE5E5E5;		
 			sender.transform.colorTransform=myColor;
-		}
+		}*/
 		
 		public function isMenuOpen():Boolean	{	return isOpen;	}
 		
