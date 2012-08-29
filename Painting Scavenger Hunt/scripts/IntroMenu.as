@@ -72,7 +72,7 @@
 			titleField.text="Welcome to The Night Before The Battle\nScavenger Hunt!";
 			
 			proceedButton.selectable=false;
-			proceedButton.defaultTextFormat = BaseMenu.textButtonFormat;
+			proceedButton.defaultTextFormat = BaseMenu.textButtonUpFormat;
 			proceedButton.autoSize = TextFieldAutoSize.CENTER;
 			proceedButton.x=10;			
 			proceedButton.width=width - (proceedButton.x * 2);

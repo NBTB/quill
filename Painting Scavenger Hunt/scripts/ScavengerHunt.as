@@ -74,7 +74,7 @@ package scripts
 		//When splash screen ends, set up the rest of the game.
 		public function initGame():void
 		{														
-			//Prevent the mouse from scrolling the webpage while the program is selected
+			//prevent the mouse from scrolling the webpage while the program is selected
 			MouseWheel.capture();
 					
 			//create in-game children that will handle specific interaction
@@ -186,6 +186,15 @@ package scripts
 			addChildAt(magnifyButton, childIndex++);
 			addChildAt(endGoalMenu, childIndex++);	
 			addChildAt(cluesMenu, childIndex++);		
+			
+			
+			//temporary
+			var test:TextButton = new TextButton("hi", null, BaseMenu.textButtonUpFormat, BaseMenu.textButtonOverFormat, BaseMenu.textButtonDownFormat);
+			test.x = 100;
+			test.y = 150;
+			addChild(test);
+			
+			
 			
 			//add click listeners to in-game children to dismiss other menus
 			addDismissibleOverlayCloser(paintingCanvas);

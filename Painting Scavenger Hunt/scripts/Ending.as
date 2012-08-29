@@ -30,7 +30,7 @@
 			
 			//create continue button
 			continueButton = new TextField();
-			continueButton.defaultTextFormat = BaseMenu.textButtonFormat;
+			continueButton.defaultTextFormat = BaseMenu.textButtonUpFormat;
 			continueButton.selectable = false;			
 			continueButton.autoSize = TextFieldAutoSize.LEFT;					
 			continueButton.text = "Continue";

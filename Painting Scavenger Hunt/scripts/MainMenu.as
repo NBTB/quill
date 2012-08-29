@@ -81,7 +81,7 @@
 			
 			//create menu opener button using the menu's title
 			var menuOpener:TextField = new TextField();
-			menuOpener.defaultTextFormat = BaseMenu.textButtonFormat;
+			menuOpener.defaultTextFormat = BaseMenu.textButtonUpFormat;
 			menuOpener.text = menuTitle;
 			menuOpener.selectable = false;
 			menuOpeners.push(menuOpener);			

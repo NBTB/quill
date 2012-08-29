@@ -21,10 +21,20 @@
 		<color>0xCC9933</color>
 		<italic/>	
 	</text_format>
-	<text_format name = "text_button">
+	<text_format name = "text_button_up">
 		<font>Vijaya</font>
 		<size>30</size>
 		<color>0xE5E5E5</color>
+	</text_format>
+	<text_format name = "text_button_over">
+		<font>Vijaya</font>
+		<size>30</size>
+		<color>0xCC9933</color>
+	</text_format>
+	<text_format name = "text_button_down">
+		<font>Vijaya</font>
+		<size>30</size>
+		<color>0xCC9933</color>
 	</text_format>
 	<text_format name = "link_usable">
 		<font>Vijaya</font>

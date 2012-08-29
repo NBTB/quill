@@ -47,8 +47,8 @@
 			/*textFormat.color = 0xE5E5E5;
 			textFormat.font = "Gabriola";
 			textFormat.size = 26;*/
-			startOverYes.setTextFormat(BaseMenu.textButtonFormat);
-			startOverNo.setTextFormat(BaseMenu.textButtonFormat);
+			startOverYes.setTextFormat(BaseMenu.textButtonUpFormat);
+			startOverNo.setTextFormat(BaseMenu.textButtonUpFormat);
 			
 			//Adds all three
 			addChild(startOverQuestion);
