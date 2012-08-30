@@ -15,7 +15,7 @@
 		public static var curSlide:Number;
 		var theBackground:Shape = new Shape();
 		var tutFormat:TextFormat = new TextFormat();
-		//var titleFormat:TextFormat = new TextFormat();
+		var titleFormat:TextFormat = new TextFormat();
 		var buttonFormat:TextFormat = new TextFormat();
 		var titleField:TextField = new TextField();
 		var magLoader:Loader = new Loader();
@@ -52,13 +52,13 @@
 		
 		function initText() 
 		{			
-			/*titleFormat.color=BaseMenu.titleFormat.color;
+			titleFormat.color=BaseMenu.titleFormat.color;
 			titleFormat.font=BaseMenu.titleFormat.font;
 			titleFormat.size=Number(BaseMenu.titleFormat.size) * 1,5;
 			titleFormat.align = TextFormatAlign.CENTER
 			titleFormat.bold = BaseMenu.titleFormat.bold;
 			titleFormat.underline = BaseMenu.titleFormat.italic;
-			titleFormat.italic = BaseMenu.titleFormat.underline;*/
+			titleFormat.italic = BaseMenu.titleFormat.underline;
 			
 			titleField.selectable = false;
 			titleField.defaultTextFormat = titleFormat;

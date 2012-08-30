@@ -36,43 +36,36 @@
             objectiveOption = new TextButton("Objective", linkUsableFormat, textUpColor, textOverColor, textDownColor);
             objectiveOption.x = startX;
             objectiveOption.y = startY;
-            //objectiveOption.height = elementHeight;
             addContent(objectiveOption);
           	
             //set up controls button
             controlsOption = new TextButton("Controls", linkUsableFormat, textUpColor, textOverColor, textDownColor);
 			controlsOption.x = startX;
-            //controlsOption.height = elementHeight;
             addContentToTail(controlsOption);
              
             //set up clues button
             cluesOption = new TextButton("Clues", linkUsableFormat, textUpColor, textOverColor, textDownColor);
             cluesOption.x = startX;
-            //cluesOption.height = elementHeight;
             addContentToTail(cluesOption);
 			
 			//set up letter button
             endGoalOption = new TextButton("Letter", linkUsableFormat, textUpColor, textOverColor, textDownColor);
             endGoalOption.x = startX;
-           // endGoalOption.height = elementHeight;
             addContentToTail(endGoalOption);
 			
 			//set up objects button
             objectsOption = new TextButton("Objects", linkUsableFormat, textUpColor, textOverColor, textDownColor);
             objectsOption.x = startX;
-            //objectsOption.height = elementHeight;
             addContentToTail(objectsOption);
 			
 			//set up about button
             aboutOption = new TextButton("About", linkUsableFormat, textUpColor, textOverColor, textDownColor);
             aboutOption.x = startX;
-            //aboutOption.height = elementHeight;
             addContentToTail(aboutOption);
 			
 			//set up credits button
             creditsOption = new TextButton("Credits", linkUsableFormat, textUpColor, textOverColor, textDownColor);
             creditsOption.x = startX;
-            //creditsOption.height = elementHeight;
             addContentToTail(creditsOption);
 			
 			//listen for being added
@@ -185,10 +178,11 @@
 		
 		override public function closeMenu():Boolean
 		{
+			var closed:Boolean = super.closeMenu();
 			if(!instructionsOpening)
 				instructions.closeMenu();
 			instructionsOpening = false;
-			return super.closeMenu();
+			return closed;
 		}
 	}
 }

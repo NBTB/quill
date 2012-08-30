@@ -11,7 +11,6 @@
 	<text_format name = "body">
 		<size>26</size>
 		<color>0xEEBB55</color>
-		<align>justify</align>
 	</text_format>
 	<text_format name = "caption">
 		<size>20</size>

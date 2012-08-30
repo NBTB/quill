@@ -33,6 +33,7 @@
 				//create new clue textfield and use the new clue's text
 				currentClueText = createClueTextField();
 				currentClueText.text = currentClue;			
+				currentClueText.y = 15;
 				
 				//add new text box to content
 				addContentToHead(currentClueText);

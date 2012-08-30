@@ -19,10 +19,10 @@ package scripts
 		private var openedMenus:Array = null;							//list of currently open menus
 		private var prepareZoom:Boolean = false;						//flag preperation for use of magnifying glass
 		private var zoomed:Boolean = false;								//flag tracking whether or not the magnifying glass is active
-		private var magnifyingGlass:MagnifyingGlass;					//magnifying glass used to enlarge portions of the scene
+		private var magnifyingGlass:MagnifyingGlass = null;				//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;					//button that toggles magnifying glass
 		private var notificationTimer:Timer = null;						//timer used to trigger the hiding of the notification textfield
-		private var notificationText:TextField = new TextField(); 		//textfield to hold notifications
+		private var notificationText:TextField = null; 					//textfield to hold notifications
 		private var notificationTextFormat:TextFormat;					//text format of the notification textfield
 		private var notificationTextColorNormal:ColorTransform = null;	//color of notification text in its normal state
 		private var notificationTextColorNew:ColorTransform = null;		//color transform applied to notification text immediately after it is updated
@@ -84,8 +84,6 @@ package scripts
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
 			notificationText = new TextField();
-			notificationText.embedFonts = true;
-			magnifyButton = new SimpleButton();
 			cluesMenu = new CluesMenu(0, 0, 765, 55);
 			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			
 			introMenu = new IntroMenu(30, 75, 700, 480);
@@ -104,8 +102,9 @@ package scripts
 			notificationTextColorFadeTime = 10;
 			
 			//setup clue text format
-			notificationTextFormat = new TextFormat("Times New Roman", 25, notificationTextColorNormal.color);
-			notificationTextFormat.align = TextFormatAlign.CENTER;
+			notificationTextFormat = new TextFormat(BaseMenu.titleFormat.font, BaseMenu.titleFormat.size,  notificationTextColorNormal.color, 
+													BaseMenu.titleFormat.bold, BaseMenu.titleFormat.italic, BaseMenu.titleFormat.underline, 
+													null, null, TextFormatAlign.CENTER);
 			
 			//set clue textfield location and settings
 			notificationText.defaultTextFormat = notificationTextFormat;
@@ -117,6 +116,9 @@ package scripts
 			notificationText.visible = false;
 			notificationText.selectable = false;
 			notificationText.mouseEnabled = false;
+			
+			notificationText.embedFonts = true;
+			magnifyButton = new SimpleButton();
 			
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
@@ -235,7 +237,7 @@ package scripts
 																							 {
 																								//if events that depend on all other menus being closed are allowed, open
 																								if(!pauseEvents && !prepareZoom)
-																									helpMenu.openMenu();																								
+																									helpMenu.openMenu();
 																							 });
 
 			//create list of opened menus
@@ -363,14 +365,14 @@ package scripts
 		
 		//handle the openeing of a menu
 		private function menuOpened(targetMenu:BaseMenu)
-		{
+		{			
 			//disallow actions that depend on all menus being closed
 			allowEventsOutsideMenu(false);
 			
 			//if the given menu is being not already being tracked as open, track it
 			var indexOfMenu = openedMenus.indexOf(targetMenu)
-			if(indexOfMenu >= 0)
-				openedMenus.push(targetMenu);			
+			if(indexOfMenu < 0)
+				openedMenus.push(targetMenu);	
 		}
 		
 		//handle the closing of a menu

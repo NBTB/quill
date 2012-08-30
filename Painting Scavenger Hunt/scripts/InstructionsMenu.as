@@ -45,7 +45,6 @@
 			
 			titleField.defaultTextFormat = BaseMenu.titleFormat;
 			instructions.defaultTextFormat = BaseMenu.bodyFormat;
-			//resumeButton.defaultTextFormat = BaseMenu.textButtonUpFormat;
 			
 			
 			instructions.setTextFormat(tutText);
