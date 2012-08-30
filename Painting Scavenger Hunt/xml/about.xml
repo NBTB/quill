@@ -8,7 +8,7 @@
 	<clues_text_file>clues.txt</clues_text_file>
 	<objects_title>Objects</objects_title>
 	<objects_text_file>objects.txt</objects_text_file>
-	<end_goal_title>Totally not Letter</end_goal_title>
+	<end_goal_title>Letter</end_goal_title>
 	<end_goal_text_file>end goal.txt</end_goal_text_file>
 	<controls_title>Controls</controls_title>
 	<controls_text_file>controls.txt</controls_text_file>

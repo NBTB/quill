@@ -127,7 +127,7 @@
 		<info>
 			<info_text_file>cannonball info.txt</info_text_file>
 		</info>
-		<x>0.0606896</x>
+		<x>0.0616896</x>
 		<y>0.9174942</y>
 		<info_pane_x>0.4</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
@@ -172,8 +172,8 @@
 		<info>
 			<info_text_file>parrott rifle info.txt</info_text_file>
 		</info>
-		<x>0.2560307</x>
-		<y>0.3380287</y>
+		<x>0.2570307</x>
+		<y>0.3370287</y>
 		<info_pane_x>0.02</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>parrott rifle hitmap.png</hitmap_filename>
@@ -202,8 +202,8 @@
 		<info>
 			<info_text_file>gabions info.txt</info_text_file>
 		</info>
-		<x>0.005</x>
-		<y>0.2600287</y>
+		<x>0.00585</x>
+		<y>0.2610287</y>
 		<info_pane_x>0.02</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>gabions hitmap.png</hitmap_filename>

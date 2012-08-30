@@ -14,6 +14,9 @@
 		private var numObjects:int;									//Number of objects in the painting
 		public var curLink:int = 0;									//Which link is next to be updated
 		public var linksArray:Array = null;							//Array which holds all of the links
+		
+		//event types
+		private static const STOP_BLINKING:String = "Stop blinking"	//stop attemping to grab player's attention
 				
 		//Construct the objects menu, using the base x, y, width, height, and main menu as arguments.  Also sets up the linksArray.
 		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -122,8 +125,8 @@
 			dispatchEvent(new MenuEvent(this, MenuEvent.SPECIAL_OPEN_REQUEST));
 		}
 		
-		//attempt to grab the users attention
-		public function lookAtMe()
+		//attempt to grab the player's attention
+		public function startBlink()
 		{
 			//create list of text button openers and tie them to the blink timer
 			var textButtonOpeners:Array = new Array();			
@@ -134,12 +137,7 @@
 				if(getDefinitionByName(getQualifiedClassName(openers[i])) == textButtonClassName)
 				{
 					textButtonOpeners.push(openers[i]);
-					TextButton(openers[i]).addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
-																									{	
-																										blinkTimer.reset();	
-																										for(var o:int = 0; o < textButtonOpeners.length; o++)
-																											TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textUpColor);
-																									});
+					TextButton(openers[i]).addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	stopBlink();	});
 				}
 			}
 				
@@ -161,7 +159,16 @@
 																					 });
 				blinkTimer.start();
 				
+				addEventListener(STOP_BLINKING, function(e:Event):void
+																 {
+																	 blinkTimer.reset();	
+																	 for(var o:int = 0; o < textButtonOpeners.length; o++)
+																		TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textUpColor);
+																 });
 			}
 		}
+		
+		//stop attempting to grab player's attention
+		public function stopBlink()	{	dispatchEvent(new Event(STOP_BLINKING));	}
 	}
 }

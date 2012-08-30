@@ -285,7 +285,13 @@ package scripts
 																					if(allFound && allSolved)
 																						unlockHiddenPiece();
 																					else
-																						ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).lookAtMe();
+																					{
+																						//draw attention to objects menu
+																						ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).startBlink();
+																						
+																						//urge further exploration with a broad clue
+																						cluesMenu.addClue("What happened to Sergeant Poule?")
+																					}
 																				});
 			
 			//listen for restart menu to open and close
@@ -472,9 +478,6 @@ package scripts
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
 				
-				//urge further exploration with a broad clue
-				cluesMenu.addClue("What happened to Sergeant Poule?")
-				
 				//show ending
 				ending.openMenu();
 			}
@@ -494,7 +497,6 @@ package scripts
 			allFound = true
 			if(allFound && allSolved)
 				unlockHiddenPiece();
-			
 		}
 		
 		//unlock the hidden piece of the end goal
@@ -505,10 +507,13 @@ package scripts
 			endGoalMenu.unlockFinalReward();			
 			postNotification("You found a hidden letter!");
 			
+			//stop the object menu's blinking
+			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).stopBlink();
+			
 			//make the current clue old
 			cluesMenu.outdateCurrentClue();
 			
-			//urge further exploration with a broad clue
+			//congratulate player of truly finishing the gamse
 			cluesMenu.addClue("Congratulations. Diligence has its benefits.")
 		}
 		

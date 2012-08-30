@@ -162,7 +162,7 @@
 			//help menu:Objects
 			else if(curSlide==4) {
 				titleField.text = objectsTitle;
-				instructions.text = objectsTitle;
+				instructions.text = objectsText;
 				addChild(mouseLoader);
 				addChild(mouseOverLoader);
 			}
