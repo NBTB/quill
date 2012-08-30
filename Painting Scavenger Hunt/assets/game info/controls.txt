@@ -1,0 +1,3 @@
+Single Left Click: Select
+Double Left Click (painting only): Open Object Info Panel
+Space: Toggle Magnifying glass

@@ -49,7 +49,7 @@
             addContentToTail(cluesOption);
 			
 			//set up letter button
-            endGoalOption = new TextButton("Letter", linkUsableFormat, textUpColor, textOverColor, textDownColor);
+            endGoalOption = new TextButton(InstructionsMenu.endGoalTitle, linkUsableFormat, textUpColor, textOverColor, textDownColor);
             endGoalOption.x = startX;
             addContentToTail(endGoalOption);
 			

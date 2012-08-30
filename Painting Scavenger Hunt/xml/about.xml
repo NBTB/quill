@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <About xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<credits_text_file>credits.txt</credits_text_file>
+	<welcome_title>Welcome to The Night Before The Battle Interactive Scavenger Hunt!</welcome_title>
+	<welcome_text_file>welcome.txt</welcome_text_file>
+	<objective_title>Objective</objective_title>
+	<objective_text_file>objective.txt</objective_text_file>
+	<clues_title>Clues</clues_title>
+	<clues_text_file>clues.txt</clues_text_file>
+	<objects_title>Objects</objects_title>
+	<objects_text_file>objects.txt</objects_text_file>
+	<end_goal_title>Totally not Letter</end_goal_title>
+	<end_goal_text_file>end goal.txt</end_goal_text_file>
+	<controls_title>Controls</controls_title>
+	<controls_text_file>controls.txt</controls_text_file>
+	<about_title>About The Night Before the Battle Puzzle</about_title>
 	<about_text_file>about.txt</about_text_file>
-	<tutorial_text_file>tutorial.txt</tutorial_text_file>
+	<credits_title>Credits</credits_title>
+	<credits_text_file>credits.txt</credits_text_file>
 </About>

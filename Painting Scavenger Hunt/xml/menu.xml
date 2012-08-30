@@ -9,7 +9,7 @@
 		<bold/>
 	</text_format>
 	<text_format name = "body">
-		<size>26</size>
+		<size>24</size>
 		<color>0xEEBB55</color>
 	</text_format>
 	<text_format name = "caption">

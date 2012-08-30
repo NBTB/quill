@@ -99,6 +99,7 @@
 																							if(solvedOOI.getID() == currentOOI.getID())
 																							{
 																								objectsMenu.objectSolved(solvedOOI);
+																								incorrectAnswerTimer.reset();
 																								dispatchEvent(new Event(CORRECT));
 																							}
 																							else
@@ -245,11 +246,11 @@
 		}
 		
 		//add all objects whose found images are visible to a list of bitmaps
-		public function addObjectFoundImagesToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
+		public function addObjectSolvedImagesToList(bitmapList:Array, texturePointList:Array, samplePoint:Point, useFullsize:Boolean = false)
 		{
 			for(var i:int = 0; i < objectsOfInterest.length; i++)
 				if(objectsOfInterest[i].isFound())
-					objectsOfInterest[i].addFoundImageToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
+					objectsOfInterest[i].addSolvedImageToList(bitmapList, texturePointList, new Point(samplePoint.x, samplePoint.y), useFullsize);
 		}		
 		
 		public function getOOIAtIndex(index:int):ObjectOfInterest

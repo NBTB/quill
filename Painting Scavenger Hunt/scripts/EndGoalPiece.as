@@ -32,7 +32,7 @@
 			staticID++;
 			
 			//store scale to be used when loading bitmaps
-            if(scaleFactor  <= 0)
+            if(scaleFactor <= 0)
                 scaleFactor = 1;
             this.scaleFactor = scaleFactor;
         }

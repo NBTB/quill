@@ -284,6 +284,8 @@ package scripts
 																					allSolved = true
 																					if(allFound && allSolved)
 																						unlockHiddenPiece();
+																					else
+																						ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).lookAtMe();
 																				});
 			
 			//listen for restart menu to open and close
@@ -427,7 +429,7 @@ package scripts
 			paintingCanvas.addPaintingToList(bitmaps, texturePoints, new Point(center.x - paintingCanvas.x, center.y - paintingCanvas.y), true);
 			
 			//add magnified object highlights
-			ooiManager.addObjectFoundImagesToList(bitmaps, texturePoints, center, true);
+			ooiManager.addObjectSolvedImagesToList(bitmaps, texturePoints, center, true);
 			ooiManager.addObjectHighlightsToList(bitmaps, texturePoints, center, true);
 			
 			//magnify
@@ -443,7 +445,7 @@ package scripts
 			//show the hunted object's found image
 			var foundObject = ooiManager.getCurrentOOI();
 			if(foundObject)
-				foundObject.showFoundImage();
+				foundObject.showSolvedImage();
 		
 			//add the piece of the end goal
 			var completionRequirement:Number = ooiManager.getSolvableOOICount() + 1;
@@ -469,6 +471,9 @@ package scripts
 			{											
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
+				
+				//urge further exploration with a broad clue
+				cluesMenu.addClue("What happened to Sergeant Poule?")
 				
 				//show ending
 				ending.openMenu();
@@ -499,6 +504,12 @@ package scripts
 			endGoalMenu.addPage();
 			endGoalMenu.unlockFinalReward();			
 			postNotification("You found a hidden letter!");
+			
+			//make the current clue old
+			cluesMenu.outdateCurrentClue();
+			
+			//urge further exploration with a broad clue
+			cluesMenu.addClue("Congratulations. Diligence has its benefits.")
 		}
 		
 		//display notification in textfield on screen

@@ -274,46 +274,68 @@
 		//parse XML specification of menu content
 		private function parseMenuContent(menuContent:XML)
 		{					
-			var creditsLoader:TextLoader = new TextLoader();						
-			if(menuContent.hasOwnProperty("credits_text_file"))
+			if(menuContent.hasOwnProperty("objective_title"))
+				InstructionsMenu.objectiveTitle = menuContent.objective_title;
+			if(menuContent.hasOwnProperty("objective_text_file"))
 			{
-				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.credits_text_file));
-			}
+				var objectiveLoader:TextLoader = new TextLoader();			
+				objectiveLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.objectiveText = objectiveLoader.parseText();	});
+				objectiveLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.objective_text_file));
+			}			
+		
+			if(menuContent.hasOwnProperty("clues_title"))
+				InstructionsMenu.cluesTitle = menuContent.clues_title;
+			if(menuContent.hasOwnProperty("clues_text_file"))
+			{
+				var cluesLoader:TextLoader = new TextLoader();			
+				cluesLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.cluesText = cluesLoader.parseText();	});
+				cluesLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.clues_text_file));
+			}	
 			
-			var aboutLoader:TextLoader = new TextLoader();			
+			if(menuContent.hasOwnProperty("objects_title"))
+				InstructionsMenu.objectsTitle = menuContent.objects_title;
+			if(menuContent.hasOwnProperty("objects_text_file"))
+			{
+				var objectsLoader:TextLoader = new TextLoader();			
+				objectsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.objectsText = objectsLoader.parseText();	});
+				objectsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.objects_text_file));
+			}	
+			
+			if(menuContent.hasOwnProperty("end_goal_title"))
+				InstructionsMenu.endGoalTitle = menuContent.end_goal_title;
+			if(menuContent.hasOwnProperty("end_goal_text_file"))
+			{
+				var endGoalLoader:TextLoader = new TextLoader();			
+				endGoalLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.endGoalText = endGoalLoader.parseText();	});
+				endGoalLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.end_goal_text_file));
+			}	
+			
+			if(menuContent.hasOwnProperty("controls_title"))
+				InstructionsMenu.controlsTitle = menuContent.controls_title;
+			if(menuContent.hasOwnProperty("controls_text_file"))
+			{
+				var controlsLoader:TextLoader = new TextLoader();			
+				controlsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.controlsText = controlsLoader.parseText();	});
+				controlsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.controls_text_file));
+			}	
+			
+			if(menuContent.hasOwnProperty("about_title"))
+				InstructionsMenu.aboutTitle = menuContent.about_title;
 			if(menuContent.hasOwnProperty("about_text_file"))
 			{
-			   aboutLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.about_text_file));
-			}		
+				var aboutLoader:TextLoader = new TextLoader();			
+				aboutLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.aboutText = aboutLoader.parseText();	});
+				aboutLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.about_text_file));
+			}	
 			
-			
-			if(menuContent.hasOwnProperty("tutorial_text_file"))
+			if(menuContent.hasOwnProperty("credits_title"))
+				InstructionsMenu.creditsTitle = menuContent.credits_title;
+			if(menuContent.hasOwnProperty("credits_text_file"))
 			{
-				   
-			}
-			
-			creditsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
-																							   {
-																									//parse text file
-																									var newText:String = creditsLoader.parseText();
-																									
-																									//if text was found, add a textfield to the object's info pane
-																									if(newText)
-																									{
-																											InstructionsMenu.credits = newText;
-																									}
-																							   });
-			aboutLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void
-																							  {																								
-																								//parse text file
-																								var newText:String = aboutLoader.parseText();
-																								
-																								//if text was found, add a textfield to the object's info pane
-																								if(newText)
-																								{
-																									InstructionsMenu.about = newText;
-																								}
-																							  });
+				var creditsLoader:TextLoader = new TextLoader();			
+				creditsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.creditsText = creditsLoader.parseText();	});
+				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.credits_text_file));
+			}			
 		}
 		 
         //parse XML specification of scavenger hunt parameters
