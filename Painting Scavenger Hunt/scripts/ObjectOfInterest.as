@@ -111,6 +111,7 @@
 			titleText.autoSize = TextFieldAutoSize.LEFT;
 			titleText.selectable = false;
 			titleText.mouseWheelEnabled = false;
+			titleText.embedFonts = true;
 			infoPane.addContent(titleText);
 			
 			//initially disable mouse interaction
@@ -119,14 +120,6 @@
 						
 			//track the start of a new frame
 			addEventListener(Event.ENTER_FRAME, enterFrame);
-			
-			//listen for
-			/*addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
-																		{
-																			hitmap.bitmapData.dispose();
-																			highlight.bitmapData.dispose();
-																			removeEventListener(Event.ENTER_FRAME, enterFrame);
-																		});*/
 			
 			//listen for closing of info pane
 			infoPane.addEventListener(MenuEvent.MENU_CLOSED, function(e:Event):void	{	hideHighlight();	});

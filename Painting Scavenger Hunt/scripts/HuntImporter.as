@@ -179,6 +179,12 @@
 		//parse XML specification of menu parameters
 		private function parseMenu(menuParams:XML)
 		{
+			// Create a new instance of the Font symbol from the document's library.
+			var normalFont:Font = new NormalFont();
+			var boldFont:Font = new BoldFont();
+			var italicFont:Font = new ItalicFont();
+			var boldItalicFont:Font = new BoldItalicFont();
+			
 			//attempt to retrieve standard menu parameters
 			if(menuParams.hasOwnProperty("menu_color"))
 				BaseMenu.menuColor = Number(menuParams.menu_color);
@@ -190,6 +196,8 @@
 			//attempt to create text formats
 			if(menuParams.hasOwnProperty("text_format"))
 			{
+				
+				
 				var formats:XMLList = menuParams.text_format;
 				for each(var formatParams in formats)
 				{
@@ -202,8 +210,6 @@
 							var formatName = attrib;
 							var textFormats:XMLList = menuParams.text_format;
 							var newFormat:TextFormat = new TextFormat();
-							if(formatParams.hasOwnProperty("font"))
-								newFormat.font = formatParams.font;
 							if(formatParams.hasOwnProperty("size"))
 								newFormat.size = Number(formatParams.size);
 							if(formatParams.hasOwnProperty("color"))
@@ -225,7 +231,17 @@
 								newFormat.italic = true;
 							if(formatParams.hasOwnProperty("underline"))
 								newFormat.underline = true;
-							
+								
+							//pick embedded font
+							if(!newFormat.bold && !newFormat.italic)
+								newFormat.font = normalFont.fontName;
+							else if(!newFormat.italic)
+								newFormat.font = boldFont.fontName;
+							else if(!newFormat.bold)
+								newFormat.font = italicFont.fontName;
+							else
+								newFormat.font = boldItalicFont.fontName;
+								
 							//store format
 							if(formatName == "title")
 								BaseMenu.titleFormat = newFormat;

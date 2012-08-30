@@ -20,6 +20,7 @@
 			ending = new TextField();		
 			ending.defaultTextFormat = BaseMenu.bodyFormat;
 			ending.selectable = false;
+			ending.embedFonts = true;
 			ending.autoSize = TextFieldAutoSize.LEFT;
 			ending.wordWrap = true;
 			ending.text = "Congratulations! You have solved all of the riddles! Although no clues remain, there is still plenty to discover and learn. Perhaps a secret awaits.";

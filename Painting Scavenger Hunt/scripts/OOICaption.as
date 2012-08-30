@@ -14,18 +14,21 @@
 		{
 			//populate textfields
 			nameText = new TextField();
+			nameText.embedFonts = true;
 			nameText.defaultTextFormat = BaseMenu.titleFormat;
 			nameText.selectable = false;
 			nameText.mouseEnabled = false;
 			nameText.text = objectName;
 			nameText.autoSize = TextFieldAutoSize.LEFT;
 			infoSnippetText = new TextField();
+			infoSnippetText.embedFonts = true;
 			infoSnippetText.defaultTextFormat = BaseMenu.bodyFormat;			
 			infoSnippetText.selectable = false;
 			infoSnippetText.mouseEnabled = false;
 			infoSnippetText.text = infoSnippet;
 			infoSnippetText.autoSize = TextFieldAutoSize.LEFT;
 			moreInfoHintText = new TextField();
+			moreInfoHintText.embedFonts = true;
 			moreInfoHintText.defaultTextFormat = BaseMenu.captionFormat;			
 			moreInfoHintText.selectable = false;
 			moreInfoHintText.mouseEnabled = false;

@@ -84,6 +84,7 @@ package scripts
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
 			notificationText = new TextField();
+			notificationText.embedFonts = true;
 			magnifyButton = new SimpleButton();
 			cluesMenu = new CluesMenu(0, 0, 765, 55);
 			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			

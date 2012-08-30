@@ -45,6 +45,7 @@
 																									newTextField.autoSize = TextFieldAutoSize.LEFT;
 																									newTextField.selectable = false;
 																									newTextField.mouseWheelEnabled = false;
+																									newTextField.embedFonts = true;
 																									targetOOI.addInfoToPaneTail(newTextField);
 																								}
 																								

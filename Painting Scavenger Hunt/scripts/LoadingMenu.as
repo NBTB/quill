@@ -61,6 +61,7 @@
 						
 			//create title
 			splashTitle.defaultTextFormat = splashTitleFormat;
+			splashTitle.embedFonts = true;
 			splashTitle.wordWrap = true;
 			splashTitle.selectable = false;
 			splashTitle.x = 410;
@@ -71,6 +72,7 @@
 			
 			//create loading text field
 			loadingText.defaultTextFormat = splashTitleFormat;
+			loadingText.embedFonts = true;
 			loadingText.wordWrap = true;
 			loadingText.selectable = false;
 			loadingText.x = 410;

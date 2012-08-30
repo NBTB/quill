@@ -32,7 +32,7 @@
 		public static var titleFormat:TextFormat = null;					//text format for titles
 		public static var bodyFormat:TextFormat = null;						//text format for body text
 		public static var captionFormat:TextFormat = null;					//text format for captions
-		public static var textButtonFormat:TextFormat = null;				//text format for text in buttons
+		public static var textButtonFormat:TextFormat = null;				//text format for up state text in buttons
 		public static var linkUsableFormat:TextFormat = null;				//text format for usable links
 		public static var linkUnusableFormat:TextFormat = null;				//text format for unusable links
 		public static var linkAccentuatedFormat:TextFormat = null;			//text format for links that are special		
@@ -483,24 +483,6 @@
 				
 			return isOpener;
 		}
-		
-		//changes the text color of the menu buttons to identify which one you're moused over
-		/*public function colorChange(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;
-			myColor.color=0xCC9933;
-			sender.transform.colorTransform=myColor;
-		}
-		
-		//reverts the buttons back to their original colors
-		public function revertColor(event:MouseEvent):void 
-		{
-			var sender:TextField=event.target as TextField;
-			var myColor:ColorTransform=sender.transform.colorTransform;	
-			myColor.color=0xE5E5E5;		
-			sender.transform.colorTransform=myColor;
-		}*/
 		
 		public function isMenuOpen():Boolean	{	return isOpen;	}
 		

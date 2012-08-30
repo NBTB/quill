@@ -49,7 +49,6 @@
 			{
 				tempLink = new TextButton(ooiManager.objectsOfInterest[objCount].getObjectName(), linkUnusableFormat, Number(linkUnusableFormat.color), Number(linkUnusableFormat.color), Number(linkUnusableFormat.color));
 				tempLink.x = 10;
-				tempLink.setHitbox(new Rectangle(-tempLink.x, 0, width - 30, tempLink.height));
 				
 				linksArray.push(tempLink);
 				addContentToTail(tempLink);

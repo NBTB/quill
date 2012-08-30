@@ -7,13 +7,11 @@
   
     public class EndGoalMenu extends BaseMenu
     {
-  
         private var pieces:Array=new Array();                      			//stores all of the letterPieces
         private var buttonFormat:TextFormat = new TextFormat();   			//formatting		
 		private var rewardCounter:Number = 0;								//counter of rewards given
 		private var heading:TextField = new TextField();					//labels the letter
-		private var endGoalOverlayFormat:TextFormat = null;					//format of text overlaid above end goal
-		
+		private var endGoalOverlayFormat:TextFormat = null;					//format of text overlaid above end goal		
 		
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
@@ -92,6 +90,7 @@
 			heading.x = 0;
 			heading.y = 20;
 			heading.width = width;
+			heading.embedFonts = true;
 			heading.alpha = 0.2;
 			heading.text = "Letter home from Sergeant Poule";
 			heading.blendMode = BlendMode.LAYER;

@@ -19,7 +19,8 @@
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
 			
 			//Sets up the question
-			startOverQuestion = new TextField()
+			startOverQuestion = new TextField();
+			startOverQuestion.embedFonts = true;
 			startOverQuestion.text = "Are you sure you want to start over? All progress will be lost.";
 			startOverQuestion.wordWrap = true;
 			startOverQuestion.x = 20;

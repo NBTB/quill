@@ -4,38 +4,31 @@
 	<menu_border>0x836A35</menu_border>
 	<menu_opacity>0.3</menu_opacity>
 	<text_format name = "title">
-		<font>Vijaya</font>
 		<size>30</size>
 		<color>0xEEBB55</color>
-		<bold/>	
+		<bold/>
 	</text_format>
 	<text_format name = "body">
-		<font>Vijaya</font>
 		<size>26</size>
 		<color>0xEEBB55</color>
 		<align>justify</align>
 	</text_format>
 	<text_format name = "caption">
-		<font>Vijaya</font>
 		<size>20</size>
 		<color>0xCC9933</color>
 		<italic/>	
 	</text_format>
 	<text_format name = "text_button">
-		<font>Vijaya</font>
 		<size>30</size>
 	</text_format>
 	<text_format name = "link_usable">
-		<font>Vijaya</font>
 		<size>20</size>
 	</text_format>
 	<text_format name = "link_unusable">
-		<font>Vijaya</font>
 		<size>20</size>
 		<color>0xFE5E5A</color>
 	</text_format>
 	<text_format name = "link_accentuated">
-		<font>Vijaya</font>
 		<size>20</size>
 		<bold/>
 	</text_format>

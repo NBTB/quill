@@ -18,13 +18,14 @@
 		public static const DOWN_STATE = 2;
 		
 		public function TextButton(text:String, format:TextFormat, upColor:uint, overColor:uint, downColor:uint, hitbox:Rectangle = null)
-		{
+		{			
 			//create up state
 			upTextField = new TextField();
 			upTextField.selectable = false;
 			upTextField.defaultTextFormat = format;
 			upTextField.textColor = upColor;
 			upTextField.autoSize = TextFieldAutoSize.LEFT;
+			upTextField.embedFonts = true;
 			
 			//create over state
 			overTextField = new TextField();
@@ -32,6 +33,7 @@
 			overTextField.defaultTextFormat = format;
 			overTextField.textColor = overColor;
 			overTextField.autoSize = TextFieldAutoSize.LEFT;
+			overTextField.embedFonts = true;
 			
 			//create down state
 			downTextField = new TextField();
@@ -39,6 +41,7 @@
 			downTextField.defaultTextFormat = format;
 			downTextField.textColor = downColor;
 			downTextField.autoSize = TextFieldAutoSize.LEFT;
+			downTextField.embedFonts = true;
 			
 			//populate states with text
 			setText(text);
@@ -60,6 +63,7 @@
 			
 			//construct superclass
 			super(upTextField, overTextField, downTextField, hit);
+			useHandCursor = false;
 		}
 		
 		//resize the hit test state to tightly fit the largest text

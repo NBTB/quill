@@ -61,6 +61,7 @@
 		{
 			var newClueTextField = new TextField();
 			newClueTextField.defaultTextFormat = BaseMenu.bodyFormat;
+			newClueTextField.embedFonts = true;
 			newClueTextField.selectable = false;
 			newClueTextField.wordWrap = true;
 			newClueTextField.x = 15;

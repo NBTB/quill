@@ -52,7 +52,6 @@
 			
 			curSlide=1;
 			resumeButton = new TextButton("Resume Game", textButtonFormat, textUpColor, textOverColor, textDownColor);
-			//resumeButton.setTextFormat(buttonFormat);
 			
 			addContent(titleField);
 			addContent(instructions);
@@ -100,7 +99,7 @@
 			titleField.y=10
 			titleField.width=width - (titleField.x * 2);
 			titleField.autoSize = TextFieldAutoSize.CENTER;
-			
+			titleField.embedFonts = true;
 
 			//resumeButton.text="Resume Game";
 			//resumeButton.autoSize = TextFieldAutoSize.CENTER;
@@ -112,6 +111,7 @@
 			instructions.width=width - (instructions.x * 2);
 			instructions.autoSize = TextFieldAutoSize.LEFT;
 			instructions.wordWrap=true;
+			instructions.embedFonts = true;
 		}
 
 

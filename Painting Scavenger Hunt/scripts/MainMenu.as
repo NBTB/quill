@@ -18,12 +18,7 @@
 		private var menuContainer:DisplayObjectContainer = null;	//container of menu panes
 		
 		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
-		
-		//text format of menu opening buttons
-		/*private static var menuOpenerTextFormat:TextFormat = new TextFormat("Gabriola", 30, 0xE5E5E5, 
-																			null, null, null, null, null, 
-																			TextFormatAlign.CENTER);*/
-		
+				
 		//event types 
 		public static const OPEN_MENU = "A menu has opened"			//dispatched when a child menu opens
 		public static const CLOSE_MENU = "A menu has closed"		//dispatched when a child menu closes
@@ -85,7 +80,7 @@
 			
 			//position menu opener
 			menuOpener.x = menuOpenerSize.x * ((menuOpeners.length - 1) + 0.5) - menuOpener.width/2;
-			menuOpener.y = 0;		
+			menuOpener.y = 10;		
 			
 			//add menu opener to display list
 			addChild(menuOpener);			
