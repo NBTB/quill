@@ -159,6 +159,7 @@
 																					 });
 				blinkTimer.start();
 				
+				//listen for command to stop blinking
 				addEventListener(STOP_BLINKING, function(e:Event):void
 																 {
 																	 blinkTimer.reset();	
