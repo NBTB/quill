@@ -22,8 +22,20 @@
 		var clueLoader:Loader = new Loader();
 		var mouseLoader:Loader = new Loader();
 		var mouseOverLoader:Loader = new Loader();
-		public static var about:String = null;
-		public static var credits:String = null;
+		public static var objectiveTitle = null;
+		public static var objectiveText = null;
+		public static var cluesTitle = null;
+		public static var cluesText = null;
+		public static var objectsTitle = null;
+		public static var objectsText = null;
+		public static var endGoalTitle = null;
+		public static var endGoalText = null;
+		public static var controlsTitle = null;
+		public static var controlsText = null;
+		public static var aboutTitle = null;
+		public static var aboutText = null;
+		public static var creditsTitle = null;
+		public static var creditsText = null;
 
 		public function InstructionsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
@@ -137,45 +149,45 @@
 			}
 			//help menu:Objective
 			else if (curSlide==2) {
-				titleField.text = "Objective";
-				instructions.text="The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas. When you find an interesting object, left click upon it to interact with it.  Use the spacebar or the little icon in the right corner of the menu bar to toggle the magnifying glass and see things more clearly.";
+				titleField.text = objectiveTitle;
+				instructions.text = objectiveText;
 				//addChild(magLoader);
 			}
 			//help menu:Clues
 			else if (curSlide==3) {
-				titleField.text = "Clues";
-				instructions.text="At the top of the screen is your clue bar.  This riddle points to a certain object on the screen.  Correctly solving the riddle will unlock the next clue to be displayed here.";
+				titleField.text = cluesTitle;
+				instructions.text = cluesText;
 				addChild(clueLoader);
 			}	
 			//help menu:Objects
 			else if(curSlide==4) {
-				titleField.text = "Objects";
-				instructions.text = "Many objects important to the painting are scattered acrossed the canvas.  You will know when you've found one because the object will become highlighted. Double Clicking on an object will open a description panel about the object, providing some background on the objects history and its relevance in the painting. It will then be sent to the objects menu where you can review this and other objects you have discovered";
+				titleField.text = objectsTitle;
+				instructions.text = objectsTitle;
 				addChild(mouseLoader);
 				addChild(mouseOverLoader);
 			}
 			//help menu:Letter
 			else if (curSlide==5) {
-				titleField.text = "Letter";
-				instructions.text="As you progress, you will be rewarded with a piece of a letter written by one of the soldiers in this painting.  The letter has been torn, and is missing several pieces.  The panel to the right of the main screen shows you your progress. As you solve riddles and uncover objects, you will be given new pieces of the letter until it is whole.";
+				titleField.text = endGoalTitle;
+				instructions.text = endGoalText;
 				
 			}
 			//help menu:Controls
 			else if (curSlide==6) {
-				titleField.text = "Controls";
-				instructions.text="Single Left Click: Select\nDouble Left Click (painting only): Open Object Info Panel\nSpace: Toggle Magnifying glass";
+				titleField.text = controlsTitle;
+				instructions.text = controlsText;
 			}
 			
 			//help menu:about
 			else if (curSlide==7) {
-				titleField.text="About the Night Before the Battle Puzzle";
-				instructions.text = about;
+				titleField.text = aboutTitle;
+				instructions.text = aboutText;
 			}
 			
 			//help menu:credits
 			else if (curSlide==8) {
-				titleField.text="Credits";
-				instructions.text = credits;
+				titleField.text = creditsTitle;
+				instructions.text = creditsText;
 			}
 		}		
 	}

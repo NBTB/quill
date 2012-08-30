@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OOIs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Object_Of_Interest>
-		<name>Quill &amp; Paper</name>
+		<name>Quill</name>
 		<info_snippet>Commonly used in writing</info_snippet>
 		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
 		<info>
 			<info_text_file>quill info.txt</info_text_file>
 		</info>
-		<x>0.7844827</x>
+		<x>0.7834827</x>
 		<y>0.70486368636</y>
 		<info_pane_x>0.35</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>quill hitmap.png</hitmap_filename>
 		<highlight_filename>quill highlight.png</highlight_filename>
 		<found_image_filename>quill saturated.png</found_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Letter</name>
+		<info_snippet>Correspondence home</info_snippet>
+		<clue>Simple and flat, I may be, but I will make your thoughts easier to see...</clue>
+		<info>
+			<info_text_file>letter info.txt</info_text_file>
+		</info>
+		<x>0.7844827</x>
+		<y>0.75486368636</y>
+		<info_pane_x>0.36</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>letter hitmap.png</hitmap_filename>
+		<highlight_filename>letter highlight.png</highlight_filename>
+		<found_image_filename>letter saturated.png</found_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Moon</name>

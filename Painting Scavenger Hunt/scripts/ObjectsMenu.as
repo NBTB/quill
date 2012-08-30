@@ -3,20 +3,18 @@
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
-	import flash.text.*;
-	
+	import flash.text.*;	
+	import flash.utils.*;	
 
 	class ObjectsMenu extends BaseMenu
 	{
-		
 		private var thisX:int;										//X position of this menu
 		private var thisY:int;										//Y position of this menu
 		private var thisWidth:int;									//Width of this menu
 		private var numObjects:int;									//Number of objects in the painting
 		public var curLink:int = 0;									//Which link is next to be updated
-		private var linkFormat:TextFormat = new TextFormat();		//Formatting for the links
 		public var linksArray:Array = null;							//Array which holds all of the links
-		
+				
 		//Construct the objects menu, using the base x, y, width, height, and main menu as arguments.  Also sets up the linksArray.
 		public function ObjectsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
@@ -32,11 +30,6 @@
 			//Determine how many objects are in the manager, and send manager a copy of this
 			numObjects = ooiManager.objectsOfInterest.length;
 			ooiManager.setObjectMenu(this);
-			
-			//Set up initial link formatting
-			linkFormat.color = 0xFE5E5A;
-			linkFormat.font = "Gabriola";
-			linkFormat.size = 20;
 			
 			var tempLink:TextButton;			
 			
@@ -127,6 +120,48 @@
 			e.target.removeEventListener(MenuEvent.MENU_CLOSED, paneFromLinkClosed);
 			
 			dispatchEvent(new MenuEvent(this, MenuEvent.SPECIAL_OPEN_REQUEST));
+		}
+		
+		//attempt to grab the users attention
+		public function lookAtMe()
+		{
+			//create list of text button openers and tie them to the blink timer
+			var textButtonOpeners:Array = new Array();			
+			var blinkTimer:Timer = new Timer(200);
+			var textButtonClassName:String = String(getDefinitionByName(getQualifiedClassName(TextButton)));
+			for(var i:int = 0; i < openers.length; i++)
+			{
+				if(getDefinitionByName(getQualifiedClassName(openers[i])) == textButtonClassName)
+				{
+					textButtonOpeners.push(openers[i]);
+					TextButton(openers[i]).addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
+																									{	
+																										blinkTimer.reset();	
+																										for(var o:int = 0; o < textButtonOpeners.length; o++)
+																											TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textUpColor);
+																									});
+				}
+			}
+				
+			//if any openers were stored, make them blink
+			if(textButtonOpeners.length > 0)
+			{
+				var colorSwap:Boolean = false;
+				blinkTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
+																					{
+																						 colorSwap = !colorSwap;
+																						 for(var o:int = 0; o < textButtonOpeners.length; o++)
+																						 {
+																							
+																							if(colorSwap)
+																								TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textDownColor);
+																							else
+																								TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textUpColor);
+																						 }
+																					 });
+				blinkTimer.start();
+				
+			}
 		}
 	}
 }

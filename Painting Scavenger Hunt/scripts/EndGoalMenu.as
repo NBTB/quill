@@ -56,10 +56,6 @@
             }
             else
                 pieces.push(newPiece);
-                 
-            //add new object to list
-            newPiece.width = 431;
-            newPiece.height = 664;  
         }
         
 		//unlock the reward
@@ -99,14 +95,13 @@
 		}
 		
 		function displayHeading(event:MouseEvent):void
-		{			
-			//heading.border = true;			
-			//heading.background = true;
+		{	
 			heading.alpha = 0.7;
 			
+			/*TODO this should be done on page switch*/
 			if(rewardCheck == true)
 			{
-				heading.text = "Letter To Poule's sister from Colonel MacAlister";
+				heading.text = "Letter To Poule's Sister from Colonel McAlister";
 			}
 			else
 			{
@@ -118,8 +113,6 @@
 		
 		function removeHeading(event:MouseEvent):void
 		{
-			//heading.border = false;
-			//heading.background = false;	
 			heading.alpha = 0.2;
 		}
 		
@@ -129,6 +122,7 @@
 			addContent(pieces[pieces.length - 1]); 
 			pieces[pieces.length - 1].visible = true;
 			rewardCheck = true;
+			heading.text = "Letter To Poule's Sister from Colonel McAlister";
 			return true;
 		} 
 		

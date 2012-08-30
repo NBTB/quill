@@ -284,6 +284,8 @@ package scripts
 																					allSolved = true
 																					if(allFound && allSolved)
 																						unlockHiddenPiece();
+																					else
+																						ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).lookAtMe();
 																				});
 			
 			//listen for restart menu to open and close
@@ -427,7 +429,7 @@ package scripts
 			paintingCanvas.addPaintingToList(bitmaps, texturePoints, new Point(center.x - paintingCanvas.x, center.y - paintingCanvas.y), true);
 			
 			//add magnified object highlights
-			ooiManager.addObjectFoundImagesToList(bitmaps, texturePoints, center, true);
+			ooiManager.addObjectSolvedImagesToList(bitmaps, texturePoints, center, true);
 			ooiManager.addObjectHighlightsToList(bitmaps, texturePoints, center, true);
 			
 			//magnify
@@ -443,7 +445,7 @@ package scripts
 			//show the hunted object's found image
 			var foundObject = ooiManager.getCurrentOOI();
 			if(foundObject)
-				foundObject.showFoundImage();
+				foundObject.showSolvedImage();
 		
 			//add the piece of the end goal
 			var completionRequirement:Number = ooiManager.getSolvableOOICount() + 1;
