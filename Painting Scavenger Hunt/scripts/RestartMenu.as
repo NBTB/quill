@@ -34,11 +34,11 @@
 			//Sets up the yes and no buttons
 			startOverYes = new TextButton("Restart", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			startOverYes.x = 80;
-			startOverYes.y = 130;
+			startOverYes.y = height - startOverYes.height - 20;
 			
 			startOverNo = new TextButton("Cancel", textButtonFormat, textUpColor, textOverColor, textDownColor);
-			startOverNo.x = 240;
-			startOverNo.y = 130;
+			startOverNo.x = width - startOverNo.width - 80;
+			startOverNo.y = height - startOverNo.height - 20;
 			
 			//Adds all three
 			addChild(startOverQuestion);

@@ -37,7 +37,9 @@ package scripts
 		private var loadingMenu:LoadingMenu = null;						//pane displayed while loading
 		private var introMenu:IntroMenu = null;							//overlay that introduces the game
 		private var allSolved = false;									//flag if all clues have been solved
-		private var allFound = false;									//flag if all objects of interest have been found
+		private var allFound = false;									//flag if all objects of interest have been found		
+		private var stageSize:Point = null;								//size of stage (web deployment has issues with stage's stageWidth and stageHeight properties)
+		private var canvasRect = null;									//rectangle to hold canvas
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -51,10 +53,14 @@ package scripts
 		//construct scavanger hunt
 		public function ScavengerHunt():void
 		{
+			//create stage size and canvas rectangle 
+			stageSize = new Point();
+			canvasRect = new Rectangle();
+			
 			//find specification files before preparing game
 			importer = new HuntImporter();
 			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void	{	startMenu()	});
-			importer.findSpecFilesAndAssetDirectories("xml/importer.xml");			
+			importer.findSpecFilesAndAssetDirectories("xml/importer.xml", stageSize, canvasRect);			
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
@@ -63,11 +69,17 @@ package scripts
 			//load start-up information and listen for completion
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
 																					 {				
-																						loadingMenu = new LoadingMenu(0, 0, 1265, 630);
+																						loadingMenu = new LoadingMenu(0, 0, stageSize.x, stageSize.y);
 																						addChild(loadingMenu);
 																						loadingMenu.openMenu();
-																						loadingMenu.addChild(loadingMenu.loadLoader);
 																						initGame();																		
+																					 });
+			importer.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
+																					 {
+																						loadingMenu = new LoadingMenu(0, 0, stageSize.x, stageSize.y);
+																						addChild(loadingMenu);
+																						loadingMenu.openMenu();
+																						loadingMenu.fail();
 																					 });
 			importer.importStartUp();			
 		}
@@ -79,19 +91,22 @@ package scripts
 			MouseWheel.capture();
 					
 			//create in-game children that will handle specific interaction
-			paintingCanvas = new PaintingCanvas(0, 56, 765, 574);
+			paintingCanvas = new PaintingCanvas(canvasRect.x, canvasRect.y, canvasRect.width, canvasRect.height);
 			ooiManager = new OOIManager(this, this);
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
+			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 4, this);
 			notificationText = new TextField();
-			cluesMenu = new CluesMenu(0, 0, 764, 55);
-			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			
-			introMenu = new IntroMenu(30, 75, 700, 480);
-			ending = new Ending(150, 150, 450, 200);
+			cluesMenu = new CluesMenu(0, 0, canvasRect.width-1, canvasRect.y-1);
+			endGoalMenu = new EndGoalMenu(canvasRect.width, 0, stageSize.x - canvasRect.width, stageSize.y);			
+			introMenu = new IntroMenu(canvasRect.x + 30, canvasRect.y + 20, canvasRect.width - 60, canvasRect.height - 40);
+			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
 			
 			//create color transforms for notification text
 			notificationTextColorNormal = new ColorTransform();	
 			notificationTextColorNew = new ColorTransform();
+			
+			//split canvas into segments half the size of a main menu segement for use in menu positioning
+			var menuInterval:Number = canvasRect.width / (mainMenu.getMenuCapacity() * 2);
 			
 			magnifyButton = new SimpleButton();
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
@@ -102,19 +117,19 @@ package scripts
 																																new Bitmap(magnifyButtonLoader.getOverImage()), 
 																																new Bitmap(magnifyButtonLoader.getDownImage()), 
 																																new Bitmap(magnifyButtonLoader.getHittestImage()));
-																							magnifyButton.x = 645;
-																							magnifyButton.y = 581;
 																							magnifyButton.width /= 5;
 																							magnifyButton.height /= 5;
+																							magnifyButton.x = canvasRect.x + (7 * menuInterval) - (magnifyButton.width / 2);
+																							magnifyButton.y = mainMenu.y + 5;
 																							magnifyButton.visible = true;
 																					   });
 			magnifyButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "magnify button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "magnify button over.png"), 
 											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
 			
-			//create menus to appear in main menu
-			var helpMenu:HelpMenu = new HelpMenu(40, 230, 120, 340);					
-			var objectsMenu:ObjectsMenu = new ObjectsMenu(200, 105, 190, 465);	
-			var restartMenu:RestartMenu = new RestartMenu (200, 150, 375, 200);
+			//create menus to appear in main menu			
+			var helpMenu:HelpMenu = new HelpMenu(canvasRect.x + menuInterval - 60, mainMenu.y - 275, 120, 270, new Rectangle(canvasRect.x + 30, canvasRect.y + 30, canvasRect.width - 60, canvasRect.height - 60));					
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(canvasRect.x + (3 * menuInterval) - 95, mainMenu.y - 470, 190, 465);	
+			var restartMenu:RestartMenu = new RestartMenu (canvasRect.x + 200, canvasRect.y + 100, canvasRect.width - 400, canvasRect.height - 350);
 			
 			//load hunt information and listen for completion (set a minimum load time to avoid a quick flash)
 			var timerReady:Boolean = false;
@@ -180,11 +195,7 @@ package scripts
 			var menuCount = mainMenu.getMenuCount();
 			for(var m:int = 0; m < menuCount; m++)
 				addDismissibleOverlayCloser(mainMenu.getMenuAtIndex(m), MenuEvent.MENU_OPENED);
-				
-			//add menu open listeners to object of interest info panes to dismiss other menus
-			var ooiCount = ooiManager.getTotalOOICount();
-			for(var o:int = 0; o < ooiCount; o++)
-			
+							
 			//open clues and end goal menus
 			cluesMenu.openMenu();
 			endGoalMenu.openMenu();
@@ -269,8 +280,18 @@ package scripts
 			
 			//listen for restart menu to open and close
 			var restartMenu:RestartMenu = RestartMenu(mainMenu.getMenu(restartMenuTitle));
-			restartMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
-			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
+			restartMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
+																					 {	
+																					 	forceInteractionWithMenu(e.getTargetMenu());	
+																						if(allSolved && !allFound)
+																							ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).stopBlink();
+																					 });
+			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
+																					 {	
+																					 	forceInteractionWithMenu(e.getTargetMenu());	
+																						if(allSolved && !allFound)
+																							ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).startBlink();
+																					 });
 			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	toggleZoom();	});
@@ -315,9 +336,9 @@ package scripts
 			notificationText.defaultTextFormat = notificationTextFormat;
 			notificationText.transform.colorTransform = notificationTextColorNormal;
 			notificationText.wordWrap=true;
-			notificationText.x=150;
-			notificationText.y=90;
-			notificationText.width=474;
+			notificationText.x = paintingCanvas.x + 150;
+			notificationText.y = paintingCanvas.y + 50;
+			notificationText.width = paintingCanvas.width - 300;
 			notificationText.visible = false;
 			notificationText.selectable = false;
 			notificationText.mouseEnabled = false;
@@ -335,7 +356,8 @@ package scripts
 			
 			//unlock the first pieces of the end goal (remain hidden for now)
 			endGoalMenu.hideRewards();
-			endGoalMenu.unlockReward(ooiManager.getSolvableOOICount() + 1, EndGoalMenu.NEXT_REWARD);
+			for(var r:int = 0; r < EndGoalMenu.freeRewardCount; r++)
+				endGoalMenu.unlockReward(ooiManager.getSolvableOOICount() + 1, EndGoalMenu.NEXT_REWARD);
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
@@ -462,7 +484,7 @@ package scripts
 		
 			//add the piece of the end goal
 			var completionRequirement:Number = ooiManager.getSolvableOOICount() + 1;
-			endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
+			var rewardNotification:String = endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
 		
 			//attempt to pick the next object to hunt and retrieve its clue
 			var nextClue:String = ooiManager.pickNextOOI();			
@@ -471,13 +493,13 @@ package scripts
 			if(nextClue)
 			{							
 				//make the current clue old
-				cluesMenu.outdateCurrentClue();
+				cluesMenu.outdateCurrentClue();				
 				
 				//add new clue to clue menu
 				cluesMenu.addClue(nextClue);
 				
-				//post correct answer notification
-				postNotification("Correct!\nYou unlocked a piece of the letter.");
+				//post notification of correct answer
+				postNotification("Correct!\n" + rewardNotification);
 			}
 			//otherwise, end the game
 			else
@@ -511,8 +533,7 @@ package scripts
 		{
 			//add a new page to the end goal menu and show final reward		
 			endGoalMenu.addPage();
-			endGoalMenu.unlockFinalReward();			
-			postNotification("You found a hidden letter!");
+			postNotification(endGoalMenu.unlockFinalReward());	
 			
 			//stop the object menu's blinking
 			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).stopBlink();

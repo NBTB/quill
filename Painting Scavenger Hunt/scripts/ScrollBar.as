@@ -291,7 +291,7 @@
 			//if both the total content height and displayable height are positive, use the ratio to determine scroller height
 			if(contentHeight > 0 && visibleHeight > 0)
 			{
-				var visibleTotalRatio:Number = visibleHeight/contentHeight;				
+				var visibleTotalRatio:Number = visibleHeight/contentHeight;	
 				if(visibleTotalRatio < 1)
 					calcHeight *= visibleTotalRatio;
 			}

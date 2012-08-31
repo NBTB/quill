@@ -156,7 +156,8 @@
 				return BaseMenu(menus[index]);
 		}
 		
-		public function getMenuCount():int	{	return menuCount;	};
+		public function getMenuCount():int		{	return menuCount;		};
+		public function getMenuCapacity():int	{	return menuCapacity;	};
 		
 		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
 		{ 

@@ -29,7 +29,7 @@
         public static const END_GOAL_LOADED:String = "End goal loaded";
 		
 		//find specification files for importation with the XML of the given file
-		public function findSpecFilesAndAssetDirectories(specListFilename:String)
+		public function findSpecFilesAndAssetDirectories(specListFilename:String, stageSize:Point, canvasRectangle:Rectangle)
 		{
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener(Event.COMPLETE, function(e:Event):void
@@ -40,6 +40,37 @@
 																			//attempt to give loading screen a title
 																			if(specList.hasOwnProperty("loading_title"))
 																				LoadingMenu.loadingTitle = specList.loading_title;
+																			
+																			//attempt to parse stage size
+																			if(specList.hasOwnProperty("stage_size"))
+																			{
+																				var sizeAttribs:XMLList = specList.stage_size.attributes();
+																				for each(var sizeAttrib in sizeAttribs)
+																				{
+																					if(sizeAttrib.name() == "width")
+																						stageSize.x = Number(sizeAttrib);
+																					if(sizeAttrib.name() == "height")
+																						stageSize.y = Number(sizeAttrib);
+																				}
+																			}
+																			
+																			//attempt to parse canvas rectangle
+																			if(specList.hasOwnProperty("canvas_rectangle"))
+																			{
+																				var rectAttribs:XMLList = specList.canvas_rectangle.attributes();
+																				for each(var rectAttrib in rectAttribs)
+																				{
+																					if(rectAttrib.name() == "x")
+																						canvasRectangle.x = Number(rectAttrib);
+																					if(rectAttrib.name() == "y")
+																						canvasRectangle.y = Number(rectAttrib);
+																					if(rectAttrib.name() == "width")
+																						canvasRectangle.width = Number(rectAttrib);
+																					if(rectAttrib.name() == "height")
+																						canvasRectangle.height = Number(rectAttrib);
+																				}
+																			}
+																			
 																			//attempt to find spec files
 																			if(specList.hasOwnProperty("menu"))
 																				menuImportFile = specList.menu;
@@ -78,6 +109,7 @@
 			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																			   {
 																				   trace("Failed to load specification list.");
+																				   dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																			   });
 			xmlLoader.load(new URLRequest(specListFilename));
 		}
@@ -101,10 +133,8 @@
 																			});
 			menuXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																				   {
-																					   trace("Failed to load menu parameters.");
-																					   menuParamsLoaded = true;
-																						if(menuParamsLoaded && aboutLoaded)
-																							dispatchEvent(new Event(START_UP_LOADED));
+																						trace("Failed to load menu parameters.");																					   
+																				 	 	dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																				   });
             menuXMLLoader.load(new URLRequest(menuImportFile));
 			
@@ -120,9 +150,7 @@
 			aboutXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																				    {
 																					  	trace("Failed to load info about game.");
-																					  	aboutLoaded = true;
-																						if(menuParamsLoaded && aboutLoaded)
-																							dispatchEvent(new Event(START_UP_LOADED));
+																						dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																				    });
             aboutXMLLoader.load(new URLRequest(aboutImportFile));
 		}
@@ -151,9 +179,7 @@
 			huntXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																				   {
 																					   	trace("Failed to load hunt parameters.");
-																					  	huntLoaded = true;
-																						if(huntLoaded && paintingLoaded)
-																							prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
+																						dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																				   });
 			huntXMLLoader.load(new URLRequest(huntImportFile));
 			
@@ -172,9 +198,7 @@
 			paintingXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																					   {
 																						  	trace("Failed to load painting.");
-																							paintingLoaded = true;
-																							if(huntLoaded && paintingLoaded)
-																								prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
+																							dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																					   });
 			paintingXMLLoader.load(new URLRequest(paintingImportFile));
         }
@@ -215,7 +239,7 @@
 							var newFormat:TextFormat = new TextFormat();
 							if(formatParams.hasOwnProperty("size"))
 								newFormat.size = Number(formatParams.size);
-							if(formatParams.hasOwnProperty("color"))
+							if(formatParams.hasOwnProperty("color") && formatParams.color != "null")
 								newFormat.color = Number(formatParams.color);
 							if(formatParams.hasOwnProperty("align"))
 							{
@@ -228,12 +252,10 @@
 								else if(formatParams.align == "justify")
 									newFormat.align = TextFormatAlign.JUSTIFY;
 							}
-							if(formatParams.hasOwnProperty("bold"))
+							if(formatParams.hasOwnProperty("bold") && formatParams.bold == "true")
 								newFormat.bold = true;
-							if(formatParams.hasOwnProperty("italic"))
+							if(formatParams.hasOwnProperty("italic") && formatParams.italic == "true")
 								newFormat.italic = true;
-							if(formatParams.hasOwnProperty("underline"))
-								newFormat.underline = true;
 								
 							//pick embedded font
 							if(!newFormat.bold && !newFormat.italic)
@@ -431,11 +453,8 @@
                                                                                               });
 			ibitmapLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 																										    {	
-																										   		//dispatch and IO error message
-																										   		dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
-																											
-																												//display error in debug trace
 																												trace("Failed to load painting (interactive)");
+																												dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																										    });
             ibitmapLoader.load(new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, painting.interactive_filename)));
 			
@@ -453,11 +472,8 @@
                                                                                               });
 			nbitmapLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 																										    {	
-																										   		//dispatch and IO error message
-																										   		dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
-																											
-																												//display error in debug trace
 																												trace("Failed to load painting (non-interactive)");
+																												dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																										    });
             nbitmapLoader.load(new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, painting.non_interactive_filename)));
         }
@@ -490,6 +506,7 @@
 			ooiXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																			  {
 																				  trace("Failed to load objects of interest specification file.");
+																				  dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																			  });
 			ooiXMLLoader.load(new URLRequest(ooiImportFile));
 			
@@ -516,6 +533,7 @@
 			endGoalXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
 																				  {
 																					  trace("Failed to load end goal specification file.");
+																					  dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));
 																				  });
 			endGoalXMLLoader.load(new URLRequest(endGoalImportFile));
 		}
@@ -547,7 +565,7 @@
 						ObjectOfInterest.defaultInfoRect.height = defaultInfoRect.height;
 				}
 				
-                else if(ooi.name() == "Object_Of_Interest" && ooi.hasOwnProperty("name") && ooi.hasOwnProperty("info_snippet") && ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename") && ooi.hasOwnProperty("found_image_filename") && ooi.hasOwnProperty("x") && ooi.hasOwnProperty("y") && ooi.hasOwnProperty("clue"))
+                else if(ooi.name() == "Object_Of_Interest" && ooi.hasOwnProperty("name") && ooi.hasOwnProperty("info_snippet") && ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename") && ooi.hasOwnProperty("solved_image_filename") && ooi.hasOwnProperty("x") && ooi.hasOwnProperty("y") && ooi.hasOwnProperty("clue"))
                 {					
                     //increment the number of objects parsed
                     objectsParsed++;
@@ -563,7 +581,7 @@
 																		  ooi.clue, 
 																		  FileFinder.completePath(FileFinder.OOI_IMAGES, ooi.hitmap_filename), 
 																		  FileFinder.completePath(FileFinder.OOI_IMAGES, ooi.highlight_filename), 
-																		  FileFinder.completePath(FileFinder.OOI_IMAGES, ooi.found_image_filename), 
+																		  FileFinder.completePath(FileFinder.OOI_IMAGES, ooi.solved_image_filename), 
 																		  ooiInfoLoader, 
 																		  canvasRectangle.x + Number(ooi.x) * canvasRectangle.width, 
 																		  canvasRectangle.y + Number(ooi.y) * canvasRectangle.height, 
@@ -635,19 +653,23 @@
 				//parse end goal overlay parameters
 				if(piece.name() == "heading_text_color")
 					EndGoalMenu.headingTextColor = Number(piece);
-				if(piece.name() == "goal_heading_text")
+				else if(piece.name() == "goal_heading_text")
 					EndGoalMenu.goalOverlayText = piece;
-				if(piece.name() == "hidden_heading_text")
+				else if(piece.name() == "hidden_heading_text")
 					EndGoalMenu.hiddenOverlayText = piece;
-				
+					
+				//parse number of rewards given freely at beginning 
+				else if(piece.name() == "free_reward_count")
+					EndGoalMenu.freeRewardCount = Number(piece);
+					
 				//parse end goal piece
-                else if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename"), piece.hasOwnProperty("x"), piece.hasOwnProperty("y"))
+                else if(piece.hasOwnProperty("name") && piece.hasOwnProperty("filename") && piece.hasOwnProperty("x") &&  piece.hasOwnProperty("y") && piece.hasOwnProperty("reward_notification"))
                 {
                     //increment the number of objects parsed
                     piecesParsed++;
   
                     //create new object of interest
-                    var newPiece:EndGoalPiece = new EndGoalPiece(piece.name, FileFinder.completePath(FileFinder.END_GOAL_IMAGES, piece.filename), Number(piece.x), Number(piece.y));
+                    var newPiece:EndGoalPiece = new EndGoalPiece(piece.name, FileFinder.completePath(FileFinder.END_GOAL_IMAGES, piece.filename), Number(piece.x), Number(piece.y), piece.reward_notification);
                        
                     //listen for the completion of the new object
                     newPiece.addEventListener(Event.COMPLETE, function(e:Event):void

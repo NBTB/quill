@@ -1,54 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <End_Goal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<free_reward_count>1</free_reward_count>
 	<heading_text_color>0x000000</heading_text_color>
 	<goal_heading_text>Letter Home from Sergeant Poule</goal_heading_text>
-	<hidden_heading_text>Letter to Poule's Sister from Colonel McAlister</hidden_heading_text>>
+	<hidden_heading_text>Letter to Poule's Sister from Colonel McAlister</hidden_heading_text>
 	<End_Goal_Piece>
 		<name>Blank Letter</name>
 		<filename>blank letter.png</filename>
+		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>		
+		<y>2</y>
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece1</name>
 		<filename>letterPiece1.png</filename>
+		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>		
+		<y>2</y>
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece2</name>
-		<filename>letterPiece2.png</filename>	
+		<filename>letterPiece2.png</filename>
+		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>	
+		<y>2</y>
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece3</name>
-		<filename>letterPiece3.png</filename>	
+		<filename>letterPiece3.png</filename>
+		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>	
-	</End_Goal_Piece>	
+		<y>2</y>
+	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece4</name>
-		<filename>letterPiece4.png</filename>	
+		<filename>letterPiece4.png</filename>
+		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>	
-	</End_Goal_Piece>	
+		<y>2</y>
+	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece5</name>
 		<filename>letterPiece5.png</filename>
+		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>	
-	</End_Goal_Piece>	
+		<y>2</y>
+	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece6</name>
-		<filename>letterPiece6.png</filename>	
+		<filename>letterPiece6.png</filename>
+		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>	
-	</End_Goal_Piece>	
+		<y>2</y>
+	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>HiddenLetter</name>
 		<filename>hiddenLetter.png</filename>
-		<x>25</x>		
-		<y>2</y>	
+		<reward_notification>You found a hidden letter!</reward_notification>
+		<x>25</x>
+		<y>2</y>
 	</End_Goal_Piece>
-</End_Goal>	
+</End_Goal>

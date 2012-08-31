@@ -3,7 +3,7 @@
     import flash.display.*;	
     import flash.events.*;
     import flash.text.*;
-    import flash.geom.ColorTransform;
+    import flash.geom.*;
   
     class HelpMenu extends BaseMenu
     {
@@ -22,7 +22,7 @@
         var textFormat:TextFormat = new TextFormat();           //Formatting
          
         //Creates the help menu
-        public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+        public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, instructionsRect:Rectangle):void
         {
             //sends variables to create background to the base menu
             super(xPos, yPos, widthVal, heightVal);
@@ -71,7 +71,7 @@
 			//listen for being added
 			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
 																    {
-																		instructions = new InstructionsMenu(30, 75, 700, 480);	
+																		instructions = new InstructionsMenu(instructionsRect.x, instructionsRect.y, instructionsRect.width, instructionsRect.height);	
 																		instructions.updateText();
 																		parent.addChild(instructions);
 																		instructions.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);

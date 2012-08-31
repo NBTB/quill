@@ -12,7 +12,8 @@
 		private var rewardCounter:Number = 0;								//counter of rewards given
 		private var heading:TextField = new TextField();					//labels the letter
 		
-		public static var headingTextColor = 0;			//color of text in overlay
+		public static var freeRewardCount = 0;				//number of free rewards given at beginning
+		public static var headingTextColor = 0;				//color of text in overlay
 		public static var goalOverlayText = null;			//text to display over goal
 		public static var hiddenOverlayText = null;			//text to display over hidden goal
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
@@ -42,6 +43,7 @@
         {
             var newID:int = newPiece.getID();
             var indexFound:Boolean = false;
+			newPiece.visible = false;
              
             if(pieces.length > 0)
             {
@@ -59,21 +61,6 @@
             else
                 pieces.push(newPiece);
         }
-        
-		//unlock the reward
-		public function unlockReward(completionRequirement:int, rewardNumber:int = NEXT_REWARD):Boolean
-		{
-			
-			/*TODO make unlocking depend on reward number given*/
-			if(rewardCounter < completionRequirement)
-			{
-            	addContent(pieces[rewardCounter]);    
-				pieces[rewardCounter].visible = true;
-				rewardCounter++;
-				return true;
-			}
-			return false;
-		}    
 		
 		public function initHeading()
 		{			
@@ -104,15 +91,42 @@
 		{
 			heading.alpha = 0.2;
 		}
-		
-		//unlock the final reward
-		public function unlockFinalReward():Boolean
+        
+		//unlock a reward
+		public function unlockReward(completionRequirement:int, rewardNumber:int = NEXT_REWARD):String
 		{
-			addContent(pieces[pieces.length - 1]); 
-			pieces[pieces.length - 1].visible = true;
-			rewardCheck = true;
-			heading.text = hiddenOverlayText;
-			return true;
+			if(rewardNumber == NEXT_REWARD)
+			{
+				if(rewardCounter < completionRequirement)
+				{
+					addContent(pieces[rewardCounter]);    
+					pieces[rewardCounter].visible = true;
+					rewardCounter++;					
+					return pieces[rewardCounter-1].getRewardNotification();
+				}
+			}
+			else if (rewardNumber < completionRequirement && !pieces[rewardCounter].visible)
+			{
+				addContent(pieces[rewardNumber]);    
+				pieces[rewardNumber].visible = true;				
+				return pieces[rewardNumber].getRewardNotification();
+			}
+			return null;
+		}    
+			
+		//unlock the final reward
+		public function unlockFinalReward():String
+		{
+			if(!pieces[pieces.length - 1].visible)
+			{
+				addContent(pieces[pieces.length - 1]); 
+				pieces[pieces.length - 1].visible = true;
+				rewardCheck = true;
+				heading.text = hiddenOverlayText;
+				return pieces[pieces.length - 1].getRewardNotification();
+			}
+			else 
+				return null;
 		} 
 		
 		public function hideRewards()

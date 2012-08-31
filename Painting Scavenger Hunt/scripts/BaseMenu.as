@@ -160,14 +160,6 @@
 				}
 			}
 			
-			//if the menu is scrollable, create scroll bar
-			if(scrollable)
-			{
-				scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y, 30);
-				addChild(scrollBar);
-				scrollBar.visible = false;
-			}
-			
 			//if draggable add a drag cap
 			if(draggable)
 			{
@@ -206,6 +198,20 @@
 																																						});
 																				});
 			}	
+			
+			//if the menu is scrollable, create scroll bar
+			if(scrollable)
+			{
+				//if the menu has a drag cap, less of the menu should be available for content
+				var dragCapOffset:Number = 0;
+				if(dragCap)
+					dragCapOffset = dragCap.height;
+				
+				//create scroll bar
+				scrollBar = new ScrollBar(new Rectangle(width - 20, 30, 10, height - 40), scrollBarStyle, 0, paneDimensions.y - dragCapOffset, 30);
+				addChild(scrollBar);
+				scrollBar.visible = false;
+			}
 			
 			//draw mask
 			menuMask = new Shape();

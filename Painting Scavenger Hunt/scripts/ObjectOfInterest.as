@@ -291,7 +291,7 @@
 			solvedImageLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
 																											{	
 																												dispatchEvent(new IOErrorEvent(IOErrorEvent.IO_ERROR));	
-																												trace("Failed to load found image of " + objectName);
+																												trace("Failed to load solved image of " + objectName);
 																											});
 			
 			//begin loading image

@@ -19,7 +19,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>quill hitmap.png</hitmap_filename>
 		<highlight_filename>quill highlight.png</highlight_filename>
-		<found_image_filename>quill saturated.png</found_image_filename>
+		<solved_image_filename>quill saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Letter</name>
@@ -34,7 +34,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>letter hitmap.png</hitmap_filename>
 		<highlight_filename>letter highlight.png</highlight_filename>
-		<found_image_filename>letter saturated.png</found_image_filename>
+		<solved_image_filename>letter saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Moon</name>
@@ -49,7 +49,7 @@
 		<info_pane_y>0.02</info_pane_y>
 		<hitmap_filename>moon hitmap.png</hitmap_filename>
 		<highlight_filename>moon highlight.png</highlight_filename>
-		<found_image_filename>moon saturated.png</found_image_filename>
+		<solved_image_filename>moon saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Flag</name>
@@ -64,7 +64,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>flag hitmap.png</hitmap_filename>
 		<highlight_filename>flag highlight.png</highlight_filename>
-		<found_image_filename>flag saturated.png</found_image_filename>
+		<solved_image_filename>flag saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Skeleton</name>
@@ -79,7 +79,7 @@
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>skeleton hitmap.png</hitmap_filename>
 		<highlight_filename>skeleton highlight.png</highlight_filename>
-		<found_image_filename>skeleton saturated.png</found_image_filename>
+		<solved_image_filename>skeleton saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Musket</name>
@@ -94,7 +94,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>musket hitmap.png</hitmap_filename>
 		<highlight_filename>musket highlight.png</highlight_filename>
-		<found_image_filename>musket saturated.png</found_image_filename>
+		<solved_image_filename>musket saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Sentry</name>
@@ -109,7 +109,7 @@
 		<info_pane_y>0.02</info_pane_y>
 		<hitmap_filename>silhouette hitmap.png</hitmap_filename>
 		<highlight_filename>silhouette highlight.png</highlight_filename>
-		<found_image_filename>silhouette saturated.png</found_image_filename>
+		<solved_image_filename>silhouette saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Fire</name>
@@ -124,7 +124,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>fire hitmap.png</hitmap_filename>
 		<highlight_filename>fire highlight.png</highlight_filename>
-		<found_image_filename>fire saturated.png</found_image_filename>
+		<solved_image_filename>fire saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Cannonball</name>
@@ -139,7 +139,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>cannonball hitmap.png</hitmap_filename>
 		<highlight_filename>cannonball highlight.png</highlight_filename>
-		<found_image_filename>cannonball saturated.png</found_image_filename>
+		<solved_image_filename>cannonball saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Sword</name>
@@ -154,7 +154,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>sword hitmap.png</hitmap_filename>
 		<highlight_filename>sword highlight.png</highlight_filename>
-		<found_image_filename>sword saturated.png</found_image_filename>
+		<solved_image_filename>sword saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Playing Cards</name>
@@ -169,7 +169,7 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>cards hitmap.png</hitmap_filename>
 		<highlight_filename>cards highlight.png</highlight_filename>
-		<found_image_filename>cards saturated.png</found_image_filename>
+		<solved_image_filename>cards saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Parrott Rifle</name>
@@ -184,7 +184,7 @@
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>parrott rifle hitmap.png</hitmap_filename>
 		<highlight_filename>parrott rifle highlight.png</highlight_filename>
-		<found_image_filename>parrott rifle saturated.png</found_image_filename>
+		<solved_image_filename>parrott rifle saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Sergeant</name>
@@ -199,7 +199,7 @@
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>sergeant hitmap.png</hitmap_filename>
 		<highlight_filename>sergeant highlight.png</highlight_filename>
-		<found_image_filename>sergeant saturated.png</found_image_filename>
+		<solved_image_filename>sergeant saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Gabions</name>
@@ -214,7 +214,7 @@
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>gabions hitmap.png</hitmap_filename>
 		<highlight_filename>gabions highlight.png</highlight_filename>
-		<found_image_filename>gabions saturated.png</found_image_filename>
+		<solved_image_filename>gabions saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Signature</name>
@@ -229,7 +229,7 @@
 		<info_pane_y>0.15</info_pane_y>
 		<hitmap_filename>signature hitmap.png</hitmap_filename>
 		<highlight_filename>signature highlight.png</highlight_filename>
-		<found_image_filename>signature saturated.png</found_image_filename>
+		<solved_image_filename>signature saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
 		<name>Uniform</name>
@@ -244,6 +244,6 @@
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>uniform hitmap.png</hitmap_filename>
 		<highlight_filename>uniform highlight.png</highlight_filename>
-		<found_image_filename>uniform saturated.png</found_image_filename>
+		<solved_image_filename>uniform saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 </OOIs>

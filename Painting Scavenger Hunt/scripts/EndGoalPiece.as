@@ -14,15 +14,17 @@
 		private var fileName:String;
 		private var piece:Bitmap = null;
 		private var scaleFactor:Number = 1; 
+		private var rewardNotification = null;
 	
 		private static var staticID:Number = 0;
 		
 		var myArrayListeners:Array=[];
 		
-		function EndGoalPiece(pieceName:String, fileName:String, xPos:Number, yPos:Number)
+		function EndGoalPiece(pieceName:String, fileName:String, xPos:Number, yPos:Number, rewardNotification:String)
 		{
 			this.pieceName = pieceName;
 			this.fileName = fileName;
+			this.rewardNotification = rewardNotification;
 			x = xPos;
 			y = yPos;
 			
@@ -91,5 +93,7 @@
 			}
 			myArrayListeners=null;
 		}
+		
+		public function getRewardNotification():String	{	return rewardNotification;	}
 	}	
 }

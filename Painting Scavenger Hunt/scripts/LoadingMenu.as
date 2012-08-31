@@ -24,7 +24,6 @@
 			
 			initText();
 			init();
-			
 		}
 
 		function init() 
@@ -82,6 +81,13 @@
 			loadingText.height = 168;
 			loadingText.width = 425;
 			loadingText.text = "Loading... Please Wait.";
+		}
+		
+		public function fail()
+		{
+			loadingText.text = "Failed to load";
+			if(loadLoader.parent)
+				loadLoader.parent.removeChild(loadLoader);
 		}
 	}
 }
