@@ -6,9 +6,12 @@
 	 
     class CluesMenu extends BaseMenu
     {
-        private var currentClueText:TextField = null;           //The displayed current clue
-        private var currentClue:String = null;                  //The text of the current clue
-        public var oldClues:Array = null;                      //Keeps track of all previous clues
+        private var currentClueText:TextField = null;           //displayed current clue
+        private var currentClue:String = null;                  //text of the current clue
+        private var oldClues:Array = null;                      //keeps track of all previous clues
+		
+		public static var finalClue:String = null;				//final clue, meant to hint at hidden goal
+		public static var congratulations:String = null;		//player congratulation message for completing the game
          
         //Creates the clues menu
         public function CluesMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void

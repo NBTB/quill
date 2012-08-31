@@ -16,6 +16,8 @@
 		var splashTitle:TextField = new TextField();
 		var loadingText:TextField = new TextField();
 		var splashTitleFormat:TextFormat = new TextFormat();
+		
+		public static var loadingTitle:String = null
 
 		public function LoadingMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
@@ -68,7 +70,7 @@
 			splashTitle.y = 50;
 			splashTitle.height = 168;
 			splashTitle.width = 425;
-			splashTitle.text = "The Night Before the Battle Scavenger Hunt";
+			splashTitle.text = loadingTitle;
 			
 			//create loading text field
 			loadingText.defaultTextFormat = splashTitleFormat;

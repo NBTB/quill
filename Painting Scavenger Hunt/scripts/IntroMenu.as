@@ -24,16 +24,18 @@
 		var mouseOverLoader:Loader = new Loader();
 		public static var fromHelp:Boolean=false;
 		
+		public static var introTitle = null;
+		public static var introText = null;
+		
 		public function IntroMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
 			
 			
-			initText();
-			init();
+			
 			
 		}
 
-		function init() 
+		public function init() 
 		{
 			addChild(titleField);
 			addChild(controls);
@@ -46,11 +48,10 @@
 		
 		function proceedFromTut(event:MouseEvent):void
 		{			
-			//proceedButton.removeEventListener(MouseEvent.MOUSE_DOWN, proceedFromTut);
 			closeMenu();
 		}	
 		
-		function initText() 
+		public function initText() 
 		{			
 			titleFormat.color=BaseMenu.titleFormat.color;
 			titleFormat.font=BaseMenu.titleFormat.font;
@@ -64,9 +65,10 @@
 			titleField.defaultTextFormat = titleFormat;
 			titleField.embedFonts = true;
 			titleField.autoSize = TextFieldAutoSize.CENTER;
-			titleField.x=0;
+			titleField.x=50;
+			titleField.wordWrap = true;
 			titleField.width=width - (titleField.x * 2);
-			titleField.text="Welcome to The Night Before The Battle\nScavenger Hunt!";
+			titleField.text=introTitle;
 			
 			proceedButton=new TextButton("Proceed", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			proceedButton.x=(width / 2) - (proceedButton.width / 2);			
@@ -81,7 +83,7 @@
 			controls.height=proceedButton.y - controls.y - 10;
 			controls.wordWrap=true;
 			controls.autoSize = TextFieldAutoSize.CENTER;
-			controls.text="The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas. Tap the Spacebar or click the icon in the right corner of the main menu to toggle the magnifying glass and help you see the painting more clearly.  Follow the clues to progress through the scavenger hunt.\nGood Luck!";
+			controls.text=introText;
 		}
 	}
 }

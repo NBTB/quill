@@ -11,8 +11,10 @@
         private var buttonFormat:TextFormat = new TextFormat();   			//formatting		
 		private var rewardCounter:Number = 0;								//counter of rewards given
 		private var heading:TextField = new TextField();					//labels the letter
-		private var endGoalOverlayFormat:TextFormat = null;					//format of text overlaid above end goal		
 		
+		public static var headingTextColor = 0;			//color of text in overlay
+		public static var goalOverlayText = null;			//text to display over goal
+		public static var hiddenOverlayText = null;			//text to display over hidden goal
 		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
         //Creates the end goal menu
@@ -30,9 +32,9 @@
 			nextPageButton.fitHitboxToText();
 			nextPageButton.x = widthVal - nextPageButton.width - 2;
 			nextPageButton.y = (heightVal - nextPageButton.height) / 2;
-			initHeading();
-			addEventListener(MouseEvent.MOUSE_OVER, displayHeading);
-			addEventListener(MouseEvent.MOUSE_OUT, removeHeading);
+			
+			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	heading.text = goalOverlayText		});
+			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void		{	heading.text = hiddenOverlayText	});
         }
          
         //add new letter piece to list
@@ -73,45 +75,32 @@
 			return false;
 		}    
 		
-		function initHeading()
+		public function initHeading()
 		{			
-			endGoalOverlayFormat = new TextFormat(bodyFormat.font, bodyFormat.size, bodyFormat.color, bodyFormat.bold, bodyFormat.italic, bodyFormat.underline, null, null, bodyFormat.align);
-			endGoalOverlayFormat.color = 0;
+			var endGoalOverlayFormat:TextFormat = new TextFormat(bodyFormat.font, bodyFormat.size, headingTextColor, bodyFormat.bold, bodyFormat.italic, bodyFormat.underline, null, null, bodyFormat.align);
 			endGoalOverlayFormat.align = TextFormatAlign.CENTER;
 		
 			heading.defaultTextFormat = endGoalOverlayFormat;
-			//heading.borderColor = over;
 			heading.autoSize = TextFieldAutoSize.CENTER;
-			heading.textColor = 0;	
 			heading.x = 0;
 			heading.y = 20;
 			heading.width = width;
 			heading.embedFonts = true;
-			heading.alpha = 0.2;
-			heading.text = "Letter home from Sergeant Poule";
+			heading.text = goalOverlayText;
 			heading.blendMode = BlendMode.LAYER;
+			fadeHeading();
 			addChild(heading);
 			
+			addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void	{	displayHeading();	});
+			addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	fadeHeading();		});
 		}
 		
-		function displayHeading(event:MouseEvent):void
+		function displayHeading():void
 		{	
 			heading.alpha = 0.7;
-			
-			/*TODO this should be done on page switch*/
-			if(rewardCheck == true)
-			{
-				heading.text = "Letter To Poule's Sister from Colonel McAlister";
-			}
-			else
-			{
-				heading.text = "Letter home from Sergeant Poule";
-			}
-			
-			
 		}
 		
-		function removeHeading(event:MouseEvent):void
+		function fadeHeading():void
 		{
 			heading.alpha = 0.2;
 		}
@@ -122,7 +111,7 @@
 			addContent(pieces[pieces.length - 1]); 
 			pieces[pieces.length - 1].visible = true;
 			rewardCheck = true;
-			heading.text = "Letter To Poule's Sister from Colonel McAlister";
+			heading.text = hiddenOverlayText;
 			return true;
 		} 
 		

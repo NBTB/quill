@@ -37,6 +37,9 @@
 																			//convert text to xml
 																			var specList = new XML(e.target.data);
 																			
+																			//attempt to give loading screen a title
+																			if(specList.hasOwnProperty("loading_title"))
+																				LoadingMenu.loadingTitle = specList.loading_title;
 																			//attempt to find spec files
 																			if(specList.hasOwnProperty("menu"))
 																				menuImportFile = specList.menu;
@@ -81,7 +84,7 @@
 		
          
 		//load XML start up specification
-		public function importStartUp()//startUpScreen:SplashScreen)
+		public function importStartUp()
 		{
 			//track load status of menu parameters and info about game
 			var menuParamsLoaded:Boolean = false;
@@ -126,7 +129,7 @@
 		
 		
         //load XML scavenger hunt specification
-        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, endGoalMenu:EndGoalMenu):void
+        public function importHunt(paintingCanvas:PaintingCanvas, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, endGoalMenu:EndGoalMenu, notificationTextColorNormal:ColorTransform, notificationTextColorNew:ColorTransform):void
         {			
 			//track load status of hunt parameters and painting
 			var huntLoaded:Boolean = false;
@@ -142,7 +145,7 @@
 																																	if(huntLoaded && paintingLoaded)
 																																		prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
 																															   });
-																				parseHunt(new XML(e.target.data), ooiManager, magnifyingGlass);
+																				parseHunt(new XML(e.target.data), ooiManager, magnifyingGlass, notificationTextColorNormal, notificationTextColorNew);
 																																	
 																			});
 			huntXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
@@ -274,6 +277,17 @@
 		//parse XML specification of menu content
 		private function parseMenuContent(menuContent:XML)
 		{					
+			//parse welcome
+			if(menuContent.hasOwnProperty("welcome_title"))
+				IntroMenu.introTitle = menuContent.welcome_title;
+			if(menuContent.hasOwnProperty("welcome_text_file"))
+			{
+				var welcomeLoader:TextLoader = new TextLoader();			
+				welcomeLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	IntroMenu.introText = welcomeLoader.parseText();	});
+				welcomeLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.welcome_text_file));
+			}		
+		
+			//parse objective page
 			if(menuContent.hasOwnProperty("objective_title"))
 				InstructionsMenu.objectiveTitle = menuContent.objective_title;
 			if(menuContent.hasOwnProperty("objective_text_file"))
@@ -282,7 +296,8 @@
 				objectiveLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.objectiveText = objectiveLoader.parseText();	});
 				objectiveLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.objective_text_file));
 			}			
-		
+			
+			//parse clues page
 			if(menuContent.hasOwnProperty("clues_title"))
 				InstructionsMenu.cluesTitle = menuContent.clues_title;
 			if(menuContent.hasOwnProperty("clues_text_file"))
@@ -292,6 +307,7 @@
 				cluesLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.clues_text_file));
 			}	
 			
+			//parse objects page
 			if(menuContent.hasOwnProperty("objects_title"))
 				InstructionsMenu.objectsTitle = menuContent.objects_title;
 			if(menuContent.hasOwnProperty("objects_text_file"))
@@ -301,6 +317,7 @@
 				objectsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.objects_text_file));
 			}	
 			
+			//parse end goal page
 			if(menuContent.hasOwnProperty("end_goal_title"))
 				InstructionsMenu.endGoalTitle = menuContent.end_goal_title;
 			if(menuContent.hasOwnProperty("end_goal_text_file"))
@@ -310,6 +327,7 @@
 				endGoalLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.end_goal_text_file));
 			}	
 			
+			//parse controls page
 			if(menuContent.hasOwnProperty("controls_title"))
 				InstructionsMenu.controlsTitle = menuContent.controls_title;
 			if(menuContent.hasOwnProperty("controls_text_file"))
@@ -319,6 +337,7 @@
 				controlsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.controls_text_file));
 			}	
 			
+			//parse about page
 			if(menuContent.hasOwnProperty("about_title"))
 				InstructionsMenu.aboutTitle = menuContent.about_title;
 			if(menuContent.hasOwnProperty("about_text_file"))
@@ -328,6 +347,7 @@
 				aboutLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.about_text_file));
 			}	
 			
+			//parse credits page
 			if(menuContent.hasOwnProperty("credits_title"))
 				InstructionsMenu.creditsTitle = menuContent.credits_title;
 			if(menuContent.hasOwnProperty("credits_text_file"))
@@ -336,10 +356,18 @@
 				creditsLoader.addEventListener(TextLoaderEvent.TEXT_FILE_IMPORTED, function(e:Event):void	{	InstructionsMenu.creditsText = creditsLoader.parseText();	});
 				creditsLoader.importText(FileFinder.completePath(FileFinder.GAME_INFO, menuContent.credits_text_file));
 			}			
+			
+			//parse restart menu
+			if(menuContent.hasOwnProperty("restart_text"))
+				RestartMenu.restartText = menuContent.restart_text;
+			
+			//parse ending
+			if(menuContent.hasOwnProperty("ending_text"))
+				Ending.endingText = menuContent.ending_text;
 		}
 		 
         //parse XML specification of scavenger hunt parameters
-        private function parseHunt(hunt:XML, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass):void
+        private function parseHunt(hunt:XML, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, notificationTextColorNormal:ColorTransform, notificationTextColorNew:ColorTransform):void
         {              
             //parse hunt attributes
             var mgZoom:Number = 1;
@@ -363,6 +391,18 @@
             //set number of number of usable objects of interest
             ooiManager.setSolvableOOICount(huntCount);      			
 			
+			//attempt to parse final two clue menu outputs
+			if(hunt.hasOwnProperty("final_clue"))
+				CluesMenu.finalClue = hunt.final_clue;
+			if(hunt.hasOwnProperty("congratulations_clue"))
+				CluesMenu.congratulations = hunt.congratulations_clue;			
+			
+			//attempt to parse notification colors
+			if(hunt.hasOwnProperty("notification_normal_color"))
+				notificationTextColorNormal.color = Number(hunt.notification_normal_color);
+			if(hunt.hasOwnProperty("notification_new_color"))
+				notificationTextColorNew.color = Number(hunt.notification_new_color);
+				
 			//dispatch hunt loaded event
 			dispatchEvent(new Event(HUNT_LOADED));
         }
@@ -482,7 +522,7 @@
                  
         //parse XML specification of obejcts of interest
         private function parseObjectsOfInterest(objectsOfInterest:XMLList, ooiManager:OOIManager, ooiScaleFactor:Number, canvasRectangle:Rectangle)
-        {
+        {			
             //object of interest loading counters
             var objectsParsed:Number = 0;
             var objectsLoaded:Number = 0;
@@ -492,7 +532,22 @@
             var allObjectsParsed:Boolean = false;
             for each(var ooi in objectsOfInterest)
             {
-                if(ooi.hasOwnProperty("name") && ooi.hasOwnProperty("info_snippet") && ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename") && ooi.hasOwnProperty("found_image_filename") && ooi.hasOwnProperty("x") && ooi.hasOwnProperty("y") && ooi.hasOwnProperty("clue"))
+				//parse default object of interest info pane position and size
+				if(ooi.name() == "default_info_rect")
+				{
+					var defaultInfoRect:XML = ooi;
+					ObjectOfInterest.defaultInfoRect = new Rectangle();
+					if(defaultInfoRect.hasOwnProperty("x"))
+						ObjectOfInterest.defaultInfoRect.x = defaultInfoRect.x;
+					if(defaultInfoRect.hasOwnProperty("y"))
+						ObjectOfInterest.defaultInfoRect.y = defaultInfoRect.y;
+					if(defaultInfoRect.hasOwnProperty("width"))
+						ObjectOfInterest.defaultInfoRect.width = defaultInfoRect.width;
+					if(defaultInfoRect.hasOwnProperty("height"))
+						ObjectOfInterest.defaultInfoRect.height = defaultInfoRect.height;
+				}
+				
+                else if(ooi.name() == "Object_Of_Interest" && ooi.hasOwnProperty("name") && ooi.hasOwnProperty("info_snippet") && ooi.hasOwnProperty("hitmap_filename") && ooi.hasOwnProperty("highlight_filename") && ooi.hasOwnProperty("found_image_filename") && ooi.hasOwnProperty("x") && ooi.hasOwnProperty("y") && ooi.hasOwnProperty("clue"))
                 {					
                     //increment the number of objects parsed
                     objectsParsed++;
@@ -577,7 +632,16 @@
              
             for each(var piece in pieces)
             {
-                if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename"), piece.hasOwnProperty("x"), piece.hasOwnProperty("y"))
+				//parse end goal overlay parameters
+				if(piece.name() == "heading_text_color")
+					EndGoalMenu.headingTextColor = Number(piece);
+				if(piece.name() == "goal_heading_text")
+					EndGoalMenu.goalOverlayText = piece;
+				if(piece.name() == "hidden_heading_text")
+					EndGoalMenu.hiddenOverlayText = piece;
+				
+				//parse end goal piece
+                else if(piece.hasOwnProperty("name"), piece.hasOwnProperty("filename"), piece.hasOwnProperty("x"), piece.hasOwnProperty("y"))
                 {
                     //increment the number of objects parsed
                     piecesParsed++;

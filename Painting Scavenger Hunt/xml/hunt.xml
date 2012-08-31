@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Hunt magnify_scale="1" magnify_radius="100" hunt_count="6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+<Hunt magnify_scale="1" magnify_radius="100" hunt_count="6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<final_clue>What happened to Sergeant Poule?</final_clue>
+	<congratulations_clue>Congratulations. Diligence has its benefits.</congratulations_clue>
+	<notification_normal_color>0x40E0D0</notification_normal_color>
+	<notification_new_color>0x909090</notification_new_color>
+</Hunt>

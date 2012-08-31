@@ -84,42 +84,16 @@ package scripts
 			magnifyingGlass = new MagnifyingGlass();
 			mainMenu = new MainMenu(new Rectangle(0, 574, 764, 55), 4, this);
 			notificationText = new TextField();
-			cluesMenu = new CluesMenu(0, 0, 765, 55);
+			cluesMenu = new CluesMenu(0, 0, 764, 55);
 			endGoalMenu = new EndGoalMenu(765, 0, 500, 630);			
 			introMenu = new IntroMenu(30, 75, 700, 480);
 			ending = new Ending(150, 150, 450, 200);
 			
-			//define normal notification text color
-			var normalRed:uint = 0x40;
-			var normalGreen:uint = 0xE0;
-			var normalBlue:uint = 0xD0;
-			var normalAlpha:uint = 0xFF
+			//create color transforms for notification text
 			notificationTextColorNormal = new ColorTransform();	
-			notificationTextColorNormal.color = (normalRed * 0x010000) + (normalGreen * 0x000100) + (normalBlue);
+			notificationTextColorNew = new ColorTransform();
 			
-			//define offsets to apply when notification is new
-			notificationTextColorNew = new ColorTransform(1, 1, 1, 1, 0x90 - normalRed, 0x90 - normalGreen, 0x90 - normalBlue);
-			notificationTextColorFadeTime = 10;
-			
-			//setup clue text format
-			notificationTextFormat = new TextFormat(BaseMenu.titleFormat.font, BaseMenu.titleFormat.size,  notificationTextColorNormal.color, 
-													BaseMenu.titleFormat.bold, BaseMenu.titleFormat.italic, BaseMenu.titleFormat.underline, 
-													null, null, TextFormatAlign.CENTER);
-			
-			//set clue textfield location and settings
-			notificationText.defaultTextFormat = notificationTextFormat;
-			notificationText.transform.colorTransform = notificationTextColorNormal;
-			notificationText.wordWrap=true;
-			notificationText.x=150;
-			notificationText.y=90;
-			notificationText.width=474;
-			notificationText.visible = false;
-			notificationText.selectable = false;
-			notificationText.mouseEnabled = false;
-			
-			notificationText.embedFonts = true;
 			magnifyButton = new SimpleButton();
-			
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 																					   {
@@ -161,7 +135,7 @@ package scripts
 																			if(timerReady && loadReady)
 																				startGame();
 																	   });
-			importer.importHunt(paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu);			
+			importer.importHunt(paintingCanvas, ooiManager, magnifyingGlass, endGoalMenu, notificationTextColorNormal, notificationTextColorNew);			
 			
 			//add menus to main menu
 			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
@@ -210,7 +184,6 @@ package scripts
 			//add menu open listeners to object of interest info panes to dismiss other menus
 			var ooiCount = ooiManager.getTotalOOICount();
 			for(var o:int = 0; o < ooiCount; o++)
-				addDismissibleOverlayCloser(ooiManager.getOOIAtIndex(o).getInfoPane(), MenuEvent.MENU_OPENED);
 			
 			//open clues and end goal menus
 			cluesMenu.openMenu();
@@ -290,7 +263,7 @@ package scripts
 																						ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).startBlink();
 																						
 																						//urge further exploration with a broad clue
-																						cluesMenu.addClue("What happened to Sergeant Poule?")
+																						cluesMenu.addClue(CluesMenu.finalClue)
 																					}
 																				});
 			
@@ -315,10 +288,44 @@ package scripts
 																						cluesMenu.addClue(firstClue);
 																						
 																						//show unlocked content
+																						endGoalMenu.initHeading();
 																						endGoalMenu.showRewards();
 																				   });
 			
-			//open intro menu						
+			//calculate color offsets between new and normal notification colors (seperate components of color within unsigned integer)
+			var normalRed:uint = (notificationTextColorNormal.color & 0xFF0000)/0x010000;
+			var normalGreen:uint = (notificationTextColorNormal.color & 0x00FF00)/0x000100;
+			var normalBlue:uint = (notificationTextColorNormal.color & 0x0000FF)/0x000001;
+			var newRed:uint = (notificationTextColorNew.color & 0xFF0000)/0x010000;
+			var newGreen:uint = (notificationTextColorNew.color & 0x00FF00)/0x000100;
+			var newBlue:uint = (notificationTextColorNew.color & 0x0000FF)/0x000001;			
+			notificationTextColorNew.redOffset = newRed - normalRed;
+			notificationTextColorNew.greenOffset = newGreen - normalGreen;
+			notificationTextColorNew.blueOffset = newBlue - normalBlue;
+			
+			//define new to normal notification fade timer
+			notificationTextColorFadeTime = 10;
+			
+			//setup clue text format
+			notificationTextFormat = new TextFormat(BaseMenu.titleFormat.font, BaseMenu.titleFormat.size,  notificationTextColorNormal.color, 
+													BaseMenu.titleFormat.bold, BaseMenu.titleFormat.italic, BaseMenu.titleFormat.underline, 
+													null, null, TextFormatAlign.CENTER);
+			
+			//set notification textfield location and settings
+			notificationText.defaultTextFormat = notificationTextFormat;
+			notificationText.transform.colorTransform = notificationTextColorNormal;
+			notificationText.wordWrap=true;
+			notificationText.x=150;
+			notificationText.y=90;
+			notificationText.width=474;
+			notificationText.visible = false;
+			notificationText.selectable = false;
+			notificationText.mouseEnabled = false;
+			notificationText.embedFonts = true;
+			
+			//open intro menu				
+			introMenu.initText();
+			introMenu.init();
 			addChild(introMenu);	
 			introMenu.openMenu();		
 							
@@ -514,7 +521,7 @@ package scripts
 			cluesMenu.outdateCurrentClue();
 			
 			//congratulate player of truly finishing the gamse
-			cluesMenu.addClue("Congratulations. Diligence has its benefits.")
+			cluesMenu.addClue(CluesMenu.congratulations)
 		}
 		
 		//display notification in textfield on screen

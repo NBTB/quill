@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OOIs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<default_info_rect>
+		<x>5</x>
+		<y>5</y>
+		<width>320</width>
+		<height>400</height>
+	</default_info_rect>
 	<Object_Of_Interest>
 		<name>Quill</name>
 		<info_snippet>Commonly used in writing</info_snippet>
@@ -52,8 +58,8 @@
 		<info>
 			<info_text_file>flag info.txt</info_text_file>
 		</info>
-		<x>0.5396551</x>
-		<y>0.685572</y>
+		<x>0.5406561</x>
+		<y>0.686574</y>
 		<info_pane_x>0.12</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>flag hitmap.png</hitmap_filename>
@@ -143,7 +149,7 @@
 			<info_text_file>sword info.txt</info_text_file>
 		</info>
 		<x>0.8485517</x>
-		<y>0.7722242</y>
+		<y>0.7732242</y>
 		<info_pane_x>0.41</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>sword hitmap.png</hitmap_filename>
@@ -157,8 +163,8 @@
 		<info>
 			<info_text_file>cards info.txt</info_text_file>
 		</info>
-		<x>0.3913793</x>
-		<y>0.912397</y>
+		<x>0.3923793</x>
+		<y>0.913397</y>
 		<info_pane_x>0.47</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>cards hitmap.png</hitmap_filename>
@@ -187,7 +193,7 @@
 		<info>
 			<info_text_file>sergeant info.txt</info_text_file>
 		</info>
-		<x>0.48</x>
+		<x>0.479</x>
 		<y>0.692</y>
 		<info_pane_x>0.1</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
@@ -203,7 +209,7 @@
 			<info_text_file>gabions info.txt</info_text_file>
 		</info>
 		<x>0.00585</x>
-		<y>0.2610287</y>
+		<y>0.2620287</y>
 		<info_pane_x>0.02</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>gabions hitmap.png</hitmap_filename>
@@ -233,7 +239,7 @@
 			<info_text_file>uniform info.txt</info_text_file>
 		</info>
 		<x>0.2960307</x>
-		<y>0.6780287</y>
+		<y>0.6810287</y>
 		<info_pane_x>0.42</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>uniform hitmap.png</hitmap_filename>

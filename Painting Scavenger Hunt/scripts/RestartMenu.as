@@ -8,9 +8,11 @@
 	
 	class RestartMenu extends BaseMenu
 	{		
-		var startOverQuestion:TextField = null;		//Question asking if the user wants to start over
-		var startOverYes:TextButton = null;			//yes button
-		var startOverNo:TextButton = null;			//no button
+		var startOverQuestion:TextField = null;			//question asking if the user wants to start over
+		var startOverYes:TextButton = null;				//yes button
+		var startOverNo:TextButton = null;				//no button
+		
+		public static var restartText:String = null;	//actual text of question
 		
 		//Creates the restart menu
 		public function RestartMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -21,7 +23,7 @@
 			//Sets up the question
 			startOverQuestion = new TextField();
 			startOverQuestion.embedFonts = true;
-			startOverQuestion.text = "Are you sure you want to start over? All progress will be lost.";
+			startOverQuestion.text = restartText;
 			startOverQuestion.wordWrap = true;
 			startOverQuestion.x = 20;
 			startOverQuestion.y = 20;
@@ -37,9 +39,6 @@
 			startOverNo = new TextButton("Cancel", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			startOverNo.x = 240;
 			startOverNo.y = 130;
-			
-			//startOverYes.setTextFormat(BaseMenu.textButtonUpFormat);
-			//startOverNo.setTextFormat(BaseMenu.textButtonUpFormat);
 			
 			//Adds all three
 			addChild(startOverQuestion);

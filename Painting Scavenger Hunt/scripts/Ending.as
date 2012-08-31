@@ -6,9 +6,10 @@
   
     class Ending extends BaseMenu
     {
+		private var continueButton:TextButton = null;
+		private var ending:TextField = null;		
 		
-		var continueButton:TextButton = null;
-		var ending:TextField = new TextField();		
+		public static var endingText:String = null;
 		
 		 //Creates the ending menu
         public function Ending(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -23,7 +24,7 @@
 			ending.embedFonts = true;
 			ending.autoSize = TextFieldAutoSize.LEFT;
 			ending.wordWrap = true;
-			ending.text = "Congratulations! You have solved all of the riddles! Although no clues remain, there is still plenty to discover and learn. Perhaps a secret awaits.";
+			ending.text = endingText;
 			ending.x = 10;
 			ending.y = ending.x;
 			ending.width = width - (ending.x * 2);			
@@ -32,7 +33,7 @@
 			//create continue button
 			continueButton = new TextButton("Continue", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			continueButton.x = (width / 2) - (continueButton.width / 2);
-			continueButton.y = ending.y + ending.height + 10;			
+			continueButton.y = height - continueButton.height - 10;			
 			addContent(continueButton);
 			
 			//listen for the continue button to be clicked

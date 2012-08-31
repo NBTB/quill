@@ -35,6 +35,7 @@
 		private var hasBeenOpened:Boolean = false;						//turned true first time objects display pane is showed
 		private var hitTestSuppression:Boolean = false;					//flag if hit testing should be supressed
 		
+		public static var defaultInfoRect = null;												//default info pane position and size
 		public static var anyMousedOver = false;												//flag if any object is moused over
 		private static var staticID:Number = 0;													//counter of objects used to determine each objects ID
 		private static var captionFormat:TextFormat = new TextFormat("Arial", 20, 0x40E0D0);	//text format used by caption
@@ -88,7 +89,10 @@
 			caption.mouseChildren = false;
 						
 			//create info pane
-			infoPane = new OOIInfoPane(5, 5, 320, 400);
+			if(defaultInfoRect)
+				infoPane = new OOIInfoPane(defaultInfoRect.x, defaultInfoRect.y, defaultInfoRect.width, defaultInfoRect.height);
+			else
+				infoPane = new OOIInfoPane(5, 5, 320, 400);
 			infoPane.visible = false;
 			infoPane.mouseEnabled = true;
 			infoPane.mouseChildren = true;
