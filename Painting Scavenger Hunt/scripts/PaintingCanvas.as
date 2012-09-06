@@ -35,6 +35,23 @@
             this.y = y;
             this.canvasWidth = canvasWidth;
             this.canvasHeight = canvasHeight;
+			
+			//listen for being removed from the display list
+			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
+																		{
+																			//dispose of bitmaps
+																			if(painting)
+																			{
+																				painting.bitmapData.dispose();
+																				painting = null;
+																				fullsizePainting = null;
+																			}
+																			if(nonInteractivePainting)
+																			{
+																				nonInteractivePainting.bitmapData.dispose();
+																				nonInteractivePainting= null;
+																			}
+																		});
         }
          
         //display painting on canvas

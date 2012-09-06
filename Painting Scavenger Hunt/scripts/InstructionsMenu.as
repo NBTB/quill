@@ -102,6 +102,26 @@
 			mouseOverLoader.scaleY=.8;
 			mouseOverLoader.x=180;
 			mouseOverLoader.y=250;
+			
+			//listen for being removed from the display list
+			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
+																		{
+																			//dispose of bitmaps
+																			if(magLoader && magLoader.content)
+																			{
+																				Bitmap(magLoader.content).bitmapData.dispose();
+																				magLoader.unload();
+																				if(magLoader.parent)
+																					magLoader.parent.removeChild(magLoader);
+																			}
+																			if(clueLoader && clueLoader.content)
+																			{
+																				Bitmap(clueLoader.content).bitmapData.dispose();
+																				clueLoader.unload();
+																				if(clueLoader.parent)
+																					clueLoader.parent.removeChild(clueLoader);
+																			}
+																		});
 		}
 
 		function initText() {
@@ -112,8 +132,6 @@
 			titleField.autoSize = TextFieldAutoSize.CENTER;
 			titleField.embedFonts = true;
 
-			//resumeButton.text="Resume Game";
-			//resumeButton.autoSize = TextFieldAutoSize.CENTER;
 			resumeButton.x=(width / 2) - (resumeButton.width / 2);
 			resumeButton.y=height-resumeButton.height - 10;			
 

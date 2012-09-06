@@ -1,7 +1,8 @@
 ﻿package scripts
 {
     import flash.display.*;
-    import flash.events.*;
+    import flash.events.*;	
+	import flash.utils.*;	
      
     public class ScrollBarStyle extends EventDispatcher
     {
@@ -80,5 +81,23 @@
                 dispatchEvent(new Event(SCROLL_BUTTON_STATES_CHANGED));
             }
         }
+		
+		public function disposeOfBitmaps()
+		{
+			var bitmapClassName:String = String(getDefinitionByName(getQualifiedClassName(Bitmap)));
+			for(var i:int = 0; i < NUM_STATES; i++)
+			{
+				if(String(getDefinitionByName(getQualifiedClassName(upDownButtonStates[i]))) == bitmapClassName)
+				{
+					Bitmap(upDownButtonStates[i]).bitmapData.dispose();
+					upDownButtonStates[i] = null;
+				}
+				if(String(getDefinitionByName(getQualifiedClassName(scrollerStates[i]))) == bitmapClassName)
+				{
+					Bitmap(scrollerStates[i]).bitmapData.dispose();
+					scrollerStates[i] = null;
+				}
+			}
+		}
     }
 }

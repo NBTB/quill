@@ -10,7 +10,7 @@
 		private var textFiles:Array = null;			//list of text fils that have been read in (cleared on load completion)
 		private var textImports:Array = null;		//list of imported text strings (cleared on load completion)
 		private var sectionTrackers:Array = null;	//list of numbers that track the next section to read in each text string (cleared on load completion)
-		var myArrayListeners:Array=[];								//Array of Event Listeners 
+		var myArrayListeners:Array=[];					//Array of Event Listeners in TextLoader
 		
 		public function TextLoader()
 		{

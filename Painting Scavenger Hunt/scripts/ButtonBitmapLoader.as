@@ -159,6 +159,18 @@
 			}
 		}
 		
+		public function disposeOfBitmaps()
+		{
+			if(upImage)
+				upImage.dispose();
+			if(overImage)
+				overImage.dispose();
+			if(downImage)
+				downImage.dispose();
+			if(hittestImage)
+				hittestImage.dispose();
+		}
+		
 		public function getUpImage():BitmapData				{	return upImage;										}
 		public function getOverImage():BitmapData			{	return (overImage) ? overImage : upImage;			}
 		public function getDownImage():BitmapData			{	return (downImage) ? downImage : upImage;			}

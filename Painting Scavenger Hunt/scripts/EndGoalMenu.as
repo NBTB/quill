@@ -2,8 +2,9 @@
 {
     import flash.display.*;
     import flash.text.*;
-    import flash.geom.ColorTransform;
-    import flash.events.*;
+    import flash.geom.*;
+    import flash.events.*;	
+	import flash.utils.*;	
   
     public class EndGoalMenu extends BaseMenu
     {
@@ -36,6 +37,20 @@
 			
 			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	heading.text = goalOverlayText		});
 			nextPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void		{	heading.text = hiddenOverlayText	});
+			
+			//listen for being removed from the display list
+			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
+																		{
+																			var bitmapClassName:String = String(getDefinitionByName(getQualifiedClassName(Bitmap)));
+																			for(var i:int = 0; i < pieces.size; i++)
+																			{
+																				if(String(getDefinitionByName(getQualifiedClassName(pieces[i]))) == bitmapClassName)
+																				{
+																					Bitmap(pieces[i]).bitmapData.dispose();
+																					pieces = null;
+																				}
+																			}
+																		});
         }
          
         //add new letter piece to list

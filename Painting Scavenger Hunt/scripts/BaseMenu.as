@@ -490,6 +490,20 @@
 			return isOpener;
 		}
 		
+		public static function disposeOfBitmaps()
+		{
+			if(closeButtonLoader)
+			{
+				closeButtonLoader.disposeOfBitmaps();
+				closeButtonLoader = null;
+			}
+			if(scrollBarStyle)
+			{
+				scrollBarStyle.disposeOfBitmaps();
+				scrollBarStyle = null;
+			}
+		}
+		
 		public function isMenuOpen():Boolean	{	return isOpen;	}
 		
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}

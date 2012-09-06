@@ -61,6 +61,11 @@ package scripts
 			importer = new HuntImporter();
 			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void	{	startMenu()	});
 			importer.findSpecFilesAndAssetDirectories("xml/importer.xml", stageSize, canvasRect);			
+			
+			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
+																		{
+																			BaseMenu.disposeOfBitmaps();
+																		});
 		}
 		
 		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
@@ -669,7 +674,7 @@ package scripts
 		
 		public function clearEvents():void 
 		{
-			ooiManager.clearEvents();
+			/*ooiManager.clearEvents();
 			loadingMenu.clearEvents();
 			mainMenu.clearEvents();
 			magnifyingGlass.clearEvents();
@@ -680,7 +685,7 @@ package scripts
 					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
 				}
 			}
-			myArrayListeners=null;
+			myArrayListeners=null;*/
 		}
 	}
 }

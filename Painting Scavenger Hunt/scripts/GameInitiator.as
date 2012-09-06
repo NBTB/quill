@@ -13,7 +13,6 @@
 
 	public class GameInitiator extends MovieClip
 	{
-		//var theGame:ScavengerHunt;		
 		var gameLoader:Loader = new Loader();											//Loader which allows the main game to load
 		var context:LoaderContext = new LoaderContext();								//Context for the game's domain
 		var gameName:URLRequest = new URLRequest("Painting Scavenger Hunt.swf");		//Path to the game's .swf
@@ -21,17 +20,11 @@
 		//Function to load the game
 		public function GameInitiator():void
 		{			
-			//trace("Initial Load");
-			
 			//set the domain, so they can refer to each other
 			context.applicationDomain = ApplicationDomain.currentDomain;
 			
-			/*TODO loadContent causing infinite loop and not creating hunt, temporary solution here*/
 			//load the game for the first time
 			loadContent();			
-			
-			//check for the restart event to restart the game
-			//this.addEventListener(RestartEvent.RESTART_GAME, restartHandler);
 		}
 		
 		//when the game loader has correclty obtained the game, start it.
@@ -50,17 +43,7 @@
 		
 		//restart the game (currently non-functional)
 		public function restartHandler(evt:RestartEvent)
-		{
-			//addChild(gameLoader);
-			//removeChild(gameLoader.content);
-			
-			//removeChild(gameLoader);
-			//gameLoader.unload();
-			
-			
-			/*TODO this does not work in CS3, find alternative or upgrade*/
-			//gameLoader.unloadAndStop();  //This works, but does not remove event listeners
-			
+		{			
 			ScavengerHunt(gameLoader.content).clearEvents();
 			removeChild(gameLoader);
 			gameLoader.unload();
@@ -69,12 +52,5 @@
 			
 			loadContent();
 		}
-		
-		/*public function reloadGame():void
-		{
-			removeChild(theGame);
-			theGame = new ScavengerHunt(this);
-			addChild(theGame);
-		}*/
 	}
 }

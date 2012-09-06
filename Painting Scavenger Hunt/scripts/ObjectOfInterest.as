@@ -127,6 +127,27 @@
 			
 			//listen for closing of info pane
 			infoPane.addEventListener(MenuEvent.MENU_CLOSED, function(e:Event):void	{	hideHighlight();	});
+			
+			//listen for being removed from the display list
+			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
+																		{
+																			//dispose of bitmaps
+																			if(hitmap)
+																			{
+																				hitmap.bitmapData.dispose();
+																				hitmap = null;
+																			}
+																			if(highlight)
+																			{
+																				highlight.bitmapData.dispose();
+																				highlight = null;
+																			}
+																			if(hitmap)
+																			{
+																				solvedImage.bitmapData.dispose();
+																				solvedImage = null;
+																			}
+																		});
 		}
 		
 		//handle new frames
