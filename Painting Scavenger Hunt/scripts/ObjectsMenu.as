@@ -12,8 +12,8 @@
 		private var thisY:int;										//Y position of this menu
 		private var thisWidth:int;									//Width of this menu
 		private var numObjects:int;									//Number of objects in the painting
-		public var curLink:int = 0;									//Which link is next to be updated
-		public var linksArray:Array = null;							//Array which holds all of the links
+		private var curLink:int = 0;								//Which link is next to be updated
+		private var linksArray:Array = null;						//Array which holds all of the links
 		
 		//event types
 		private static const STOP_BLINKING:String = "Stop blinking"	//stop attemping to grab player's attention

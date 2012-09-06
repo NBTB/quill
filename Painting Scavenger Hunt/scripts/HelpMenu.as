@@ -7,21 +7,18 @@
   
     class HelpMenu extends BaseMenu
     {
-         
-        var objectiveOption:TextButton = null;	      
-        var controlsOption:TextButton = null;		
-		var endGoalOption:TextButton = null;		
-		var objectsOption:TextButton = null;	
-		var cluesOption:TextButton = null;
-		var aboutOption:TextButton = null;
-		var creditsOption:TextButton = null;
+		var instructions:InstructionsMenu;			//instructions menu
+		var instructionsOpening:Boolean = false;	//flag if instructions menu is opening
 		
-		var instructions:InstructionsMenu;
-		var instructionsOpening:Boolean = false;
+        //help menu options
+        private var objectiveOption:TextButton = null;	      
+        private var controlsOption:TextButton = null;		
+		private var endGoalOption:TextButton = null;		
+		private var objectsOption:TextButton = null;	
+		private var cluesOption:TextButton = null;
+		private var aboutOption:TextButton = null;
+		private var creditsOption:TextButton = null;		
          
-        var textFormat:TextFormat = new TextFormat();           //Formatting
-         
-        //Creates the help menu
         public function HelpMenu(xPos:int, yPos:int, widthVal:int, heightVal:int, instructionsRect:Rectangle):void
         {
             //sends variables to create background to the base menu
@@ -72,9 +69,7 @@
 			addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void
 																    {
 																		instructions = new InstructionsMenu(instructionsRect.x, instructionsRect.y, instructionsRect.width, instructionsRect.height);	
-																		instructions.updateText();
 																		parent.addChild(instructions);
-																		instructions.resumeButton.addEventListener(MouseEvent.MOUSE_DOWN,closeTutFromHelp);
 																		instructions.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
 																																				  {	
 																																					instructionsOpening = true;
@@ -88,7 +83,7 @@
             controlsOption.addEventListener(MouseEvent.MOUSE_DOWN, showControls);
 			cluesOption.addEventListener(MouseEvent.MOUSE_DOWN, showClues);
 			objectsOption.addEventListener(MouseEvent.MOUSE_DOWN, showObjects);
-			endGoalOption.addEventListener(MouseEvent.MOUSE_DOWN, showLetter);
+			endGoalOption.addEventListener(MouseEvent.MOUSE_DOWN, showEndGoal);
 			aboutOption.addEventListener(MouseEvent.MOUSE_DOWN, showAbout);
 			creditsOption.addEventListener(MouseEvent.MOUSE_DOWN, showCredits);	
         }         
@@ -97,64 +92,51 @@
         //function called if the button to show the objective is pressed
         public function showObjective(event:MouseEvent):void
         {			
-			instructions.curSlide = 2;
-			instructions.updateText();
+			instructions.updateText(InstructionsMenu.OBJECTIVE_SLIDE);
 			instructions.openMenu();
         }
 		
 		 //function called if the button to show the info regarding clues is pressed
         public function showClues(event:MouseEvent):void
         {
-			instructions.curSlide = 3;
-			instructions.updateText();
+			instructions.updateText(InstructionsMenu.CLUES_SLIDE);
 			instructions.openMenu();
         }
 		
 		 //function called if the button to show the info regarding objects is pressed
         public function showObjects(event:MouseEvent):void
         {
-			instructions.curSlide = 4;
-			instructions.updateText();
+			instructions.updateText(InstructionsMenu.OBJECTS_SLIDE);
 			instructions.openMenu();
         }
 		
-		 //function called if the button to show the info regarding the letter is pressed
-        public function showLetter(event:MouseEvent):void
+		 //function called if the button to show the info regarding the end goal is pressed
+        public function showEndGoal(event:MouseEvent):void
         {
-			instructions.curSlide = 5;
-			instructions.updateText();
+			instructions.updateText(InstructionsMenu.END_GOAL_SLIDE);
 			instructions.openMenu();
         }
          
         //function called if the button to show the controls is pressed
         public function showControls(event:MouseEvent):void
         {
-			instructions.curSlide = 6;
-			instructions.updateText();
+			instructions.updateText(InstructionsMenu.CONTROLS_SLIDE);
 			instructions.openMenu();			
         }
 		
 		public function showAbout(event:MouseEvent):void
 		{
-			instructions.curSlide = 7;
-			instructions.updateText();
+			instructions.updateText(InstructionsMenu.ABOUT_SLIDE);
 			instructions.openMenu();			
 		}
 		
 		public function showCredits(event:MouseEvent):void
 		{
-			instructions.curSlide = 8;
-			instructions.updateText();
+			instructions.updateText(InstructionsMenu.CREDITS_SLIDE);
 			instructions.openMenu();			
 		}
 		
-		function closeTutFromHelp(event:MouseEvent):void
-		{
-			//removeChild(instructions);
-			instructions.closeMenu();
-		}
-		
-			//handle the event of a help link being clicked
+		//handle the event of a help link being clicked
 		private function helpLinkClicked():void
 		{
 			closeMenu();

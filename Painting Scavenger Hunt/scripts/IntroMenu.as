@@ -10,49 +10,30 @@
 
 	public class IntroMenu extends BaseMenu {
 
-		public var proceedButton:TextButton = null;		
-		var controls:TextField = new TextField();
-		public static var curSlide:Number;
-		var theBackground:Shape = new Shape();
-		var tutFormat:TextFormat = new TextFormat();
-		var titleFormat:TextFormat = new TextFormat();
-		var buttonFormat:TextFormat = new TextFormat();
-		var titleField:TextField = new TextField();
-		var magLoader:Loader = new Loader();
-		var clueLoader:Loader = new Loader();
-		var mouseLoader:Loader = new Loader();
-		var mouseOverLoader:Loader = new Loader();
-		public static var fromHelp:Boolean=false;
+		private var proceedButton:TextButton = null;		//button to proceed to game		
+		private var titleField:TextField = null;			//intro title field
+		private var intro:TextField = null;					//intro text field
 		
-		public static var introTitle = null;
-		public static var introText = null;
+		public static var introTitle = null;				//intro title text
+		public static var introText = null;					//intro body text
 		
-		public function IntroMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
+		public function IntroMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
+		{
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
-			
-			
-			
-			
 		}
-
+	
 		public function init() 
 		{
 			addChild(titleField);
-			addChild(controls);
+			addChild(intro);
 			addChild(proceedButton);
 			
-			curSlide=1;
-			
-			proceedButton.addEventListener(MouseEvent.MOUSE_DOWN,proceedFromTut);
+			proceedButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	closeMenu();	});
 		}
-		
-		function proceedFromTut(event:MouseEvent):void
-		{			
-			closeMenu();
-		}	
 		
 		public function initText() 
 		{			
+			var titleFormat:TextFormat = new TextFormat();
 			titleFormat.color=BaseMenu.titleFormat.color;
 			titleFormat.font=BaseMenu.titleFormat.font;
 			titleFormat.size=Number(BaseMenu.titleFormat.size) * 1,5;
@@ -61,6 +42,7 @@
 			titleFormat.underline = BaseMenu.titleFormat.italic;
 			titleFormat.italic = BaseMenu.titleFormat.underline;
 			
+			titleField = new TextField();
 			titleField.selectable = false;
 			titleField.defaultTextFormat = titleFormat;
 			titleField.embedFonts = true;
@@ -74,16 +56,17 @@
 			proceedButton.x=(width / 2) - (proceedButton.width / 2);			
 			proceedButton.y=height - proceedButton.height - 10;
 
-			controls.selectable=false;			
-			controls.defaultTextFormat = BaseMenu.bodyFormat;
-			controls.embedFonts = true;
-			controls.x = 10;
-			controls.y = titleField.y + titleField.height + 10;
-			controls.width=width - (controls.x * 2);
-			controls.height=proceedButton.y - controls.y - 10;
-			controls.wordWrap=true;
-			controls.autoSize = TextFieldAutoSize.CENTER;
-			controls.text=introText;
+			intro = new TextField();
+			intro.selectable=false;			
+			intro.defaultTextFormat = BaseMenu.bodyFormat;
+			intro.embedFonts = true;
+			intro.x = 10;
+			intro.y = titleField.y + titleField.height + 10;
+			intro.width=width - (intro.x * 2);
+			intro.height=proceedButton.y - intro.y - 10;
+			intro.wordWrap=true;
+			intro.autoSize = TextFieldAutoSize.CENTER;
+			intro.text=introText;
 		}
 	}
 }

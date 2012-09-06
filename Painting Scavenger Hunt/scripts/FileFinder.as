@@ -2,8 +2,9 @@
 {
 	public class FileFinder
 	{
-		private static var directories:Array = null;
+		private static var directories:Array = null;	//list of directories
 		
+		//directory numbers
 		public static const INTERFACE:int = 0;
 		public static const GAME_INFO:int = 1;
 		public static const OOI_IMAGES:int = 2;

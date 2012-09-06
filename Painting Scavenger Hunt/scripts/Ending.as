@@ -6,10 +6,10 @@
   
     class Ending extends BaseMenu
     {
-		private var continueButton:TextButton = null;
-		private var ending:TextField = null;		
+		private var continueButton:TextButton = null;	//button to continue playing game
+		private var ending:TextField = null;			//text field to hold ending text
 		
-		public static var endingText:String = null;
+		public static var endingText:String = null;		//body of ending text
 		
 		 //Creates the ending menu
         public function Ending(xPos:int, yPos:int, widthVal:int, heightVal:int):void

@@ -9,14 +9,14 @@
 	
 	public class EndGoalPiece extends MovieClip
 	{
-		private var pieceName:String;
-		private var id:Number = 0;
-		private var fileName:String;
-		private var piece:Bitmap = null;
-		private var scaleFactor:Number = 1; 
-		private var rewardNotification = null;
+		private var pieceName:String;				//name of piece
+		private var id:Number = 0;					//unique id of piece
+		private var fileName:String;				//filename of asset attached to piece
+		private var piece:Bitmap = null;			//image attached to piece
+		private var scaleFactor:Number = 1; 		//scaling of piece to fit scene
+		private var rewardNotification = null;		//notification to display when piece is unlocked
 	
-		private static var staticID:Number = 0;
+		private static var staticID:Number = 0;		//counter used to generate each id
 		
 		function EndGoalPiece(pieceName:String, fileName:String, xPos:Number, yPos:Number, rewardNotification:String)
 		{
@@ -24,8 +24,7 @@
 			this.fileName = fileName;
 			this.rewardNotification = rewardNotification;
 			x = xPos;
-			y = yPos;
-			
+			y = yPos;			
 			
 			//set ID and increment static counter
 			this.id = staticID;

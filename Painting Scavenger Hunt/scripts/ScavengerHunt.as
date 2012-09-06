@@ -599,12 +599,6 @@ package scripts
 			}
 		}
 		
-		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
-		{ 
-			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
-			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
-		}
-		
 		//in the end menu, if you click to view the letter, the end menu is closed and the letter menu is opened
 		function viewLetter(event:MouseEvent):void
 		{
@@ -651,6 +645,7 @@ package scripts
 			menusDismissible = othersEnabled;
 		}
 		
+		//set whether or not events outside of a menu are allowed
 		private function allowEventsOutsideMenu(allowEvents:Boolean):void
 		{
 			//flag the pause/unpause of certain events

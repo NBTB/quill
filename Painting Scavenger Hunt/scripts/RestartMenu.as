@@ -8,13 +8,12 @@
 	
 	class RestartMenu extends BaseMenu
 	{		
-		var startOverQuestion:TextField = null;			//question asking if the user wants to start over
-		var startOverYes:TextButton = null;				//yes button
-		var startOverNo:TextButton = null;				//no button
+		private var startOverQuestion:TextField = null;			//question asking if the user wants to start over
+		private var startOverYes:TextButton = null;				//yes button
+		private var startOverNo:TextButton = null;				//no button
 		
-		public static var restartText:String = null;	//actual text of question
+		public static var restartText:String = null;			//actual text of question
 		
-		//Creates the restart menu
 		public function RestartMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			//feeds the position values for the background to the base menu

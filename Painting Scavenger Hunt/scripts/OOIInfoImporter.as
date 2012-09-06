@@ -9,14 +9,13 @@
 	{	
 		private var xmlData:XMLList = null; 		//XML specifications
 		private var doneLoading:Boolean = false;	//flag if loading has been completed
-		
-		var myArrayListeners:Array=[];				//Array of Event Listeners in BaseMenu
 	
 		public function OOIInfoImporter(xmlData:XMLList)
 		{
 			this.xmlData = xmlData;
 		}
 	
+		//load XML data into an object of interest as content of the object's info pane
 		public function loadInfoToOOI(targetOOI:ObjectOfInterest)
 		{
 			//extract list of children

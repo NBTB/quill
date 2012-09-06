@@ -142,6 +142,7 @@
 			infoPane.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	dispatchEvent(new MenuEvent(e.getTargetMenu(), MenuEvent.MENU_CLOSED));	});
 		}
 
+		//handle being added to stage
 		private function addedToStage(e:Event)
 		{
 			for(var i:int; i < objectsOfInterest.length; i++)
@@ -263,9 +264,9 @@
 		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
 		public function getCurrentClue():String					{	return currentOOI.getClue();		}		
 		public function getTotalOOICount():int					{	return totalOOICount;				}
-		public function getSolvableOOICount():int					{	return solvableOOICount;				}
+		public function getSolvableOOICount():int				{	return solvableOOICount;			}
 		
-		public function setSolvableOOICount(count:int):void		{	solvableOOICount = count;				}
+		public function setSolvableOOICount(count:int):void		{	solvableOOICount = count;			}
 		public function setObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
 	}
 }

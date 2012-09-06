@@ -6,8 +6,8 @@
 	
 	public class DraggableButton extends SimpleButton
 	{
-		private var drag:Boolean = false;
-		private var fromMouse:Point = null;
+		private var drag:Boolean = false;		//flag if being dragged
+		private var fromMouse:Point = null;		//store distance from mouse
 		
 		public function DraggableButton(upState:DisplayObject = null, overState:DisplayObject = null, downState:DisplayObject = null, hitTestState:DisplayObject = null)
 		{
@@ -18,6 +18,7 @@
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 		}
 		
+		//start drag button
 		public function startDrag():void
 		{
 			drag = true;
@@ -25,11 +26,13 @@
 			fromMouse.y = y - parent.mouseY;
 		}
 		
+		//stop dragging button
 		public function stopDrag():void
 		{
 			drag = false;
 		}
 		
+		//handle each new frame
 		private function enterFrame(e:Event):void
 		{
 			if(drag && parent)

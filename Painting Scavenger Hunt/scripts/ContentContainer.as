@@ -29,7 +29,8 @@
 				scrollBar.addEventListener(ScrollBar.SCROLLED, trackScrollBar);
 			}
 		}
-	
+		
+		//override the addChildAt function to add child as content in the list
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
 		{						
 			//if the new content is the first content, update the content head			
@@ -63,8 +64,10 @@
 			return child;
 		}
 	
+		//override addChild function to ensure that overriden addChildAt is used
 		override public function addChild(child:DisplayObject):DisplayObject	{	return addChildAt(child, numChildren);	}
 		
+		//add child the head of the content list and optionally move other content below it
 		public function addChildToHead(child:DisplayObject, repositionContent:Boolean = true):DisplayObject
 		{
 			//if other content exists, place new child at the top
@@ -89,6 +92,7 @@
 			return addChild(child);	
 		}
 		
+		//add child to tail of content list
 		public function addChildToTail(child:DisplayObject):DisplayObject
 		{
 			//if no content exists, place new child at the bottom
@@ -102,6 +106,7 @@
 			return addChild(child);
 		}
 		
+		//override the remoeChildFunction to removed child from content list
 		override public function removeChild(child:DisplayObject):DisplayObject
 		{				
 			//remove child
@@ -140,8 +145,10 @@
 			return child;
 		}
 		
+		//override removeChildAt function to ensure that overriden removeChild is used
 		override public function removeChildAt(index:int):DisplayObject	{	return removeChild(getChildAt(index));	}
 		
+		//handle the event of the attach scroll bar changing
 		private function trackScrollBar(e:Event)
 		{
 			//if content is valid, compute how much content must be scrolled
@@ -159,6 +166,7 @@
 			}
 		}
 		
+		//update attached scroll bar
 		private function updateScrollBar():void
 		{			
 			//update scroller bar height

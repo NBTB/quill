@@ -10,44 +10,34 @@
 
 	public class LoadingMenu extends BaseMenu {	
 		
-		var loadLoader:Loader = new Loader();
-		var startGameListener:MenuListener;
+		private var loadLoader:Loader = null;					//loader of loading animation
 		
-		var splashTitle:TextField = new TextField();
-		var loadingText:TextField = new TextField();
-		var splashTitleFormat:TextFormat = new TextFormat();
+		private var splashTitle:TextField = null;				//title to display while loading
+		private var loadingText:TextField = null;				//loading notification
+		private var loadingScreenTextFormat:TextFormat = null;	//format of textfields on loading screen
 		
 		public static var loadingTitle:String = null
 
-		public function LoadingMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
+		public function LoadingMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void 
+		{
 			super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
 			
 			initText();
 			init();
 		}
 
-		function init() 
+		private function init() 
 		{
 			addChild(splashTitle);
 			addChild(loadingText);
 			addChild(loadLoader);
 		}
 		
-		
-		function endLoad(e:Event)
-		{
-			startGameListener.triggerListener();
-		}
-		
-		function getStartListener(theListener:MenuListener)
-		{
-			startGameListener = theListener;
-		}
-		
-		function initText()
+		private function initText()
 		{
 			var url3:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "loadingWheel.swf"));
 
+			loadLoader = new Loader();
 			loadLoader.load(url3);
 			loadLoader.scaleX=.6;
 			loadLoader.scaleY=.6;
@@ -55,13 +45,15 @@
 			loadLoader.y=170;
 			
 			//create variation of menu title format
-			splashTitleFormat.align = TextFormatAlign.CENTER;
-			splashTitleFormat.color = BaseMenu.titleFormat.color;
-			splashTitleFormat.font = BaseMenu.titleFormat.font;
-			splashTitleFormat.size = Number(BaseMenu.titleFormat.size) * 1.5;	
+			loadingScreenTextFormat = new TextFormat();
+			loadingScreenTextFormat.align = TextFormatAlign.CENTER;
+			loadingScreenTextFormat.color = BaseMenu.titleFormat.color;
+			loadingScreenTextFormat.font = BaseMenu.titleFormat.font;
+			loadingScreenTextFormat.size = Number(BaseMenu.titleFormat.size) * 1.5;	
 						
 			//create title
-			splashTitle.defaultTextFormat = splashTitleFormat;
+			splashTitle = new TextField();
+			splashTitle.defaultTextFormat = loadingScreenTextFormat;
 			splashTitle.embedFonts = true;
 			splashTitle.wordWrap = true;
 			splashTitle.selectable = false;
@@ -72,7 +64,8 @@
 			splashTitle.text = loadingTitle;
 			
 			//create loading text field
-			loadingText.defaultTextFormat = splashTitleFormat;
+			loadingText = new TextField();
+			loadingText.defaultTextFormat = loadingScreenTextFormat;
 			loadingText.embedFonts = true;
 			loadingText.wordWrap = true;
 			loadingText.selectable = false;

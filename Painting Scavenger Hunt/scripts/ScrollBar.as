@@ -150,6 +150,7 @@
 																				});
 		}
 		
+		//handle each new frame
 		private function enterFrame(e:Event)
 		{			
 			if(visible)
@@ -195,6 +196,7 @@
 			}
 		}
 		
+		//move scroller a given amount
 		private function moveScroller(movement:Number)
 		{
 			movementFactor = movement;
@@ -203,11 +205,13 @@
 			dispatchEvent(new Event(SCROLLED));
 		}
 		
+		//stop scroller movement
 		private function stopScroller()
 		{
 			movementFactor = 0;
 		}
 		
+		//reset scroller position to top of scroll bar
 		public function resetScroller()
 		{
 			scroller.y = upButton.y + upButton.height;
@@ -215,6 +219,7 @@
 			dispatchEvent(new Event(SCROLLED));
 		}
 		
+		//compute the scrollers ability to move as far as it wants to
 		private function scrollerMoveableFactor()
 		{
 			//determine raw movement
@@ -239,6 +244,7 @@
 			return moveable;
 		}
 		
+		//update the images used for the up and down buttons' states
 		private function updateUpDownButtonStates(style:ScrollBarStyle):void 
 		{			
 			//get states
@@ -264,6 +270,7 @@
 			downButton.height = upDownButtonSize.y;
 		}
 		
+		//update the images used for the the scroller's states
 		private function updateScrollerStates(style:ScrollBarStyle):void
 		{
 			//get states
@@ -281,6 +288,7 @@
 			scroller.height = scrollerSize.y;
 		}
 		
+		//calculate the height of the scroller based on content
 		private function calculateScrollerHeight():Number
 		{
 			//calculate the distance between the up and down buttons
@@ -297,6 +305,7 @@
 			return calcHeight;
 		}
 		
+		//calculate the scroller's movement speed
 		private function calculateScrollSpeed():Number
 		{
 			//compute the two extremes that are reachable by the top of the scroll bar
@@ -314,6 +323,7 @@
 			return speed;
 		}
 		
+		//calculate how far the down the scroll bar the scroller has moved, value in interval [0, 1]
 		private function calculateScrolledPercentage():Number
 		{
 			//compute the two extremes that are reachable by the top of the scroll bar

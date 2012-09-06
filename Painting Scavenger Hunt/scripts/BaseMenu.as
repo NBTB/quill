@@ -304,6 +304,7 @@
 			addChildAt(menuBackground, 0);
 		}
 		
+		//change the color of the menu background
 		public function changeBackgroundColor(newColor:uint, opacity:Number = DEFAULT_OPACITY):void
 		{
 			var widthVal = menuBackground.width;
@@ -342,6 +343,7 @@
 																						 });
 		}
 		
+		//add content page to list
 		public function addPage(pageNumber:int = LAST_PAGE)
 		{
 			//if the menu has a drag cap, less of the menu should be available for content
@@ -364,6 +366,7 @@
 			changePage(pageNumber);
 		}
 		
+		//change display a given content page
 		public function changePage(pageNumber:int = LAST_PAGE)
 		{
 			//if the page number is not array valid, use the last page
@@ -397,6 +400,7 @@
 			nextPageButton.visible = currentPage < pages.length - 1;
 		}
 		
+		//add content to a given page, and optionally reposition it
 		public function addContent(child:DisplayObject, pageNumber:int = LAST_PAGE, position:Point = null)
 		{						
 			//if the page number is not array valid, use the last page
@@ -417,6 +421,7 @@
 			contentContainer.addChild(child);	
 		}
 		
+		//add content to a given page's head
 		public function addContentToHead(child:DisplayObject, pageNumber:int = FIRST_PAGE, displaceContent:Boolean = true)
 		{			
 			//if the page number is not array valid, use the last page
@@ -430,6 +435,7 @@
 			contentContainer.addChildToHead(child, displaceContent);	
 		}
 		
+		//add content to a given page's tail
 		public function addContentToTail(child:DisplayObject, pageNumber:int = LAST_PAGE)
 		{
 			//if the page number is not array valid, use the last page
@@ -443,6 +449,7 @@
 			contentContainer.addChildToTail(child);
 		}
 		
+		//remove content from a given page
 		public function removeContent(child:DisplayObject, pageNumber:int = LAST_PAGE)
 		{			
 			//container of given content
@@ -488,6 +495,7 @@
 			return isOpener;
 		}
 		
+		//dipose of bitmaps created for use by all menues
 		public static function disposeOfBitmaps()
 		{
 			if(closeButtonLoader)

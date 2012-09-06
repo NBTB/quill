@@ -18,6 +18,7 @@
 			sectionTrackers = new Array();
 		}
 		
+		//load text file
 		public function importText(filename:String):void
 		{
 			//determine if the given file has already been loaded
@@ -57,6 +58,7 @@
 				dispatchEvent(new Event(TextLoaderEvent.TEXT_FILE_IMPORTED));
 		}
 		
+		//parse contents of text file
 		public function parseText(filename:String = null, section:int = -1, headerString:String = "##"):String
 		{
 			//if no text files have been imported, return a failure
@@ -132,6 +134,7 @@
 			return resultString;
 		}
 		
+		//find the given header of the desired section
 		private function findSectionHeader(fullText:String, sectionNumber:int, headerString:String):int
 		{
 			//start index at the beginning of text

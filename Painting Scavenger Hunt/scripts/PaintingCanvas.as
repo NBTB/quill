@@ -16,16 +16,16 @@
      
     public class PaintingCanvas extends MovieClip
     {
-        var canvasWidth:Number;                             //width of canvas
-        var canvasHeight:Number;                            //height of canvas
+        private var canvasWidth:Number;                     //width of canvas
+        private var canvasHeight:Number;                    //height of canvas
         private var painting:Bitmap = null;                 //painting displayed on canvas
         private var fullsizePainting:Bitmap = null;         //unscaled painting
         private var paintingScale:Number = 1;               //scale factor of painting to fit a given scene         
         private var paintingMask:Shape;                     //mask around painting used to cover display objects that should not be seen beyond such bounds
 		private var nonInteractivePainting:Bitmap = null;	//painting to be used when interaction is not allowed
          
-        public static const INTERACTIVE:int = 0;
-		public static const NON_INTERACTIVE:int = 1;
+        public static const INTERACTIVE:int = 0;			//interactive mode enum
+		public static const NON_INTERACTIVE:int = 1;		//non-interactive mode enum
 		 
         //construct a painting canvas with a position and dimensions
         public function PaintingCanvas(x:Number, y:Number, canvasWidth:Number, canvasHeight:Number):void
@@ -107,13 +107,6 @@
             texturePointList.push(paintingTexturePoint);
              
         }
-         
-        public function getCanvasWidth():Number     {   return canvasWidth;     }
-        public function getCanvasHeight():Number    {   return canvasHeight;    }      
-        public function getPaintingWidth():Number   {   return painting.width;  }
-        public function getPaintingHeight():Number  {   return painting.height; }      
-        public function getPaintingMask():Shape     {   return paintingMask;    }
-        public function getPaintingScale():Number   {   return paintingScale;   }
 		
 		//attach a painting and fit it to the canvas
 		public function attachPainting(bitmap:Bitmap):void
@@ -139,5 +132,12 @@
             nonInteractivePainting.width *= nonInteractivePaintingScale;
             nonInteractivePainting.height *= nonInteractivePaintingScale;
 		}
+		
+		public function getCanvasWidth():Number     {   return canvasWidth;     }
+        public function getCanvasHeight():Number    {   return canvasHeight;    }      
+        public function getPaintingWidth():Number   {   return painting.width;  }
+        public function getPaintingHeight():Number  {   return painting.height; }      
+        public function getPaintingMask():Shape     {   return paintingMask;    }
+        public function getPaintingScale():Number   {   return paintingScale;   }
     }
 }

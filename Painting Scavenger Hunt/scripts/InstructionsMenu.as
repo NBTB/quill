@@ -6,73 +6,56 @@
 	import flash.net.*
 	import flash.geom.ColorTransform;
 	
-
-
 	public class InstructionsMenu extends BaseMenu {
 
-		var resumeButton:TextButton = null;
-		var instructions:TextField = new TextField();
-		var curSlide:Number;
-		var theBackground:Shape = new Shape();
-		var tutText:TextFormat = new TextFormat();
-		var titleText:TextFormat = new TextFormat();
-		var buttonFormat:TextFormat = new TextFormat();
-		var titleField:TextField = new TextField();
-		var magLoader:Loader = new Loader();
-		var clueLoader:Loader = new Loader();
-		var mouseLoader:Loader = new Loader();
-		var mouseOverLoader:Loader = new Loader();
-		public static var objectiveTitle = null;
-		public static var objectiveText = null;
-		public static var cluesTitle = null;
-		public static var cluesText = null;
-		public static var objectsTitle = null;
-		public static var objectsText = null;
-		public static var endGoalTitle = null;
-		public static var endGoalText = null;
-		public static var controlsTitle = null;
-		public static var controlsText = null;
-		public static var aboutTitle = null;
-		public static var aboutText = null;
-		public static var creditsTitle = null;
-		public static var creditsText = null;
+		private var resumeButton:TextButton = null;		//button for resuming game
+		private var instructions:TextField = null;		//instructions text field
+		private var titleField:TextField = null;		//title text field
+		private var magLoader:Loader = null;			//loader of magnifying glass help image
+		private var clueLoader:Loader = null;			//loader of clues help image
+		private var mouseLoader:Loader = null;			//loader of mouse help image
+		private var mouseOverLoader:Loader = null;		//loader of mouse over help image
+		
+		public static var objectiveTitle:String = null;	//instruction title of objective menu
+		public static var objectiveText:String = null;	//instruction text of objective menu
+		public static var cluesTitle:String = null;		//instruction title of clues menu
+		public static var cluesText:String = null;		//instruction text of clues menu
+		public static var objectsTitle:String = null;	//instruction title of objects menu
+		public static var objectsText:String = null;	//instruction text of objects menu
+		public static var endGoalTitle:String = null;	//instruction title of end goal menu
+		public static var endGoalText:String = null;	//instruction text of end goal menu
+		public static var controlsTitle:String = null;	//instruction title of controls menu
+		public static var controlsText:String = null;	//instruction text of controls menu
+		public static var aboutTitle:String = null;		//instruction title of about menu
+		public static var aboutText:String = null;		//instruction text of about menu
+		public static var creditsTitle:String = null;	//instruction title of credits menu
+		public static var creditsText:String = null;	//instruction text of credits menu
+		
+		//slide numbers
+		public static const OBJECTIVE_SLIDE:int = 1;
+		public static const CLUES_SLIDE:int = 2;
+		public static const OBJECTS_SLIDE:int = 3;
+		public static const END_GOAL_SLIDE:int = 4;
+		public static const CONTROLS_SLIDE:int = 5;
+		public static const ABOUT_SLIDE:int = 6;
+		public static const CREDITS_SLIDE:int = 7;
 
 		public function InstructionsMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void {
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
 
-			init();
 			initText();
-			loadImages();
-			
-		}
-
-		function init() {
-
-			titleField.setTextFormat(titleText);
-			instructions.setTextFormat(tutText);
-			instructions.selectable=false;			
-			
-			titleField.selectable=false;
-			
-			
-			titleField.defaultTextFormat = BaseMenu.titleFormat;
-			instructions.defaultTextFormat = BaseMenu.bodyFormat;
-			
-			
-			instructions.setTextFormat(tutText);
-			
-			curSlide=1;
-			resumeButton = new TextButton("Resume Game", textButtonFormat, textUpColor, textOverColor, textDownColor);
+			loadImages();			
 			
 			addContent(titleField);
 			addContent(instructions);
 			addContent(resumeButton);
 		}
 
-		function loadImages() {
+		//load images to be used in slides
+		private function loadImages() {
 
 			var url:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "magGlassPoint.png"));
-
+			magLoader = new Loader();
 			magLoader.load(url);
 			magLoader.scaleX=.6;
 			magLoader.scaleY=.6;
@@ -80,7 +63,7 @@
 			magLoader.y=260;
 
 			var url2:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "clueBar.png"));
-
+			clueLoader = new Loader();
 			clueLoader.load(url2);
 			clueLoader.scaleX=.6;
 			clueLoader.scaleY=.6;
@@ -88,20 +71,20 @@
 			clueLoader.y=150;
 
 			var url3:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "mouseLeftClick.swf"));
-
+			mouseLoader = new Loader();
 			mouseLoader.load(url3);
 			mouseLoader.scaleX=.6;
 			mouseLoader.scaleY=.6;
 			mouseLoader.x=130;
-			mouseLoader.y=251;
+			mouseLoader.y=241;
 
 			var url4:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "mouseOver.swf"));
-
+			mouseOverLoader = new Loader();
 			mouseOverLoader.load(url4);
 			mouseOverLoader.scaleX=.8;
 			mouseOverLoader.scaleY=.8;
 			mouseOverLoader.x=180;
-			mouseOverLoader.y=250;
+			mouseOverLoader.y=240;
 			
 			//listen for being removed from the display list
 			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
@@ -124,29 +107,37 @@
 																		});
 		}
 
-		function initText() {
-
+		//initialize text fields
+		private function initText() {
+			titleField = new TextField();
+			titleField.defaultTextFormat = BaseMenu.titleFormat;
 			titleField.x=10;
 			titleField.y=10
 			titleField.width=width - (titleField.x * 2);
 			titleField.autoSize = TextFieldAutoSize.CENTER;
 			titleField.embedFonts = true;
-
+			titleField.selectable=false;
+			
+			resumeButton = new TextButton("Resume Game", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			resumeButton.x=(width / 2) - (resumeButton.width / 2);
 			resumeButton.y=height-resumeButton.height - 10;			
+			resumeButton.addEventListener(MouseEvent.CLICK, function(e:Event):void	{	closeMenu();	});
 
+			instructions = new TextField();
+			instructions.defaultTextFormat = BaseMenu.bodyFormat;
 			instructions.x=10
 			instructions.y=titleField.y + titleField.height + 50 ;
 			instructions.width=width - (instructions.x * 2);
 			instructions.autoSize = TextFieldAutoSize.LEFT;
 			instructions.wordWrap=true;
 			instructions.embedFonts = true;
+			instructions.selectable=false;	
 		}
 
 
 
 		//cycles through what the text in the tutorial says
-		function updateText():void {
+		public function updateText(curSlide:int):void {
 			//if an image is a child, and is not supposed to be seen in that page, remove it
 			if (contains(magLoader)) {
 				removeChild(magLoader);
@@ -160,50 +151,45 @@
 			if (contains(mouseOverLoader)) {
 				removeChild(mouseOverLoader);
 			}
-			//change the text depending on what slide you are on. Add images if necessary on that slide
-			if (curSlide==1) {
-				titleField.text = "Welcome";
-				instructions.text="Welcome to The Night Before The Battle Interactive Scavenger Hunt!  The objective of this game is to help you look more closely at this painting, in order to understand the importance of many of the paintings elements as well as gain knowledge of the history depicted in the artwork. Use your mouse to interact with objects on the canvas.  Hit 'Space' or the little icon in the bottom corner of your screen to toggle the magnifying glass to help you see things more clearly";
-			}
 			//help menu:Objective
-			else if (curSlide==2) {
+			if (curSlide==OBJECTIVE_SLIDE) {
 				titleField.text = objectiveTitle;
 				instructions.text = objectiveText;
 				//addChild(magLoader);
 			}
 			//help menu:Clues
-			else if (curSlide==3) {
+			else if (curSlide==CLUES_SLIDE) {
 				titleField.text = cluesTitle;
 				instructions.text = cluesText;
 				addChild(clueLoader);
 			}	
 			//help menu:Objects
-			else if(curSlide==4) {
+			else if(curSlide==OBJECTS_SLIDE) {
 				titleField.text = objectsTitle;
 				instructions.text = objectsText;
 				addChild(mouseLoader);
 				addChild(mouseOverLoader);
 			}
-			//help menu:Letter
-			else if (curSlide==5) {
+			//help menu:End Goal
+			else if (curSlide==END_GOAL_SLIDE) {
 				titleField.text = endGoalTitle;
 				instructions.text = endGoalText;
 				
 			}
 			//help menu:Controls
-			else if (curSlide==6) {
+			else if (curSlide==CONTROLS_SLIDE) {
 				titleField.text = controlsTitle;
 				instructions.text = controlsText;
 			}
 			
-			//help menu:about
-			else if (curSlide==7) {
+			//help menu:About
+			else if (curSlide==ABOUT_SLIDE) {
 				titleField.text = aboutTitle;
 				instructions.text = aboutText;
 			}
 			
-			//help menu:credits
-			else if (curSlide==8) {
+			//help menu:Credits
+			else if (curSlide==CREDITS_SLIDE) {
 				titleField.text = creditsTitle;
 				instructions.text = creditsText;
 			}
