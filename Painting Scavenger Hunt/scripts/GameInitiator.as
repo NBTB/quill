@@ -44,7 +44,6 @@
 		//restart the game (currently non-functional)
 		public function restartHandler(evt:RestartEvent)
 		{			
-			ScavengerHunt(gameLoader.content).clearEvents();
 			removeChild(gameLoader);
 			gameLoader.unload();
 			gameLoader = null;

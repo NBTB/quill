@@ -13,8 +13,6 @@
 		private var loading:Boolean = false;
 		
 		public static const IMAGE_LOAD_ERROR = "An image failed to load";
-		
-		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 	
 		public function loadBitmaps(upFilename:String = null, overFilename:String = null, downFilename:String = null, hittestFilename = null)
 		{
@@ -176,23 +174,5 @@
 		public function getDownImage():BitmapData			{	return (downImage) ? downImage : upImage;			}
 		public function getHittestImage():BitmapData		{	return (hittestImage) ? hittestImage : upImage;		}
 		public function isLoading():Boolean					{	return loading;										}
-		
-		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
-		{ 
-			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
-			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
-		}
-		
-		function clearEvents():void 
-		{
-			for (var i:Number=0; i < myArrayListeners.length; i++) 
-			{
-				if (this.hasEventListener(myArrayListeners[i].type)) 
-				{
-					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
-				}
-			}
-			myArrayListeners=null;
-		}
 	}
 }

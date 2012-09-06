@@ -48,8 +48,6 @@ package scripts
 		private var objectsMenuTitle:String = "Objects";	//title of objects menu		
 		private var restartMenuTitle:String = "Restart";	//title of restart menu
 		
-		var myArrayListeners:Array=[];						//Array of Event Listeners in BaseMenu
-		
 		//construct scavanger hunt
 		public function ScavengerHunt():void
 		{
@@ -670,22 +668,6 @@ package scripts
 			{
 				ooiManager.setAllOOIHitTestSuppression(false);
 			}
-		}
-		
-		public function clearEvents():void 
-		{
-			/*ooiManager.clearEvents();
-			loadingMenu.clearEvents();
-			mainMenu.clearEvents();
-			magnifyingGlass.clearEvents();
-			for (var i:Number=0; i < myArrayListeners.length; i++) 
-			{
-				if (this.hasEventListener(myArrayListeners[i].type)) 
-				{
-					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
-				}
-			}
-			myArrayListeners=null;*/
 		}
 	}
 }

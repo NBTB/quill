@@ -16,8 +16,6 @@
 		private var menuCount:int = 0;								//total number of child menus
 		private var menuOpenerSize:Point = null;					//dimensions of child menu openers
 		private var menuContainer:DisplayObjectContainer = null;	//container of menu panes
-		
-		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
 				
 		//event types 
 		public static const OPEN_MENU = "A menu has opened"			//dispatched when a child menu opens
@@ -158,30 +156,5 @@
 		
 		public function getMenuCount():int		{	return menuCount;		};
 		public function getMenuCapacity():int	{	return menuCapacity;	};
-		
-		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
-		{ 
-			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
-			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
-		}
-		
-		function clearEvents():void 
-		{
-			//instruct child menus to clear event listeners
-			for (var m:Number = 0; m < menus.length; m++)
-			{
-				BaseMenu(menus[m]).clearEvents();
-			}
-			
-			//clear event listeners
-			for (var i:Number=0; i < myArrayListeners.length; i++) 
-			{
-				if (this.hasEventListener(myArrayListeners[i].type)) 
-				{
-					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
-				}
-			}
-			myArrayListeners=null;
-		}
 	}
 }

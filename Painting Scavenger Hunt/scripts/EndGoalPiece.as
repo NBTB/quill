@@ -18,8 +18,6 @@
 	
 		private static var staticID:Number = 0;
 		
-		var myArrayListeners:Array=[];
-		
 		function EndGoalPiece(pieceName:String, fileName:String, xPos:Number, yPos:Number, rewardNotification:String)
 		{
 			this.pieceName = pieceName;
@@ -74,26 +72,7 @@
             loader.load(new URLRequest(fileName));
         }
 		
-		public function getID():Number	{	return id;				}
-		
-		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
-		{ 
-			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
-			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
-		}
-		
-		function clearEvents():void 
-		{
-			for (var i:Number=0; i < myArrayListeners.length; i++) 
-			{
-				if (this.hasEventListener(myArrayListeners[i].type)) 
-				{
-					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
-				}
-			}
-			myArrayListeners=null;
-		}
-		
+		public function getID():Number					{	return id;					}		
 		public function getRewardNotification():String	{	return rewardNotification;	}
 	}	
 }

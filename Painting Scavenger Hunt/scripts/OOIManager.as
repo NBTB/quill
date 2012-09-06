@@ -24,8 +24,6 @@
 		public static const INCORRECT:String = "An incorrect answer was given";				//dispatched when an incorrect answer is given
 		public static const ALL_OBJECTS_FOUND = "All objects have been found";				//dispatched when all object (not just those with clues) have been found
 		
-		var myArrayListeners:Array=[];								//Array of Event Listeners in BaseMenu
-		
 		//construct Object of Interest Manager
 		public function OOIManager(ooiCaptionContainer:DisplayObjectContainer = null, ooiInfoPaneContainer:DisplayObjectContainer = null)
 		{
@@ -269,28 +267,5 @@
 		
 		public function setSolvableOOICount(count:int):void		{	solvableOOICount = count;				}
 		public function setObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
-		
-		override public function addEventListener (type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void 
-		{ 
-			super.addEventListener (type, listener, useCapture, priority, useWeakReference);
-			myArrayListeners.push({type:type, listener:listener, useCapture:useCapture});
-		}
-		
-		function clearEvents():void 
-		{
-			var i:int;
-			for (i = 0; i < objectsOfInterest.length; i++)
-			{
-				objectsOfInterest[i].clearEvents();
-			}
-			for (i = 0; i < myArrayListeners.length; i++) 
-			{
-				if (this.hasEventListener(myArrayListeners[i].type)) 
-				{
-					this.removeEventListener(myArrayListeners[i].type, myArrayListeners[i].listener);
-				}
-			}
-			myArrayListeners=null;
-		}
 	}
 }
