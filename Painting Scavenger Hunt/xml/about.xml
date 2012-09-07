@@ -17,5 +17,5 @@
 	<credits_title>Credits</credits_title>
 	<credits_text_file>credits.txt</credits_text_file>
 	<restart_text>Are you want to start over? All progress will be lost.</restart_text>
-	<ending_text>Congratulations! You have solved all of the riddles! Although no clues remain, there is still plenty to discover and learn. Perhaps a secret awaits.</ending_text>
+	<ending_text>Congratulations! You found a letter home from Sergeant Poule. Some mysteries, however, remain unsolved. Perhaps they will reveal more of Poule's story.</ending_text>
 </About>

@@ -13,11 +13,11 @@
 		private var rewardCounter:Number = 0;								//counter of rewards given
 		private var heading:TextField = new TextField();					//labels the letter
 		
+		public static var completionRequirement = 0;		//number of rewards required to complete goal (does not include hidden rewards)
 		public static var freeRewardCount = 0;				//number of free rewards given at beginning
 		public static var headingTextColor = 0;				//color of text in overlay
 		public static var goalOverlayText = null;			//text to display over goal
 		public static var hiddenOverlayText = null;			//text to display over hidden goal
-		public static const NEXT_REWARD:int = -1;			//denotes the use of the next reward
          
         //Creates the end goal menu
         public function EndGoalMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
@@ -108,23 +108,14 @@
 		}
         
 		//unlock a reward
-		public function unlockReward(completionRequirement:int, rewardNumber:int = NEXT_REWARD):String
+		public function unlockReward():String
 		{
-			if(rewardNumber == NEXT_REWARD)
+			if(rewardCounter < freeRewardCount + completionRequirement)
 			{
-				if(rewardCounter < completionRequirement)
-				{
-					addContent(pieces[rewardCounter]);    
-					pieces[rewardCounter].visible = true;
-					rewardCounter++;					
-					return pieces[rewardCounter-1].getRewardNotification();
-				}
-			}
-			else if (rewardNumber < completionRequirement && !pieces[rewardCounter].visible)
-			{
-				addContent(pieces[rewardNumber]);    
-				pieces[rewardNumber].visible = true;				
-				return pieces[rewardNumber].getRewardNotification();
+				addContent(pieces[rewardCounter]);    
+				pieces[rewardCounter].visible = true;
+				rewardCounter++;					
+				return pieces[rewardCounter-1].getRewardNotification();
 			}
 			return null;
 		}    
@@ -144,12 +135,17 @@
 				return null;
 		} 
 		
+		//determine if all non-hidden rewards have been awarded
+		public function allNormalPiecesAwarded():Boolean	{	return (rewardCounter >= freeRewardCount + completionRequirement);	}
+		
+		//hide rewards from display
 		public function hideRewards()
 		{
 			for(var i:int; i < pages.length; i++)
 				pages[i].visible = false;
 		}
          
+		//display rewards
 		public function showRewards()
 		{
 			for(var i:int; i < pages.length; i++)

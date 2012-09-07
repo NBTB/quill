@@ -124,52 +124,5 @@
 			
 			dispatchEvent(new MenuEvent(this, MenuEvent.SPECIAL_OPEN_REQUEST));
 		}
-		
-		//attempt to grab the player's attention
-		public function startBlink()
-		{
-			//create list of text button openers and tie them to the blink timer
-			var textButtonOpeners:Array = new Array();			
-			var blinkTimer:Timer = new Timer(200);
-			var textButtonClassName:String = String(getDefinitionByName(getQualifiedClassName(TextButton)));
-			for(var i:int = 0; i < openers.length; i++)
-			{
-				if(getDefinitionByName(getQualifiedClassName(openers[i])) == textButtonClassName)
-				{
-					textButtonOpeners.push(openers[i]);
-					TextButton(openers[i]).addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	stopBlink();	});
-				}
-			}
-				
-			//if any openers were stored, make them blink
-			if(textButtonOpeners.length > 0)
-			{
-				var colorSwap:Boolean = false;
-				blinkTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
-																					{
-																						 colorSwap = !colorSwap;
-																						 for(var o:int = 0; o < textButtonOpeners.length; o++)
-																						 {
-																							
-																							if(colorSwap)
-																								TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textDownColor);
-																							else
-																								TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textUpColor);
-																						 }
-																					 });
-				blinkTimer.start();
-				
-				//listen for command to stop blinking
-				addEventListener(STOP_BLINKING, function(e:Event):void
-																 {
-																	 blinkTimer.reset();	
-																	 for(var o:int = 0; o < textButtonOpeners.length; o++)
-																		TextButton(textButtonOpeners[o]).setColor(TextButton.UP_STATE, textUpColor);
-																 });
-			}
-		}
-		
-		//stop attempting to grab player's attention
-		public function stopBlink()	{	dispatchEvent(new Event(STOP_BLINKING));	}
 	}
 }
