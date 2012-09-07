@@ -10,9 +10,6 @@
 		public var objectsOfInterest:Array = null;				//array of objects of interest
 		private var ooiUnused:Array = null;						//array of objects of interest that have not yet been used for hunt
 		private var currentOOI:ObjectOfInterest = null;			//current object of interest being hunted				
-		private var totalOOICount:int = 0;						//total number of objects of interest stored
-		private var solvableOOICount:int = -1;					//maximum number of objects of interest that can be used to finish the hunt (- values denote a use of all)
-		private var totalFound = 0;								//number of objects found in painting
 		private var objectsMenu:ObjectsMenu;					//the objectMenu, used to update said menu when objects are clicked the first time
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
 		private var ooiCaptionContainer = null;					//container for object of interest captions
@@ -59,7 +56,6 @@
 			var childIndex = objectsOfInterest.length - 1;
 			
 			//add new object as a display list child
-			totalOOICount++;
 			addChildAt(newObject, childIndex);
 			
 			//instruct the new object to display its caption and info pane in the specified containers
@@ -116,9 +112,6 @@
 																							//link to object in objects menu and add to total found
 																							ObjectOfInterest(e.target).hasOpened();
 																							objectsMenu.objectClicked(ObjectOfInterest(e.target));
-																							totalFound++;
-																							if(totalFound >= totalOOICount)
-																								dispatchEvent(new Event(ALL_OBJECTS_FOUND));
 																						}
 																						
 																						
@@ -161,27 +154,13 @@
 		
 		//pick the next object of interest to hunt at random and return its clue
 		public function pickNextOOI():String
-		{
-			//if the maximum number of usable objects of interet is positive or zero, ensure that it does not get exceeded
-			if(solvableOOICount >= 0)
+		{			
+			//if no objects remain to be selected, return a failure
+			if(ooiUnused.length < 1)
 			{
-				//if the maxium number of usable objects of interest has been reached, return a failure
-				if(ooiUnused.length <= objectsOfInterest.length - solvableOOICount)
-				{
-					currentOOI = null;
-					return null;
-				}
-			}
-			//otherwise, ensure that an unused clue remains
-			else
-			{
-				//if the maxium number of usable objects of interest has been reached, return a failure
-				if(ooiUnused.length < 1)
-				{
-					currentOOI = null;
-					return null;
-				}
-			}
+				currentOOI = null;
+				return null;
+			}	
 				
 			//generate a number [0, 1)
 			var randNum:Number = Math.random();
@@ -255,18 +234,15 @@
 		public function getOOIAtIndex(index:int):ObjectOfInterest
 		{
 			//if the index is invalid match, return a failure
-			if(index < 0 || index >= totalOOICount)
+			if(index < 0 || index >= objectsOfInterest.length)
 				return null;
 			//otherwise, return the corresponding menu
 			else
 				return ObjectOfInterest(objectsOfInterest[index]);
 		}
 		public function getCurrentOOI():ObjectOfInterest		{	return currentOOI;					}
-		public function getCurrentClue():String					{	return currentOOI.getClue();		}		
-		public function getTotalOOICount():int					{	return totalOOICount;				}
-		public function getSolvableOOICount():int				{	return solvableOOICount;			}
+		public function getCurrentClue():String					{	return currentOOI.getClue();		}	
 		
-		public function setSolvableOOICount(count:int):void		{	solvableOOICount = count;			}
 		public function setObjectMenu(theMenu:ObjectsMenu):void	{	objectsMenu = theMenu;				}
 	}
 }

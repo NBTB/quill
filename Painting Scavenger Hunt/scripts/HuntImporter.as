@@ -170,7 +170,7 @@
 																																	if(huntLoaded && paintingLoaded)
 																																		prepareToParseAssets(paintingCanvas, ooiManager, endGoalMenu);
 																															   });
-																				parseHunt(new XML(e.target.data), ooiManager, magnifyingGlass, notificationTextColorNormal, notificationTextColorNew);
+																				parseHunt(new XML(e.target.data), magnifyingGlass, notificationTextColorNormal, notificationTextColorNew);
 																																	
 																			});
 			huntXMLLoader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void
@@ -386,7 +386,7 @@
 		}
 		 
         //parse XML specification of scavenger hunt parameters
-        private function parseHunt(hunt:XML, ooiManager:OOIManager, magnifyingGlass:MagnifyingGlass, notificationTextColorNormal:ColorTransform, notificationTextColorNew:ColorTransform):void
+        private function parseHunt(hunt:XML, magnifyingGlass:MagnifyingGlass, notificationTextColorNormal:ColorTransform, notificationTextColorNew:ColorTransform):void
         {              
             //parse hunt attributes
             var mgZoom:Number = 1;
@@ -407,8 +407,8 @@
             magnifyingGlass.setDefaultZoom(mgZoom);
             magnifyingGlass.setDefaultRadius(mgRadius);
              
-            //set number of number of usable objects of interest
-            ooiManager.setSolvableOOICount(huntCount);      			
+            //set number of number of rewards
+            EndGoalMenu.completionRequirement = huntCount;      			
 			
 			//attempt to parse final two clue menu outputs
 			if(hunt.hasOwnProperty("final_clue"))

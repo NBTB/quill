@@ -36,8 +36,7 @@ package scripts
 		private var ending:Ending = null;								//menu displayed when you win
 		private var loadingMenu:LoadingMenu = null;						//pane displayed while loading
 		private var introMenu:IntroMenu = null;							//overlay that introduces the game
-		private var allSolved = false;									//flag if all clues have been solved
-		private var allFound = false;									//flag if all objects of interest have been found		
+		private var goalReached = false;								//flag if the normal goal has been completed (not including hidden goals)
 		private var stageSize:Point = null;								//size of stage (web deployment has issues with stage's stageWidth and stageHeight properties)
 		private var canvasRect = null;									//rectangle to hold canvas
 		
@@ -252,9 +251,6 @@ package scripts
 			//listen for incorrect answers to clues
 			ooiManager.addEventListener(OOIManager.INCORRECT, handleIncorrectAnswer);
 			
-			//listen for all objects being found
-			ooiManager.addEventListener(OOIManager.ALL_OBJECTS_FOUND, handleAllObjectsFound);
-			
 			//listen for an object of interest's info pane to open and close
 			ooiManager.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	menuOpened(e.getTargetMenu());	});
 			ooiManager.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	menuClosed(e.getTargetMenu());	});
@@ -267,34 +263,22 @@ package scripts
 			ending.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			ending.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
 																				{	
+																					//allow normal interaction
 																					forceInteractionWithMenu(e.getTargetMenu());	
-																					allSolved = true
-																					if(allFound && allSolved)
-																						unlockHiddenPiece();
-																					else
-																					{
-																						//draw attention to objects menu
-																						ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).startBlink();
-																						
-																						//urge further exploration with a broad clue
-																						cluesMenu.addClue(CluesMenu.finalClue)
-																					}
+																					
+																					//flag the normal goal as being reached
+																					goalReached = true
+																					
+																					//if more clues remain, show a new one
+																					var nextClue:String = ooiManager.pickNextOOI();		
+																					if(nextClue)
+																						cluesMenu.addClue(nextClue);
 																				});
 			
 			//listen for restart menu to open and close
 			var restartMenu:RestartMenu = RestartMenu(mainMenu.getMenu(restartMenuTitle));
-			restartMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	
-																					 {	
-																					 	forceInteractionWithMenu(e.getTargetMenu());	
-																						if(allSolved && !allFound)
-																							ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).stopBlink();
-																					 });
-			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
-																					 {	
-																					 	forceInteractionWithMenu(e.getTargetMenu());	
-																						if(allSolved && !allFound)
-																							ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).startBlink();
-																					 });
+			restartMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
+			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			
 			//listen for the magnify button being clicked
 			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	toggleZoom();	});
@@ -360,7 +344,7 @@ package scripts
 			//unlock the first pieces of the end goal (remain hidden for now)
 			endGoalMenu.hideRewards();
 			for(var r:int = 0; r < EndGoalMenu.freeRewardCount; r++)
-				endGoalMenu.unlockReward(ooiManager.getSolvableOOICount() + 1, EndGoalMenu.NEXT_REWARD);
+				endGoalMenu.unlockReward();
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
@@ -486,26 +470,10 @@ package scripts
 				foundObject.showSolvedImage();
 		
 			//add the piece of the end goal
-			var completionRequirement:Number = ooiManager.getSolvableOOICount() + 1;
-			var rewardNotification:String = endGoalMenu.unlockReward(completionRequirement, EndGoalMenu.NEXT_REWARD);
-		
-			//attempt to pick the next object to hunt and retrieve its clue
-			var nextClue:String = ooiManager.pickNextOOI();			
+			var rewardNotification:String = endGoalMenu.unlockReward();
 			
-			//if a new clue was picked, display it and pass it to the clues menu
-			if(nextClue)
-			{							
-				//make the current clue old
-				cluesMenu.outdateCurrentClue();				
-				
-				//add new clue to clue menu
-				cluesMenu.addClue(nextClue);
-				
-				//post notification of correct answer
-				postNotification("Correct!\n" + rewardNotification);
-			}
-			//otherwise, end the game
-			else
+			//if the most recent reward was the last normal reward, display ending
+			if(!goalReached && endGoalMenu.allNormalPiecesAwarded())
 			{											
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
@@ -513,8 +481,38 @@ package scripts
 				//show ending
 				ending.openMenu();
 			}
-			
-			
+			//otherwise pick the next clue
+			else
+			{
+				//attempt to pick the next object to hunt and retrieve its clue
+				var nextClue:String = ooiManager.pickNextOOI();			
+				
+				//if a new clue was picked, display it and pass it to the clues menu
+				if(nextClue)
+				{							
+					//make the current clue old
+					cluesMenu.outdateCurrentClue();				
+					
+					//add new clue to clue menu
+					cluesMenu.addClue(nextClue);
+					
+					//post notification of correct answer
+					var correctNotification:String = "Correct!\n";
+					if(rewardNotification)
+						postNotification(correctNotification + rewardNotification);
+					else
+						postNotification(correctNotification);
+				}
+				//otherwise show hidden reward
+				else
+				{
+					//make the current clue old
+					cluesMenu.outdateCurrentClue();	
+					
+					//unlock the hidden reward
+					unlockHiddenPiece();
+				}			
+			}
 		}
 		
 		//handle a incorrect answer to a clue
@@ -523,23 +521,12 @@ package scripts
 			postNotification("Try Again");
 		}
 		
-		//handle all objects being found
-		private function handleAllObjectsFound(e:Event)
-		{	
-			allFound = true
-			if(allFound && allSolved)
-				unlockHiddenPiece();
-		}
-		
 		//unlock the hidden piece of the end goal
 		private function unlockHiddenPiece()
 		{
 			//add a new page to the end goal menu and show final reward		
 			endGoalMenu.addPage();
 			postNotification(endGoalMenu.unlockFinalReward());	
-			
-			//stop the object menu's blinking
-			ObjectsMenu(mainMenu.getMenu(objectsMenuTitle)).stopBlink();
 			
 			//make the current clue old
 			cluesMenu.outdateCurrentClue();
