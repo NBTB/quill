@@ -90,6 +90,7 @@
 			heading.embedFonts = true;
 			heading.text = goalOverlayText;
 			heading.blendMode = BlendMode.LAYER;
+			heading.selectable = false;
 			fadeHeading();
 			addChild(heading);
 			
