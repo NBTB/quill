@@ -1,1 +1,1 @@
-Your objective is to solve as clues related to this painting. Each clue hints towards a single object in the painting, and finding that object solves the clue. Each clue solved unlocks a reward piece. Once all clues have been solved, your prize will be complete.
+Your objective is to solve clues related to this painting. Each clue hints at a single object, and finding the correct object solves the clue. Each clue solved unlocks a reward piece. Once all clues have been solved, the game will be complete.
