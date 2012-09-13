@@ -8,7 +8,7 @@
 	{
 		private var nameText:TextField = null;				//name of object of interest
 		private var infoSnippetText:TextField = null; 		//short description
-		private var moreInfoHintText:TextField = null;		//hint to double click for more info
+		private var moreInfoHintText:TextField = null;		//hint to double-click for more info
 		
 		public function OOICaption(objectName:String, infoSnippet:String)
 		{

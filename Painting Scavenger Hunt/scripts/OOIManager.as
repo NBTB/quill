@@ -14,7 +14,7 @@
 		private var ooiHitTestSuppression = false;				//flag if object of interest hit testing is being suppressed
 		private var ooiCaptionContainer = null;					//container for object of interest captions
 		private var ooiInfoPaneContainer = null;				//container for object of interest info panes
-		private var incorrectAnswerTimer = null;				//time that allows for double clicking without causing a incorrect answer	
+		private var incorrectAnswerTimer = null;				//time that allows for double-clicking without causing a incorrect answer	
 
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
@@ -96,7 +96,7 @@
 																							}
 																							else
 																							{
-																								//start a timer to ensure that the object is not being double clicked before dispatching incorrect answer event
+																								//start a timer to ensure that the object is not being double-clicked before dispatching incorrect answer event
 																								incorrectAnswerTimer.addEventListener(TimerEvent.TIMER, function(e:Event):void
 																																										 {
 																																											dispatchEvent(new Event(INCORRECT));
