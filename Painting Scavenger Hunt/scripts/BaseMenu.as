@@ -20,7 +20,6 @@
 		protected var isOpen:Boolean = false;						//flag if menu is open		
 		protected var dragCap:Sprite = null;						//bar along the top of the menu that can be used for dragging
 		protected var dragged:Boolean = false;						//flag when menu is being dragged
-		var rewardCheck:Boolean = false;							//checks to see if the final reward has been one
 		protected var baseX:int;									//menu original x position
 		protected var baseY:int;									//menu original y position
 		
@@ -78,8 +77,7 @@
 			previousPageButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	
 																						{	
 																							if(currentPage > 0)
-																								changePage(currentPage - 1);	
-																							rewardCheck = !rewardCheck
+																								changePage(currentPage - 1);
 																						});
 			
 			//create next button
@@ -91,7 +89,6 @@
 																					{	
 																						if(currentPage < pages.length - 1)
 																							changePage(currentPage + 1);
-																						rewardCheck = !rewardCheck
 																					});
 			
 			//if the close button has not yet been loaded, do so now

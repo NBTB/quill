@@ -410,9 +410,7 @@
             //set number of number of rewards
             EndGoalMenu.completionRequirement = huntCount;      			
 			
-			//attempt to parse final two clue menu outputs
-			if(hunt.hasOwnProperty("final_clue"))
-				CluesMenu.finalClue = hunt.final_clue;
+			//attempt to parse congratulations to be displayed by clue menu
 			if(hunt.hasOwnProperty("congratulations_clue"))
 				CluesMenu.congratulations = hunt.congratulations_clue;			
 			

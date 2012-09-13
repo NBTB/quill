@@ -16,10 +16,6 @@
 		private var menuCount:int = 0;								//total number of child menus
 		private var menuOpenerSize:Point = null;					//dimensions of child menu openers
 		private var menuContainer:DisplayObjectContainer = null;	//container of menu panes
-				
-		//event types 
-		public static const OPEN_MENU = "A menu has opened"			//dispatched when a child menu opens
-		public static const CLOSE_MENU = "A menu has closed"		//dispatched when a child menu closes
 		
 		//construct main menu in a given area, to allow access to a number of menus, and display menus under a given parent
 		public function MainMenu(placementRect:Rectangle, menuCapacity:int, menuContainer:DisplayObjectContainer = null)

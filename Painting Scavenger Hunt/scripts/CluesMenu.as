@@ -10,7 +10,6 @@
         private var currentClue:String = null;                  //text of the current clue
         private var oldClues:Array = null;                      //keeps track of all previous clues
 		
-		public static var finalClue:String = null;				//final clue, meant to hint at hidden goal
 		public static var congratulations:String = null;		//player congratulation message for completing the game
          
         //Creates the clues menu

@@ -19,7 +19,6 @@
 		//event types
 		public static const CORRECT:String = "The correct answer was given";				//dispatched when a correct answer is given
 		public static const INCORRECT:String = "An incorrect answer was given";				//dispatched when an incorrect answer is given
-		public static const ALL_OBJECTS_FOUND = "All objects have been found";				//dispatched when all object (not just those with clues) have been found
 		
 		//construct Object of Interest Manager
 		public function OOIManager(ooiCaptionContainer:DisplayObjectContainer = null, ooiInfoPaneContainer:DisplayObjectContainer = null)
@@ -73,8 +72,7 @@
 																					{	
 																						var targetObject:ObjectOfInterest = ObjectOfInterest(e.target);
 																						targetObject.showHighlight();	
-																						targetObject.showCaption();
-																						targetObject.prepareInfoPane();							
+																						targetObject.showCaption();							
 																					});
 
 			//listen for when the cursor stops hovering over the new object

@@ -128,7 +128,6 @@
 			{
 				addContent(pieces[pieces.length - 1]); 
 				pieces[pieces.length - 1].visible = true;
-				rewardCheck = true;
 				heading.text = hiddenOverlayText;
 				return pieces[pieces.length - 1].getRewardNotification();
 			}

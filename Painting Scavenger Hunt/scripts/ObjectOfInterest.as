@@ -30,8 +30,7 @@
 		private var caption:OOICaption = null;							//caption that displays name and basic info of object
 		private var infoPane:OOIInfoPane = null;						//pane used to display object's description
 		private var infoPanePosition:Point = null;						//coordinates of info pane
-		private var infoLoader:OOIInfoImporter = null;					//loader of info pane content
-		private var descriptionTimer:Timer = null;						//time used to trigger description display		
+		private var infoLoader:OOIInfoImporter = null;					//loader of info pane content	
 		private var hasBeenOpened:Boolean = false;						//turned true first time objects display pane is showed
 		private var hitTestSuppression:Boolean = false;					//flag if hit testing should be supressed
 		
@@ -397,47 +396,6 @@
 			objectTexturePoint.x = (samplePoint.x - x) / highlight.width;
 			objectTexturePoint.y = (samplePoint.y - y) / highlight.height;
 			texturePointList.push(objectTexturePoint);
-		}
-		
-		
-		//display caption and prepare to display description after a delay
-		public function prepareInfoPane(displayDelay:Number = -1)
-		{			
-			//if a negative time was given, assume that discription is not desired and do not start timer
-			if(displayDelay < 0)
-				return;
-			
-			//create new timer
-			descriptionTimer = new Timer(displayDelay, 1);
-			
-			//listen for the completion of the time
-			descriptionTimer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void
-																				  {
-																					//if the time exists, stop and discard, and add the caption to the display list
-																					if(descriptionTimer)
-																					{
-																						descriptionTimer.stop();
-																						descriptionTimer = null;
-																						
-																						//display info Pane
-																						showInfoPane();
-																						
-																					}
-																				  });
-			
-			//start the timer
-			descriptionTimer.start();
-		}
-		
-		//stop preparing to display description and hide caption
-		public function unprepareInfoPane()
-		{
-			//stop caption time and discard it
-			if(descriptionTimer)
-			{
-				descriptionTimer.stop();
-				descriptionTimer = null;
-			}
 		}
 		
 		//place the caption at the mouse position in the display parent's space

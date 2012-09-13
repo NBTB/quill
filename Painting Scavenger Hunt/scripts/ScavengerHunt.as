@@ -56,7 +56,7 @@ package scripts
 			
 			//find specification files before preparing game
 			importer = new HuntImporter();
-			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void	{	startMenu()	});
+			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void	{	loadStartUp()	});
 			importer.findSpecFilesAndAssetDirectories("xml/importer.xml", stageSize, canvasRect);			
 			
 			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
@@ -65,8 +65,8 @@ package scripts
 																		});
 		}
 		
-		//Begins the game, by first displaying the opening splash screen menus.  Also listens for when the splash screen is finished
-		public function startMenu():void
+		//load the initial parameters of the game
+		public function loadStartUp():void
 		{								
 			//load start-up information and listen for completion
 			importer.addEventListener(HuntImporter.START_UP_LOADED, function(e:Event):void
@@ -86,7 +86,7 @@ package scripts
 			importer.importStartUp();			
 		}
 		
-		//When splash screen ends, set up the rest of the game.
+		//when initial loading ends, set up the rest of the game
 		public function initGame():void
 		{														
 			//prevent the mouse from scrolling the webpage while the program is selected
@@ -162,7 +162,7 @@ package scripts
 			
 		}
 		
-		//Actually begin the rest of the game
+		//begin the game
 		public function startGame():void
 		{					
 			//remove pre-game children from display list
