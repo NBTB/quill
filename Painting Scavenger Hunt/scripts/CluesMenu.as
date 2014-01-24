@@ -34,7 +34,7 @@
 				 
 				//create new clue textfield and use the new clue's text
 				currentClueText = createClueTextField();
-				currentClueText.text = currentClue;			
+				currentClueText.text = "Clue: " + currentClue;			
 				currentClueText.y = 15;
 				
 				//add new text box to content
@@ -57,7 +57,7 @@
 				currentClue = null;
 				currentClueText = null;
 			}
-        }     
+        } 
 		
 		//create a new textfield to be used for a clue
 		private function createClueTextField():TextField

@@ -264,6 +264,8 @@
 							else
 								newFormat.font = boldItalicFont.fontName;
 								
+							trace("Font style is " + newFormat.font);
+								
 							//store format
 							if(formatName == "title")
 								BaseMenu.titleFormat = newFormat;

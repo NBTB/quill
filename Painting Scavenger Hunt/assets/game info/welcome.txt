@@ -1,1 +1,5 @@
-The objective of this game is to help you look closely at The Night Before the Battle, to discover details that are important to understand the historical and symbolic meaning of this painting. Use your mouse to interact with objects in the painting. Tap the spacebar or click the icon in the right corner of the main menu to turn on the magnifying glass and see a piece of the painting more clearly; repeat to turn off.  Follow the clues to progress through the scavenger hunt. Good Luck!
+Look closely at The Night Before the Battle, to discover details that are important to understand the historical and symbolic meaning of this painting.
+
+-Use your mouse to find clues and reveal the letter
+-Press the               to zoom in
+-Help is in the bottom-right. Good Luck!

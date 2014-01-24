@@ -9,7 +9,7 @@
 	<Object_Of_Interest>
 		<name>Quill</name>
 		<info_snippet>Commonly used in writing</info_snippet>
-		<clue>Once I helped in achieving flight, now I assist you when you write...</clue>
+		<clue>Once I gave birds flight, now you use me just to write...</clue>
 		<info>
 			<info_text_file>quill info.txt</info_text_file>
 		</info>
@@ -24,7 +24,7 @@
 	<Object_Of_Interest>
 		<name>Letter</name>
 		<info_snippet>Correspondence home</info_snippet>
-		<clue>Simple and flat, I may be, but I will make your thoughts easier to see...</clue>
+		<clue>Paper and ink I may be, but I will make your thoughts easier to see...</clue>
 		<info>
 			<info_text_file>letter info.txt</info_text_file>
 		</info>
@@ -99,7 +99,7 @@
 	<Object_Of_Interest>
 		<name>Sentry</name>
 		<info_snippet>Visage of a man on watch</info_snippet>
-		<clue>Over yonder, one can see. Someone watches over thee...</clue>
+		<clue>Over yonder, one can see...my job is to guard over thee.</clue>
 		<info>
 			<info_text_file>silhouette info.txt</info_text_file>
 		</info>
@@ -114,7 +114,7 @@
 	<Object_Of_Interest>
 		<name>Fire</name>
 		<info_snippet>Source of warmth and light</info_snippet>
-		<clue>You can look, but don't touch. I'm just too hot to handle...</clue>
+		<clue>I provide light to see, but don't touch me...</clue>
 		<info>
 			<info_text_file>fire info.txt</info_text_file>
 		</info>
@@ -174,7 +174,7 @@
 	<Object_Of_Interest>
 		<name>Parrott Rifle</name>
 		<info_snippet>Heavy artillery</info_snippet>
-		<clue>Better run for cover because when I sneeze it'll bring the whole building down...</clue>
+		<clue>You better run for cover because when I sneeze, it'll bring the whole building down...</clue>
 		<info>
 			<info_text_file>parrott rifle info.txt</info_text_file>
 		</info>
@@ -189,7 +189,7 @@
 	<Object_Of_Interest>
 		<name>Sergeant</name>
 		<info_snippet>Commanding officer</info_snippet>
-		<clue>I literally call of the shots...</clue>
+		<clue>I call the shots...literally.</clue>
 		<info>
 			<info_text_file>sergeant info.txt</info_text_file>
 		</info>
@@ -234,7 +234,7 @@
 	<Object_Of_Interest>
 		<name>Uniform</name>
 		<info_snippet>Required military garb</info_snippet>
-		<clue>For most, selecting me should be part of your daily routine...</clue>
+		<clue>For most, wearing me should be part of your daily routine...</clue>
 		<info>
 			<info_text_file>uniform info.txt</info_text_file>
 		</info>

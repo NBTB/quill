@@ -13,7 +13,8 @@
 		private var proceedButton:TextButton = null;		//button to proceed to game		
 		private var titleField:TextField = null;			//intro title field
 		private var intro:TextField = null;					//intro text field
-		
+		private var isVisible:Boolean = true;
+		private var spacebarPic:SimpleButton = null;
 		public static var introTitle = null;				//intro title text
 		public static var introText = null;					//intro body text
 		
@@ -26,9 +27,9 @@
 		{
 			addChild(titleField);
 			addChild(intro);
-			addChild(proceedButton);
+			//addChild(proceedButton);
 			
-			proceedButton.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void	{	closeMenu();	});
+			//proceedButton.addEventListener(MouseEvent.MOUSE_DOWN, hideMenu);
 		}
 		
 		public function initText() 
@@ -52,7 +53,7 @@
 			titleField.width=width - (titleField.x * 2);
 			titleField.text=introTitle;
 			
-			proceedButton=new TextButton("Proceed", textButtonFormat, textUpColor, textOverColor, textDownColor);
+			proceedButton=new TextButton("Hide Help", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			proceedButton.x=(width / 2) - (proceedButton.width / 2);			
 			proceedButton.y=height - proceedButton.height - 10;
 
@@ -67,6 +68,32 @@
 			intro.wordWrap=true;
 			intro.autoSize = TextFieldAutoSize.CENTER;
 			intro.text=introText;
+			
+			spacebarPic = new SimpleButton();
+			var spacebarPicLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
+			spacebarPicLoader.addEventListener(Event.COMPLETE,
+				function(e:Event):void
+				   {
+						spacebarPic = new SimpleButton(new Bitmap(spacebarPicLoader.getUpImage()));
+						spacebarPic.x = intro.x + 95;
+						spacebarPic.y = intro.y + 203;
+						spacebarPic.visible = true;
+						addChild(spacebarPic);
+				   });
+			spacebarPicLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "spacebar.png"));
+		}
+		
+		public function hideMenu(e:MouseEvent):void {
+			if(intro.visible) {
+				intro.visible = false;
+				spacebarPic.visible = false;
+				proceedButton.setText("Show Help");
+			}
+			else {
+				intro.visible = true;
+				spacebarPic.visible = true;
+				proceedButton.setText("Hide Help");
+			}
 		}
 	}
 }

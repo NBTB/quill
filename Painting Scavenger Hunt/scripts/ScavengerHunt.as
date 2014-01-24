@@ -33,9 +33,11 @@ package scripts
 		private var menusDismissible:Boolean = false;					//flag when menus can be dismissed by clicking outside of them (close button is not affected)
 		private var cluesMenu:CluesMenu = null;							//panel that contains clue
 		private var endGoalMenu:EndGoalMenu = null;						//panel that contains end goal pieces
+		private var letterVisible:Boolean = false;
 		private var ending:Ending = null;								//menu displayed when you win
 		private var loadingMenu:LoadingMenu = null;						//pane displayed while loading
 		private var introMenu:IntroMenu = null;							//overlay that introduces the game
+		private var toggleLetterButton:TextButton = null;
 		private var goalReached = false;								//flag if the normal goal has been completed (not including hidden goals)
 		private var stageSize:Point = null;								//size of stage (web deployment has issues with stage's stageWidth and stageHeight properties)
 		private var canvasRect = null;									//rectangle to hold canvas
@@ -96,11 +98,12 @@ package scripts
 			paintingCanvas = new PaintingCanvas(canvasRect.x, canvasRect.y, canvasRect.width, canvasRect.height);
 			ooiManager = new OOIManager(this, this);
 			magnifyingGlass = new MagnifyingGlass();
-			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 4, this);
+			cluesMenu = new CluesMenu(0, canvasRect.y + canvasRect.height, canvasRect.width-1, 60);
+			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height + cluesMenu.height, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 4, this);
 			notificationText = new TextField();
-			cluesMenu = new CluesMenu(0, 0, canvasRect.width-1, canvasRect.y-1);
-			endGoalMenu = new EndGoalMenu(canvasRect.width, 0, stageSize.x - canvasRect.width, stageSize.y);			
-			introMenu = new IntroMenu(canvasRect.x + 30, canvasRect.y + 20, canvasRect.width - 60, canvasRect.height - 40);
+			endGoalMenu = new EndGoalMenu(canvasRect.width / 2, 0, stageSize.x - canvasRect.width, stageSize.y - 50);			
+			introMenu = new IntroMenu(canvasRect.x + 765, canvasRect.y, canvasRect.width - 265, stageSize.y);
+			toggleLetterButton = new TextButton("Toggle Letter", BaseMenu.textButtonFormat, BaseMenu.textUpColor, BaseMenu.textOverColor, BaseMenu.textDownColor);
 			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
 			
 			//create color transforms for notification text
@@ -109,6 +112,9 @@ package scripts
 			
 			//split canvas into segments half the size of a main menu segement for use in menu positioning
 			var menuInterval:Number = canvasRect.width / (mainMenu.getMenuCapacity() * 2);
+			
+			toggleLetterButton.x = endGoalMenu.x + (endGoalMenu.width);
+			toggleLetterButton.y = endGoalMenu.height - 50;
 			
 			magnifyButton = new SimpleButton();
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
@@ -176,16 +182,17 @@ package scripts
 			addChildAt(mainMenu, childIndex++);
 			addChildAt(magnifyingGlass, childIndex++);
 			addChildAt(notificationText, childIndex++);	
-			addChildAt(magnifyButton, childIndex++);
-			addChildAt(endGoalMenu, childIndex++);	
-			addChildAt(cluesMenu, childIndex++);			
+			//addChildAt(magnifyButton, childIndex++);
+			addChildAt(cluesMenu, childIndex++);
+			addChildAt(introMenu, childIndex++);
+			addChildAt(endGoalMenu, childIndex++);
 			
 			//add click listeners to in-game children to dismiss other menus
 			addDismissibleOverlayCloser(paintingCanvas);
 			addDismissibleOverlayCloser(ooiManager);
 			addDismissibleOverlayCloser(mainMenu);
 			addDismissibleOverlayCloser(magnifyingGlass);
-			addDismissibleOverlayCloser(magnifyButton);
+			//addDismissibleOverlayCloser(magnifyButton);
 			addDismissibleOverlayCloser(cluesMenu);
 			addDismissibleOverlayCloser(endGoalMenu);
 			
@@ -201,6 +208,12 @@ package scripts
 			//open clues and end goal menus
 			cluesMenu.openMenu();
 			endGoalMenu.openMenu();
+			
+			//open intro menu		
+			introMenu.initText();
+			introMenu.init();
+			introMenu.openMenu();
+			
 			
 			//make menus inside main menu displayable
 			mainMenu.makeChildMenusDisplayable();	
@@ -281,24 +294,7 @@ package scripts
 			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			
 			//listen for the magnify button being clicked
-			magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	toggleZoom();	});
-			
-			//listen for intro menu being opened and close		
-			introMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
-			introMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	
-																				   {	
-																				   		//allow interaction beyond menu as it closes
-																				   		forceInteractionWithMenu(e.getTargetMenu());	
-																						
-																						//prepare new list of unused objects of interest and pick the first object
-																						ooiManager.resetUnusedOOIList();
-																						var firstClue:String = ooiManager.pickNextOOI();
-																						cluesMenu.addClue(firstClue);
-																						
-																						//show unlocked content
-																						endGoalMenu.initHeading();
-																						endGoalMenu.showRewards();
-																				   });
+			toggleLetterButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	toggleLetter();	});
 			
 			//calculate color offsets between new and normal notification colors (seperate components of color within unsigned integer)
 			var normalRed:uint = (notificationTextColorNormal.color & 0xFF0000)/0x010000;
@@ -331,20 +327,25 @@ package scripts
 			notificationText.mouseEnabled = false;
 			notificationText.embedFonts = true;
 			
-			//open intro menu				
-			introMenu.initText();
-			introMenu.init();
-			addChild(introMenu);	
-			introMenu.openMenu();		
+			ooiManager.resetUnusedOOIList();
+			var firstClue:String = ooiManager.pickNextOOI();
+			cluesMenu.addClue(firstClue);
+			
+			//show unlocked content
+			endGoalMenu.initHeading();
+			endGoalMenu.showRewards();
 							
 			//add ending
 			ending.closeMenu();
 			addChild(ending);			
 			
 			//unlock the first pieces of the end goal (remain hidden for now)
-			endGoalMenu.hideRewards();
+			//endGoalMenu.hideRewards();
 			for(var r:int = 0; r < EndGoalMenu.freeRewardCount; r++)
 				endGoalMenu.unlockReward();
+			
+			//Initially hide letter, use can click to view it
+			endGoalMenu.closeMenu();
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
@@ -352,6 +353,13 @@ package scripts
 			//listen for input events
 			stage.focus = stage;
 			stage.addEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
+			
+			//Objects aren't hoverable unless we do this
+			//Temporary solution
+			helpMenu.openMenu();
+			helpMenu.closeMenu();
+			
+			addChild(toggleLetterButton);
 		}		
 		
 		//handle new frame
@@ -382,10 +390,11 @@ package scripts
 			//toggle magnifying glass
 			if(e.keyCode == Keyboard.SPACE)
 			{
-				closeDismissibleOverlays(magnifyButton);
+				closeDismissibleOverlays(null);
 				toggleZoom();
 			}
 		}
+		
 		
 		//handle the openeing of a menu
 		private function menuOpened(targetMenu:BaseMenu)
@@ -412,6 +421,19 @@ package scripts
 				allowEventsOutsideMenu(true);
 		}
 		
+		//toggle display of letter
+		public function toggleLetter():void
+		{
+			if(letterVisible == false) {
+				endGoalMenu.openMenu();
+				letterVisible = true;
+			}
+			else {
+				endGoalMenu.closeMenu();
+				letterVisible = false;
+			}
+		}
+		
 		//toggle use of magnifying glass
 		public function toggleZoom(forceResult:Boolean = false, forceTo:Boolean = false):void
 		{
@@ -434,7 +456,7 @@ package scripts
 				magnifyingGlass.visible = false;
 				prepareZoom = false;
 			}
-		}	
+		}
 		
 		//place the magnifying glass over the scene and magnify affected bitmaps
 		public function placeMagnifyingGlass(center:Point):void
@@ -471,6 +493,7 @@ package scripts
 		
 			//add the piece of the end goal
 			var rewardNotification:String = endGoalMenu.unlockReward();
+			trace(endGoalMenu.getRewardInfo());
 			
 			//if the most recent reward was the last normal reward, display ending
 			if(!goalReached && endGoalMenu.allNormalPiecesAwarded())

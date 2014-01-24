@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Importer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<loading_title>The Night Before the Battle Interactive Scavenger Hunt</loading_title>
 	<stage_size width="1265" height="630"/>
-	<canvas_rectangle x="0" y="56" width="765" height="518"/>
+	<canvas_rectangle x="0" y="0" width="765" height="518"/>
 	<menu>xml/menu.xml</menu>
 	<about>xml/about.xml</about>
 	<hunt>xml/hunt.xml</hunt>

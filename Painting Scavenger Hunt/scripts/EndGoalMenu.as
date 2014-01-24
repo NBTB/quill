@@ -144,6 +144,13 @@
 			for(var i:int; i < pages.length; i++)
 				pages[i].visible = false;
 		}
+		
+		//Return number of pieces unlocked, how many total to win, and the percent unlocked
+		public function getRewardInfo():String {
+			var percent:Number = ( rewardCounter / completionRequirement ) * 100;
+			var string:String = "You've unlocked " + rewardCounter + " out of " + completionRequirement + " pieces, which is " + percent + " percent.";
+			return string
+		}
          
 		//display rewards
 		public function showRewards()

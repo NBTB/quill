@@ -1,3 +1,4 @@
-Designed by:      Daniel Acito   |   Sam Trapp   |   Justin Hardenburg
+Designed by:      Daniel Acito   |   Sam Trapp 
+                  Justin Hardenburg   |    Chris Knepper
 Advisors:      Gordon Goodman   |   Susan Daiss
-Thank you to the Rochester Memorial Art Gallery, the RIT School of Interactive Games and Media,  and James Henry Beard.
+Thank you to the Memorial Art Gallery of the University of Rochester, the RIT School of Interactive Games and Media, and James Henry Beard.

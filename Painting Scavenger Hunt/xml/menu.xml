@@ -2,24 +2,24 @@
 <Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<menu_color>0x010417</menu_color>
 	<menu_border>0x836A35</menu_border>
-	<menu_opacity>0.3</menu_opacity>
+	<menu_opacity>0.7</menu_opacity>
 	<text_format name="title">
 		<size>30</size>
 		<color>0xEEBB55</color>
 		<bold>true</bold>
-		<italic>false</italic>
+		<italic>true</italic>
 	</text_format>
 	<text_format name="body">
-		<size>24</size>
+		<size>20</size>
 		<color>0xEEBB55</color>
 		<bold>false</bold>
 		<italic>false</italic>
 	</text_format>
 	<text_format name="caption">
-		<size>20</size>
+		<size>16</size>
 		<color>0xCC9933</color>
 		<bold>false</bold>
-		<italic>true</italic>
+		<italic>false</italic>
 	</text_format>
 	<text_format name="text_button">
 		<size>30</size>
