@@ -13,8 +13,8 @@
 		<info>
 			<info_text_file>quill info.txt</info_text_file>
 		</info>
-		<x>0.7834827</x>
-		<y>0.70486368636</y>
+		<x>0.7730000</x>
+		<y>0.6980000</y>
 		<info_pane_x>0.35</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>quill hitmap.png</hitmap_filename>
@@ -28,8 +28,8 @@
 		<info>
 			<info_text_file>letter info.txt</info_text_file>
 		</info>
-		<x>0.7844827</x>
-		<y>0.75486368636</y>
+		<x>0.7770000</x>
+		<y>0.7470000</y>
 		<info_pane_x>0.36</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>letter hitmap.png</hitmap_filename>
@@ -43,8 +43,8 @@
 		<info>
 			<info_text_file>moon info.txt</info_text_file>
 		</info>
-		<x>0.138931</x>
-		<y>0.0392288</y>
+		<x>0.133000</x>
+		<y>0.0330000</y>
 		<info_pane_x>0.18</info_pane_x>
 		<info_pane_y>0.02</info_pane_y>
 		<hitmap_filename>moon hitmap.png</hitmap_filename>
@@ -58,8 +58,8 @@
 		<info>
 			<info_text_file>flag info.txt</info_text_file>
 		</info>
-		<x>0.5406561</x>
-		<y>0.686574</y>
+		<x>0.5350000</x>
+		<y>0.678000</y>
 		<info_pane_x>0.12</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>flag hitmap.png</hitmap_filename>
@@ -73,8 +73,8 @@
 		<info>
 			<info_text_file>skeleton info.txt</info_text_file>
 		</info>
-		<x>0.4555827</x>
-		<y>0.3307687</y>
+		<x>0.4520000</x>
+		<y>0.3280000</y>
 		<info_pane_x>0.05</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>skeleton hitmap.png</hitmap_filename>
@@ -88,8 +88,8 @@
 		<info>
 			<info_text_file>musket info.txt</info_text_file>
 		</info>
-		<x>0.6232068</x>
-		<y>0.6401487</y>
+		<x>0.6200000</x>
+		<y>0.6240000</y>
 		<info_pane_x>0.2</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>musket hitmap.png</hitmap_filename>
@@ -103,8 +103,8 @@
 		<info>
 			<info_text_file>silhouette info.txt</info_text_file>
 		</info>
-		<x>0.8701379</x>
-		<y>0.1251726</y>
+		<x>0.8650000</x>
+		<y>0.1100000</y>
 		<info_pane_x>0.45</info_pane_x>
 		<info_pane_y>0.02</info_pane_y>
 		<hitmap_filename>silhouette hitmap.png</hitmap_filename>
@@ -118,8 +118,8 @@
 		<info>
 			<info_text_file>fire info.txt</info_text_file>
 		</info>
-		<x>0.1772068</x>
-		<y>0.7695784</y>
+		<x>0.1700000</x>
+		<y>0.759000</y>
 		<info_pane_x>0.24</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>fire hitmap.png</hitmap_filename>
@@ -133,8 +133,8 @@
 		<info>
 			<info_text_file>cannonball info.txt</info_text_file>
 		</info>
-		<x>0.0616896</x>
-		<y>0.9174942</y>
+		<x>0.0550000</x>
+		<y>0.9000000</y>
 		<info_pane_x>0.4</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>cannonball hitmap.png</hitmap_filename>
@@ -148,8 +148,8 @@
 		<info>
 			<info_text_file>sword info.txt</info_text_file>
 		</info>
-		<x>0.8485517</x>
-		<y>0.7732242</y>
+		<x>0.8440000</x>
+		<y>0.7700000</y>
 		<info_pane_x>0.41</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>sword hitmap.png</hitmap_filename>
@@ -163,8 +163,8 @@
 		<info>
 			<info_text_file>cards info.txt</info_text_file>
 		</info>
-		<x>0.3923793</x>
-		<y>0.913397</y>
+		<x>0.3868000</x>
+		<y>0.906000</y>
 		<info_pane_x>0.47</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>cards hitmap.png</hitmap_filename>
@@ -178,8 +178,8 @@
 		<info>
 			<info_text_file>parrott rifle info.txt</info_text_file>
 		</info>
-		<x>0.2570307</x>
-		<y>0.3390287</y>
+		<x>0.2380000</x>
+		<y>0.3050000</y>
 		<info_pane_x>0.02</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>parrott rifle hitmap.png</hitmap_filename>
@@ -193,8 +193,8 @@
 		<info>
 			<info_text_file>sergeant info.txt</info_text_file>
 		</info>
-		<x>0.479</x>
-		<y>0.692</y>
+		<x>0.475</x>
+		<y>0.680</y>
 		<info_pane_x>0.1</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>sergeant hitmap.png</hitmap_filename>
@@ -208,8 +208,8 @@
 		<info>
 			<info_text_file>gabions info.txt</info_text_file>
 		</info>
-		<x>0.00585</x>
-		<y>0.2620287</y>
+		<x>-0.008000</x>
+		<y>0.2520000</y>
 		<info_pane_x>0.02</info_pane_x>
 		<info_pane_y>0.1</info_pane_y>
 		<hitmap_filename>gabions hitmap.png</hitmap_filename>
@@ -238,8 +238,8 @@
 		<info>
 			<info_text_file>uniform info.txt</info_text_file>
 		</info>
-		<x>0.2960307</x>
-		<y>0.6810287</y>
+		<x>0.2930000</x>
+		<y>0.6750000</y>
 		<info_pane_x>0.42</info_pane_x>
 		<info_pane_y>0.2</info_pane_y>
 		<hitmap_filename>uniform hitmap.png</hitmap_filename>
