@@ -74,7 +74,7 @@
 			
 			//position menu opener
 			menuOpener.x = menuOpenerSize.x * ((menuOpeners.length - 1) + 0.5) - menuOpener.width/2;
-			menuOpener.y = 10;		
+			menuOpener.y = 5;		
 			
 			//add menu opener to display list
 			addChild(menuOpener);			

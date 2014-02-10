@@ -147,9 +147,20 @@
 		
 		//Return number of pieces unlocked, how many total to win, and the percent unlocked
 		public function getRewardInfo():String {
-			var percent:Number = ( rewardCounter / completionRequirement ) * 100;
-			var string:String = "You've unlocked " + rewardCounter + " out of " + completionRequirement + " pieces, which is " + percent + " percent.";
-			return string
+			return "You've unlocked " + (rewardCounter - freeRewardCount) + " out of " + completionRequirement 
+			+ " pieces, which is " + (calculatePercentLeft(true) * 100) + " percent.";
+		}
+		
+		public function getCluesLeft():String {
+			return (rewardCounter - freeRewardCount) + " / " + completionRequirement;
+		}
+		
+		public function calculatePercentLeft(round:Boolean = false):Number {
+			var percent:Number = ( (rewardCounter - freeRewardCount) / completionRequirement );
+			if(round == true) {
+				percent = Math.round(percent);
+			}
+			return percent;
 		}
          
 		//display rewards

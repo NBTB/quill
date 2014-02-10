@@ -507,6 +507,22 @@
 			}
 		}
 		
+		public function scaleMenu(originalX:Number, originalY:Number, scaledX:Number, scaledY:Number):void {
+			if(scaleX == 1) {
+				scaleX = 0.25;
+				scaleY = 0.25;
+				x = scaledX;
+				y = scaledY;
+			}
+			else {
+				scaleX = 1;
+				scaleY = 1;
+				x = originalX;
+				y = originalY;
+				
+			}
+		}
+		
 		public function isMenuOpen():Boolean	{	return isOpen;	}
 		
 		public static function getTitleFormat():TextFormat		{	return titleFormat;		}

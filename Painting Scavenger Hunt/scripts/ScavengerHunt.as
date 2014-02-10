@@ -41,6 +41,9 @@ package scripts
 		private var goalReached = false;								//flag if the normal goal has been completed (not including hidden goals)
 		private var stageSize:Point = null;								//size of stage (web deployment has issues with stage's stageWidth and stageHeight properties)
 		private var canvasRect = null;									//rectangle to hold canvas
+		private var clueProgress = null;								//Progress meter for clues found
+		private var clueProgressText = null;							//Label text for progress meter
+		private var textF = null;										//Progress meter label textformat
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -99,11 +102,12 @@ package scripts
 			ooiManager = new OOIManager(this, this);
 			magnifyingGlass = new MagnifyingGlass();
 			cluesMenu = new CluesMenu(0, canvasRect.y + canvasRect.height, canvasRect.width-1, 60);
-			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height + cluesMenu.height, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 4, this);
+			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height + cluesMenu.height, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 3, this);
 			notificationText = new TextField();
-			endGoalMenu = new EndGoalMenu(canvasRect.width / 2, 0, stageSize.x - canvasRect.width, stageSize.y - 50);			
-			introMenu = new IntroMenu(canvasRect.x + 765, canvasRect.y, canvasRect.width - 265, stageSize.y);
-			toggleLetterButton = new TextButton("Toggle Letter", BaseMenu.textButtonFormat, BaseMenu.textUpColor, BaseMenu.textOverColor, BaseMenu.textDownColor);
+			clueProgressText = new TextField();
+			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, stageSize.x - canvasRect.width, stageSize.y - 50);			
+			introMenu = new IntroMenu(765, canvasRect.y, 500, stageSize.y);
+			clueProgress = new ProgressBar(350, 35);
 			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
 			
 			//create color transforms for notification text
@@ -112,27 +116,36 @@ package scripts
 			
 			//split canvas into segments half the size of a main menu segement for use in menu positioning
 			var menuInterval:Number = canvasRect.width / (mainMenu.getMenuCapacity() * 2);
+			clueProgress.x = introMenu.x + 15;
+			clueProgress.y = introMenu.height - 300;
+			clueProgressText.width = clueProgress.width;
+			clueProgressText.x = clueProgress.x;
+			clueProgressText.y = clueProgress.y - 35;
 			
-			toggleLetterButton.x = endGoalMenu.x + (endGoalMenu.width);
-			toggleLetterButton.y = endGoalMenu.height - 50;
+			//Format for progress bar caption
+			textF = new TextFormat();
+			textF.font = "Verdana";
+			textF.size = 17;
+			textF.color = 0xcccccc;
 			
 			magnifyButton = new SimpleButton();
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
-																					   {
-																						   //setup next clue button
-																							magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage()), 
-																																new Bitmap(magnifyButtonLoader.getOverImage()), 
-																																new Bitmap(magnifyButtonLoader.getDownImage()), 
-																																new Bitmap(magnifyButtonLoader.getHittestImage()));
-																							magnifyButton.width /= 5;
-																							magnifyButton.height /= 5;
-																							magnifyButton.x = canvasRect.x + (7 * menuInterval) - (magnifyButton.width / 2);
-																							magnifyButton.y = mainMenu.y + 5;
-																							magnifyButton.visible = true;
-																					   });
-			magnifyButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "magnify button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "magnify button over.png"), 
-											FileFinder.completePath(FileFinder.INTERFACE, "magnify button down.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnify button hittest.png"));
+			   {
+				   //setup next clue button
+					magnifyButton = new SimpleButton(new Bitmap(magnifyButtonLoader.getUpImage()), 
+													new Bitmap(magnifyButtonLoader.getOverImage()), 
+													new Bitmap(magnifyButtonLoader.getDownImage()), 
+													new Bitmap(magnifyButtonLoader.getHittestImage()));
+					magnifyButton.x = 780;
+					magnifyButton.y = 205;
+					magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
+						closeDismissibleOverlays(null);
+						toggleZoom();
+					});
+			   });
+			magnifyButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "magnifying_glass.png"), FileFinder.completePath(FileFinder.INTERFACE, "magnifying_glass_over.png"), 
+											FileFinder.completePath(FileFinder.INTERFACE, "magnifying_glass.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnifying_glass.png"));
 			
 			//create menus to appear in main menu			
 			var helpMenu:HelpMenu = new HelpMenu(canvasRect.x + menuInterval - 60, mainMenu.y - 275, 120, 270, new Rectangle(canvasRect.x + 30, canvasRect.y + 30, canvasRect.width - 60, canvasRect.height - 60));					
@@ -182,9 +195,11 @@ package scripts
 			addChildAt(mainMenu, childIndex++);
 			addChildAt(magnifyingGlass, childIndex++);
 			addChildAt(notificationText, childIndex++);	
-			//addChildAt(magnifyButton, childIndex++);
 			addChildAt(cluesMenu, childIndex++);
 			addChildAt(introMenu, childIndex++);
+			addChildAt(magnifyButton, childIndex++);
+			addChildAt(clueProgress, childIndex++);
+			addChildAt(clueProgressText, childIndex++);
 			addChildAt(endGoalMenu, childIndex++);
 			
 			//add click listeners to in-game children to dismiss other menus
@@ -192,7 +207,6 @@ package scripts
 			addDismissibleOverlayCloser(ooiManager);
 			addDismissibleOverlayCloser(mainMenu);
 			addDismissibleOverlayCloser(magnifyingGlass);
-			//addDismissibleOverlayCloser(magnifyButton);
 			addDismissibleOverlayCloser(cluesMenu);
 			addDismissibleOverlayCloser(endGoalMenu);
 			
@@ -213,7 +227,6 @@ package scripts
 			introMenu.initText();
 			introMenu.init();
 			introMenu.openMenu();
-			
 			
 			//make menus inside main menu displayable
 			mainMenu.makeChildMenusDisplayable();	
@@ -294,7 +307,7 @@ package scripts
 			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			
 			//listen for the magnify button being clicked
-			toggleLetterButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	toggleLetter();	});
+			endGoalMenu.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	endGoalMenu.scaleMenu(canvasRect.width, 0, canvasRect.width + 15, 435);	});
 			
 			//calculate color offsets between new and normal notification colors (seperate components of color within unsigned integer)
 			var normalRed:uint = (notificationTextColorNormal.color & 0xFF0000)/0x010000;
@@ -345,7 +358,7 @@ package scripts
 				endGoalMenu.unlockReward();
 			
 			//Initially hide letter, use can click to view it
-			endGoalMenu.closeMenu();
+			//endGoalMenu.closeMenu();
 			
 			//listen for new frame
 			addEventListener(Event.ENTER_FRAME, checkEnterFrame);
@@ -358,8 +371,12 @@ package scripts
 			//Temporary solution
 			helpMenu.openMenu();
 			helpMenu.closeMenu();
+			endGoalMenu.scaleMenu(canvasRect.width + 15, 435, canvasRect.width + 15, 435);
 			
-			addChild(toggleLetterButton);
+			//Initially set progress bar
+			clueProgressText.text = "Clues Found: " + endGoalMenu.getCluesLeft();
+			clueProgressText.defaultTextFormat = textF;
+			clueProgressText.setTextFormat(textF);
 		}		
 		
 		//handle new frame
@@ -421,19 +438,6 @@ package scripts
 				allowEventsOutsideMenu(true);
 		}
 		
-		//toggle display of letter
-		public function toggleLetter():void
-		{
-			if(letterVisible == false) {
-				endGoalMenu.openMenu();
-				letterVisible = true;
-			}
-			else {
-				endGoalMenu.closeMenu();
-				letterVisible = false;
-			}
-		}
-		
 		//toggle use of magnifying glass
 		public function toggleZoom(forceResult:Boolean = false, forceTo:Boolean = false):void
 		{
@@ -493,7 +497,9 @@ package scripts
 		
 			//add the piece of the end goal
 			var rewardNotification:String = endGoalMenu.unlockReward();
-			trace(endGoalMenu.getRewardInfo());
+			//Update progress bar and text
+			clueProgress.draw(endGoalMenu.calculatePercentLeft());
+			clueProgressText.text = "Clues Found: " + endGoalMenu.getCluesLeft();
 			
 			//if the most recent reward was the last normal reward, display ending
 			if(!goalReached && endGoalMenu.allNormalPiecesAwarded())
