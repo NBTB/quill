@@ -14,6 +14,8 @@
 		private var heading:TextField = new TextField();					//labels the letter
 		
 		public static var completionRequirement = 0;		//number of rewards required to complete goal (does not include hidden rewards)
+		public static var trueCompletionRequirement = 0;    //number of rewards required to complete goal (includes hidden rewards)
+		public static var completionToShow = 0;				//display number of rewards the player needs to find, used because we can't alter completionRequirement
 		public static var freeRewardCount = 0;				//number of free rewards given at beginning
 		public static var headingTextColor = 0;				//color of text in overlay
 		public static var goalOverlayText = null;			//text to display over goal
@@ -24,7 +26,7 @@
         {
             //Pass in variables to the base menu to create background
             super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
-			
+			changeBackgroundColor(0x000000, 0); //Get rid of background for letter
 			//change previous and next button
 			previousPageButton.setText("<");
 			previousPageButton.fitHitboxToText();
@@ -80,32 +82,17 @@
 		public function initHeading()
 		{			
 			var endGoalOverlayFormat:TextFormat = new TextFormat(bodyFormat.font, bodyFormat.size, headingTextColor, bodyFormat.bold, bodyFormat.italic, bodyFormat.underline, null, null, bodyFormat.align);
-			endGoalOverlayFormat.align = TextFormatAlign.CENTER;
 		
 			heading.defaultTextFormat = endGoalOverlayFormat;
-			heading.autoSize = TextFieldAutoSize.CENTER;
-			heading.x = 0;
+			heading.x = 40;
 			heading.y = 20;
 			heading.width = width;
 			heading.embedFonts = true;
 			heading.text = goalOverlayText;
 			heading.blendMode = BlendMode.LAYER;
 			heading.selectable = false;
-			fadeHeading();
+			heading.alpha = 0.8;
 			addChild(heading);
-			
-			addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void	{	displayHeading();	});
-			addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	fadeHeading();		});
-		}
-		
-		function displayHeading():void
-		{	
-			heading.alpha = 0.7;
-		}
-		
-		function fadeHeading():void
-		{
-			heading.alpha = 0.2;
 		}
         
 		//unlock a reward
@@ -118,6 +105,7 @@
 				rewardCounter++;					
 				return pieces[rewardCounter-1].getRewardNotification();
 			}
+			rewardCounter++;
 			return null;
 		}    
 			
@@ -152,11 +140,14 @@
 		}
 		
 		public function getCluesLeft():String {
-			return (rewardCounter - freeRewardCount) + " / " + completionRequirement;
+			return (rewardCounter - freeRewardCount) + " / " + completionToShow;
 		}
 		
 		public function calculatePercentLeft(round:Boolean = false):Number {
-			var percent:Number = ( (rewardCounter - freeRewardCount) / completionRequirement );
+			if(allNormalPiecesAwarded()) {
+				completionToShow = trueCompletionRequirement;
+			}
+			var percent:Number = ( (rewardCounter - freeRewardCount) / completionToShow );
 			if(round == true) {
 				percent = Math.round(percent);
 			}

@@ -20,8 +20,8 @@
 		
 		public function IntroMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
-			BaseMenu.menuColor = 0x413826;
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
+			changeBackgroundColor(0x635d52, 1);
 		}
 	
 		public function init() 

@@ -44,6 +44,7 @@ package scripts
 		private var clueProgress = null;								//Progress meter for clues found
 		private var clueProgressText = null;							//Label text for progress meter
 		private var textF = null;										//Progress meter label textformat
+		private var FULLSIZE_LETTER_X = null;							//X-Position of fullsize letters
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -105,7 +106,7 @@ package scripts
 			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height + cluesMenu.height, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 3, this);
 			notificationText = new TextField();
 			clueProgressText = new TextField();
-			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, stageSize.x - canvasRect.width, stageSize.y - 50);			
+			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, 1000, 630);			
 			introMenu = new IntroMenu(765, canvasRect.y, 500, stageSize.y);
 			clueProgress = new ProgressBar(350, 35);
 			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
@@ -306,8 +307,10 @@ package scripts
 			restartMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			
+			FULLSIZE_LETTER_X = 500;
+			
 			//listen for the magnify button being clicked
-			endGoalMenu.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	endGoalMenu.scaleMenu(canvasRect.width, 0, canvasRect.width + 15, 435);	});
+			endGoalMenu.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 0, canvasRect.width + 15, 435);	});
 			
 			//calculate color offsets between new and normal notification colors (seperate components of color within unsigned integer)
 			var normalRed:uint = (notificationTextColorNormal.color & 0xFF0000)/0x010000;
@@ -371,7 +374,7 @@ package scripts
 			//Temporary solution
 			helpMenu.openMenu();
 			helpMenu.closeMenu();
-			endGoalMenu.scaleMenu(canvasRect.width + 15, 435, canvasRect.width + 15, 435);
+			endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 435, canvasRect.width + 15, 435);
 			
 			//Initially set progress bar
 			clueProgressText.text = "Clues Found: " + endGoalMenu.getCluesLeft();
@@ -486,7 +489,7 @@ package scripts
 		
 		//handle a correct answer to a clue
 		private function handleCorrectAnswer(e:Event)
-		{			
+		{
 			//hide the current clue
 			hideNotificationText();
 
@@ -503,10 +506,9 @@ package scripts
 			
 			//if the most recent reward was the last normal reward, display ending
 			if(!goalReached && endGoalMenu.allNormalPiecesAwarded())
-			{											
+			{
 				//make the current clue old
 				cluesMenu.outdateCurrentClue();
-				
 				//show ending
 				ending.openMenu();
 			}
@@ -553,8 +555,8 @@ package scripts
 		//unlock the hidden piece of the end goal
 		private function unlockHiddenPiece()
 		{
-			//add a new page to the end goal menu and show final reward		
-			endGoalMenu.addPage();
+			FULLSIZE_LETTER_X = 300;
+			//add a new page to the end goal menu and show final reward
 			postNotification(endGoalMenu.unlockFinalReward());	
 			
 			//make the current clue old

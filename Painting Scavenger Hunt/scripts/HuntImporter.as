@@ -394,6 +394,7 @@
             var mgZoom:Number = 1;
             var mgRadius:Number = 100;
             var huntCount:int = -1;
+			var trueHuntCount:int = 1;
             var huntAttribs:XMLList = hunt.attributes();
             for each(var attrib in huntAttribs)
             {
@@ -403,6 +404,8 @@
                     mgRadius = Number(attrib);
                 if(attrib.name() == "hunt_count")
                     huntCount = int(Number(attrib));
+                if(attrib.name() == "true_hunt_count")
+                    trueHuntCount = int(Number(attrib));
             }
 			
             //set magnifying glass defaults
@@ -410,7 +413,9 @@
             magnifyingGlass.setDefaultRadius(mgRadius);
              
             //set number of number of rewards
-            EndGoalMenu.completionRequirement = huntCount;      			
+            EndGoalMenu.completionRequirement = huntCount;
+			EndGoalMenu.trueCompletionRequirement = trueHuntCount;
+			EndGoalMenu.completionToShow = huntCount;
 			
 			//attempt to parse congratulations to be displayed by clue menu
 			if(hunt.hasOwnProperty("congratulations_clue"))

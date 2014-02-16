@@ -9,14 +9,14 @@
 		<filename>blank letter.png</filename>
 		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>
+		<y>0</y>
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece1</name>
 		<filename>letterPiece1.png</filename>
 		<reward_notification>You unlocked a piece of the letter.</reward_notification>
 		<x>25</x>
-		<y>2</y>
+		<y>0</y>
 	</End_Goal_Piece>
 	<End_Goal_Piece>
 		<name>Piece2</name>
@@ -57,7 +57,7 @@
 		<name>HiddenLetter</name>
 		<filename>hiddenLetter.png</filename>
 		<reward_notification>You found a hidden letter!</reward_notification>
-		<x>25</x>
+		<x>500</x>
 		<y>2</y>
 	</End_Goal_Piece>
 </End_Goal>
