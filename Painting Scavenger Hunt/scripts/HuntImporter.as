@@ -652,10 +652,7 @@
              
             for each(var piece in pieces)
             {
-				//parse end goal overlay parameters
-				if(piece.name() == "heading_text_color")
-					EndGoalMenu.headingTextColor = Number(piece);
-				else if(piece.name() == "goal_heading_text")
+				if(piece.name() == "goal_heading_text")
 					EndGoalMenu.goalOverlayText = piece;
 				else if(piece.name() == "hidden_heading_text")
 					EndGoalMenu.hiddenOverlayText = piece;

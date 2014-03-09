@@ -41,7 +41,7 @@
 			outline = new Sprite();
 			addChild(outline);
 			outline.graphics.moveTo(3, 0);
-			outline.graphics.lineStyle(1, 0xE5E5E5, 1, true);
+			outline.graphics.lineStyle(2, 0xB8AD98, 1, true);
 			outline.graphics.lineTo(barWidth - 3, 0);
 			outline.graphics.curveTo(barWidth, 0, barWidth, 3);
 			outline.graphics.lineTo(barWidth, barHeight - 3);
@@ -55,7 +55,7 @@
 		public function draw(progress:Number):void {
 			bar.graphics.clear();
 			
-			bar.graphics.beginFill(0, 1);
+			bar.graphics.beginFill(0x423e37, 1);
 			bar.graphics.drawRect(barWidth * progress, 0, barWidth - barWidth * progress, barHeight);
 			bar.graphics.endFill();
 			

@@ -13,7 +13,6 @@
 		private var titleField:TextField = null;			//intro title field
 		private var intro:TextField = null;					//intro text field
 		private var isVisible:Boolean = true;
-		private var spaceCaption:TextField = null;
 		private var letterCaption:TextField = null;
 		public static var introTitle = null;				//intro title text
 		public static var introText = null;					//intro body text
@@ -28,7 +27,6 @@
 		{
 			addChild(titleField);
 			addChild(intro);
-			addChild(spaceCaption);
 			addChild(letterCaption);
 		}
 		
@@ -63,27 +61,16 @@
 			intro.autoSize = TextFieldAutoSize.CENTER;
 			intro.text=introText;
 			
-			spaceCaption = new TextField();
-			spaceCaption.selectable=false;			
-			spaceCaption.defaultTextFormat = BaseMenu.bodyFormat;
-			spaceCaption.embedFonts = true;
-			spaceCaption.x = 85;
-			spaceCaption.y = 230;
-			spaceCaption.width=width - (intro.x * 2);
-			spaceCaption.wordWrap=true;
-			spaceCaption.autoSize = TextFieldAutoSize.CENTER;
-			spaceCaption.text= "(or press the spacebar)";
-			
 			letterCaption = new TextField();
 			letterCaption.selectable=false;			
 			letterCaption.defaultTextFormat = BaseMenu.bodyFormat;
 			letterCaption.embedFonts = true;
 			letterCaption.x = 15;
-			letterCaption.y = 590;
+			letterCaption.y = 400;
 			letterCaption.width=width - (intro.x * 2);
 			letterCaption.wordWrap=true;
 			letterCaption.autoSize = TextFieldAutoSize.CENTER;
-			letterCaption.text= "Click the letter to enlarge it";
+			letterCaption.text= "Inventory";
 		}
 	}
 }

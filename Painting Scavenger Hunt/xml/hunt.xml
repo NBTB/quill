@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Hunt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" magnify_scale="1" magnify_radius="100" hunt_count="6" true_hunt_count="17">
+<Hunt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" magnify_scale="1" magnify_radius="100" hunt_count="6" true_hunt_count="16">
 	<congratulations_clue>Congratulations. Diligence has its benefits.</congratulations_clue>
-	<notification_normal_color>0x40E0D0</notification_normal_color>
+	<notification_normal_color>0x66a5df</notification_normal_color>
 	<notification_new_color>0x909090</notification_new_color>
 </Hunt>
+<!-- 
+	We define, via attributes in the Hunt element, how many clues needed to complete both the first letter and second one.
+	These are used to compute the progress bar fill.
+-->

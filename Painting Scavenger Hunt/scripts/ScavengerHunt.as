@@ -45,6 +45,7 @@ package scripts
 		private var clueProgressText = null;							//Label text for progress meter
 		private var textF = null;										//Progress meter label textformat
 		private var FULLSIZE_LETTER_X = null;							//X-Position of fullsize letters
+		private var inventoryCaptions = null;							//Captions for player items
 		
 		//main menu titles
 		private var helpMenuTitle:String = "Help";			//title of help menu
@@ -102,11 +103,11 @@ package scripts
 			paintingCanvas = new PaintingCanvas(canvasRect.x, canvasRect.y, canvasRect.width, canvasRect.height);
 			ooiManager = new OOIManager(this, this);
 			magnifyingGlass = new MagnifyingGlass();
-			cluesMenu = new CluesMenu(0, canvasRect.y + canvasRect.height, canvasRect.width-1, 60);
-			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height + cluesMenu.height, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 3, this);
+			cluesMenu = new CluesMenu(0, canvasRect.y + canvasRect.height - 1, canvasRect.width-1, 60);
+			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height + cluesMenu.height - 2, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 3, this);
 			notificationText = new TextField();
 			clueProgressText = new TextField();
-			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, 1000, 630);			
+			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, 1200, 630);			
 			introMenu = new IntroMenu(765, canvasRect.y, 500, stageSize.y);
 			clueProgress = new ProgressBar(350, 35);
 			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
@@ -118,7 +119,7 @@ package scripts
 			//split canvas into segments half the size of a main menu segement for use in menu positioning
 			var menuInterval:Number = canvasRect.width / (mainMenu.getMenuCapacity() * 2);
 			clueProgress.x = introMenu.x + 15;
-			clueProgress.y = introMenu.height - 300;
+			clueProgress.y = introMenu.height - 350;
 			clueProgressText.width = clueProgress.width;
 			clueProgressText.x = clueProgress.x;
 			clueProgressText.y = clueProgress.y - 35;
@@ -138,8 +139,8 @@ package scripts
 													new Bitmap(magnifyButtonLoader.getOverImage()), 
 													new Bitmap(magnifyButtonLoader.getDownImage()), 
 													new Bitmap(magnifyButtonLoader.getHittestImage()));
-					magnifyButton.x = 780;
-					magnifyButton.y = 205;
+					magnifyButton.x = 810;
+					magnifyButton.y = 465;
 					magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 						closeDismissibleOverlays(null);
 						toggleZoom();
@@ -178,7 +179,6 @@ package scripts
 			mainMenu.addChildMenu(helpMenu, helpMenuTitle);
 			mainMenu.addChildMenu(objectsMenu, objectsMenuTitle);
 			mainMenu.addChildMenu(restartMenu, restartMenuTitle);
-			
 			
 		}
 		
@@ -230,7 +230,14 @@ package scripts
 			introMenu.openMenu();
 			
 			//make menus inside main menu displayable
-			mainMenu.makeChildMenusDisplayable();	
+			mainMenu.makeChildMenusDisplayable();
+			
+			
+			//create array of caption objects for each inventory item
+			inventoryCaptions = new Array();
+			inventoryCaptions[0] = new OOICaption("Magnifying Glass", "A tool to see things better", "Click or press space to zoom in");
+			inventoryCaptions[1] = new OOICaption("Letter", EndGoalMenu.goalOverlayText, "Click to zoom in");
+			inventoryCaptions[2] = new OOICaption("Letter", EndGoalMenu.hiddenOverlayText, "Click to zoom in");
 			
 			//give OOIManager reference to objects menu
 			var objectsMenu:ObjectsMenu = ObjectsMenu(mainMenu.getMenu(objectsMenuTitle));
@@ -307,10 +314,25 @@ package scripts
 			restartMenu.addEventListener(MenuEvent.MENU_OPENED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			restartMenu.addEventListener(MenuEvent.MENU_CLOSED, function(e:MenuEvent):void	{	forceInteractionWithMenu(e.getTargetMenu());	});
 			
-			FULLSIZE_LETTER_X = 500;
+			//Overlay letter on right side of screen when it's fullsize
+			FULLSIZE_LETTER_X = 750;
 			
-			//listen for the magnify button being clicked
-			endGoalMenu.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 0, canvasRect.width + 15, 435);	});
+			//Add inventory captions, but keep them invisible and off-stage for now
+			for each (var item in inventoryCaptions) {
+				addChild(item);
+			}
+			//Add caption to magnifying glass
+			magnifyButton.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void	{	showInventoryCaption(0);	});
+			magnifyButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	hideInventoryCaption(0);	});
+			//Zoom our menu on click, be sure to hide the letter captions
+			endGoalMenu.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 0, canvasRect.width + 170, 435); hideInventoryCaption(1); hideInventoryCaption(2);	});
+			//Add hover events for each piece in the letter (except the last one) to show the caption for the first letter
+			//We'll add the event listener for the last one (which is hidden) when it gets unlocked
+			for(var i = 0; i < endGoalMenu.getPieces().length - 1; i++) {
+				var piece = endGoalMenu.getPieces()[i];
+				piece.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void	{	if(endGoalMenu.x != FULLSIZE_LETTER_X) showInventoryCaption(1);   });
+				piece.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	hideInventoryCaption(1);	});
+			}
 			
 			//calculate color offsets between new and normal notification colors (seperate components of color within unsigned integer)
 			var normalRed:uint = (notificationTextColorNormal.color & 0xFF0000)/0x010000;
@@ -348,7 +370,6 @@ package scripts
 			cluesMenu.addClue(firstClue);
 			
 			//show unlocked content
-			endGoalMenu.initHeading();
 			endGoalMenu.showRewards();
 							
 			//add ending
@@ -374,7 +395,7 @@ package scripts
 			//Temporary solution
 			helpMenu.openMenu();
 			helpMenu.closeMenu();
-			endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 435, canvasRect.width + 15, 435);
+			endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 35, canvasRect.width + 170, 435);
 			
 			//Initially set progress bar
 			clueProgressText.text = "Clues Found: " + endGoalMenu.getCluesLeft();
@@ -401,7 +422,16 @@ package scripts
             if(zoomed)
 			{
                 placeMagnifyingGlass(new Point(mouseX, mouseY));
-			}				
+			}
+			
+			for each (var item in inventoryCaptions){
+				item.mouseEnabled = false;
+				if(item.visible == true) {
+					item.x = (mouseX + item.width + 40 >= stage.stageWidth) ? mouseX - item.width - 20 : mouseX + 20;
+					item.y = mouseY - (item.height / 2);
+				}
+			}
+			
 		}		
 		
 		//handles the release of keys
@@ -542,6 +572,8 @@ package scripts
 					
 					//unlock the hidden reward
 					unlockHiddenPiece();
+					endGoalMenu.getLastPiece().addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void	{	if(endGoalMenu.x != FULLSIZE_LETTER_X) showInventoryCaption(2);   });
+					endGoalMenu.getLastPiece().addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	hideInventoryCaption(2);	});
 				}			
 			}
 		}
@@ -555,10 +587,9 @@ package scripts
 		//unlock the hidden piece of the end goal
 		private function unlockHiddenPiece()
 		{
-			FULLSIZE_LETTER_X = 300;
+			FULLSIZE_LETTER_X = 200;
 			//add a new page to the end goal menu and show final reward
-			postNotification(endGoalMenu.unlockFinalReward());	
-			
+			postNotification(endGoalMenu.unlockFinalReward());
 			//make the current clue old
 			cluesMenu.outdateCurrentClue();
 			
@@ -615,6 +646,16 @@ package scripts
 				menusDismissible = false;
 				menusDismissibleTimer.start();
 			}
+		}
+		
+		private function showInventoryCaption(index:int) {
+			if(index is int)
+				inventoryCaptions[index].visible = true;
+		}
+		
+		private function hideInventoryCaption(index:int) {
+			if(index is int)
+				inventoryCaptions[index].visible = false;
 		}
 		
 		//in the end menu, if you click to view the letter, the end menu is closed and the letter menu is opened

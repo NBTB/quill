@@ -10,7 +10,7 @@
 		private var infoSnippetText:TextField = null; 		//short description
 		private var moreInfoHintText:TextField = null;		//hint to double-click for more info
 		
-		public function OOICaption(objectName:String, infoSnippet:String)
+		public function OOICaption(objectName:String, infoSnippet:String, overrideHint:String = "")
 		{
 			//populate textfields
 			nameText = new TextField();
@@ -33,6 +33,8 @@
 			moreInfoHintText.selectable = false;
 			moreInfoHintText.mouseEnabled = false;
 			moreInfoHintText.text = "Double-click for more info";
+			if(overrideHint.length > 0)
+				moreInfoHintText.text = overrideHint;
 			moreInfoHintText.autoSize = TextFieldAutoSize.LEFT;
 			
 			//determine required width of pane
@@ -54,6 +56,10 @@
 			addContent(nameText, BaseMenu.LAST_PAGE, new Point(5, 5));
 			addContent(infoSnippetText, BaseMenu.LAST_PAGE, new Point(5, nameText.y + nameText.height));
 			addContent(moreInfoHintText, BaseMenu.LAST_PAGE, new Point(5, infoSnippetText.y + infoSnippetText.height));
+		}
+		
+		public function getTitle():String {
+			return nameText.text;
 		}
 	}
 }
