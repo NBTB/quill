@@ -23,12 +23,18 @@
 		protected var baseX:int;									//menu original x position
 		protected var baseY:int;									//menu original y position
 		
-		public static var menuColor:uint = 0;								//default color of menu background 	
-		public static var menuBorderColor:uint = 0;							//default color of menu border 	
+		public static var menuColor:uint = 0;								//default color of menu background
+		public static var mainMenuColor:uint = 0;							//default color of main menu background
+		public static var cluesMenuColor:uint = 0;							//default color of clues menu background
+		public static var menuBorderColor:uint = 0;							//default color of menu border
+		public static var menuBorderEnabled:Boolean = false;				//default to not showing borders
 		public static var menuOpacity:Number = 1;							//default opacity of menu background 
 		public static var titleFormat:TextFormat = null;					//text format for titles
 		public static var bodyFormat:TextFormat = null;						//text format for body text
+		public static var introFormat:TextFormat = null;					//text format for intro menu text
 		public static var captionFormat:TextFormat = null;					//text format for captions
+		public static var subCaptionFormat:TextFormat = null;				//text format for smaller captions
+		public static var infoFormat:TextFormat = null;						//text format for description captions
 		public static var textButtonFormat:TextFormat = null;				//text format for up state text in buttons
 		public static var linkUsableFormat:TextFormat = null;				//text format for usable links
 		public static var linkUnusableFormat:TextFormat = null;				//text format for unusable links
@@ -290,7 +296,9 @@
 		public function createBackground(widthVal:int, heightVal:int, opacity:Number = DEFAULT_OPACITY):void
 		{
 			menuBackground = new Shape();
-			menuBackground.graphics.lineStyle(1, menuBorderColor);
+			if(menuBorderEnabled) {
+				menuBackground.graphics.lineStyle(1, menuBorderColor);
+			}
 			menuBackground.graphics.beginFill(menuColor);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();
@@ -307,7 +315,9 @@
 			var widthVal = menuBackground.width;
 			var heightVal = menuBackground.height;
 			menuBackground.graphics.clear();
-			menuBackground.graphics.lineStyle(1, menuBorderColor);
+			if(menuBorderEnabled) {
+				menuBackground.graphics.lineStyle(1, menuBorderColor);
+			}
 			menuBackground.graphics.beginFill(newColor);
 			menuBackground.graphics.drawRect(0, 0, widthVal, heightVal);
 			menuBackground.graphics.endFill();

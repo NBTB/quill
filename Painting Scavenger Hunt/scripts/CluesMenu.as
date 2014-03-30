@@ -17,7 +17,7 @@
         {
             //call base constructor
             super(xPos, yPos, widthVal, heightVal, false, false, false, 1);  
-			changeBackgroundColor(0x250000, 1);
+			changeBackgroundColor(BaseMenu.cluesMenuColor, 1);
 			
 			//create array to store old clues
             oldClues = new Array();     
@@ -35,7 +35,7 @@
 				//create new clue textfield and use the new clue's text
 				currentClueText = createClueTextField();
 				currentClueText.text = "Clue: " + currentClue;			
-				currentClueText.y = 15;
+				currentClueText.y = (menuBackground.height - currentClueText.height) / 2;
 				
 				//add new text box to content
 				addContentToHead(currentClueText);

@@ -45,8 +45,10 @@
 			this.menuContainer = menuContainer;
 			
 			//Set the background graphics
-			menuBackground.graphics.lineStyle(1, 0x836A35);
-			menuBackground.graphics.beginFill(BaseMenu.menuColor);
+			if(BaseMenu.menuBorderEnabled) {
+				menuBackground.graphics.lineStyle(1, BaseMenu.menuBorderColor);
+			}
+			menuBackground.graphics.beginFill(BaseMenu.mainMenuColor);
 			menuBackground.graphics.drawRect(0, 0, placementRect.width, placementRect.height);
 			menuBackground.graphics.endFill();
 			addChild(menuBackground);
@@ -70,11 +72,10 @@
 			
 			//create menu opener button using the menu's title
 			var menuOpener:TextButton = new TextButton(menuTitle, BaseMenu.textButtonFormat, BaseMenu.textUpColor, BaseMenu.textOverColor, BaseMenu.textDownColor);
-			menuOpeners.push(menuOpener);			
-			
+			menuOpeners.push(menuOpener);
 			//position menu opener
 			menuOpener.x = menuOpenerSize.x * ((menuOpeners.length - 1) + 0.5) - menuOpener.width/2;
-			menuOpener.y = 5;		
+			menuOpener.y = (menuBackground.height - menuOpener.height) / 2;		
 			
 			//add menu opener to display list
 			addChild(menuOpener);			

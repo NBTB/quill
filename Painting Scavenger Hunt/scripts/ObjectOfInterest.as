@@ -447,13 +447,15 @@
 		//display caption
 		public function showCaption()
 		{
+			(parent as MovieClip).buttonMode = true;
 			caption.visible = true;
-				captionAtMouse();
+			captionAtMouse();
 		}
 		
 		//hide caption
 		public function hideCaption()
 		{
+			(parent as MovieClip).buttonMode = true;
 			caption.visible = false;
 		}		
 		

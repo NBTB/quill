@@ -212,8 +212,14 @@
 			//attempt to retrieve standard menu parameters
 			if(menuParams.hasOwnProperty("menu_color"))
 				BaseMenu.menuColor = Number(menuParams.menu_color);
+			if(menuParams.hasOwnProperty("main_menu_color"))
+				BaseMenu.mainMenuColor = Number(menuParams.main_menu_color);
+			if(menuParams.hasOwnProperty("clues_menu_color"))
+				BaseMenu.cluesMenuColor = Number(menuParams.clues_menu_color);
 			if(menuParams.hasOwnProperty("menu_border"))
 				BaseMenu.menuBorderColor = Number(menuParams.menu_border);
+			if(menuParams.hasOwnProperty("menu_border_enabled") && menuParams.menu_border_enabled == "true")
+				BaseMenu.menuBorderEnabled = true;
 			if(menuParams.hasOwnProperty("menu_opacity"))
 				BaseMenu.menuOpacity = Number(menuParams.menu_opacity);
 			
@@ -273,6 +279,12 @@
 								BaseMenu.bodyFormat = newFormat;
 							else if(formatName == "caption")
 								BaseMenu.captionFormat = newFormat;
+							else if(formatName == "sub_caption")
+								BaseMenu.subCaptionFormat = newFormat;
+							else if(formatName == "info")
+								BaseMenu.infoFormat = newFormat;
+							else if(formatName == "intro")
+								BaseMenu.introFormat = newFormat;
 							else if(formatName == "text_button")
 								BaseMenu.textButtonFormat = newFormat;
 							else if(formatName == "link_usable")

@@ -25,7 +25,7 @@
             //Pass in variables to the base menu to create background
             super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
 			changeBackgroundColor(0x000000, 0); //Get rid of background for letter
-			
+			this.buttonMode = true;
 			//listen for being removed from the display list
 			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
 																		{

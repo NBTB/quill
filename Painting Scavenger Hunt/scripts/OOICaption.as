@@ -15,21 +15,21 @@
 			//populate textfields
 			nameText = new TextField();
 			nameText.embedFonts = true;
-			nameText.defaultTextFormat = BaseMenu.titleFormat;
+			nameText.defaultTextFormat = BaseMenu.captionFormat;
 			nameText.selectable = false;
 			nameText.mouseEnabled = false;
 			nameText.text = objectName;
 			nameText.autoSize = TextFieldAutoSize.LEFT;
 			infoSnippetText = new TextField();
 			infoSnippetText.embedFonts = true;
-			infoSnippetText.defaultTextFormat = BaseMenu.bodyFormat;			
+			infoSnippetText.defaultTextFormat = BaseMenu.infoFormat;			
 			infoSnippetText.selectable = false;
 			infoSnippetText.mouseEnabled = false;
 			infoSnippetText.text = infoSnippet;
 			infoSnippetText.autoSize = TextFieldAutoSize.LEFT;
 			moreInfoHintText = new TextField();
 			moreInfoHintText.embedFonts = true;
-			moreInfoHintText.defaultTextFormat = BaseMenu.captionFormat;			
+			moreInfoHintText.defaultTextFormat = BaseMenu.subCaptionFormat;			
 			moreInfoHintText.selectable = false;
 			moreInfoHintText.mouseEnabled = false;
 			moreInfoHintText.text = "Double-click for more info";

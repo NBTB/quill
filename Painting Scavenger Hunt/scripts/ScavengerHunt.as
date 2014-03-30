@@ -64,7 +64,7 @@ package scripts
 			//find specification files before preparing game
 			importer = new HuntImporter();
 			importer.addEventListener(HuntImporter.SPECS_AND_DIRECTORIES_FOUND, function(e:Event):void	{	loadStartUp()	});
-			importer.findSpecFilesAndAssetDirectories("xml/importer.xml", stageSize, canvasRect);			
+			importer.findSpecFilesAndAssetDirectories("xml/importer.xml", stageSize, canvasRect);
 			
 			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
 																		{
@@ -103,12 +103,12 @@ package scripts
 			paintingCanvas = new PaintingCanvas(canvasRect.x, canvasRect.y, canvasRect.width, canvasRect.height);
 			ooiManager = new OOIManager(this, this);
 			magnifyingGlass = new MagnifyingGlass();
-			cluesMenu = new CluesMenu(0, canvasRect.y + canvasRect.height - 1, canvasRect.width-1, 60);
-			mainMenu = new MainMenu(new Rectangle(0, canvasRect.y + canvasRect.height + cluesMenu.height - 2, canvasRect.width, stageSize.y - (canvasRect.y + canvasRect.height)), 3, this);
+			cluesMenu = new CluesMenu(0, canvasRect.y + canvasRect.height, canvasRect.width, 77);
+			introMenu = new IntroMenu(canvasRect.width, canvasRect.y, 430, stageSize.y);
+			mainMenu = new MainMenu(new Rectangle(canvasRect.width, canvasRect.height, introMenu.width, 77), 3, this);
 			notificationText = new TextField();
 			clueProgressText = new TextField();
 			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, 1200, 630);			
-			introMenu = new IntroMenu(765, canvasRect.y, 500, stageSize.y);
 			clueProgress = new ProgressBar(350, 35);
 			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
 			
@@ -118,8 +118,8 @@ package scripts
 			
 			//split canvas into segments half the size of a main menu segement for use in menu positioning
 			var menuInterval:Number = canvasRect.width / (mainMenu.getMenuCapacity() * 2);
-			clueProgress.x = introMenu.x + 15;
-			clueProgress.y = introMenu.height - 350;
+			clueProgress.x = introMenu.x + 25;
+			clueProgress.y = introMenu.height - 420;
 			clueProgressText.width = clueProgress.width;
 			clueProgressText.x = clueProgress.x;
 			clueProgressText.y = clueProgress.y - 35;
@@ -128,7 +128,7 @@ package scripts
 			textF = new TextFormat();
 			textF.font = "Verdana";
 			textF.size = 17;
-			textF.color = 0xcccccc;
+			textF.color = 0x000000;
 			
 			magnifyButton = new SimpleButton();
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
@@ -139,7 +139,7 @@ package scripts
 													new Bitmap(magnifyButtonLoader.getOverImage()), 
 													new Bitmap(magnifyButtonLoader.getDownImage()), 
 													new Bitmap(magnifyButtonLoader.getHittestImage()));
-					magnifyButton.x = 810;
+					magnifyButton.x = 890;
 					magnifyButton.y = 465;
 					magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 						closeDismissibleOverlays(null);
@@ -150,8 +150,8 @@ package scripts
 											FileFinder.completePath(FileFinder.INTERFACE, "magnifying_glass.png"),FileFinder.completePath(FileFinder.INTERFACE, "magnifying_glass.png"));
 			
 			//create menus to appear in main menu			
-			var helpMenu:HelpMenu = new HelpMenu(canvasRect.x + menuInterval - 60, mainMenu.y - 275, 120, 270, new Rectangle(canvasRect.x + 30, canvasRect.y + 30, canvasRect.width - 60, canvasRect.height - 60));					
-			var objectsMenu:ObjectsMenu = new ObjectsMenu(canvasRect.x + (3 * menuInterval) - 95, mainMenu.y - 470, 190, 465);	
+			var helpMenu:HelpMenu = new HelpMenu(canvasRect.width + menuInterval - 200, mainMenu.y - 275, 120, 270, new Rectangle(canvasRect.x + 30, canvasRect.y + 30, canvasRect.width - 60, canvasRect.height - 60));					
+			var objectsMenu:ObjectsMenu = new ObjectsMenu(helpMenu.x + 150, mainMenu.y - 470, 190, 465);	
 			var restartMenu:RestartMenu = new RestartMenu (canvasRect.x + 200, canvasRect.y + 100, canvasRect.width - 400, canvasRect.height - 350);
 			
 			//load hunt information and listen for completion (set a minimum load time to avoid a quick flash)
@@ -193,7 +193,6 @@ package scripts
 			var childIndex:int = 0;
 			addChildAt(paintingCanvas, childIndex++);
 			addChildAt(ooiManager, childIndex++);
-			addChildAt(mainMenu, childIndex++);
 			addChildAt(magnifyingGlass, childIndex++);
 			addChildAt(notificationText, childIndex++);	
 			addChildAt(cluesMenu, childIndex++);
@@ -202,6 +201,7 @@ package scripts
 			addChildAt(clueProgress, childIndex++);
 			addChildAt(clueProgressText, childIndex++);
 			addChildAt(endGoalMenu, childIndex++);
+			addChildAt(mainMenu, childIndex++);
 			
 			//add click listeners to in-game children to dismiss other menus
 			addDismissibleOverlayCloser(paintingCanvas);
@@ -426,10 +426,8 @@ package scripts
 			
 			for each (var item in inventoryCaptions){
 				item.mouseEnabled = false;
-				if(item.visible == true) {
-					item.x = (mouseX + item.width + 40 >= stage.stageWidth) ? mouseX - item.width - 20 : mouseX + 20;
-					item.y = mouseY - (item.height / 2);
-				}
+				item.x = (mouseX + item.width + 40 >= stage.stageWidth) ? mouseX - item.width - 20 : mouseX + 20;
+				item.y = mouseY - (item.height / 2);
 			}
 			
 		}		

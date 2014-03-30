@@ -63,7 +63,7 @@
 			
 			//construct superclass
 			super(upTextField, overTextField, downTextField, hit);
-			useHandCursor = false;
+			useHandCursor = true;
 		}
 		
 		//resize the hit test state to tightly fit the largest text
