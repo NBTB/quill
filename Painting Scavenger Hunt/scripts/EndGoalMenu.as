@@ -110,7 +110,15 @@
 		}
 		
 		public function getCluesLeft():String {
-			return (rewardCounter - freeRewardCount) + " / " + completionToShow;
+			return getCluesUnlocked() + " / " + getCluesNotUnlocked();
+		}
+		
+		public function getCluesNotUnlocked():Number {
+			return allNormalPiecesAwarded() ? trueCompletionRequirement : completionToShow;
+		}
+		
+		public function getCluesUnlocked():Number {
+			return rewardCounter - freeRewardCount;
 		}
 		
 		public function calculatePercentLeft(round:Boolean = false):Number {

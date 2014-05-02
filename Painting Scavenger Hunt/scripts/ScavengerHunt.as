@@ -109,7 +109,7 @@ package scripts
 			notificationText = new TextField();
 			clueProgressText = new TextField();
 			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, 1200, 630);			
-			clueProgress = new ProgressBar(350, 35);
+			clueProgress = new ProgressBar(350, 35,endGoalMenu.getCluesNotUnlocked(), endGoalMenu.getCluesUnlocked());
 			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
 			
 			//create color transforms for notification text
@@ -139,8 +139,8 @@ package scripts
 													new Bitmap(magnifyButtonLoader.getOverImage()), 
 													new Bitmap(magnifyButtonLoader.getDownImage()), 
 													new Bitmap(magnifyButtonLoader.getHittestImage()));
-					magnifyButton.x = 890;
-					magnifyButton.y = 465;
+					magnifyButton.x = 860;
+					magnifyButton.y = 420;
 					magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 						closeDismissibleOverlays(null);
 						toggleZoom();
@@ -320,6 +320,7 @@ package scripts
 			//Add inventory captions, but keep them invisible and off-stage for now
 			for each (var item in inventoryCaptions) {
 				addChild(item);
+				item.mouseEnabled = false;
 			}
 			//Add caption to magnifying glass
 			magnifyButton.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void	{	showInventoryCaption(0);	});
@@ -401,6 +402,7 @@ package scripts
 			clueProgressText.text = "Clues Found: " + endGoalMenu.getCluesLeft();
 			clueProgressText.defaultTextFormat = textF;
 			clueProgressText.setTextFormat(textF);
+			clueProgress.draw(endGoalMenu.getCluesNotUnlocked(), endGoalMenu.getCluesUnlocked());
 		}		
 		
 		//handle new frame
@@ -529,7 +531,7 @@ package scripts
 			//add the piece of the end goal
 			var rewardNotification:String = endGoalMenu.unlockReward();
 			//Update progress bar and text
-			clueProgress.draw(endGoalMenu.calculatePercentLeft());
+			clueProgress.draw(endGoalMenu.getCluesNotUnlocked(), endGoalMenu.getCluesUnlocked());
 			clueProgressText.text = "Clues Found: " + endGoalMenu.getCluesLeft();
 			
 			//if the most recent reward was the last normal reward, display ending

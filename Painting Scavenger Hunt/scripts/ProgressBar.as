@@ -16,30 +16,59 @@
 		private var bar:Sprite;
 		private var outline:Sprite;
 		
-		public function ProgressBar(width:Number, height:Number) 
+		private var widthThreshold:Number = 5; //If we've unlocked more clues than this, we need to make the bars less wide so they fit on-screen
+		
+		private var sections:Array;
+		
+		public function ProgressBar(width:Number, height:Number, max:Number, unlocked:Number) 
 		{
 			barHeight = height;
 			barWidth = width;
 			bar = new Sprite();
 			bar.graphics.moveTo(0, 0);
 			addChild(bar);
-			bar.graphics.lineStyle(2, 0x78942e);
-			bar.graphics.beginFill(0xbfc7aa, 1);
+			bar.graphics.beginFill(0xbfc7aa, 0);
 			bar.graphics.drawRect(0, 0, barWidth, barHeight);
 			bar.graphics.endFill();
-			outline = new Sprite();
-			addChild(outline);
+			draw(max, unlocked);
+			sections = new Array();
 		}
 		
-		public function draw(progress:Number):void {
-			bar.graphics.beginFill(0xbfc7aa, 1);
-			bar.graphics.endFill();
-			outline.graphics.clear();
-			outline.graphics.moveTo(0, 0);
-			outline.graphics.beginFill(0x78942e, 1);
-			outline.graphics.drawRect(1, 1, (barWidth * progress) - 2, barHeight - 2);
-			outline.graphics.endFill();
-			
+		//We represent the clues as sections. Locked ones are grey/empty, found ones are green/full
+		public function draw(max:Number, unlocked:Number):void {
+				for(var section in sections) {
+					sections[section].graphics.clear();
+				}
+				for(var i = 0; i < max; i++) {
+				bar = new Sprite();
+				bar.graphics.moveTo(0, 0);
+				addChild(bar);
+				sections.push(bar);
+				bar.graphics.lineStyle(2, 0x949494);
+				bar.graphics.beginFill(0xc7c7c7, 1);
+				if(unlocked > widthThreshold) {
+					bar.graphics.drawRect(i * 25, 0, 15, barHeight);
+				}
+				else {
+					bar.graphics.drawRect(i * 60, 0, 40, barHeight);
+				}
+				bar.graphics.endFill();
+				if(unlocked > i) {
+					bar = new Sprite();
+					bar.graphics.moveTo(0, 0);
+					addChild(bar);
+					sections.push(bar);
+					bar.graphics.lineStyle(2, 0x78942e);
+					bar.graphics.beginFill(0x7cc845, 1);
+					if(unlocked > widthThreshold) {
+						bar.graphics.drawRect(i * 25, 0, 15, barHeight);
+					}
+					else {
+						bar.graphics.drawRect(i * 60, 0, 40, barHeight);
+					}
+					bar.graphics.endFill();	
+				}
+			}
 		}
 	}
 

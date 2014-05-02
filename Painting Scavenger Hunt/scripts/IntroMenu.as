@@ -20,7 +20,7 @@
 		public function IntroMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
-			changeBackgroundColor(0xe9e6d9, 1);
+			changeBackgroundColor(0xc9ced3, 1);
 		}
 	
 		public function init() 
@@ -35,16 +35,17 @@
 			var titleFormat:TextFormat = new TextFormat();
 			titleFormat.color=BaseMenu.introFormat.color;
 			titleFormat.font=BaseMenu.titleFormat.font;
-			titleFormat.size=Number(BaseMenu.titleFormat.size) * 1,5;
+			titleFormat.size=Number(BaseMenu.titleFormat.size) * 1.2;
 			titleFormat.bold = BaseMenu.titleFormat.bold;
-			titleFormat.underline = BaseMenu.titleFormat.italic;
-			titleFormat.italic = BaseMenu.titleFormat.underline;
+			titleFormat.underline = BaseMenu.titleFormat.underline;
+			titleFormat.italic = BaseMenu.titleFormat.italic;
 			
 			titleField = new TextField();
 			titleField.selectable = false;
 			titleField.defaultTextFormat = titleFormat;
 			titleField.embedFonts = true;
 			titleField.x = 25;
+			titleField.y = 25;
 			titleField.wordWrap = true;
 			titleField.width= 430;
 			titleField.text=introTitle;
@@ -54,7 +55,7 @@
 			intro.defaultTextFormat = BaseMenu.introFormat;
 			intro.embedFonts = true;
 			intro.x = 25;
-			intro.y = titleField.y + 50;
+			intro.y = titleField.y + 65;
 			intro.width=360;
 			intro.wordWrap=true;
 			intro.autoSize = TextFieldAutoSize.CENTER;

@@ -21,7 +21,7 @@
 		public function LoadingMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void 
 		{
 			super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
-			
+			changeBackgroundColor(0xc9ced3, 1);
 			initText();
 			init();
 		}
@@ -41,8 +41,8 @@
 			loadLoader.load(url3);
 			loadLoader.scaleX=.6;
 			loadLoader.scaleY=.6;
-			loadLoader.x=450;
-			loadLoader.y=170;
+			loadLoader.x=575;
+			loadLoader.y= 300;
 			
 			//create variation of menu title format
 			loadingScreenTextFormat = new TextFormat();
@@ -57,10 +57,10 @@
 			splashTitle.embedFonts = true;
 			splashTitle.wordWrap = true;
 			splashTitle.selectable = false;
-			splashTitle.x = 410;
-			splashTitle.y = 50;
+			splashTitle.x = 335;
+			splashTitle.y = 200;
 			splashTitle.height = 168;
-			splashTitle.width = 425;
+			splashTitle.width = 600;
 			splashTitle.text = loadingTitle;
 			
 			//create loading text field
@@ -69,11 +69,11 @@
 			loadingText.embedFonts = true;
 			loadingText.wordWrap = true;
 			loadingText.selectable = false;
-			loadingText.x = 410;
+			loadingText.x = 400;
 			loadingText.y = 370;
 			loadingText.height = 168;
 			loadingText.width = 425;
-			loadingText.text = "Loading... Please Wait.";
+			loadingText.text = "Loading...";
 		}
 		
 		public function fail()

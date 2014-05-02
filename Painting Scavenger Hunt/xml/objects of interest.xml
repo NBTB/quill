@@ -217,21 +217,6 @@
 		<solved_image_filename>gabions saturated.png</solved_image_filename>
 	</Object_Of_Interest>
 	<Object_Of_Interest>
-		<name>Signature</name>
-		<info_snippet>Mark of credit and endorsement</info_snippet>
-		<clue>Without me, what shame, oh, to not even know the artist's name...</clue>
-		<info>
-			<info_text_file>signature info.txt</info_text_file>
-		</info>
-		<x>0.0060307</x>
-		<y>0.9580287</y>
-		<info_pane_x>0.02</info_pane_x>
-		<info_pane_y>0.15</info_pane_y>
-		<hitmap_filename>signature hitmap.png</hitmap_filename>
-		<highlight_filename>signature highlight.png</highlight_filename>
-		<solved_image_filename>signature saturated.png</solved_image_filename>
-	</Object_Of_Interest>
-	<Object_Of_Interest>
 		<name>Uniform</name>
 		<info_snippet>Required military garb</info_snippet>
 		<clue>For most, wearing me should be part of your daily routine...</clue>
