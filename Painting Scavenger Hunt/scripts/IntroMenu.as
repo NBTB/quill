@@ -13,64 +13,65 @@
 		private var titleField:TextField = null;			//intro title field
 		private var intro:TextField = null;					//intro text field
 		private var isVisible:Boolean = true;
-		private var letterCaption:TextField = null;
+		private var titleBorderLoader:Loader = null;		//loader for title border image
 		public static var introTitle = null;				//intro title text
 		public static var introText = null;					//intro body text
 		
 		public function IntroMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void
 		{
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
-			changeBackgroundColor(0xc9ced3, 1);
+			changeBackgroundColor(BaseMenu.introMenuColor, 1);
 		}
 	
 		public function init() 
 		{
 			addChild(titleField);
+			addChild(titleBorderLoader);
 			addChild(intro);
-			addChild(letterCaption);
 		}
 		
 		public function initText() 
 		{			
-			var titleFormat:TextFormat = new TextFormat();
-			titleFormat.color=BaseMenu.introFormat.color;
-			titleFormat.font=BaseMenu.titleFormat.font;
-			titleFormat.size=Number(BaseMenu.titleFormat.size) * 1.2;
-			titleFormat.bold = BaseMenu.titleFormat.bold;
-			titleFormat.underline = BaseMenu.titleFormat.underline;
-			titleFormat.italic = BaseMenu.titleFormat.italic;
+			BaseMenu.titleFormat.color = BaseMenu.introFormat.color;
+			BaseMenu.titleFormat.align = TextFormatAlign.CENTER;
+			BaseMenu.titleFormat.size = Number(BaseMenu.titleFormat.size) * 1.2;
 			
 			titleField = new TextField();
 			titleField.selectable = false;
-			titleField.defaultTextFormat = titleFormat;
+
+			titleField.defaultTextFormat = BaseMenu.titleFormat;
 			titleField.embedFonts = true;
-			titleField.x = 25;
+			titleField.x = 0;
 			titleField.y = 25;
 			titleField.wordWrap = true;
-			titleField.width= 430;
+			titleField.width= this.width;
+			titleField.autoSize = TextFieldAutoSize.CENTER;
 			titleField.text=introTitle;
+
+			var bar = new Sprite();
+			bar.graphics.moveTo(0, 0);
+			addChild(bar);
+			bar.graphics.beginFill(BaseMenu.menuColor, 1);
+			bar.graphics.drawRect(20, 65, titleField.width - 40, 4);
+			bar.graphics.endFill();
 
 			intro = new TextField();
 			intro.selectable=false;			
 			intro.defaultTextFormat = BaseMenu.introFormat;
 			intro.embedFonts = true;
 			intro.x = 25;
-			intro.y = titleField.y + 65;
+			intro.y = titleField.y + 60;
 			intro.width=360;
 			intro.wordWrap=true;
 			intro.autoSize = TextFieldAutoSize.CENTER;
 			intro.text=introText;
-			
-			letterCaption = new TextField();
-			letterCaption.selectable=false;			
-			letterCaption.defaultTextFormat = BaseMenu.introFormat;
-			letterCaption.embedFonts = true;
-			letterCaption.x = 25;
-			letterCaption.y = 400;
-			letterCaption.width=width - (intro.x * 2);
-			letterCaption.wordWrap=true;
-			letterCaption.autoSize = TextFieldAutoSize.CENTER;
-			letterCaption.text= "Inventory";
+
+			titleBorderLoader = new Loader();
+			titleBorderLoader.load(new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "heading_separator.png")));
+			titleBorderLoader.scaleX = 0.5;
+			titleBorderLoader.x= titleField.x + ((titleField.width / 2) - 50);
+			titleBorderLoader.y= titleField.y + 235;
+			titleBorderLoader.alpha = 0.6;
 		}
 	}
 }

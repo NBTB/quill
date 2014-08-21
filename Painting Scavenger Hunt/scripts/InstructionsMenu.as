@@ -110,7 +110,7 @@
 		//initialize text fields
 		private function initText() {
 			titleField = new TextField();
-			titleField.defaultTextFormat = BaseMenu.titleFormat;
+			titleField.defaultTextFormat = BaseMenu.altTitleFormat;
 			titleField.x=10;
 			titleField.y=10
 			titleField.width=width - (titleField.x * 2);

@@ -214,6 +214,8 @@
 				BaseMenu.menuColor = Number(menuParams.menu_color);
 			if(menuParams.hasOwnProperty("main_menu_color"))
 				BaseMenu.mainMenuColor = Number(menuParams.main_menu_color);
+			if(menuParams.hasOwnProperty("intro_menu_color"))
+				BaseMenu.introMenuColor = Number(menuParams.intro_menu_color);
 			if(menuParams.hasOwnProperty("clues_menu_color"))
 				BaseMenu.cluesMenuColor = Number(menuParams.clues_menu_color);
 			if(menuParams.hasOwnProperty("menu_border"))
@@ -275,6 +277,8 @@
 							//store format
 							if(formatName == "title")
 								BaseMenu.titleFormat = newFormat;
+							else if(formatName == "alt_title")
+								BaseMenu.altTitleFormat = newFormat;
 							else if(formatName == "body")
 								BaseMenu.bodyFormat = newFormat;
 							else if(formatName == "caption")

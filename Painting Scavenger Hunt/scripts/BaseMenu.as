@@ -25,11 +25,13 @@
 		
 		public static var menuColor:uint = 0;								//default color of menu background
 		public static var mainMenuColor:uint = 0;							//default color of main menu background
+		public static var introMenuColor:uint = 0;							//default color of intro menu background
 		public static var cluesMenuColor:uint = 0;							//default color of clues menu background
 		public static var menuBorderColor:uint = 0;							//default color of menu border
 		public static var menuBorderEnabled:Boolean = false;				//default to not showing borders
 		public static var menuOpacity:Number = 1;							//default opacity of menu background 
 		public static var titleFormat:TextFormat = null;					//text format for titles
+		public static var altTitleFormat:TextFormat = null;					//alternate text format for titles
 		public static var bodyFormat:TextFormat = null;						//text format for body text
 		public static var introFormat:TextFormat = null;					//text format for intro menu text
 		public static var captionFormat:TextFormat = null;					//text format for captions
@@ -519,8 +521,8 @@
 		
 		public function scaleMenu(originalX:Number, originalY:Number, scaledX:Number, scaledY:Number):void {
 			if(scaleX == 1) {
-				scaleX = 0.25;
-				scaleY = 0.25;
+				scaleX = 0.15;
+				scaleY = 0.15;
 				x = scaledX;
 				y = scaledY;
 			}

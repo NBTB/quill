@@ -44,13 +44,13 @@
 				bar.graphics.moveTo(0, 0);
 				addChild(bar);
 				sections.push(bar);
-				bar.graphics.lineStyle(2, 0x949494);
-				bar.graphics.beginFill(0xc7c7c7, 1);
+				bar.graphics.lineStyle(2, 0x988972, 0.5);
+				bar.graphics.beginFill(0xb8a68a, 1);
 				if(unlocked > widthThreshold) {
-					bar.graphics.drawRect(i * 25, 0, 15, barHeight);
+					bar.graphics.drawCircle(i * 25, 0, 10);
 				}
 				else {
-					bar.graphics.drawRect(i * 60, 0, 40, barHeight);
+					bar.graphics.drawCircle(i * 60, 0, 20);
 				}
 				bar.graphics.endFill();
 				if(unlocked > i) {
@@ -58,13 +58,13 @@
 					bar.graphics.moveTo(0, 0);
 					addChild(bar);
 					sections.push(bar);
-					bar.graphics.lineStyle(2, 0x78942e);
-					bar.graphics.beginFill(0x7cc845, 1);
+					bar.graphics.lineStyle(2, 0x4e463b);
+					bar.graphics.beginFill(0x34841b, 1);
 					if(unlocked > widthThreshold) {
-						bar.graphics.drawRect(i * 25, 0, 15, barHeight);
+						bar.graphics.drawCircle(i * 25, 0, 10);
 					}
 					else {
-						bar.graphics.drawRect(i * 60, 0, 40, barHeight);
+						bar.graphics.drawCircle(i * 60, 0, 20);
 					}
 					bar.graphics.endFill();	
 				}

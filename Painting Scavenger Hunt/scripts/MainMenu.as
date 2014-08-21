@@ -71,10 +71,10 @@
 			menuTitles.push(menuTitle);
 			
 			//create menu opener button using the menu's title
-			var menuOpener:TextButton = new TextButton(menuTitle, BaseMenu.textButtonFormat, BaseMenu.textUpColor, BaseMenu.textOverColor, BaseMenu.textDownColor);
+			var menuOpener:TextButton = new TextButton(menuTitle, BaseMenu.textButtonFormat, BaseMenu.textUpColor, BaseMenu.textOverColor, BaseMenu.textDownColor, null, TextFieldAutoSize.CENTER);
 			menuOpeners.push(menuOpener);
 			//position menu opener
-			menuOpener.x = menuOpenerSize.x * ((menuOpeners.length - 1) + 0.5) - menuOpener.width/2;
+			menuOpener.x = ((menuOpenerSize.x + 10) * ((menuOpeners.length - 1) + 0.3)) - menuOpener.width/2;
 			menuOpener.y = (menuBackground.height - menuOpener.height) / 2;		
 			
 			//add menu opener to display list

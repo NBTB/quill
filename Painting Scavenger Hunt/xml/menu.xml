@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<menu_color>0x010417</menu_color>
+	<menu_color>0x221f19</menu_color>
 	<main_menu_color>0x647891</main_menu_color>
-	<clues_menu_color>0xac3e22</clues_menu_color>
+	<intro_menu_color>0xbfad8f</intro_menu_color>
+	<clues_menu_color>0x984d3a</clues_menu_color>
 	<menu_border>0x836A35</menu_border>
 	<menu_border_enabled>false</menu_border_enabled>
 	<menu_opacity>0.7</menu_opacity>
 	<text_format name="title">
 		<size>24</size>
+		<color>0x1a1b1f</color>
+		<bold>true</bold>
+		<italic>false</italic>
+	</text_format>
+	<text_format name="alt_title">
+		<size>24</size>
 		<color>0xFFFFFF</color>
 		<bold>true</bold>
-		<italic>true</italic>
+		<italic>false</italic>
 	</text_format>
 	<text_format name="body">
 		<size>20</size>

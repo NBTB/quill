@@ -17,14 +17,14 @@
 		public static const OVER_STATE = 1;
 		public static const DOWN_STATE = 2;
 		
-		public function TextButton(text:String, format:TextFormat, upColor:uint, overColor:uint, downColor:uint, hitbox:Rectangle = null)
+		public function TextButton(text:String, format:TextFormat, upColor:uint, overColor:uint, downColor:uint, hitbox:Rectangle = null, alignment:String = TextFieldAutoSize.LEFT)
 		{			
 			//create up state
 			upTextField = new TextField();
 			upTextField.selectable = false;
 			upTextField.defaultTextFormat = format;
 			upTextField.textColor = upColor;
-			upTextField.autoSize = TextFieldAutoSize.LEFT;
+			upTextField.autoSize = alignment;
 			upTextField.embedFonts = true;
 			
 			//create over state
@@ -32,7 +32,7 @@
 			overTextField.selectable = false;
 			overTextField.defaultTextFormat = format;
 			overTextField.textColor = overColor;
-			overTextField.autoSize = TextFieldAutoSize.LEFT;
+			overTextField.autoSize = alignment;
 			overTextField.embedFonts = true;
 			
 			//create down state
@@ -40,7 +40,7 @@
 			downTextField.selectable = false;
 			downTextField.defaultTextFormat = format;
 			downTextField.textColor = downColor;
-			downTextField.autoSize = TextFieldAutoSize.LEFT;
+			downTextField.autoSize = alignment;
 			downTextField.embedFonts = true;
 			
 			//populate states with text

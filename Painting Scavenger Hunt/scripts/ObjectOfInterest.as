@@ -105,7 +105,7 @@
 			
 			//add title to object info Pane
 			var titleText:TextField = new TextField();
-			titleText.defaultTextFormat = BaseMenu.getTitleFormat();
+			titleText.defaultTextFormat = BaseMenu.altTitleFormat;
 			titleText.text = objectName;	
 			titleText.width = 280;
 			titleText.x = 5;

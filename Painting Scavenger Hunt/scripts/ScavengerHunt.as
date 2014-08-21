@@ -21,6 +21,8 @@ package scripts
 		private var zoomed:Boolean = false;								//flag tracking whether or not the magnifying glass is active
 		private var magnifyingGlass:MagnifyingGlass = null;				//magnifying glass used to enlarge portions of the scene
 		private var magnifyButton:SimpleButton = null;					//button that toggles magnifying glass
+		private var magnifyButtonBg:Sprite = null;						//background for magnifyButton
+		private var firstLetterBg:Sprite = null;						//background for first letter
 		private var notificationTimer:Timer = null;						//timer used to trigger the hiding of the notification textfield
 		private var notificationText:TextField = null; 					//textfield to hold notifications
 		private var notificationTextFormat:TextFormat;					//text format of the notification textfield
@@ -43,6 +45,7 @@ package scripts
 		private var canvasRect = null;									//rectangle to hold canvas
 		private var clueProgress = null;								//Progress meter for clues found
 		private var clueProgressText = null;							//Label text for progress meter
+		private var letterCaption = null;								//Label for inventory
 		private var textF = null;										//Progress meter label textformat
 		private var FULLSIZE_LETTER_X = null;							//X-Position of fullsize letters
 		private var inventoryCaptions = null;							//Captions for player items
@@ -108,6 +111,7 @@ package scripts
 			mainMenu = new MainMenu(new Rectangle(canvasRect.width, canvasRect.height, introMenu.width, 77), 3, this);
 			notificationText = new TextField();
 			clueProgressText = new TextField();
+			letterCaption = new TextField();
 			endGoalMenu = new EndGoalMenu(canvasRect.width + 10, 435, 1200, 630);			
 			clueProgress = new ProgressBar(350, 35,endGoalMenu.getCluesNotUnlocked(), endGoalMenu.getCluesUnlocked());
 			ending = new Ending(canvasRect.x + 150, canvasRect.y + 100, canvasRect.width - 300, canvasRect.height - 300);
@@ -118,19 +122,17 @@ package scripts
 			
 			//split canvas into segments half the size of a main menu segement for use in menu positioning
 			var menuInterval:Number = canvasRect.width / (mainMenu.getMenuCapacity() * 2);
-			clueProgress.x = introMenu.x + 25;
-			clueProgress.y = introMenu.height - 420;
+			clueProgress.x = introMenu.x + 50;
+			clueProgress.y = 390;
 			clueProgressText.width = clueProgress.width;
-			clueProgressText.x = clueProgress.x;
-			clueProgressText.y = clueProgress.y - 35;
-			
-			//Format for progress bar caption
-			textF = new TextFormat();
-			textF.font = "Verdana";
-			textF.size = 17;
-			textF.color = 0x000000;
+			clueProgressText.x = introMenu.x + 25;
+			clueProgressText.y = 330;
+
+			//Add inventory background to letter
+			firstLetterBg = new Sprite();
 			
 			magnifyButton = new SimpleButton();
+
 			var magnifyButtonLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
 			magnifyButtonLoader.addEventListener(Event.COMPLETE, function(e:Event):void
 			   {
@@ -139,8 +141,13 @@ package scripts
 													new Bitmap(magnifyButtonLoader.getOverImage()), 
 													new Bitmap(magnifyButtonLoader.getDownImage()), 
 													new Bitmap(magnifyButtonLoader.getHittestImage()));
-					magnifyButton.x = 860;
-					magnifyButton.y = 420;
+					magnifyButton.x = 900;
+					magnifyButton.y = 510;
+					magnifyButtonBg = new Sprite();
+					magnifyButtonBg.graphics.moveTo(magnifyButton.x, magnifyButton.y);
+					magnifyButtonBg.graphics.beginFill(0xa9997f, 1);
+					magnifyButtonBg.graphics.drawRoundRect(magnifyButton.x - 17, magnifyButton.y - 20, 120, 120, 5, 5);
+					magnifyButtonBg.graphics.endFill();
 					magnifyButton.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 						closeDismissibleOverlays(null);
 						toggleZoom();
@@ -197,9 +204,12 @@ package scripts
 			addChildAt(notificationText, childIndex++);	
 			addChildAt(cluesMenu, childIndex++);
 			addChildAt(introMenu, childIndex++);
+			addChildAt(magnifyButtonBg, childIndex++);
 			addChildAt(magnifyButton, childIndex++);
 			addChildAt(clueProgress, childIndex++);
 			addChildAt(clueProgressText, childIndex++);
+			addChildAt(letterCaption, childIndex++);
+			addChildAt(firstLetterBg, childIndex++);
 			addChildAt(endGoalMenu, childIndex++);
 			addChildAt(mainMenu, childIndex++);
 			
@@ -321,12 +331,13 @@ package scripts
 			for each (var item in inventoryCaptions) {
 				addChild(item);
 				item.mouseEnabled = false;
+				item.mouseChildren = false;
 			}
 			//Add caption to magnifying glass
 			magnifyButton.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void	{	showInventoryCaption(0);	});
 			magnifyButton.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void	{	hideInventoryCaption(0);	});
 			//Zoom our menu on click, be sure to hide the letter captions
-			endGoalMenu.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 0, canvasRect.width + 170, 435); hideInventoryCaption(1); hideInventoryCaption(2);	});
+			endGoalMenu.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void	{	endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 0, canvasRect.width + 190, 503); hideInventoryCaption(1); hideInventoryCaption(2);	});
 			//Add hover events for each piece in the letter (except the last one) to show the caption for the first letter
 			//We'll add the event listener for the last one (which is hidden) when it gets unlocked
 			for(var i = 0; i < endGoalMenu.getPieces().length - 1; i++) {
@@ -396,13 +407,30 @@ package scripts
 			//Temporary solution
 			helpMenu.openMenu();
 			helpMenu.closeMenu();
-			endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 35, canvasRect.width + 170, 435);
+			endGoalMenu.scaleMenu(FULLSIZE_LETTER_X, 35, canvasRect.width + 190, 503);
+
+			firstLetterBg.graphics.moveTo(endGoalMenu.x, endGoalMenu.y);
+			firstLetterBg.graphics.beginFill(0xa9997f, 1);
+			firstLetterBg.graphics.drawRoundRect(endGoalMenu.x - 22, endGoalMenu.y - 13, 120, 120, 5, 5);
+			firstLetterBg.graphics.endFill();
 			
 			//Initially set progress bar
 			clueProgressText.text = "Clues Found: " + endGoalMenu.getCluesLeft();
-			clueProgressText.defaultTextFormat = textF;
-			clueProgressText.setTextFormat(textF);
+			clueProgressText.selectable = false;
+			clueProgressText.defaultTextFormat = BaseMenu.introFormat;
+			clueProgressText.setTextFormat(BaseMenu.introFormat);
 			clueProgress.draw(endGoalMenu.getCluesNotUnlocked(), endGoalMenu.getCluesUnlocked());
+
+			//Set up inventory label
+			letterCaption.selectable=false;			
+			letterCaption.defaultTextFormat = BaseMenu.introFormat;
+			letterCaption.setTextFormat(BaseMenu.introFormat);
+			letterCaption.x = clueProgressText.x;
+			letterCaption.y = 440;
+			letterCaption.width= 300;
+			letterCaption.wordWrap=true;
+			letterCaption.autoSize = TextFieldAutoSize.CENTER;
+			letterCaption.text= "Inventory";
 		}		
 		
 		//handle new frame

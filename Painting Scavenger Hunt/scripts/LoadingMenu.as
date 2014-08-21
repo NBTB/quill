@@ -21,7 +21,7 @@
 		public function LoadingMenu(xPos:int, yPos:int, widthVal:int, heightVal:int):void 
 		{
 			super(xPos, yPos, widthVal, heightVal, false, false, false, 1);
-			changeBackgroundColor(0xc9ced3, 1);
+			changeBackgroundColor(0x647891, 1);
 			initText();
 			init();
 		}

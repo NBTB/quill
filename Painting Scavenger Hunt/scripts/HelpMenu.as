@@ -25,7 +25,7 @@
             super(xPos, yPos, widthVal, heightVal);
              
             //set up start position and size of link textfields
-            var startX = 20;
+            var startX = 10;
             var startY = 10;
             var elementHeight = 35;
              
