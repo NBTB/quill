@@ -2,44 +2,50 @@
 <Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<menu_color>0x221f19</menu_color>
 	<main_menu_color>0x647891</main_menu_color>
-	<intro_menu_color>0xbfad8f</intro_menu_color>
+	<intro_menu_color>0xccb899</intro_menu_color>
 	<clues_menu_color>0x984d3a</clues_menu_color>
-	<menu_border>0x836A35</menu_border>
+	<menu_border>0x464f63</menu_border>
 	<menu_border_enabled>false</menu_border_enabled>
 	<menu_opacity>0.7</menu_opacity>
 	<text_format name="title">
-		<size>24</size>
+		<size>30</size>
 		<color>0x1a1b1f</color>
 		<bold>true</bold>
 		<italic>false</italic>
 	</text_format>
 	<text_format name="alt_title">
-		<size>24</size>
+		<size>28</size>
 		<color>0xFFFFFF</color>
 		<bold>true</bold>
 		<italic>false</italic>
 	</text_format>
 	<text_format name="body">
-		<size>20</size>
+		<size>18</size>
 		<color>0xFFFFFF</color>
 		<bold>false</bold>
 		<italic>false</italic>
 	</text_format>
 	<text_format name="intro">
-		<size>20</size>
+		<size>17</size>
 		<color>0x1a1b1f</color>
 		<bold>false</bold>
 		<italic>false</italic>
 	</text_format>
+	<text_format name="alt_intro">
+		<size>24</size>
+		<color>0x1a1b1f</color>
+		<bold>true</bold>
+		<italic>false</italic>
+	</text_format>
 	<text_format name="caption">
-		<size>30</size>
+		<size>26</size>
 		<color>0x78942e</color>
 		<bold>false</bold>
 		<italic>false</italic>
 	</text_format>
 	<text_format name="sub_caption">
 		<size>16</size>
-		<color>0xCC9933</color>
+		<color>0xccb899</color>
 		<bold>false</bold>
 		<italic>false</italic>
 	</text_format>
@@ -52,18 +58,18 @@
 	<text_format name="text_button">
 		<size>30</size>
 		<color>null</color>
-		<bold>false</bold>
+		<bold>true</bold>
 		<italic>false</italic>
 	</text_format>
 	<text_format name="link_usable">
-		<size>20</size>
+		<size>17</size>
 		<color>null</color>
 		<bold>false</bold>
 		<italic>false</italic>
 	</text_format>
 	<text_format name="link_unusable">
-		<size>20</size>
-		<color>0xFE5E5A</color>
+		<size>17</size>
+		<color>0x9c9c9c</color>
 		<bold>false</bold>
 		<italic>false</italic>
 	</text_format>
@@ -74,6 +80,6 @@
 		<italic>false</italic>
 	</text_format>
 	<up_color>0xE5E5E5</up_color>
-	<over_color>0xCC9933</over_color>
-	<down_color>0xCC9933</down_color>
+	<over_color>0xccb899</over_color>
+	<down_color>0x8c7f69</down_color>
 </Menu>

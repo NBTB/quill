@@ -1,4 +1,13 @@
-Designed by:      Daniel Acito   |   Sam Trapp 
-                  Justin Hardenburg   |    Chris Knepper
-Advisors:      Gordon Goodman   |   Susan Daiss
+Original Game Designed by:
+         Justin Hardenburg
+         Sam Trapp
+         Daniel Acito
+
+Version 2.0 by:
+         Chris Knepper
+
+Advisors:
+         Gordon Goodman
+         Susan Daiss
+
 Thank you to the Memorial Art Gallery of the University of Rochester, the RIT School of Interactive Games and Media, and James Henry Beard.

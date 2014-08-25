@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <About xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<welcome_title>The Night Before The Battle</welcome_title>
+	<welcome_subtitle>Civil War Scavenger Hunt</welcome_subtitle>
 	<welcome_text_file>welcome.txt</welcome_text_file>
 	<objective_title>Objective</objective_title>
 	<objective_text_file>objective.txt</objective_text_file>

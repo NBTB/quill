@@ -5,7 +5,7 @@
 	import flash.text.*
 	import flash.net.*
 	import flash.geom.ColorTransform;
-	
+
 	public class InstructionsMenu extends BaseMenu {
 
 		private var resumeButton:TextButton = null;		//button for resuming game
@@ -15,7 +15,7 @@
 		private var clueLoader:Loader = null;			//loader of clues help image
 		private var mouseLoader:Loader = null;			//loader of mouse help image
 		private var mouseOverLoader:Loader = null;		//loader of mouse over help image
-		
+
 		public static var objectiveTitle:String = null;	//instruction title of objective menu
 		public static var objectiveText:String = null;	//instruction text of objective menu
 		public static var cluesTitle:String = null;		//instruction title of clues menu
@@ -30,7 +30,7 @@
 		public static var aboutText:String = null;		//instruction text of about menu
 		public static var creditsTitle:String = null;	//instruction title of credits menu
 		public static var creditsText:String = null;	//instruction text of credits menu
-		
+
 		//slide numbers
 		public static const OBJECTIVE_SLIDE:int = 1;
 		public static const CLUES_SLIDE:int = 2;
@@ -44,8 +44,8 @@
 			super(xPos, yPos, widthVal, heightVal, false, false, false);
 
 			initText();
-			loadImages();			
-			
+			loadImages();
+
 			addContent(titleField);
 			addContent(instructions);
 			addContent(resumeButton);
@@ -65,9 +65,7 @@
 			var url2:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "clueBar.png"));
 			clueLoader = new Loader();
 			clueLoader.load(url2);
-			clueLoader.scaleX=.6;
-			clueLoader.scaleY=.6;
-			clueLoader.x=95;
+			clueLoader.x=60;
 			clueLoader.y=150;
 
 			var url3:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "mouseLeftClick.swf"));
@@ -85,7 +83,7 @@
 			mouseOverLoader.scaleY=.8;
 			mouseOverLoader.x=180;
 			mouseOverLoader.y=240;
-			
+
 			//listen for being removed from the display list
 			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
 																		{
@@ -117,10 +115,10 @@
 			titleField.autoSize = TextFieldAutoSize.CENTER;
 			titleField.embedFonts = true;
 			titleField.selectable=false;
-			
+
 			resumeButton = new TextButton("Resume Game", textButtonFormat, textUpColor, textOverColor, textDownColor);
 			resumeButton.x=(width / 2) - (resumeButton.width / 2);
-			resumeButton.y=height-resumeButton.height - 10;			
+			resumeButton.y=height-resumeButton.height - 10;
 			resumeButton.addEventListener(MouseEvent.CLICK, function(e:Event):void	{	closeMenu();	});
 
 			instructions = new TextField();
@@ -131,7 +129,7 @@
 			instructions.autoSize = TextFieldAutoSize.LEFT;
 			instructions.wordWrap=true;
 			instructions.embedFonts = true;
-			instructions.selectable=false;	
+			instructions.selectable=false;
 		}
 
 
@@ -162,7 +160,7 @@
 				titleField.text = cluesTitle;
 				instructions.text = cluesText;
 				addChild(clueLoader);
-			}	
+			}
 			//help menu:Objects
 			else if(curSlide==OBJECTS_SLIDE) {
 				titleField.text = objectsTitle;
@@ -174,25 +172,25 @@
 			else if (curSlide==END_GOAL_SLIDE) {
 				titleField.text = endGoalTitle;
 				instructions.text = endGoalText;
-				
+
 			}
 			//help menu:Controls
 			else if (curSlide==CONTROLS_SLIDE) {
 				titleField.text = controlsTitle;
 				instructions.text = controlsText;
 			}
-			
+
 			//help menu:About
 			else if (curSlide==ABOUT_SLIDE) {
 				titleField.text = aboutTitle;
 				instructions.text = aboutText;
 			}
-			
+
 			//help menu:Credits
 			else if (curSlide==CREDITS_SLIDE) {
 				titleField.text = creditsTitle;
 				instructions.text = creditsText;
 			}
-		}		
+		}
 	}
 }
