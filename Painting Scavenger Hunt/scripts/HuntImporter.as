@@ -711,6 +711,7 @@
                     //listen of an IO error cause by the new object (signifies a failure to load file)
                     newPiece.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void
                                                                                               {
+                                                                                              	trace('failed to load piece');
 
                                                                                                 //increment the number of failed objects
                                                                                                 piecesFailed++;

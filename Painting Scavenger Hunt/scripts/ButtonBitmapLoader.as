@@ -34,8 +34,9 @@
 																				upNeeded = false;
 																				completedBitmap(0, Bitmap(LoaderInfo(e.target).content), upNeeded, overNeeded, downNeeded, hittestNeeded)	
 																		   });
-				upLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void	
+				upLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):void	
 																		   {	
+																		   		trace(e.text);
 																				upNeeded = false;
 																				errorBitmap(upFilename, 0, upNeeded, overNeeded, downNeeded, hittestNeeded)	
 																		   });

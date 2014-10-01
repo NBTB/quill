@@ -54,14 +54,6 @@
 		//load images to be used in slides
 		private function loadImages() {
 
-			var url:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "magGlassPoint.png"));
-			magLoader = new Loader();
-			magLoader.load(url);
-			magLoader.scaleX=.6;
-			magLoader.scaleY=.6;
-			magLoader.x=170;
-			magLoader.y=260;
-
 			var url2:URLRequest=new URLRequest(FileFinder.completePath(FileFinder.INTERFACE, "clueBar.png"));
 			clueLoader = new Loader();
 			clueLoader.load(url2);
@@ -87,14 +79,6 @@
 			//listen for being removed from the display list
 			addEventListener(Event.REMOVED_FROM_STAGE, function(e:Event):void
 																		{
-																			//dispose of bitmaps
-																			if(magLoader && magLoader.content)
-																			{
-																				Bitmap(magLoader.content).bitmapData.dispose();
-																				magLoader.unload();
-																				if(magLoader.parent)
-																					magLoader.parent.removeChild(magLoader);
-																			}
 																			if(clueLoader && clueLoader.content)
 																			{
 																				Bitmap(clueLoader.content).bitmapData.dispose();
@@ -137,9 +121,6 @@
 		//cycles through what the text in the tutorial says
 		public function updateText(curSlide:int):void {
 			//if an image is a child, and is not supposed to be seen in that page, remove it
-			if (contains(magLoader)) {
-				removeChild(magLoader);
-			}
 			if (contains(clueLoader)) {
 				removeChild(clueLoader);
 			}
@@ -153,7 +134,6 @@
 			if (curSlide==OBJECTIVE_SLIDE) {
 				titleField.text = objectiveTitle;
 				instructions.text = objectiveText;
-				//addChild(magLoader);
 			}
 			//help menu:Clues
 			else if (curSlide==CLUES_SLIDE) {
