@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OOIs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<default_info_rect>
+		<x>5</x>
+		<y>5</y>
+		<width>320</width>
+		<height>400</height>
+	</default_info_rect>
+	<Object_Of_Interest>
+		<name>Quill</name>
+		<info_snippet>Commonly used in writing</info_snippet>
+		<clue>Once I gave birds flight, now you use me just to write...</clue>
+		<info>
+			<info_text_file>quill_info.txt</info_text_file>
+		</info>
+		<x>0.8120000</x>
+		<y>0.6900000</y>
+		<info_pane_x>0.35</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>quill_hitmap.png</hitmap_filename>
+		<highlight_filename>quill_highlight.png</highlight_filename>
+		<solved_image_filename>quill_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Letter</name>
+		<info_snippet>Correspondence home</info_snippet>
+		<clue>Paper and ink I may be, but I will make your thoughts easier to see...</clue>
+		<info>
+			<info_text_file>letter_info.txt</info_text_file>
+		</info>
+		<x>0.8160000</x>
+		<y>0.7400000</y>
+		<info_pane_x>0.36</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>letter_hitmap.png</hitmap_filename>
+		<highlight_filename>letter_highlight.png</highlight_filename>
+		<solved_image_filename>letter_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Moon</name>
+		<info_snippet>Symbolic of night</info_snippet>
+		<clue>My appearance is always different, but I always have the same face...</clue>
+		<info>
+			<info_text_file>moon_info.txt</info_text_file>
+		</info>
+		<x>0.0810000</x>
+		<y>0.0100000</y>
+		<info_pane_x>0.18</info_pane_x>
+		<info_pane_y>0.02</info_pane_y>
+		<hitmap_filename>moon_hitmap.png</hitmap_filename>
+		<highlight_filename>moon_highlight.png</highlight_filename>
+		<solved_image_filename>moon_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Flag</name>
+		<info_snippet>Emblamatic of Union loyalty</info_snippet>
+		<clue>I have no arms or hands, but I am always willing to give a friendly wave...</clue>
+		<info>
+			<info_text_file>flag_info.txt</info_text_file>
+		</info>
+		<x>0.5410000</x>
+		<y>0.670000</y>
+		<info_pane_x>0.12</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>flag_hitmap.png</hitmap_filename>
+		<highlight_filename>flag_highlight.png</highlight_filename>
+		<solved_image_filename>flag_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Skeleton</name>
+		<info_snippet>Suggestive of grave misfortune</info_snippet>
+		<clue>Seeing my face may make you feel grim, but I'll always greet you with a large grin...</clue>
+		<info>
+			<info_text_file>skeleton_info.txt</info_text_file>
+		</info>
+		<x>0.443000</x>
+		<y>0.3110000</y>
+		<info_pane_x>0.05</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>skeleton_hitmap.png</hitmap_filename>
+		<highlight_filename>skeleton_highlight.png</highlight_filename>
+		<solved_image_filename>skeleton_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Musket</name>
+		<info_snippet>Standard issue military firearm</info_snippet>
+		<clue>Grip my neck, hold me tight, and keep me close when the enemy is in sight...</clue>
+		<info>
+			<info_text_file>musket_info.txt</info_text_file>
+		</info>
+		<x>0.6300000</x>
+		<y>0.6180000</y>
+		<info_pane_x>0.2</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>musket_hitmap.png</hitmap_filename>
+		<highlight_filename>musket_highlight.png</highlight_filename>
+		<solved_image_filename>musket_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sentry</name>
+		<info_snippet>Visage of a man on watch</info_snippet>
+		<clue>Over yonder, one can see...my job is to guard over thee.</clue>
+		<info>
+			<info_text_file>silhouette_info.txt</info_text_file>
+		</info>
+		<x>0.9150000</x>
+		<y>0.095000</y>
+		<info_pane_x>0.45</info_pane_x>
+		<info_pane_y>0.02</info_pane_y>
+		<hitmap_filename>silhouette_hitmap.png</hitmap_filename>
+		<highlight_filename>silhouette_highlight.png</highlight_filename>
+		<solved_image_filename>silhouette_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Fire</name>
+		<info_snippet>Source of warmth and light</info_snippet>
+		<clue>I provide light to see, but don't touch me...</clue>
+		<info>
+			<info_text_file>fire_info.txt</info_text_file>
+		</info>
+		<x>0.1235000</x>
+		<y>0.756000</y>
+		<info_pane_x>0.24</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>fire_hitmap.png</hitmap_filename>
+		<highlight_filename>fire_highlight.png</highlight_filename>
+		<solved_image_filename>fire_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Cannonball</name>
+		<info_snippet>Artillery ammunition</info_snippet>
+		<clue>I've been known to be quite the gate crasher...</clue>
+		<info>
+			<info_text_file>cannonball_info.txt</info_text_file>
+		</info>
+		<x>-0.0100000</x>
+		<y>0.9040000</y>
+		<info_pane_x>0.4</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>cannonball_hitmap.png</hitmap_filename>
+		<highlight_filename>cannonball_highlight.png</highlight_filename>
+		<solved_image_filename>cannonball_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sword</name>
+		<info_snippet>Close range weapon and rank indicator</info_snippet>
+		<clue>To find me, you'll have to be pretty sharp, but not as sharp as me...</clue>
+		<info>
+			<info_text_file>sword_info.txt</info_text_file>
+		</info>
+		<x>0.8950000</x>
+		<y>0.7650000</y>
+		<info_pane_x>0.41</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>sword_hitmap.png</hitmap_filename>
+		<highlight_filename>sword_highlight.png</highlight_filename>
+		<solved_image_filename>sword_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Playing Cards</name>
+		<info_snippet>Popular form of entertainment</info_snippet>
+		<clue>We are always dressed our best in many different suits...</clue>
+		<info>
+			<info_text_file>cards_info.txt</info_text_file>
+		</info>
+		<x>0.3698000</x>
+		<y>0.904000</y>
+		<info_pane_x>0.47</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>cards_hitmap.png</hitmap_filename>
+		<highlight_filename>cards_highlight.png</highlight_filename>
+		<solved_image_filename>cards_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Parrott Rifle</name>
+		<info_snippet>Heavy artillery</info_snippet>
+		<clue>You better run for cover because when I sneeze, it'll bring the whole building down...</clue>
+		<info>
+			<info_text_file>parrott_rifle_info.txt</info_text_file>
+		</info>
+		<x>0.1990000</x>
+		<y>0.2890000</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>parrott_rifle_hitmap.png</hitmap_filename>
+		<highlight_filename>parrott_rifle_highlight.png</highlight_filename>
+		<solved_image_filename>parrott_rifle_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Sergeant</name>
+		<info_snippet>Commanding officer</info_snippet>
+		<clue>I call the shots...literally.</clue>
+		<info>
+			<info_text_file>sergeant_info.txt</info_text_file>
+		</info>
+		<x>0.472</x>
+		<y>0.674</y>
+		<info_pane_x>0.1</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>sergeant_hitmap.png</hitmap_filename>
+		<highlight_filename>sergeant_highlight.png</highlight_filename>
+		<solved_image_filename>sergeant_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Gabions</name>
+		<info_snippet>Fortification structure</info_snippet>
+		<clue>The bigger we are, the harder it is for you to fall...</clue>
+		<info>
+			<info_text_file>gabions_info.txt</info_text_file>
+		</info>
+		<x>-0.078000</x>
+		<y>0.2370000</y>
+		<info_pane_x>0.02</info_pane_x>
+		<info_pane_y>0.1</info_pane_y>
+		<hitmap_filename>gabions_hitmap.png</hitmap_filename>
+		<highlight_filename>gabions_highlight.png</highlight_filename>
+		<solved_image_filename>gabions_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+	<Object_Of_Interest>
+		<name>Uniform</name>
+		<info_snippet>Required military garb</info_snippet>
+		<clue>For most, wearing me should be part of your daily routine...</clue>
+		<info>
+			<info_text_file>uniform_info.txt</info_text_file>
+		</info>
+		<x>0.2640000</x>
+		<y>0.6670000</y>
+		<info_pane_x>0.42</info_pane_x>
+		<info_pane_y>0.2</info_pane_y>
+		<hitmap_filename>uniform_hitmap.png</hitmap_filename>
+		<highlight_filename>uniform_highlight.png</highlight_filename>
+		<solved_image_filename>uniform_saturated.png</solved_image_filename>
+	</Object_Of_Interest>
+</OOIs>

@@ -108,8 +108,8 @@
 			if(!closeButtonLoader)
 			{
 				closeButtonLoader = new ButtonBitmapLoader();
-				closeButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "close button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button over.png"),
-											  FileFinder.completePath(FileFinder.INTERFACE, "close button down.png"), FileFinder.completePath(FileFinder.INTERFACE, "close button hit.png"));
+				closeButtonLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "close_button_up.png"), FileFinder.completePath(FileFinder.INTERFACE, "close_button_over.png"),
+											  FileFinder.completePath(FileFinder.INTERFACE, "close_button_down.png"), FileFinder.completePath(FileFinder.INTERFACE, "close_button_hit.png"));
 			}
 
 			//if the scroll bar style has not yet been loaded, do so now
@@ -131,8 +131,8 @@
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setUpDownButtonState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());
 																					 });
-				upDownBitmapLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button up.png"), FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button over.png"),
-											   FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button down.png"), FileFinder.completePath(FileFinder.INTERFACE, "scroll bar up-down button hit.png"));
+				upDownBitmapLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "scroll_bar_up-down_button_up.png"), FileFinder.completePath(FileFinder.INTERFACE, "scroll_bar_up-down_button_over.png"),
+											   FileFinder.completePath(FileFinder.INTERFACE, "scroll_bar_up-down_button_down.png"), FileFinder.completePath(FileFinder.INTERFACE, "scroll_bar_up-down_button_hit.png"));
 
 				//load bitmaps to be used by scroller
 				var scrollBitmapLoader:ButtonBitmapLoader = new ButtonBitmapLoader();
@@ -147,7 +147,7 @@
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.DOWN, bitmapLoader.getDownImage());
 																						scrollBarStyle.setScrollerState(ScrollBarStyle.HITTEST, bitmapLoader.getHittestImage());
 																					 });
-				scrollBitmapLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "scroll bar scroller up.png"));
+				scrollBitmapLoader.loadBitmaps(FileFinder.completePath(FileFinder.INTERFACE, "scroll_bar scroller_up.png"));
 			}
 
 			//if closeable, create close button

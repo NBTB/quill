@@ -7,13 +7,13 @@
 	<about>xml/about.xml</about>
 	<hunt>xml/hunt.xml</hunt>
 	<painting>xml/painting.xml</painting>
-	<objects_of_interest>xml/objects of interest.xml</objects_of_interest>
-	<end_goal>xml/end goal.xml</end_goal>
+	<objects_of_interest>xml/objects_of_interest.xml</objects_of_interest>
+	<end_goal>xml/end_goal.xml</end_goal>
 	<Asset_Directories>
 		<game_interface>assets/interface/</game_interface>
-		<game_info>assets/game info/</game_info>
-		<object_of_interest_images>assets/ooi images/</object_of_interest_images>
-		<object_of_interest_info>assets/ooi info/</object_of_interest_info>
-		<end_goal_images>assets/end goal images/</end_goal_images>
+		<game_info>assets/game_info/</game_info>
+		<object_of_interest_images>assets/ooi_images/</object_of_interest_images>
+		<object_of_interest_info>assets/ooi_info/</object_of_interest_info>
+		<end_goal_images>assets/end_goal_images/</end_goal_images>
 	</Asset_Directories>
 </Importer>

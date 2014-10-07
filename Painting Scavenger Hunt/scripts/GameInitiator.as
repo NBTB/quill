@@ -15,7 +15,7 @@
 	{
 		private var gameLoader:Loader = new Loader();											//Loader which allows the main game to load
 		private var context:LoaderContext = new LoaderContext();								//Context for the game's domain
-		private var gameName:URLRequest = new URLRequest("Painting Scavenger Hunt.swf");		//Path to the game's .swf
+		private var gameName:URLRequest = new URLRequest("PaintingScavengerHunt.swf");		//Path to the game's .swf
 		
 		//Function to load the game
 		public function GameInitiator():void
